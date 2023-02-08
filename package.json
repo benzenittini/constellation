@@ -1,13 +1,19 @@
 {
   "name": "spacia-offline",
   "version": "1.0.0",
-  "main": "./src/index.js",
   "license": "MIT",
   "description": "A visual organization tool",
+  "author": "<ben.zenittini@gmail.com>",
   "scripts": {
-    "start": "electron-forge start --app-path ./src",
-    "package": "electron-forge package --app-path ./src",
-    "make": "electron-forge make --app-path ./src"
+    "build-ui": "webpack --config webpack.ui-dev.js",
+    "watch-ui": "webpack --watch --config webpack.ui-dev.js",
+    "build-ui-prod": "webpack --config webpack.ui-prod.js",
+    "build-main": "webpack --config webpack.main-dev.js",
+    "watch-main": "webpack --watch --config webpack.main-dev.js",
+    "build-main-prod": "webpack --config webpack.main-prod.js",
+    "start": "electron-forge start --app-path ./build",
+    "package": "electron-forge package --app-path ./build",
+    "make": "electron-forge make --app-path ./build"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.5",
@@ -15,9 +21,27 @@
     "@electron-forge/maker-rpm": "^6.0.5",
     "@electron-forge/maker-squirrel": "^6.0.5",
     "@electron-forge/maker-zip": "^6.0.5",
-    "electron": "^23.0.0"
+    "@types/webpack-env": "^1.18.0",
+    "@vue/compiler-sfc": "^3.2.47",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "electron": "^23.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "sass": "^1.58.0",
+    "sass-loader": "^13.2.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.5",
+    "vue-loader": "^17.0.1",
+    "vue-template-compiler": "^2.7.14",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6",
+    "vuex": "^4.1.0"
   }
 }

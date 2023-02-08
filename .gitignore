@@ -5,10 +5,12 @@ GPUCache
 
 # First-party Generated
 dist
+out
 third-party-bin
 public
 coverage
 workdir
+build
 
 # Third-party Generated
 node_modules
@@ -20,7 +22,3 @@ yarn-error.log
 gitkey
 gitkey.pub
 scratch.txt
-
-
-
-out/
