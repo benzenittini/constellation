@@ -1,0 +1,23 @@
+{
+  "name": "spacia-offline",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "license": "MIT",
+  "description": "A visual organization tool",
+  "scripts": {
+    "start": "electron-forge start --app-path ./src",
+    "package": "electron-forge package --app-path ./src",
+    "make": "electron-forge make --app-path ./src"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.5",
+    "@electron-forge/maker-deb": "^6.0.5",
+    "@electron-forge/maker-rpm": "^6.0.5",
+    "@electron-forge/maker-squirrel": "^6.0.5",
+    "@electron-forge/maker-zip": "^6.0.5",
+    "electron": "^23.0.0"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}
