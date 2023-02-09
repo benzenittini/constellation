@@ -8,7 +8,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = {
-    target: 'web', // TODO-ben : electron-renderer (and/or electron-preload?)
+    target: 'electron-renderer',
 
     entry: {
         renderer: './src/ui/renderer.ts',
@@ -48,6 +48,7 @@ module.exports = {
     plugins: [
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({ template: './src/ui/index.html' }),
+        // TODO-const : Uncomment, or remove
         // new CopyWebpackPlugin({
         //     patterns: [
         //         { from: '../graphics/finals', to: './graphics' },

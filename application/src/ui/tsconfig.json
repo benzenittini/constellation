@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "sourceMap": true,
-        "target": "es6",
+        "target": "es2020",
         "strict": true,
         "allowSyntheticDefaultImports": true,
         "moduleResolution": "node",

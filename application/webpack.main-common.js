@@ -10,6 +10,7 @@ module.exports = {
 
     entry: {
         index: './src/main/index.ts',
+        preload: './src/main/preload.ts',
     },
 
     resolve: {

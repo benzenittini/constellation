@@ -1,16 +1,16 @@
 
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
+import { app, BrowserWindow, ipcMain } from 'electron';
+import path from 'path';
 
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
         height: 600,
-        // webPreferences: {
+        webPreferences: {
             // __static is set by webpack and will point to the public directory
             // preload: path.resolve(__static, 'preload.js'),
-        //     preload: path.join(__dirname, 'preload.js'),
-        // },
+            preload: path.join(__dirname, 'preload.js'),
+        },
     });
 
     ipcMain.handle('ping', () => 'pong');
@@ -29,6 +29,6 @@ app.whenReady().then(() => {
 });
 
 // Kill the app on linux/windows when the final window is closed.
-// app.on('window-all-closed', () => {
-//     if (process.platform !== 'darwin') app.quit();
-// });
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit();
+});

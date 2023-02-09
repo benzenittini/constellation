@@ -1,0 +1,96 @@
+
+@use 'variables' as vars;
+@use 'sass:color';
+
+@mixin center-both {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin unselectable {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+@mixin lift-up($distance: 10px) {
+    transition: 0.4s;
+    &:hover {
+        box-shadow: 10px 10px 20px vars.$gray-very-dark;
+        transform: translateY(-$distance);
+    }
+}
+
+@mixin phantom-textbox {
+    .eic-textbox-border {
+        background: transparent;
+    }
+    input {
+        border-color: transparent;
+        background: transparent;
+        transition: border-color 0.4s;
+        &:hover:not(:focus) { border-bottom: 1px solid vars.$gray4; }
+        &:focus {
+            background: vars.$gray1;
+            border-bottom: 1px solid vars.$gray-very-light;
+        }
+    }
+}
+
+@mixin link {
+    cursor: pointer;
+    color: vars.$gray-light;
+    transition: color 0.1s;
+    text-decoration: none;
+    position: relative;
+
+    &:hover {
+        color: vars.$gray-very-light;
+        text-decoration: underline;
+        text-decoration-color: vars.$pink-medium;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 6px;
+    }
+}
+
+@mixin gradient-bottom-border($height: 2px, $background: vars.$pink-purp-gradient) {
+    position: relative;
+    &::after {
+        content: '';
+        height: $height;
+        background: $background;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+    }
+}
+
+// Compliments of: https://css-tricks.com/the-current-state-of-styling-scrollbars-in-css/
+@mixin scrollbars {
+  $size: 10px;
+  $background-color: rgba(0,0,0,0.2);
+  $foreground-color: vars.$gray3;
+
+  // For Chrome & Safari
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $foreground-color;
+    border-radius: 6px;
+    border: 1px solid color.scale($foreground-color, $lightness: -30%);
+    transition: 0.4s;
+    &:hover { background-color: color.scale($foreground-color, $lightness: 30%); }
+  }
+  &::-webkit-scrollbar-track {
+    background: $background-color;
+    border-radius: 6px;
+  }
+
+  // Standard version (Firefox only for now)
+  scrollbar-color: $foreground-color $background-color;
+}

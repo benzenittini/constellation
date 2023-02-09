@@ -1,0 +1,16 @@
+
+@use 'variables' as vars;
+
+// EX: `animation: ripple 1.5s linear infinite;`
+@keyframes ripple {
+    0% {
+      box-shadow: 0 0 0 1px rgba(vars.$gray8, 0.3),
+        0 0 0 3px rgba(vars.$gray8, 0.3),
+        0 0 0 5px rgba(vars.$gray8, 0.3);
+    }
+    100% {
+      box-shadow: 0 0 0 4px rgba(vars.$gray8, 0),
+        0 0 0 20px rgba(vars.$gray8, 0),
+        0 0 0 30px rgba(vars.$gray8, 0);
+    }
+}

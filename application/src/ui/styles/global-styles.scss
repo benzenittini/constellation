@@ -1,0 +1,159 @@
+
+@use "variables" as vars;
+@use "mixins";
+
+
+// ====================
+// Document-Wide Styles
+// --------------------
+
+* { box-sizing: border-box; }
+
+html {
+    overflow-x: hidden;
+    font-family: 'Roboto';
+    font-size: 16px;
+}
+body {
+    // NOTE: We cannot have an "overflow-x: hidden" on the body element or any downstream "position: sticky" elements will not work!
+    // overflow-x: hidden;
+
+    position: relative;
+    padding: 0;
+    margin: 0;
+    background: vars.$gray-very-dark;
+    color: vars.$gray-very-light;
+}
+h1,h2,h3,h4,h5,h6 { font-weight: normal; }
+
+.mw-hr {
+    height: 1px;
+    background: vars.$gray3;
+    margin: 20px 0;
+}
+
+img { max-width: 100%; } // Improves w/ responsiveness
+
+textarea,pre {
+    font-family: 'Roboto';
+    font-size: 16px;
+}
+
+a {
+    @include mixins.link;
+}
+
+.mwm-unselectable {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.has-tooltip { cursor: help; }
+
+// This allows mouse wheel events to get captured while dragging w/ dragula.
+.gu-mirror { pointer-events: none; }
+
+
+// ==============
+// Button Styling
+// --------------
+
+@mixin button-primary($text, $background, $border, $hover-text) {
+    color: $text;
+    background: linear-gradient(to top, $border 50%, $background 50%) top;
+    background-size: 100% 200%;
+
+    padding-top: 10px; // Overridden here to "balance" the bottom border.
+    border-bottom: 2px solid $border;
+    &:hover:not(:disabled) {
+        color: $hover-text;
+        background-position: bottom;
+    }
+}
+@mixin button-secondary($text, $background, $hover-text, $hover-bg) {
+    color: $text;
+    background: $background;
+    &:hover:not(:disabled) {
+        color: $hover-text;
+        background: $hover-bg;
+    }
+}
+@mixin button-tertiary($text, $hover-border) {
+    font-weight: bold;
+    color: $text;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    &:hover:not(:disabled) {
+        border-top: 1px solid $hover-border;
+        border-bottom: 1px solid $hover-border;
+    }
+}
+button {
+    border-radius: vars.$component-radius;
+    border: none;
+    background: none;
+    font-family: 'Roboto'; // For an unknown reason, FF doesn't recognize the "Roboto" set on the html{} block above. But only for buttons.
+    font-size: 16px;
+    padding: 8px 24px;
+    cursor: pointer;
+    transition: background-color 0.2s, background-position 0.2s, border-color 0.2s, color 0.2s;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+    &:active:not(:disabled) {
+        opacity: 0.75;
+        transform: scale(0.97);
+    }
+
+    &.primary.gray   { @include button-primary(vars.$gray-very-dark, vars.$gray-light, vars.$gray-very-light, vars.$gray-very-dark); }
+    &.primary.red    { @include button-primary(vars.$red8,           vars.$red1,       vars.$red4,            vars.$red0); }
+    &.primary.pink   { @include button-primary(vars.$pink8,          vars.$pink1,      vars.$pink4,           vars.$pink0); }
+    &.primary.yellow { @include button-primary(vars.$yellow8,        vars.$yellow1,    vars.$yellow4,         vars.$yellow0); }
+    &.primary.green  { @include button-primary(vars.$green8,         vars.$green1,     vars.$green4,          vars.$green0); }
+
+    &.secondary.gray   { @include button-secondary(vars.$gray-very-light, vars.$gray3,   vars.$gray-very-dark, vars.$gray-very-light); }
+    &.secondary.red    { @include button-secondary(vars.$red0,            vars.$red6,    vars.$red0,           vars.$red4); }
+    &.secondary.pink   { @include button-secondary(vars.$pink0,           vars.$pink6,   vars.$pink0,          vars.$pink4); }
+    &.secondary.yellow { @include button-secondary(vars.$yellow0,         vars.$yellow6, vars.$yellow0,        vars.$yellow4); }
+    &.secondary.green  { @include button-secondary(vars.$green0,          vars.$green6,  vars.$green0,         vars.$green4); }
+
+    &.tertiary.gray   { @include button-tertiary(vars.$gray-very-light, vars.$gray-very-light); }
+    &.tertiary.red    { @include button-tertiary(vars.$red4,            vars.$red4); }
+    &.tertiary.pink   { @include button-tertiary(vars.$pink4,           vars.$pink4); }
+    &.tertiary.yellow { @include button-tertiary(vars.$yellow4,         vars.$yellow4); }
+    &.tertiary.green  { @include button-tertiary(vars.$green4,          vars.$green4); }
+
+}
+
+
+// ===========
+// Input Types
+// -----------
+
+input[type=color] {
+    border: 0;
+    padding: 0;
+}
+
+
+// =============
+// Notifications
+// -------------
+
+@mixin notification-color($foreground, $background, $border) {
+    border-radius: vars.$radius-small !important;
+
+    color: $foreground !important;
+    border-color: $border !important;
+    background: $background !important;
+    box-shadow: vars.$shadow-down-right-medium;
+    line-height: 24px;
+}
+.mw-notification-success { @include notification-color(vars.$green8,  vars.$green0,  vars.$green0);  }
+.mw-notification-warning { @include notification-color(vars.$yellow8, vars.$yellow0, vars.$yellow0); }
+.mw-notification-failure { @include notification-color(vars.$red8,    vars.$red0,    vars.$red0);    }
+.mw-notification-info    { @include notification-color(vars.$gray7,   vars.$gray1,   vars.$gray0);   }
