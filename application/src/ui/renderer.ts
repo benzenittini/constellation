@@ -59,7 +59,7 @@ app.use(MWVueNotify, {
     }
 });
 
-import * as ErrorLogger from './utilities/ErrorLogger';
+import * as ErrorLogger from '../common/ErrorLogger';
 ErrorLogger.initialize();
 
 

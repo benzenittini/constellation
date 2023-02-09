@@ -1,6 +1,6 @@
 
 import { useVueNotify, VueNotify } from 'mw-vue-notify';
-import { TypedMap } from '../store/StoreTypes';
+import { TypedMap } from '../ui/store/StoreTypes';
 
 let mwVueNotify: VueNotify;
 

@@ -4,7 +4,7 @@ import { useVueModals } from 'mw-vue-modals';
 
 import { useGeneralStore } from '../store/GeneralStore';
 
-import * as ObjectUtils from '../utilities/ObjectUtils';
+import * as ObjectUtils from '../../common/ObjectUtils';
 import { TypedMap } from '../store/StoreTypes';
 import { FieldDefinition, FieldType, getFieldValue, PossibleValueDefinition } from '../store/Types/FieldDataTypes';
 import { Entity } from '../store/Types/EntityDataTypes';

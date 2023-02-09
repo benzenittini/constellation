@@ -5,9 +5,9 @@ import io, { Socket } from 'socket.io-client';
 import { useVueModals } from 'mw-vue-modals';
 import { useVueNotify } from 'mw-vue-notify';
 
-import * as ErrorLogger from '../utilities/ErrorLogger';
-import { useStore } from '../store/store';
-import { useGeneralStore } from '../store/GeneralStore';
+import * as ErrorLogger from './ErrorLogger';
+import { useStore } from '../ui/store/store';
+import { useGeneralStore } from '../ui/store/GeneralStore';
 
 // TODO-const : Re-enable all the actions
 // import { GetBoardDataAction } from '../actions/WebsocketActions/GetBoardData';

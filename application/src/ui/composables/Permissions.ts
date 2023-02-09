@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 
 import { useGeneralStore } from '../store/GeneralStore';
-import * as ArrayUtils from '../utilities/ArrayUtils';
+import * as ArrayUtils from '../../common/ArrayUtils';
 
 export function usePermissions() {
 

@@ -1,4 +1,5 @@
-import { TypedMap } from "../store/StoreTypes";
+
+import { TypedMap } from "../ui/store/StoreTypes";
 
 // TODO-test : Needs tests
 export function arraysAreEqual(array1: any[] | undefined, array2: any[] | undefined, equalityCheck: (a: any, b: any) => boolean) {

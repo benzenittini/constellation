@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import { useStore } from './store';
 import { Store } from './StoreTypes';
 import { BoundingBox, Entity, EntityContent, EntityIdAndPosition, SearchCriteria } from './Types/EntityDataTypes';
-import { rectangleContainsPoint } from '../utilities/RectangleUtils';
+import { rectangleContainsPoint } from '../../common/RectangleUtils';
 import { getFieldValue } from './Types/FieldDataTypes';
 import { GRAY8 } from '../styles/styleVariables';
 

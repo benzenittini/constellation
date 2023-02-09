@@ -4,9 +4,9 @@ import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 import { RootState, TypedMap } from "./StoreTypes";
 import { EntityDataState, EntityDataGetters, EntityDataMutations, EntityDataActions, Entity, MIN_ENTITY_WIDTH, MIN_ENTITY_HEIGHT, SearchResult } from "./Types/EntityDataTypes";
 
-import * as ErrorLogger from "../utilities/ErrorLogger";
-import * as RectangleUtils from '../utilities/RectangleUtils';
-import * as ObjectUtils from '../utilities/ObjectUtils';
+import * as ErrorLogger from "../../common/ErrorLogger";
+import * as RectangleUtils from '../../common/RectangleUtils';
+import * as ObjectUtils from '../../common/ObjectUtils';
 import { getFieldValue } from "./Types/FieldDataTypes";
 
 

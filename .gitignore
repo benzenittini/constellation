@@ -17,6 +17,8 @@ node_modules
 yarn-error.log
 *.swp
 *.bkp
+*.drawio.dtmp
+*.drawio.bkp
 
 # Miscellaneous
 gitkey
