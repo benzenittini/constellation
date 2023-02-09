@@ -32,12 +32,6 @@ module.exports = {
     },
 
     plugins: [
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         { from: '../graphics/finals', to: './graphics' },
-        //         { from: '../release-notes', to: './release-notes' },
-        //     ]
-        // }),
         // See "shims-global.d.ts" for typings of this object.
         new DefinePlugin({
             WEBPACK: {

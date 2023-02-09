@@ -26,6 +26,13 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.(png|jpe?g|gif)$/i,
+                loader: 'file-loader',
+                options: {
+                    outputPath: 'graphics',
+                }
+            },
+            {
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
                 exclude: /node_modules/,
@@ -48,13 +55,6 @@ module.exports = {
     plugins: [
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({ template: './src/ui/index.html' }),
-        // TODO-const : Uncomment, or remove
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         { from: '../graphics/finals', to: './graphics' },
-        //         { from: '../release-notes', to: './release-notes' },
-        //     ]
-        // }),
         // See "shims-global.d.ts" for typings of this object.
         new DefinePlugin({
             WEBPACK: {
@@ -65,5 +65,6 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, './build'),
+        publicPath: './'
     }
 };

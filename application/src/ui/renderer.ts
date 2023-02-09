@@ -90,11 +90,11 @@ app.use(router);
 // Component Registration
 // ----------------------
 
-import { components } from './components';
+// import { components } from './components';
 
-for (let componentKey in components) {
-    app.component(componentKey, components[componentKey]);
-}
+// for (let componentKey in components) {
+//     app.component(componentKey, components[componentKey]);
+// }
 
 
 // =================

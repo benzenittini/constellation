@@ -5,6 +5,8 @@
 
         Hello, from Vue!
 
+        <img width="50" height="100" src="./graphics/mouse-left-click.png">
+
         <main>
             <router-view></router-view>
         </main>
