@@ -2,7 +2,6 @@
 
 const path = require('path');
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = {

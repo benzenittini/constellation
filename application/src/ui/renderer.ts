@@ -71,30 +71,15 @@ import {store} from './store/store';
 app.use(store);
 
 
-// ====================
-// Route Initialization
-// --------------------
-
-import { createRouter, createWebHistory } from 'vue-router';
-import { routes } from './routes';
-
-export const router = createRouter({
-    history: createWebHistory(),
-    routes,
-    scrollBehavior: () => ({ top: 0 }),
-});
-app.use(router);
-
-
 // ======================
 // Component Registration
 // ----------------------
 
-// import { components } from './components';
+import { components } from './components';
 
-// for (let componentKey in components) {
-//     app.component(componentKey, components[componentKey]);
-// }
+for (let componentKey in components) {
+    app.component(componentKey, components[componentKey]);
+}
 
 
 // =================

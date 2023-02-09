@@ -1,7 +1,7 @@
 
 import { MutationTree, ActionTree, GetterTree } from "vuex";
 
-import { GeneralDataState, GeneralDataMutations, GeneralDataActions, GeneralDataGetters, DEMO_PROJECT_DATA } from "./Types/GeneralDataTypes";
+import { GeneralDataState, GeneralDataMutations, GeneralDataActions, GeneralDataGetters } from "./Types/GeneralDataTypes";
 import { RootState } from "./StoreTypes";
 
 // =====
@@ -9,11 +9,8 @@ import { RootState } from "./StoreTypes";
 // -----
 
 const generalDataState: GeneralDataState = {
-    userData: { username: undefined, userId: undefined, email: undefined },
-    adminData: { isAdmin: false, jwt: undefined },
-    planData: { hasPaidPlan: false },
     projectData: [],
-    currentViewData: undefined,
+    currentProjectBoard: undefined,
     authToken: undefined,
     permissions: {},
     uiFlags: {
@@ -31,36 +28,24 @@ const generalDataState: GeneralDataState = {
 
 const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutations = {
     resetStore (state) {
-        state.userData        = { username: undefined, userId: undefined, email: undefined };
-        state.adminData       = { isAdmin: false, jwt: undefined };
-        state.planData        = { hasPaidPlan: false };
-        state.projectData     = [];
-        state.currentViewData = undefined;
-        state.authToken       = undefined;
-        state.permissions     = {};
-        state.uiFlags         = { disablePointerEvents: false }
+        state.projectData         = [];
+        state.currentProjectBoard = undefined;
+        state.authToken           = undefined;
+        state.permissions         = {};
+        state.uiFlags             = { disablePointerEvents: false }
     },
     clearBoardState (state) {
-        // (Not clearing user data.)
-        // (Not clearing admin data.)
-        // (Not clearing plan data.)
         state.projectData = [];
-        state.currentViewData = undefined;
+        state.currentProjectBoard = undefined;
         // (Not clearing auth token.)
         // (Not clearing permissions.)
         state.uiFlags = { disablePointerEvents: false }
     },
 
-    setUsername    (state, username)    { state.userData.username = username;                },
-    setUserId      (state, userId)      { state.userData.userId = userId;                    },
-    setEmail       (state, email)       { state.userData.email = email;                      },
-    setIsAdmin     (state, isAdmin)     { state.adminData.isAdmin = isAdmin;                 },
-    setAdminJwt    (state, adminJwt)    { state.adminData.jwt = adminJwt;                    },
-    setPlanData    (state, planData)    { state.planData.hasPaidPlan = planData.hasPaidPlan; },
-    setProjectData (state, projectData) { state.projectData = projectData;                   },
-    setCurrentView (state, currentView) { state.currentViewData = currentView;               },
-    setAuthToken   (state, authToken)   { state.authToken = authToken;                       },
-    setPermissions (state, permissions) { state.permissions = permissions;                   },
+    setProjectData         (state, projectData)         { state.projectData = projectData;                   },
+    setCurrentProjectBoard (state, currentProjectBoard) { state.currentProjectBoard = currentProjectBoard;   },
+    setAuthToken           (state, authToken)           { state.authToken = authToken;                       },
+    setPermissions         (state, permissions)         { state.permissions = permissions;                   },
 
     addProject        (state, projectData) { state.projectData.push(projectData); },
     addBoardToProject (state, {projectId, boardData}) {
@@ -94,7 +79,7 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
     setAdminJwt    ({ commit }, adminJwt)    { commit('setAdminJwt',    adminJwt);     },
     setPlanData    ({ commit }, planData)    { commit('setPlanData',    planData);    },
     setProjectData ({ commit }, projectData) { commit('setProjectData', projectData); },
-    setCurrentView ({ commit }, currentView) { commit('setCurrentView', currentView); },
+    setCurrentProjectBoard ({ commit }, currentProjectBoard) { commit('setCurrentProjectBoard', currentProjectBoard); },
     setCurrentAppPermissions ({ commit }, { authToken, permissions }) {
         commit('setAuthToken', authToken);  
         commit('setPermissions', permissions);  
@@ -115,9 +100,12 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
 // -------
 
 const generalDataGetters: GetterTree<GeneralDataState, RootState> & GeneralDataGetters = {
+    currentProjectBoard: (state) => {
+        return state.currentProjectBoard;
+    },
     currentPermissions: (state) => {
-        let currentProject = state.currentViewData?.projectId;
-        let currentBoard = state.currentViewData?.boardId;
+        let currentProject = state.currentProjectBoard?.projectId;
+        let currentBoard = state.currentProjectBoard?.boardId;
 
         if (!currentProject || !currentBoard) return [];
 
@@ -126,9 +114,6 @@ const generalDataGetters: GetterTree<GeneralDataState, RootState> & GeneralDataG
             ...state.permissions[currentBoard] ?? [],
         ];
     },
-    inDemoMode: (state) => {
-        return state.currentViewData?.projectId === DEMO_PROJECT_DATA.id;
-    }
 }
 
 

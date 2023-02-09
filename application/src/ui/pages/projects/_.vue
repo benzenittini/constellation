@@ -1,6 +1,6 @@
 <template>
     <div>
-        Projects page
+        Projects page!
     </div>
 </template>
 

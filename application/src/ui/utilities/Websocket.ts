@@ -207,7 +207,7 @@ function registerListeners(socket: Socket) {
 
         if (data.status === 'OK') {
             // Refresh the board data
-            let boardId = store.state.generalData.currentViewData?.boardId;
+            let boardId = useGeneralStore().currentProjectBoard().value?.boardId;
             if (boardId) {
                 // TODO-const : Re-enable all the actions
                 // new GetBoardDataAction(boardId).send();

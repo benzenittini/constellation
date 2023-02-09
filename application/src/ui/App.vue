@@ -3,15 +3,13 @@
         <mw-vm-modal-group v-bind:class="{ 'disable-pointer-events': pointerEventsDisabled }"></mw-vm-modal-group>
         <mw-vn-notification-display></mw-vn-notification-display>
 
-        Hello, from Vue!
-
-        <img width="50" height="100" src="./graphics/mouse-left-click.png">
-
         <main>
-            <router-view></router-view>
+            <eic-page-app v-if="hasBoardOpen"></eic-page-app>
+            <eic-page-projects v-else></eic-page-projects>
         </main>
 
-        <eic-slide-open-tray></eic-slide-open-tray>
+        <!-- TODO-const : Re-enable slide-open-tray on app page..? -->
+        <!-- <eic-slide-open-tray></eic-slide-open-tray> -->
     </div>
 </template>
 
@@ -26,6 +24,7 @@ export default defineComponent({
 
         return {
             pointerEventsDisabled: generalStore.pointerEventsDisabled(),
+            hasBoardOpen: computed(() => useGeneralStore().currentProjectBoard().value?.boardId),
         }
     },
 });

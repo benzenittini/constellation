@@ -13,15 +13,6 @@
                 <eic-svg-speech-bubble width="25" height="24" v-bind:class="{ active: openedTabId === 'feedback' }"></eic-svg-speech-bubble>
                 <span class="mw-sot-tab-preview">Give Feedback</span>
             </div>
-
-            <div class="mw-sot-tab"
-                v-if="showReleaseNotesTab"
-                v-on:click="clickTab('releases')"
-                v-bind:class="{ active: openedTabId === 'releases', displayed: highlightedTabId === 'releases' }"
-                >
-                <eic-svg-paper width="25" height="24" v-bind:class="{ active: openedTabId === 'releases' }"></eic-svg-paper>
-                <span class="mw-sot-tab-preview">Release Notes <span v-if="parsedReleaseNotes.length > 0" class="mw-sot-new-notes">(New!)</span></span>
-            </div>
         </div>
 
         <div class="mw-sot-tab-content" v-bind:style="{ width: `${contentDimensions.width}px` }">
@@ -39,14 +30,9 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUnmounted, Ref, ref, watch } from "vue";
-import { useRouter } from 'vue-router';
 
 import { useEmitter } from "../composables/Emitter";
 import { useGeneralStore } from "../store/GeneralStore";
-import * as ErrorLogger from '../utilities/ErrorLogger';
-
-// TODO-const : Re-enable all the actions
-// import { GetWhatsNew } from "../actions/RestActions/GetWhatsNew";
 
 export default defineComponent({
     props: {},
@@ -54,37 +40,14 @@ export default defineComponent({
         let openedTabId: Ref<undefined | string> = ref(undefined);
         let highlightedTabId: Ref<undefined | string> = ref(undefined);
 
-        const router = useRouter();
-        const showControlsTab = computed(() => router.currentRoute.value.path.startsWith("/app"));
+        // TODO-const : find a new way to show the controls tab since we no longer have vue-router.
+        // const showControlsTab = computed(() => router.currentRoute.value.path.startsWith("/app"));
+        const showControlsTab = computed(() => true);
 
         let emitter = useEmitter();
         let generalStore = useGeneralStore();
-        let currentUser = generalStore.userData();
-        const showReleaseNotesTab = computed(() => currentUser.value.userId);
 
         const parsedReleaseNotes = ref([] as any[]);
-        watch(() => currentUser.value.userId, (after: any, before: any) => {
-            if (before === undefined && after !== undefined) {
-                // TODO-const : Re-enable all the actions
-                // new GetWhatsNew().send(({data}: any) => {
-                //     if (data?.statusCode === 0) {
-                //         if (data.releases.length > 0) {
-                //             parsedReleaseNotes.value = (data.releases as { versionId: string, releaseDate: string }[])
-                //                 .map(r => ({
-                //                     versionId: r.versionId,
-                //                     releaseDate: new Date(r.releaseDate)
-                //                 }));
-
-                //             // Show the "releases" tab.
-                //             highlightedTabId.value = 'releases';
-                //             setTimeout(() => highlightedTabId.value = undefined, 5000);
-                //         }
-                //     } else {
-                //         ErrorLogger.showError('4.3.1', [data.errorMessage]);
-                //     }
-                // });
-            }
-        });
 
         let contentDimensions = computed(() => {
             if      (openedTabId.value === undefined)  return { width: 0   };
@@ -113,7 +76,6 @@ export default defineComponent({
             openedTabId,
             highlightedTabId,
             showControlsTab,
-            showReleaseNotesTab,
             parsedReleaseNotes,
             contentDimensions,
 

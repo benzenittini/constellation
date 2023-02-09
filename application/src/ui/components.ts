@@ -21,11 +21,8 @@ import NextPrevious          from './components/NextPrevious.vue';
 import Close                 from './components/Close.vue';
 import ReleaseNoteDisplay    from './components/ReleaseNoteDisplay.vue';
 import ReleaseNotesFormatted from './components/ReleaseNotesFormatted.vue';
-import PasswordConfirmation  from './components/PasswordConfirmation.vue';
-import StagedProgressBar     from './components/StagedProgressBar.vue';
 // Slide-Open Tray
 import SlideOpenTray     from './components/SlideOpenTray.vue';
-import GiveFeedback      from './components/GiveFeedback.vue';
 import ControlsContainer from './components/controls/ControlsContainer.vue';
 import MindMapControls   from './components/controls/MindMapControls.vue';
 import FilterControls    from './components/controls/FilterControls.vue';
@@ -57,6 +54,15 @@ import SpeechBubble    from './svgs/SpeechBubble.vue';
 import Triangle        from './svgs/Triangle.vue';
 
 
+// -- Pages --
+
+// Project/Board List
+import Projects from './pages/projects/_.vue';
+
+// Application
+import AppHome from './pages/app/_.vue';
+
+
 // -- The exported super-object --
 
 export let components: any = {
@@ -77,14 +83,11 @@ export let components: any = {
     'eic-close': Close,
     'eic-release-note-display': ReleaseNoteDisplay,
     'eic-release-notes-formatted': ReleaseNotesFormatted,
-    'eic-password-confirmation': PasswordConfirmation,
-    'eic-staged-progress-bar': StagedProgressBar,
     'eic-savecancel': SaveCancel,
     'eic-savedontsavecancel': SaveDontSaveCancel,
     'eic-nextprevious': NextPrevious,
     // Slide-Open Tray
     'eic-slide-open-tray': SlideOpenTray,
-    'eic-give-feedback': GiveFeedback,
     'eic-controls-container': ControlsContainer,
     'eic-mind-map-controls': MindMapControls,
     'eic-filter-controls': FilterControls,
@@ -115,6 +118,9 @@ export let components: any = {
     'eic-svg-speech-bubble': SpeechBubble,
     'eic-svg-triangle': Triangle,
 
-    // -- Application Components --
-    // TODO-ben : coming soon!
+    // -- Pages --
+    // Project/Board List
+    'eic-page-projects': Projects,
+    // Application
+    'eic-page-app': AppHome,
 };

@@ -8,11 +8,8 @@ import { AugmentedActionContext, GetterProperties, TypedMap } from "../StoreType
 
 // -- State --
 export interface GeneralDataState {
-    userData: BasicUserData;
-    adminData: AdminData;
-    planData: PlanData;
     projectData: BasicProjectData[];
-    currentViewData: CurrentViewData | undefined;
+    currentProjectBoard: CurrentProjectBoard | undefined;
     authToken: string | undefined;
     permissions: TypedMap<string[]>;
     uiFlags: { disablePointerEvents: boolean };
@@ -23,16 +20,10 @@ export type GeneralDataMutations<S = GeneralDataState> = {
     resetStore      (state: S): void;
     clearBoardState (state: S): void;
 
-    setUsername    (state: S, username: string | undefined): void;
-    setUserId      (state: S, userId: string | undefined): void;
-    setEmail       (state: S, email: string | undefined): void;
-    setIsAdmin     (state: S, isAdmin: boolean): void;
-    setAdminJwt    (state: S, adminJwt: string): void;
-    setProjectData (state: S, projectData: BasicProjectData[]): void;
-    setPlanData    (state: S, planData: PlanData): void;
-    setCurrentView (state: S, currentView: CurrentViewData): void;
-    setAuthToken   (state: S, newToken: string): void;
-    setPermissions (state: S, permissions: TypedMap<string[]>): void;
+    setProjectData         (state: S, projectData: BasicProjectData[]): void;
+    setCurrentProjectBoard (state: S, currentProjectBoard: CurrentProjectBoard): void;
+    setAuthToken           (state: S, newToken: string): void;
+    setPermissions         (state: S, permissions: TypedMap<string[]>): void;
 
     addProject        (state: S, projectData: BasicProjectData): void;
     addBoardToProject (state: S, data: { projectId: string, boardData: BasicBoardData }): void;
@@ -48,14 +39,8 @@ export interface GeneralDataActions {
     logOut          ({ commit }: AugmentedActionContext<GeneralDataState>): void;
     clearBoardState ({ commit }: AugmentedActionContext<GeneralDataState>): void;
 
-    setUsername    ({ commit }: AugmentedActionContext<GeneralDataState>, username: string): void;
-    setUserId      ({ commit }: AugmentedActionContext<GeneralDataState>, userId: string): void;
-    setEmail       ({ commit }: AugmentedActionContext<GeneralDataState>, email: string): void;
-    setIsAdmin     ({ commit }: AugmentedActionContext<GeneralDataState>, isAdmin: boolean): void;
-    setAdminJwt    ({ commit }: AugmentedActionContext<GeneralDataState>, adminJwt: string): void;
-    setPlanData    ({ commit }: AugmentedActionContext<GeneralDataState>, planData: PlanData): void;
     setProjectData ({ commit }: AugmentedActionContext<GeneralDataState>, projectData: BasicProjectData[]): void;
-    setCurrentView ({ commit }: AugmentedActionContext<GeneralDataState>, currentView: CurrentViewData): void;
+    setCurrentProjectBoard ({ commit }: AugmentedActionContext<GeneralDataState>, currentProjectBoard: CurrentProjectBoard): void;
     setCurrentAppPermissions ({ commit }: AugmentedActionContext<GeneralDataState>, payload: { authToken: string, permissions: TypedMap<string[]> }): void;
 
     addProject        ({ commit }: AugmentedActionContext<GeneralDataState>, projectData: BasicProjectData): void;
@@ -67,8 +52,8 @@ export interface GeneralDataActions {
 
 // -- Getters --
 export type GeneralDataGetters<S = GeneralDataState> = {
-    currentPermissions (state: S, getters: GetterProperties): string[];
-    inDemoMode (state: S): boolean;
+    currentProjectBoard (state: S, getters: GetterProperties): CurrentProjectBoard | undefined;
+    currentPermissions  (state: S, getters: GetterProperties): string[];
 }
 
 
@@ -96,27 +81,6 @@ export const VALID_BOARD_PERMISSIONS = [
 ];
 
 
-// ==============
-// Demo Constants
-// --------------
-
-export const DEMO_PROJECT_DATA = { id: 'demo', name: 'Demo' };
-export const DEMO_ORDERING = [
-    'demo-courseorg',
-    'demo-marscolonization',
-    'demo-sandbox',
-    // 'demo-projmanagement',
-    // 'demo-notetaking',
-];
-export const DEMO_DATA: TypedMap<any> = {
-    'demo-courseorg':        { id: 'demo-courseorg',        name: 'Course Organization', image: '/graphics/demo-courseorg.png',        desc: "If you're taking coursework, Spacia can help you track dates for tests, assignments, the relevant people, and tame the hundreds of website bookmarks you've likely been given." },
-    'demo-marscolonization': { id: 'demo-marscolonization', name: 'Mars Colonization',   image: '/graphics/demo-marscolonization.png', desc: "Let's go to Mars! We're absolutely definitely not planning to make a Mars colony (probably), but if we were ... it might look suspiciously similar to this." },
-    'demo-sandbox':          { id: 'demo-sandbox',          name: 'Sandbox',             image: '/graphics/demo-sandbox.png',          desc: "An empty board for you to experiment on. For science, of course!" },
-    // 'demo-projmanagement':   { comingSoon: true, id: 'demo-projmanagement',   name: 'Project Management',  image: '/graphics/demo-projmanagement.png', desc: "Our main goal is to make projects more manageable - something we felt other tools fell short on. There are many approaches you can take, but this example captures the basics." },
-    // 'demo-notetaking':       { comingSoon: true, id: 'demo-notetaking',       name: 'Note Taking',         image: '/graphics/demo-notetaking.png',     desc: "An example notebook demonstrating one approach to notetaking using Spacia." },
-};
-
-
 // ==========
 // Data Types
 // ----------
@@ -124,21 +88,6 @@ export const DEMO_DATA: TypedMap<any> = {
 export interface Permission {
     sourceId: string; // Email for users, ?? for groups
     permissionKey: string;
-}
-
-export interface BasicUserData {
-    username: string | undefined;
-    userId: string | undefined;
-    email: string | undefined;
-}
-
-export interface AdminData {
-    isAdmin: boolean;
-    jwt: string | undefined;
-}
-
-export interface PlanData {
-    hasPaidPlan: boolean;
 }
 
 export interface BasicProjectData {
@@ -159,7 +108,7 @@ export interface BasicBoardData {
     owners?: string[] | undefined;
 }
 
-export interface CurrentViewData {
+export interface CurrentProjectBoard {
     projectId: string;
     boardId: string;
 }
