@@ -8,6 +8,14 @@
 
 // func();
 
+// async function dothing() {
+//     let response = await window.projects.getProjectsAndBoards('test');
+//     // let response = await window.board.getProjectsAndBoards('test');
+//     console.log(response);
+// }
+// dothing();
+
+
 
 // ----------------------------------
 
@@ -18,7 +26,6 @@ import "@fontsource/roboto";
 import 'dragula/dist/dragula.min.css';
 
 import './styles/global-styles';
-
 
 // ==================
 // App Initialization

@@ -85,6 +85,8 @@ export const VALID_BOARD_PERMISSIONS = [
 // Data Types
 // ----------
 
+export const LOCAL_PROJECT = "local";
+
 export interface Permission {
     sourceId: string; // Email for users, ?? for groups
     permissionKey: string;

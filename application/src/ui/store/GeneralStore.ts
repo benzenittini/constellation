@@ -13,6 +13,9 @@ function currentProjectBoard(store: Store) {
 function projectsAndBoards(store: Store) {
     return computed(() => store.state.generalData.projectData);
 }
+function setCurrentProjectBoard(store: Store, projectId: string, boardId: string) {
+    store.dispatch('setCurrentProjectBoard', { projectId, boardId });
+}
 
 function authToken(store: Store) {
     // In this case, we don't actually want to request the auth token if it doesn't exist.
@@ -55,8 +58,10 @@ export function useGeneralStore() {
     return {
         rawState: store.state.generalData,
 
-        currentProjectBoard:   () => currentProjectBoard(store),
-        projectsAndBoards:     () => projectsAndBoards(store),
+        currentProjectBoard:    () => currentProjectBoard(store),
+        projectsAndBoards:      () => projectsAndBoards(store),
+        setCurrentProjectBoard: (projectId: string, boardId: string) => setCurrentProjectBoard(store, projectId, boardId),
+
         authToken:             () => authToken(store),
         currentAppPermissions: () => currentAppPermissions(store),
 

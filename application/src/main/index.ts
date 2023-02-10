@@ -2,6 +2,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 
+import { registerProjectHandlers } from './ProjectHandlers';
+import { registerBoardHandlers } from './BoardHandlers';
+
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 800,
@@ -13,7 +16,8 @@ const createWindow = () => {
         },
     });
 
-    ipcMain.handle('ping', () => 'pong');
+    registerProjectHandlers(ipcMain);
+    registerBoardHandlers(ipcMain);
 
     win.webContents.openDevTools();
     win.loadFile('index.html');
