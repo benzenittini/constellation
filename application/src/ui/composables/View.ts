@@ -1,9 +1,7 @@
 
 import { computed, ref, Ref, ComputedRef, SetupContext, onMounted, onUnmounted } from 'vue';
 
-import { useEntityStore } from '../store/EntityStore';
-import { useHierarchyStore } from '../store/HierarchyStore';
-import { useGeneralStore } from '../store/GeneralStore';
+import { useStore } from '../store/store';
 import { useWindowEvents } from './WindowEvents';
 import { useEmitter } from './Emitter';
 import { usePermissions } from './Permissions';
@@ -13,9 +11,7 @@ import { Entity } from '../store/Types/EntityDataTypes';
 // import { DeleteEntities } from '../actions/WebsocketActions/DeleteEntities';
 
 export function useView(visibleBlocks: ComputedRef<Entity[]>, context: SetupContext<Record<string, any>>) {
-    const entityStore = useEntityStore();
-    const generalStore = useGeneralStore();
-    const hierarchyStore = useHierarchyStore();
+    const store = useStore();
     const windowEvents = useWindowEvents();
 
     const eventEmitter = useEmitter();
@@ -37,12 +33,12 @@ export function useView(visibleBlocks: ComputedRef<Entity[]>, context: SetupCont
                     selectedBlocks.value = [];
 
                     // Update our local store. (This assumes the server accepts the request)
-                    entityStore.deleteEntities(deletedBlockIds);
+                    store.dispatch("deleteEntities", deletedBlockIds);
 
                     // Send the update request to the server
                     // TODO-const : Re-enable all the actions
                     // new DeleteEntities(
-                    //     generalStore.rawState.currentViewData!.boardId,
+                    //     store.state.generalData.currentProjectBoard!.boardId,
                     //     deletedBlockIds,
                     // ).send();
 
@@ -96,11 +92,11 @@ export function useView(visibleBlocks: ComputedRef<Entity[]>, context: SetupCont
         // -------
 
         getBlockStyle: (block: Entity) => {
-            return entityStore.getCssStyles(block, 1);
+            return store.getters.getCssStyles(block, 1);
         },
         getBreadcrumbs: (blockId: string) => {
-            return hierarchyStore.getParentChain(blockId)
-                .map(id => entityStore.getSummaryText(id))
+            return store.getters.getParentChain(blockId)
+                .map(id => store.state.entityData.entities[id].content.data.text)
                 .join(' > ');
         },
 
@@ -110,7 +106,7 @@ export function useView(visibleBlocks: ComputedRef<Entity[]>, context: SetupCont
         // -------
 
         goToBlock: (blockId: string) => {
-            entityStore.selectEntity(blockId, true);
+            store.dispatch("selectEntity", {entityId: blockId, clearCurrentSelection: true});
             context.emit('mw-close-view');
             setTimeout(() => eventEmitter.emit('goToBlock', blockId), 100);
         },

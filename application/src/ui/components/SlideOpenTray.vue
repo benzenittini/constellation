@@ -32,7 +32,7 @@
 import { computed, defineComponent, onMounted, onUnmounted, Ref, ref, watch } from "vue";
 
 import { useEmitter } from "../composables/Emitter";
-import { useGeneralStore } from "../store/GeneralStore";
+import { useStore } from "../store/store";
 
 export default defineComponent({
     props: {},
@@ -45,7 +45,7 @@ export default defineComponent({
         const showControlsTab = computed(() => true);
 
         let emitter = useEmitter();
-        let generalStore = useGeneralStore();
+        const store = useStore();
 
         const parsedReleaseNotes = ref([] as any[]);
 
@@ -79,7 +79,7 @@ export default defineComponent({
             parsedReleaseNotes,
             contentDimensions,
 
-            pointerEventsDisabled: generalStore.pointerEventsDisabled(),
+            pointerEventsDisabled: computed(() => store.getters.pointerEventsDisabled),
 
             clickTab: (tabId: string) => {
                 openedTabId.value = (openedTabId.value === tabId) ? undefined : tabId;

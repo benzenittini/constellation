@@ -2,8 +2,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 
-import { registerProjectHandlers } from './ProjectHandlers';
-import { registerBoardHandlers } from './BoardHandlers';
+import * as ProjectHandlers from './ProjectHandlers';
+import * as BoardHandlers from './BoardHandlers';
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -36,3 +36,11 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
+
+function registerBoardHandlers(ipcMain: Electron.IpcMain) {
+    ipcMain.handle('board:getBoardData', (event, boardId) => BoardHandlers.getBoardData(boardId));
+}
+
+function registerProjectHandlers(ipcMain: Electron.IpcMain) {
+    ipcMain.handle('projects:getProjectsAndBoards', (event, message) => ProjectHandlers.getProjectsAndBoards(message));
+}

@@ -1,13 +1,13 @@
 
 import { computed } from 'vue';
 
-import { useGeneralStore } from '../store/GeneralStore';
+import { useStore } from '../store/store';
 import * as ArrayUtils from '../../common/ArrayUtils';
 
 export function usePermissions() {
 
-    const generalStore = useGeneralStore();
-    let currentAppPermissions = generalStore.currentAppPermissions();
+    const store = useStore();
+    let currentAppPermissions = computed(() => store.getters.currentPermissions);
 
     let canEditBoardContents        = computed(() => ArrayUtils.includesAny(currentAppPermissions.value, ['BOARD_OWNER', 'BOARD_EDIT_CONTENTS']));
     let canEditBoardClassifications = computed(() => ArrayUtils.includesAny(currentAppPermissions.value, ['BOARD_OWNER', 'BOARD_EDIT_CLASSIFICATIONS']));

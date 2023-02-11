@@ -101,6 +101,9 @@ export type EntityDataGetters<S = EntityDataState> = {
     activeClassificationFieldIds (state: S, getters: GetterProperties): (entityIds: string[]) => TypedMap<string[]>;
     activeEntityFieldIds         (state: S, getters: GetterProperties): (entityIds: string[]) => string[];
     activeFieldValueCounts       (state: S, getters: GetterProperties): (entityIds: string[]) => TypedMap<{pvCounts: TypedMap<number>, outOf: number}>;
+
+    getStyles    (state: S, getters: GetterProperties): (block: Entity, depth: number) => any;
+    getCssStyles (state: S, getters: GetterProperties): (block: Entity, depth: number) => any;
 }
 
 

@@ -11,14 +11,14 @@
 import { computed, defineComponent } from "vue";
 import { ViewType } from "../../store/Types/ViewDataTypes";
 
-import { useViewStore } from "../../store/ViewStore";
+import { useStore } from "../../store/store";
 
 export default defineComponent({
     props: {},
     setup() {
-        const viewStore = useViewStore();
+        const store = useStore();
 
-        let activeViewType = computed(() => viewStore.activeViewConfig()?.value?.type);
+        let activeViewType = computed(() => store.state.viewData.activeViewConfig?.type);
 
         return {
             activeViewType,

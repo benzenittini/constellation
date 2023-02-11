@@ -8,6 +8,7 @@ import * as ErrorLogger from "../../common/ErrorLogger";
 import * as RectangleUtils from '../../common/RectangleUtils';
 import * as ObjectUtils from '../../common/ObjectUtils';
 import { getFieldValue } from "./Types/FieldDataTypes";
+import { GRAY8 } from '../styles/styleVariables';
 
 
 // =====
@@ -415,7 +416,68 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
         }
 
         return returnValue;
-    }
+    },
+
+    getStyles: (state, getters) => (block, depth) => {
+        let style: any = {};
+
+        let classificationIds = getters.classificationIds;
+        let classificationDefs = getters.classifications;
+        let fieldDefs = getters.fields;
+        let pvDefs = getters.possibleValues;
+
+        let applyStylesByFieldId = (fieldId: string) => {
+            // Look up and apply the styles for the PVs that match this block's field value(s).
+            // Since checkboxes can have multiple values chosen, need to find ALL the PVs that match.
+            let rawValue: any = getFieldValue(fieldDefs[fieldId].type, block.fieldValues[fieldId]);
+            let fieldValues: any[] = Array.isArray(rawValue) ? rawValue : [rawValue];
+            fieldDefs[fieldId].possibleValueIds
+                // Convert this field's pvIds to pvDefs
+                .map(pvId => pvDefs[pvId])
+                // Keep only the ones this entity has a value for
+                .filter(pv => fieldValues.includes(pv.name))
+                // Merge their styles.
+                .forEach(pvDef => {
+                    if (pvDef?.style?.background) style['fill']   = pvDef.style.background;
+                    if (pvDef?.style?.border)     style['stroke'] = pvDef.style.border;
+                    if (pvDef?.style?.text)       style['color']  = pvDef.style.text;
+                });
+        }
+
+        // Populate styles from the classifications
+        classificationIds
+            .filter(cid => block.classificationIds.includes(cid))
+            .forEach(cid => {
+                classificationDefs[cid]
+                    // Keep only the fields that are defined on this entity
+                    .fieldIds?.filter((fid) => block.fieldValues[fid])
+                    // Apply styles
+                    .forEach(fid => applyStylesByFieldId(fid));
+            });
+
+        // Populate styles from the fields
+        block.fieldIds
+            // Keep only the ones defined directly on the entity. (not the classifications - that's handled above.)
+            .filter(fid => fieldDefs[fid].sourceType === 'entity')
+            // Apply styles
+            .forEach(fid => applyStylesByFieldId(fid));
+
+        // Populate any final style overrides that are important
+        if (block.isSelected) {
+            style.filter = `drop-shadow(0 0 ${10/depth}px ${GRAY8})`
+        }
+        style.strokeWidth = 3 / depth;
+
+        return style;
+    },
+    getCssStyles: (state, getters) => (block, depth) => {
+        let svgStyle = getters.getStyles(block, depth);
+        let retVal: any = {};
+        if (svgStyle.fill)   retVal.background = svgStyle.fill;
+        if (svgStyle.stroke) retVal.border = svgStyle.strokeWidth + 'px solid ' + svgStyle.stroke;
+        if (svgStyle.color)  retVal.color = svgStyle.color;
+        return retVal;
+    },
 }
 
 

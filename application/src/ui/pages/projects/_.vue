@@ -10,21 +10,19 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue';
 
-import { BoardCommsSingleton } from '../../communications/BoardCommsSingleton';
-import { useGeneralStore } from '../../store/GeneralStore';
+import { useStore } from '../../store/store';
 
 export default defineComponent({
     setup() {
-        const generalStore = useGeneralStore();
+        const store = useStore();
 
         return {
             openBoard: () => {
-                // TODO-const : When local board is opened:
-                BoardCommsSingleton.activateLocalInterface();
-                // TODO-const : When remote board is opened:
-                // BoardCommsSingleton.activateRemoteInterface();
+                // TODO-const : When local board is opened, send actions over IPC
+                // TODO-const : When remote board is opened, send actions over WS
 
-                generalStore.setCurrentProjectBoard('project-id', 'board-id')
+                // TODO-const : Set proper values for these
+                store.dispatch('setCurrentProjectBoard', { projectId: 'project-id', boardId: 'board-id' });
             }
         }
     },

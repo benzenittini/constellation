@@ -2,13 +2,13 @@
 import { reactive } from 'vue';
 import { useVueModals } from 'mw-vue-modals';
 
-import { useGeneralStore } from '../store/GeneralStore';
+import { useStore } from '../store/store';
+import { useFieldStore } from '../store/FieldStore';
 
 import * as ObjectUtils from '../../common/ObjectUtils';
 import { TypedMap } from '../store/StoreTypes';
 import { FieldDefinition, FieldType, getFieldValue, PossibleValueDefinition } from '../store/Types/FieldDataTypes';
 import { Entity } from '../store/Types/EntityDataTypes';
-import { useFieldStore } from '../store/FieldStore';
 
 // TODO-const : Re-enable all the actions
 // import { UpdateFieldDefinitions } from '../actions/WebsocketActions/UpdateFieldDefinitions';
@@ -16,7 +16,7 @@ import { useFieldStore } from '../store/FieldStore';
 
 
 function openEditFieldsDialog(entityIds: string[], fieldIds: string[], fieldDefs: TypedMap<FieldDefinition>, possibleValueDefs: TypedMap<PossibleValueDefinition>) {
-    let generalStore = useGeneralStore();
+    let store = useStore();
     let mwVueModals = useVueModals();
 
     let dialogId = "edit-fields";
@@ -63,7 +63,7 @@ function openEditFieldsDialog(entityIds: string[], fieldIds: string[], fieldDefs
 
                             // TODO-const : Re-enable all the actions
                             // new UpdateFieldDefinitions(
-                            //     generalStore.rawState.currentViewData!.boardId,
+                            //     store.state.generalData.currentProjectBoard!.boardId,
                             //     entityIdsToUpdate,
                             //     fieldDefinitions,
                             //     fieldIds,
@@ -89,7 +89,7 @@ function openEditFieldsDialog(entityIds: string[], fieldIds: string[], fieldDefs
 }
 
 function setFieldValueOnEntities(entities: Entity[], fieldId: string, valueChangeEvent: any) {
-    const generalStore = useGeneralStore();
+    const store = useStore();
     const fieldStore = useFieldStore();
 
     const fieldDefs = fieldStore.fields();
@@ -149,7 +149,7 @@ function setFieldValueOnEntities(entities: Entity[], fieldId: string, valueChang
 
     // TODO-const : Re-enable all the actions
     // new UpdateFieldValueOnEntities(
-    //     generalStore.rawState.currentViewData!.boardId,
+    //     store.state.generalData.currentProjectBoard!.boardId,
     //     fieldId,
     //     entityIdToFieldValue,
     // ).send();

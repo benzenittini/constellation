@@ -72,12 +72,6 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
     logOut          ({ commit }) { commit('resetStore'); },
     clearBoardState ({ commit }) { commit('clearBoardState'); },
 
-    setUsername    ({ commit }, username)    { commit('setUsername',    username);    },
-    setUserId      ({ commit }, userId)      { commit('setUserId',      userId);      },
-    setEmail       ({ commit }, email)       { commit('setEmail',       email);       },
-    setIsAdmin     ({ commit }, isAdmin)     { commit('setIsAdmin',     isAdmin);     },
-    setAdminJwt    ({ commit }, adminJwt)    { commit('setAdminJwt',    adminJwt);     },
-    setPlanData    ({ commit }, planData)    { commit('setPlanData',    planData);    },
     setProjectData ({ commit }, projectData) { commit('setProjectData', projectData); },
     setCurrentProjectBoard ({ commit }, currentProjectBoard) { commit('setCurrentProjectBoard', currentProjectBoard); },
     setCurrentAppPermissions ({ commit }, { authToken, permissions }) {
@@ -114,6 +108,9 @@ const generalDataGetters: GetterTree<GeneralDataState, RootState> & GeneralDataG
             ...state.permissions[currentBoard] ?? [],
         ];
     },
+    pointerEventsDisabled: (state) => {
+        return state.uiFlags.disablePointerEvents;
+    }
 }
 
 

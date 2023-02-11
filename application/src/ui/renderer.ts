@@ -1,26 +1,4 @@
 
-// const func = async () => {
-//     const response = await window.versions.ping();
-//     console.log(response);
-
-//     console.log(`This app is using Chrome (v${window.versions.chrome()}), Node.js (v${window.versions.node()}), and Electron (v${window.versions.electron()})`);
-// };
-
-// func();
-
-// async function dothing() {
-//     let response = await window.projects.getProjectsAndBoards('test');
-//     // let response = await window.board.getProjectsAndBoards('test');
-//     console.log(response);
-// }
-// dothing();
-
-
-
-// ----------------------------------
-
-
-
 import "@fontsource/roboto";
 
 import 'dragula/dist/dragula.min.css';

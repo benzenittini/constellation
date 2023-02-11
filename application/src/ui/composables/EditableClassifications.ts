@@ -2,7 +2,7 @@
 import { reactive } from 'vue';
 import { useVueModals } from 'mw-vue-modals';
 
-import { useGeneralStore } from '../store/GeneralStore';
+import { useStore } from '../store/store';
 
 import { TypedMap } from '../store/StoreTypes';
 import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from '../store/Types/FieldDataTypes';
@@ -12,7 +12,7 @@ import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } fr
 
 
 function openEditClassificationsDialog(classificationIds: string[], classificationDefs: TypedMap<ClassificationDefinition>, fieldDefs: TypedMap<FieldDefinition>, possibleValueDefs: TypedMap<PossibleValueDefinition>) {
-    let generalStore = useGeneralStore();
+    let store = useStore();
     let mwVueModals = useVueModals();
 
     let dialogId = "edit-classifications";
@@ -48,7 +48,7 @@ function openEditClassificationsDialog(classificationIds: string[], classificati
 
                             // TODO-const : Re-enable all the actions
                             // new UpdateClassificationDefinitions(
-                            //     generalStore.rawState.currentViewData!.boardId,
+                            //     store.state.generalData.currentProjectBoard!.boardId,
                             //     modalData.classificationIds,
                             //     modalData.classificationDefs,
                             //     modalData.fieldDefs,
@@ -73,11 +73,11 @@ function openEditClassificationsDialog(classificationIds: string[], classificati
 }
 
 function setClassificationOnEntities(entityIds: string[], classificationId: string, isActive: boolean) {
-    let generalStore = useGeneralStore();
+    let store = useStore();
 
     // TODO-const : Re-enable all the actions
     // new UpdateClassificationOnEntities(
-    //     generalStore.rawState.currentViewData!.boardId,
+    //     store.state.generalData.currentProjectBoard!.boardId,
     //     entityIds,
     //     classificationId,
     //     isActive

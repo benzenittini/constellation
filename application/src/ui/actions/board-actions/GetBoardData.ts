@@ -1,6 +1,5 @@
 
 import { BoardData } from '../../../common/BoardDataTypes';
-import { BoardCommsSingleton } from '../../communications/BoardCommsSingleton';
 
 import { Action } from "../Action";
 
@@ -20,9 +19,10 @@ export class GetBoardDataAction extends Action {
     }
 
     submit(): void {
-        BoardCommsSingleton.activeInterface!
-            .getBoardData(this.boardId)
-            .then(boardData => this.processResponse(boardData));
+        // If local project, make the IPC request
+        window.board.getBoardData(this.boardId)
+            .then((boardData: BoardData) => this.processResponse(boardData));
+        // If remote project, send message over websocket.
     }
 
     processResponse(data: BoardData): void {

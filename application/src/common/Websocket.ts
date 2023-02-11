@@ -7,7 +7,6 @@ import { useVueNotify } from 'mw-vue-notify';
 
 import * as ErrorLogger from './ErrorLogger';
 import { useStore } from '../ui/store/store';
-import { useGeneralStore } from '../ui/store/GeneralStore';
 
 // TODO-const : Re-enable all the actions
 // import { GetBoardDataAction } from '../actions/WebsocketActions/GetBoardData';
@@ -97,7 +96,7 @@ class Websocket {
                     });
                 });
                 this.socket.on('clientValidated', () => {
-                    let authToken = useGeneralStore().authToken().value;
+                    let authToken = store.state.generalData.authToken;
                     this.socket!.emit('subscribeToBoard', { boardId, authToken });
 
                     this.setConnectionDialogMessage('fetching data...');
@@ -207,7 +206,7 @@ function registerListeners(socket: Socket) {
 
         if (data.status === 'OK') {
             // Refresh the board data
-            let boardId = useGeneralStore().currentProjectBoard().value?.boardId;
+            let boardId = store.state.generalData.currentProjectBoard.boardId;
             if (boardId) {
                 // TODO-const : Re-enable all the actions
                 // new GetBoardDataAction(boardId).send();

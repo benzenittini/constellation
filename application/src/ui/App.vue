@@ -16,15 +16,15 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue';
 
-import { useGeneralStore } from './store/GeneralStore';
+import { useStore } from './store/store';
 
 export default defineComponent({
     setup() {
-        const generalStore = useGeneralStore();
+        const store = useStore();
 
         return {
-            pointerEventsDisabled: generalStore.pointerEventsDisabled(),
-            hasBoardOpen: computed(() => useGeneralStore().currentProjectBoard().value?.boardId),
+            pointerEventsDisabled: computed(() => store.getters.pointerEventsDisabled),
+            hasBoardOpen: computed(() => store.state.generalData.currentProjectBoard?.boardId),
         }
     },
 });
