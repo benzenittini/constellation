@@ -1,7 +1,7 @@
 
-import { BoardData } from '../../../common/BoardDataTypes';
-
 import { Action } from "../Action";
+import { BoardData } from '../../../common/BoardDataTypes';
+import { useStore } from '../../store/store';
 
 export class GetBoardDataAction extends Action {
 
@@ -19,10 +19,14 @@ export class GetBoardDataAction extends Action {
     }
 
     submit(): void {
-        // If local project, make the IPC request
-        window.board.getBoardData(this.boardId)
-            .then((boardData: BoardData) => this.processResponse(boardData));
-        // If remote project, send message over websocket.
+        if (useStore().getters.isCurrentBoardRemote) {
+            // If remote project, send message over websocket.
+            // TODO-const : Send GetBoardData over websocket
+        } else {
+            // If local project, make the IPC request
+            window.board.getBoardData(this.boardId)
+                .then((boardData: BoardData) => this.processResponse(boardData));
+        }
     }
 
     processResponse(data: BoardData): void {

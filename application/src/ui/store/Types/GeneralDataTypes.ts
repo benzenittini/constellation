@@ -53,6 +53,7 @@ export interface GeneralDataActions {
 // -- Getters --
 export type GeneralDataGetters<S = GeneralDataState> = {
     currentProjectBoard   (state: S, getters: GetterProperties): CurrentProjectBoard | undefined;
+    isCurrentBoardRemote  (state: S, getters: GetterProperties): boolean;
     currentPermissions    (state: S, getters: GetterProperties): string[];
     pointerEventsDisabled (state: S, getters: GetterProperties): boolean;
 }

@@ -11,6 +11,7 @@
 import { defineComponent, computed, onMounted } from 'vue';
 
 import { useStore } from '../../store/store';
+import { LOCAL_PROJECT } from '../../store/Types/GeneralDataTypes';
 
 export default defineComponent({
     setup() {
@@ -18,11 +19,8 @@ export default defineComponent({
 
         return {
             openBoard: () => {
-                // TODO-const : When local board is opened, send actions over IPC
-                // TODO-const : When remote board is opened, send actions over WS
-
                 // TODO-const : Set proper values for these
-                store.dispatch('setCurrentProjectBoard', { projectId: 'project-id', boardId: 'board-id' });
+                store.dispatch('setCurrentProjectBoard', { projectId: LOCAL_PROJECT, boardId: 'board-id' });
             }
         }
     },

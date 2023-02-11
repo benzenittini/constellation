@@ -1,7 +1,7 @@
 
 import { MutationTree, ActionTree, GetterTree } from "vuex";
 
-import { GeneralDataState, GeneralDataMutations, GeneralDataActions, GeneralDataGetters } from "./Types/GeneralDataTypes";
+import { GeneralDataState, GeneralDataMutations, GeneralDataActions, GeneralDataGetters, LOCAL_PROJECT } from "./Types/GeneralDataTypes";
 import { RootState } from "./StoreTypes";
 
 // =====
@@ -96,6 +96,10 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
 const generalDataGetters: GetterTree<GeneralDataState, RootState> & GeneralDataGetters = {
     currentProjectBoard: (state) => {
         return state.currentProjectBoard;
+    },
+    isCurrentBoardRemote: (state) => {
+        let currentProject = state.currentProjectBoard?.projectId;
+        return currentProject !== undefined && currentProject !== LOCAL_PROJECT;
     },
     currentPermissions: (state) => {
         let currentProject = state.currentProjectBoard?.projectId;
