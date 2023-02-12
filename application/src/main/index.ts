@@ -1,12 +1,16 @@
 
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import path from 'path';
 
-import * as ProjectHandlers from './ProjectHandlers';
-import * as BoardHandlers from './BoardHandlers';
+import { registerProjectHandlers } from './ProjectHandlers';
+import { registerBoardHandlers } from './BoardHandlers';
 
 const createWindow = () => {
+    // TODO-const : Remove all "leftMonitor" lines!
+    const leftMonitor = screen.getAllDisplays().find((d) => d.bounds.x === 0);
     const win = new BrowserWindow({
+        x: leftMonitor?.bounds.x || 0 + 50,
+        y: leftMonitor?.bounds.y || 0,
         width: 800,
         height: 600,
         webPreferences: {
@@ -36,11 +40,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
-
-function registerBoardHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('board:getBoardData', (event, boardId) => BoardHandlers.getBoardData(boardId));
-}
-
-function registerProjectHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('projects:getProjectsAndBoards', (event, message) => ProjectHandlers.getProjectsAndBoards(message));
-}

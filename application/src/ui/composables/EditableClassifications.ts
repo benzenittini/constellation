@@ -4,8 +4,8 @@ import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../store/store';
 
-import { TypedMap } from '../store/StoreTypes';
 import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from '../store/Types/FieldDataTypes';
+import { TypedMap } from '../../../../common/DataTypes/GenericDataTypes';
 // TODO-const : Re-enable all the actions
 // import { UpdateClassificationDefinitions } from '../actions/WebsocketActions/UpdateClassificationDefinitions';
 // import { UpdateClassificationOnEntities } from '../actions/WebsocketActions/UpdateClassificationOnEntities';

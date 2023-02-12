@@ -1,5 +1,6 @@
 
-import { AugmentedActionContext, EntityLinkPair, GetterProperties, TypedMap } from "../StoreTypes"
+import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
+import { AugmentedActionContext, EntityLinkPair, GetterProperties } from "../StoreTypes"
 
 
 // ==========

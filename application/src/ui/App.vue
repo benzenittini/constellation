@@ -4,7 +4,7 @@
         <mw-vn-notification-display></mw-vn-notification-display>
 
         <main>
-            <eic-page-app v-if="hasBoardOpen"></eic-page-app>
+            <eic-page-mindmap v-if="hasBoardOpen"></eic-page-mindmap>
             <eic-page-projects v-else></eic-page-projects>
         </main>
 

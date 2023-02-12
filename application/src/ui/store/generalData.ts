@@ -9,10 +9,8 @@ import { RootState } from "./StoreTypes";
 // -----
 
 const generalDataState: GeneralDataState = {
-    projectData: [],
+    projectData: {},
     currentProjectBoard: undefined,
-    authToken: undefined,
-    permissions: {},
     uiFlags: {
         // When dragging on the canvas, we disable all pointer events on other UI components
         // (like the title bar, config pane, etc), which prevents an annoying effect when the
@@ -28,33 +26,29 @@ const generalDataState: GeneralDataState = {
 
 const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutations = {
     resetStore (state) {
-        state.projectData         = [];
+        state.projectData         = {};
         state.currentProjectBoard = undefined;
-        state.authToken           = undefined;
-        state.permissions         = {};
         state.uiFlags             = { disablePointerEvents: false }
     },
     clearBoardState (state) {
-        state.projectData = [];
+        state.projectData = {};
         state.currentProjectBoard = undefined;
-        // (Not clearing auth token.)
-        // (Not clearing permissions.)
         state.uiFlags = { disablePointerEvents: false }
     },
 
-    setProjectData         (state, projectData)         { state.projectData = projectData;                   },
     setCurrentProjectBoard (state, currentProjectBoard) { state.currentProjectBoard = currentProjectBoard;   },
-    setAuthToken           (state, authToken)           { state.authToken = authToken;                       },
-    setPermissions         (state, permissions)         { state.permissions = permissions;                   },
 
-    addProject        (state, projectData) { state.projectData.push(projectData); },
+    addProject (state, projectData) {
+        state.projectData[projectData.projectId] = projectData;
+    },
+    removeProject (state, projectId) {
+        delete state.projectData[projectId];
+    },
+    setBoardsForProject(state, { projectId, boards }) {
+        state.projectData[projectId].boards = boards;
+    },
     addBoardToProject (state, {projectId, boardData}) {
-        let project = state.projectData.find(p => p.projectId === projectId);
-        if (project) {
-            project.boards[boardData.boardId] = boardData;
-        } else {
-            // TODO-later : Throw an error? ... or at least might want to do something here.
-        }
+        state.projectData[projectId].boards[boardData.boardId] = boardData;
     },
 
     // UI Flags
@@ -72,15 +66,12 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
     logOut          ({ commit }) { commit('resetStore'); },
     clearBoardState ({ commit }) { commit('clearBoardState'); },
 
-    setProjectData ({ commit }, projectData) { commit('setProjectData', projectData); },
     setCurrentProjectBoard ({ commit }, currentProjectBoard) { commit('setCurrentProjectBoard', currentProjectBoard); },
-    setCurrentAppPermissions ({ commit }, { authToken, permissions }) {
-        commit('setAuthToken', authToken);  
-        commit('setPermissions', permissions);  
-    },
 
-    addProject        ({ commit }, projectData) { commit('addProject', projectData); },
-    addBoardToProject ({ commit }, { projectId, boardData }) { commit('addBoardToProject', { projectId, boardData }); },
+    addProject          ({ commit }, projectData) { commit('addProject', projectData); },
+    removeProject       ({ commit }, projectId)                  { commit('removeProject', projectId); },
+    setBoardsForProject ({ commit }, { projectId, boards })      { commit('setBoardsForProject', { projectId, boards }); },
+    addBoardToProject   ({ commit }, { projectId, boardData })   { commit('addBoardToProject', { projectId, boardData }); },
 
     // UI Flags
     setDisablePointerEvents ({ commit }, disablePointerEvents) {
@@ -100,17 +91,6 @@ const generalDataGetters: GetterTree<GeneralDataState, RootState> & GeneralDataG
     isCurrentBoardRemote: (state) => {
         let currentProject = state.currentProjectBoard?.projectId;
         return currentProject !== undefined && currentProject !== LOCAL_PROJECT;
-    },
-    currentPermissions: (state) => {
-        let currentProject = state.currentProjectBoard?.projectId;
-        let currentBoard = state.currentProjectBoard?.boardId;
-
-        if (!currentProject || !currentBoard) return [];
-
-        return [
-            ...state.permissions[currentProject] ?? [],
-            ...state.permissions[currentBoard] ?? [],
-        ];
     },
     pointerEventsDisabled: (state) => {
         return state.uiFlags.disablePointerEvents;

@@ -1,5 +1,6 @@
 
-import { TypedMap, AugmentedActionContext, GetterProperties } from "../StoreTypes";
+import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
+import { AugmentedActionContext, GetterProperties } from "../StoreTypes";
 import { FilterChain } from "./ViewDataTypes";
 
 

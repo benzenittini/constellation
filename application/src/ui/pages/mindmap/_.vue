@@ -1,6 +1,7 @@
 <template>
     <div>
-        App page
+        Mind map page
+        {{ }}
     </div>
 </template>
 
@@ -8,12 +9,19 @@
 import { defineComponent, computed, onMounted } from 'vue';
 
 import { GetBoardDataAction } from '../../actions/board-actions/GetBoardData';
+import { useStore } from '../../store/store';
 
 export default defineComponent({
     setup() {
+        const store = useStore();
+
         onMounted(() => {
-            // TODO-const : replace with proper IDs
-            new GetBoardDataAction('board-id').submit();
+            let currentBoardId = store.getters.currentProjectBoard?.boardId;
+            if (currentBoardId) {
+                new GetBoardDataAction(currentBoardId).submit();
+            } else {
+                // TODO-const : drop a generic error to try again..?
+            }
         });
         return {}
     },

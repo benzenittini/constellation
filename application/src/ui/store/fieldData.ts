@@ -1,8 +1,9 @@
 
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 import { FieldDataState, FieldDataGetters, FieldDataMutations, FieldDataActions } from "./Types/FieldDataTypes";
-import { RootState, TypedMap } from "./StoreTypes";
+import { RootState } from "./StoreTypes";
 import * as ErrorLogger from "../../common/ErrorLogger";
+import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
 
 
 // =====

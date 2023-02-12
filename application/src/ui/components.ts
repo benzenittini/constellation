@@ -60,7 +60,7 @@ import Triangle        from './svgs/Triangle.vue';
 import Projects from './pages/projects/_.vue';
 
 // Application
-import AppHome from './pages/app/_.vue';
+import Mindmap from './pages/mindmap/_.vue';
 
 
 // -- The exported super-object --
@@ -122,5 +122,5 @@ export let components: any = {
     // Project/Board List
     'eic-page-projects': Projects,
     // Application
-    'eic-page-app': AppHome,
+    'eic-page-mindmap': Mindmap,
 };

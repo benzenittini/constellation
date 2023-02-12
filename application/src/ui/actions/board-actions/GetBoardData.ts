@@ -1,6 +1,6 @@
 
 import { Action } from "../Action";
-import { BoardData } from '../../../common/BoardDataTypes';
+import { BoardData } from '../../../../../common/DataTypes/BoardDataTypes';
 import { useStore } from '../../store/store';
 
 export class GetBoardDataAction extends Action {
@@ -25,12 +25,21 @@ export class GetBoardDataAction extends Action {
         } else {
             // If local project, make the IPC request
             window.board.getBoardData(this.boardId)
-                .then((boardData: BoardData) => this.processResponse(boardData));
+                .then((boardData: BoardData | undefined) => this.processResponse(boardData));
         }
     }
 
-    processResponse(data: BoardData): void {
+    processResponse(data: BoardData | undefined): void {
+        if (data === undefined) {
+            // TODO-const : post error
+            console.log("Error fetching board data for board: " + this.boardId);
+            return;
+        }
+
         console.log("Received: " + JSON.stringify(data));
+
+        // TODO-const : Persist the board data into Vuex
+
         // if (data.statusCode == 0) {
         //     let store = useStore();
 

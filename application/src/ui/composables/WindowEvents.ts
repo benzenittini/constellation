@@ -1,5 +1,6 @@
 
-import { TypedMap } from "../store/StoreTypes";
+import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
+
 
 export type EventRegistration = {
     type: string,

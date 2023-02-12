@@ -1,10 +1,11 @@
 
-import { AugmentedActionContext, GetterProperties, RootState, TypedMap } from "../StoreTypes";
+import { AugmentedActionContext, GetterProperties, RootState } from "../StoreTypes";
 import { Entity } from "./EntityDataTypes";
 import { DateTime, PossibleValueDefinition } from "./FieldDataTypes";
 import * as StringUtils from '../../../common/StringUtils';
 import * as DateUtils from '../../../common/DateUtils';
 import * as ErrorLogger from '../../../common/ErrorLogger';
+import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 
 
 // -- State --

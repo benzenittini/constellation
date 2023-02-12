@@ -3,12 +3,11 @@ import { reactive } from 'vue';
 import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../store/store';
-import { useFieldStore } from '../store/FieldStore';
 
 import * as ObjectUtils from '../../common/ObjectUtils';
-import { TypedMap } from '../store/StoreTypes';
 import { FieldDefinition, FieldType, getFieldValue, PossibleValueDefinition } from '../store/Types/FieldDataTypes';
 import { Entity } from '../store/Types/EntityDataTypes';
+import { TypedMap } from '../../../../common/DataTypes/GenericDataTypes';
 
 // TODO-const : Re-enable all the actions
 // import { UpdateFieldDefinitions } from '../actions/WebsocketActions/UpdateFieldDefinitions';
@@ -90,9 +89,8 @@ function openEditFieldsDialog(entityIds: string[], fieldIds: string[], fieldDefs
 
 function setFieldValueOnEntities(entities: Entity[], fieldId: string, valueChangeEvent: any) {
     const store = useStore();
-    const fieldStore = useFieldStore();
 
-    const fieldDefs = fieldStore.fields();
+    const fieldDefs = store.getters.fields;
 
     const entityIdToFieldValue: TypedMap<any> = {};
 
@@ -111,7 +109,7 @@ function setFieldValueOnEntities(entities: Entity[], fieldId: string, valueChang
         });
     }
     // If this event came from a date+time field, don't clear the value ... but only sometimes.
-    else if (fieldDefs.value[fieldId].type === FieldType.DATETIME && (valueChangeEvent.date === '' || valueChangeEvent.time === '') && entities.length > 1) {
+    else if (fieldDefs[fieldId].type === FieldType.DATETIME && (valueChangeEvent.date === '' || valueChangeEvent.time === '') && entities.length > 1) {
         // We receive an object of the for { date: '', time: '' }. If either 'date' or 'time' is empty, it could mean one of two things:
         // 1. The user intentionally cleared the date/time
         // 2. It's a datetime field, and the user is editing multiple blocks. The blocks all have different times, and the user set a

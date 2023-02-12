@@ -24,7 +24,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import { TypedMap } from "../store/StoreTypes";
+
+import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
 
 // TODO-const : Re-enable all the actions
 // import { GetReleaseNote } from '../actions/RestActions/GetReleaseNote';

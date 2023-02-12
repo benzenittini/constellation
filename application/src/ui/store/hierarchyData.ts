@@ -1,9 +1,10 @@
 
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
-import { HierarchyDataState, HierarchyDataGetters, HierarchyDataMutations, HierarchyDataActions } from "./Types/HierarchyDataTypes";
-import { EntityLinkPair, RootState, TypedMap } from "./StoreTypes";
-
 import { useVueNotify } from 'mw-vue-notify';
+
+import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
+import { EntityLinkPair, RootState } from "./StoreTypes";
+import { HierarchyDataState, HierarchyDataGetters, HierarchyDataMutations, HierarchyDataActions } from "./Types/HierarchyDataTypes";
 
 
 // =====

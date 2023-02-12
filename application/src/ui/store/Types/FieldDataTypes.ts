@@ -1,5 +1,6 @@
 
-import { AugmentedActionContext, GetterProperties, RootState, TypedMap } from "../StoreTypes"
+import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
+import { AugmentedActionContext, GetterProperties, RootState } from "../StoreTypes"
 
 
 // -- State --

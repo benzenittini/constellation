@@ -51,9 +51,6 @@ export type AugmentedActionContext<S> = {
 // Miscellaneous Data Types
 // ------------------------
 
-// Useful for all those (id --> Object) maps we use.
-export type TypedMap<T> = { [key: string]: T }
-
 export interface EntityLinkPair {
     id: string;
     source:      { entityId: string, isSelected: boolean, x: number, y: number, entityWidth: number, entityHeight: number };

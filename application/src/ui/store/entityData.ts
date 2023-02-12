@@ -1,7 +1,7 @@
 
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 
-import { RootState, TypedMap } from "./StoreTypes";
+import { RootState } from "./StoreTypes";
 import { EntityDataState, EntityDataGetters, EntityDataMutations, EntityDataActions, Entity, MIN_ENTITY_WIDTH, MIN_ENTITY_HEIGHT, SearchResult } from "./Types/EntityDataTypes";
 
 import * as ErrorLogger from "../../common/ErrorLogger";
@@ -9,6 +9,7 @@ import * as RectangleUtils from '../../common/RectangleUtils';
 import * as ObjectUtils from '../../common/ObjectUtils';
 import { getFieldValue } from "./Types/FieldDataTypes";
 import { GRAY8 } from '../styles/styleVariables';
+import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
 
 
 // =====
