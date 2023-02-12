@@ -4,18 +4,18 @@ import { computed, ref, Ref, ComputedRef, SetupContext, onMounted, onUnmounted }
 import { useStore } from '../store/store';
 import { useWindowEvents } from './WindowEvents';
 import { useEmitter } from './Emitter';
-import { Entity } from '../store/Types/EntityDataTypes';
+import { Block } from '../../../../common/DataTypes/BlockDataTypes';
 
 // TODO-const : Re-enable all the actions
-// import { DeleteEntities } from '../actions/WebsocketActions/DeleteEntities';
+// import { DeleteBlocks } from '../actions/WebsocketActions/DeleteBlocks';
 
-export function useView(visibleBlocks: ComputedRef<Entity[]>, context: SetupContext<Record<string, any>>) {
+export function useView(visibleBlocks: ComputedRef<Block[]>, context: SetupContext<Record<string, any>>) {
     const store = useStore();
     const windowEvents = useWindowEvents();
 
     const eventEmitter = useEmitter();
 
-    let selectedBlocks: Ref<Entity[]> = ref([]);
+    let selectedBlocks: Ref<Block[]> = ref([]);
     let selectedBlockIds = computed(() => selectedBlocks.value.map(block => block.id));
 
     let selectedButFilteredBlocks = computed(() => selectedBlocks.value.filter(sb => !visibleBlocks.value.some(b => sb.id === b.id)));
@@ -30,11 +30,11 @@ export function useView(visibleBlocks: ComputedRef<Entity[]>, context: SetupCont
                 selectedBlocks.value = [];
 
                 // Update our local store. (This assumes the server accepts the request)
-                store.dispatch("deleteEntities", deletedBlockIds);
+                store.dispatch("deleteBlocks", deletedBlockIds);
 
                 // Send the update request to the server
                 // TODO-const : Re-enable all the actions
-                // new DeleteEntities(
+                // new DeleteBlocks(
                 //     store.state.generalData.currentProjectBoard!.boardId,
                 //     deletedBlockIds,
                 // ).send();
@@ -56,7 +56,7 @@ export function useView(visibleBlocks: ComputedRef<Entity[]>, context: SetupCont
         selectedBlocks,
         selectedBlockIds,
         selectedButFilteredBlocks,
-        toggleSelection: (event: MouseEvent, block: Entity) => {
+        toggleSelection: (event: MouseEvent, block: Block) => {
             if (event.shiftKey) {
                 // If shift is being held, toggle the block's selection
                 let index = selectedBlocks.value.findIndex((b) => b.id === block.id);
@@ -87,12 +87,12 @@ export function useView(visibleBlocks: ComputedRef<Entity[]>, context: SetupCont
         // Getters
         // -------
 
-        getBlockStyle: (block: Entity) => {
+        getBlockStyle: (block: Block) => {
             return store.getters.getCssStyles(block, 1);
         },
         getBreadcrumbs: (blockId: string) => {
             return store.getters.getParentChain(blockId)
-                .map(id => store.state.entityData.entities[id].content.data.text)
+                .map(id => store.state.blockData.blocks[id].content.data.text)
                 .join(' > ');
         },
 
@@ -102,7 +102,7 @@ export function useView(visibleBlocks: ComputedRef<Entity[]>, context: SetupCont
         // -------
 
         goToBlock: (blockId: string) => {
-            store.dispatch("selectEntity", {entityId: blockId, clearCurrentSelection: true});
+            store.dispatch("selectBlock", {blockId: blockId, clearCurrentSelection: true});
             context.emit('mw-close-view');
             setTimeout(() => eventEmitter.emit('goToBlock', blockId), 100);
         },

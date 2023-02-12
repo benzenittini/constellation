@@ -1,6 +1,6 @@
 
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
-import { FieldDataState, FieldDataGetters, FieldDataMutations, FieldDataActions } from "./Types/FieldDataTypes";
+import { FieldDataState, FieldDataGetters, FieldDataMutations, FieldDataActions } from "./Types/FieldStoreTypes";
 import { RootState } from "./StoreTypes";
 import * as ErrorLogger from "../../common/ErrorLogger";
 import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
@@ -101,7 +101,7 @@ const fieldDataGetters: GetterTree<FieldDataState, RootState> & FieldDataGetters
             }
         }
 
-        let changedFieldValues: { entityId: string, fieldId: string, newValue: any }[] = [];
+        let changedFieldValues: { blockId: string, fieldId: string, newValue: any }[] = [];
         // (special array logic goes here..?)
         for (let changedPV of changedPVs) {
             // Determine which field has this PV.
@@ -109,23 +109,23 @@ const fieldDataGetters: GetterTree<FieldDataState, RootState> & FieldDataGetters
             let fieldId = Object.values(getters.fields)
                 .find(f => f.possibleValueIds.includes(changedPV.pvId))?.id;
             if (fieldId) {
-                // Identify any entities that have the "old value" for this field.
-                for (let entity of Object.values(rootState.entityData.entities)) {
-                    if (Array.isArray(entity.fieldValues[fieldId])) {
-                        let index = entity.fieldValues[fieldId].indexOf(changedPV.oldName);
+                // Identify any blocks that have the "old value" for this field.
+                for (let block of Object.values(rootState.blockData.blocks)) {
+                    if (Array.isArray(block.fieldValues[fieldId])) {
+                        let index = block.fieldValues[fieldId].indexOf(changedPV.oldName);
                         if (index !== -1) {
                             changedFieldValues.push({
-                                entityId: entity.id,
+                                blockId: block.id,
                                 fieldId: fieldId,
-                                newValue: entity.fieldValues[fieldId]
+                                newValue: block.fieldValues[fieldId]
                             });
                         }
-                    } else if (entity.fieldValues[fieldId] === changedPV.oldName) {
-                        entity.fieldValues[fieldId] = changedPV.newName;
+                    } else if (block.fieldValues[fieldId] === changedPV.oldName) {
+                        block.fieldValues[fieldId] = changedPV.newName;
                         changedFieldValues.push({
-                            entityId: entity.id,
+                            blockId: block.id,
                             fieldId: fieldId,
-                            newValue: entity.fieldValues[fieldId]
+                            newValue: block.fieldValues[fieldId]
                         });
                     }
                 }

@@ -30,11 +30,11 @@
 import { defineComponent, computed, onMounted, ref } from 'vue';
 
 import { useStore } from '../../store/store';
-import { LOCAL_PROJECT } from '../../store/Types/GeneralDataTypes';
 
 import { CreateNewBoardAction } from '../../actions/project-actions/CreateNewBoard';
 import { GetBoardsForProjectAction } from '../../actions/project-actions/GetBoardsForProject';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
+import { LOCAL_PROJECT } from '../../../../../common/DataTypes/BoardDataTypes';
 
 export default defineComponent({
     setup() {

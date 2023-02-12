@@ -21,7 +21,8 @@
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from "vue";
-import { DateTime, FieldType } from "../store/Types/FieldDataTypes";
+
+import { DateTime, FieldType } from "../../../../common/DataTypes/FieldDataTypes";
 
 export default defineComponent({
     props: {

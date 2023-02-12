@@ -1,7 +1,7 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { BasicBoardData, LOCAL_PROJECT } from "../../store/Types/GeneralDataTypes";
+import { BasicBoardData, LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
 
 export class CreateNewBoardAction extends Action {
 

@@ -2,16 +2,15 @@
 
 import fs from 'fs';
 
-import { TypedMap } from '../DataTypes/GenericDataTypes';
-import { Block, BoardData } from '../DataTypes/BoardDataTypes';
+import { BoardData } from '../DataTypes/BoardDataTypes';
 
 export class BoardDataPersistence {
 
     private sourceFile: string | undefined;
 
-    private data: {
-        blocks: TypedMap<Block>,
-    };
+    private data: BoardData;
+
+    private saveTimer: ReturnType<typeof setTimeout> | undefined = undefined;
 
     constructor(sourceFile: string | undefined = undefined) {
 
@@ -27,11 +26,15 @@ export class BoardDataPersistence {
             }
             this.data = JSON.parse(fileData);
 
-            // Set up the autosave timer to write to the file
-            setInterval(() => this.saveData(), 5000);
         } else {
             this.data = BoardDataPersistence.getInitData();
         }
+    }
+
+    /** This function should be called any time this.data is modified! */
+    private scheduleSave() {
+        if (this.saveTimer) clearTimeout(this.saveTimer);
+        this.saveTimer = setTimeout(() => this.saveData(), 5000);
     }
 
     private saveData() {
@@ -45,6 +48,12 @@ export class BoardDataPersistence {
     static getInitData() {
         return {
             blocks: {},
+            views: {},
+            fields: {},
+            classifications: {},
+            possibleValues: {},
+            blockPriorities: [],
+            classificationIds: [],
         };
     }
 
@@ -53,9 +62,7 @@ export class BoardDataPersistence {
     // Category!
     // ----------------
 
-    async functionthatdoesathing(boardName: string): Promise<void> {
-        // return {
-        //     boardName,
-        // };
+    async getBoardData(): Promise<BoardData> {
+        return this.data;
     }
 }

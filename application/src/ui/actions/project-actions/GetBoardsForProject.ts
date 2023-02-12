@@ -1,9 +1,9 @@
 
-import { BasicBoardData, LOCAL_PROJECT } from "../../store/Types/GeneralDataTypes";
 import { useStore } from "../../store/store";
 import { Action } from "../Action";
 
 import { mapify } from '../../../common/ArrayUtils';
+import { BasicBoardData, LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
 
 export class GetBoardsForProjectAction extends Action {
 

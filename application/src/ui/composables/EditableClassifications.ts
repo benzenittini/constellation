@@ -4,8 +4,8 @@ import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../store/store';
 
-import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from '../store/Types/FieldDataTypes';
 import { TypedMap } from '../../../../common/DataTypes/GenericDataTypes';
+import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from '../../../../common/DataTypes/FieldDataTypes';
 // TODO-const : Re-enable all the actions
 // import { UpdateClassificationDefinitions } from '../actions/WebsocketActions/UpdateClassificationDefinitions';
 // import { UpdateClassificationOnEntities } from '../actions/WebsocketActions/UpdateClassificationOnEntities';
@@ -72,13 +72,13 @@ function openEditClassificationsDialog(classificationIds: string[], classificati
     });
 }
 
-function setClassificationOnEntities(entityIds: string[], classificationId: string, isActive: boolean) {
+function setClassificationOnBlocks(blockIds: string[], classificationId: string, isActive: boolean) {
     let store = useStore();
 
     // TODO-const : Re-enable all the actions
     // new UpdateClassificationOnEntities(
     //     store.state.generalData.currentProjectBoard!.boardId,
-    //     entityIds,
+    //     blockIds,
     //     classificationId,
     //     isActive
     // ).send();
@@ -87,6 +87,6 @@ function setClassificationOnEntities(entityIds: string[], classificationId: stri
 export function useEditableClassifications() {
     return {
         openEditClassificationsDialog,
-        setClassificationOnEntities,
+        setClassificationOnBlocks,
     };
 }

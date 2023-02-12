@@ -1,8 +1,8 @@
 
-import { DateTime } from "../ui/store/Types/FieldDataTypes";
-
 
 // TODO-test this whole file
+
+import { DateTime } from "../../../common/DataTypes/FieldDataTypes";
 
 export function formatHyphenatedYYYYMMDD(date: Date) {
     let year  = date.getUTCFullYear();

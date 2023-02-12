@@ -1,8 +1,9 @@
 
 import { MutationTree, ActionTree, GetterTree } from "vuex";
 
-import { GeneralDataState, GeneralDataMutations, GeneralDataActions, GeneralDataGetters, LOCAL_PROJECT } from "./Types/GeneralDataTypes";
+import { GeneralDataState, GeneralDataMutations, GeneralDataActions, GeneralDataGetters } from "./Types/GeneralStoreTypes";
 import { RootState } from "./StoreTypes";
+import { LOCAL_PROJECT } from "../../../../common/DataTypes/BoardDataTypes";
 
 // =====
 // State

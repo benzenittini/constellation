@@ -2,7 +2,7 @@
 import { createStore } from 'vuex';
 
 import { generalDataStore } from './generalData';
-import { entityDataStore } from './entityData';
+import { blockDataStore } from './blockData';
 import { Store } from './StoreTypes';
 import { hierarchyDataStore } from './hierarchyData';
 import { fieldDataStore } from './fieldData';
@@ -11,7 +11,7 @@ import { viewDataStore } from './viewData';
 export let store = createStore({
     modules: {
         generalData: generalDataStore,
-        entityData: entityDataStore,
+        blockData: blockDataStore,
         hierarchyData: hierarchyDataStore,
         fieldData: fieldDataStore,
         viewData: viewDataStore,

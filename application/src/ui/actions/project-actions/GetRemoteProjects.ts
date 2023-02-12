@@ -1,5 +1,5 @@
 
-import { BasicProjectData } from "../../store/Types/GeneralDataTypes";
+import { BasicProjectData } from "../../../../../common/DataTypes/BoardDataTypes";
 import { Action } from "../Action";
 
 export class GetRemoteProjectsAction extends Action {

@@ -1,11 +1,11 @@
 
 import { Store as VuexStore, CommitOptions, ActionContext, DispatchOptions } from 'vuex';
 
-import { GeneralDataState, GeneralDataGetters, GeneralDataMutations, GeneralDataActions } from './Types/GeneralDataTypes';
-import { EntityDataState, EntityDataGetters, EntityDataMutations, EntityDataActions } from './Types/EntityDataTypes';
-import { HierarchyDataState, HierarchyDataGetters, HierarchyDataMutations, HierarchyDataActions } from './Types/HierarchyDataTypes';
-import { FieldDataState, FieldDataGetters, FieldDataMutations, FieldDataActions } from './Types/FieldDataTypes';
-import { ViewDataState, ViewDataGetters, ViewDataMutations, ViewDataActions } from './Types/ViewDataTypes';
+import { GeneralDataState, GeneralDataGetters, GeneralDataMutations, GeneralDataActions } from './Types/GeneralStoreTypes';
+import { BlockDataState, BlockDataGetters, BlockDataMutations, BlockDataActions } from './Types/BlockStoreTypes';
+import { HierarchyDataState, HierarchyDataGetters, HierarchyDataMutations, HierarchyDataActions } from './Types/HierarchyStoreTypes';
+import { FieldDataState, FieldDataGetters, FieldDataMutations, FieldDataActions } from './Types/FieldStoreTypes';
+import { ViewDataState, ViewDataGetters, ViewDataMutations, ViewDataActions } from './Types/ViewStoreTypes';
 
 
 // ===============
@@ -14,15 +14,15 @@ import { ViewDataState, ViewDataGetters, ViewDataMutations, ViewDataActions } fr
 
 export interface RootState {
     generalData: GeneralDataState,
-    entityData: EntityDataState,
+    blockData: BlockDataState,
     hierarchyData: HierarchyDataState,
     classificationData: FieldDataState,
     viewData: ViewDataState,
 }
 
-type AllGetters   = GeneralDataGetters   & EntityDataGetters   & HierarchyDataGetters   & FieldDataGetters   & ViewDataGetters;
-type AllMutations = GeneralDataMutations & EntityDataMutations & HierarchyDataMutations & FieldDataMutations & ViewDataMutations;
-type AllActions   = GeneralDataActions   & EntityDataActions   & HierarchyDataActions   & FieldDataActions   & ViewDataActions;
+type AllGetters   = GeneralDataGetters   & BlockDataGetters   & HierarchyDataGetters   & FieldDataGetters   & ViewDataGetters;
+type AllMutations = GeneralDataMutations & BlockDataMutations & HierarchyDataMutations & FieldDataMutations & ViewDataMutations;
+type AllActions   = GeneralDataActions   & BlockDataActions   & HierarchyDataActions   & FieldDataActions   & ViewDataActions;
 
 export type GetterProperties = { [K in keyof AllGetters]: ReturnType<AllGetters[K]> }
 
@@ -51,8 +51,8 @@ export type AugmentedActionContext<S> = {
 // Miscellaneous Data Types
 // ------------------------
 
-export interface EntityLinkPair {
+export interface BlockLinkPair {
     id: string;
-    source:      { entityId: string, isSelected: boolean, x: number, y: number, entityWidth: number, entityHeight: number };
-    destination: { entityId: string, isSelected: boolean, x: number, y: number, entityWidth: number, entityHeight: number };
+    source:      { blockId: string, isSelected: boolean, x: number, y: number, blockWidth: number, blockHeight: number };
+    destination: { blockId: string, isSelected: boolean, x: number, y: number, blockWidth: number, blockHeight: number };
 }

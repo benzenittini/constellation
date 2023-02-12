@@ -2,25 +2,26 @@
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 
 import { RootState } from "./StoreTypes";
-import { EntityDataState, EntityDataGetters, EntityDataMutations, EntityDataActions, Entity, MIN_ENTITY_WIDTH, MIN_ENTITY_HEIGHT, SearchResult } from "./Types/EntityDataTypes";
+import { BlockDataState, BlockDataGetters, BlockDataMutations, BlockDataActions } from "./Types/BlockStoreTypes";
 
 import * as ErrorLogger from "../../common/ErrorLogger";
 import * as RectangleUtils from '../../common/RectangleUtils';
 import * as ObjectUtils from '../../common/ObjectUtils';
-import { getFieldValue } from "./Types/FieldDataTypes";
 import { GRAY8 } from '../styles/styleVariables';
 import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
+import { MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, SearchResult } from "../../../../common/DataTypes/BlockDataTypes";
+import { getFieldValue } from "../../../../common/DataTypes/FieldDataTypes";
 
 
 // =====
 // State
 // -----
 
-const entityDataState: EntityDataState = {
-    entities: {},
+const blockDataState: BlockDataState = {
+    blocks: {},
     blockPriorities: [],
-    expandedEntityIds: [],
-    entityIdBeingEdited: undefined,
+    expandedBlockIds: [],
+    blockIdBeingEdited: undefined,
 }
 
 
@@ -28,113 +29,113 @@ const entityDataState: EntityDataState = {
 // Mutations
 // ---------
 
-const entityDataMutations: MutationTree<EntityDataState> & EntityDataMutations = {
+const blockDataMutations: MutationTree<BlockDataState> & BlockDataMutations = {
     resetStore (state) {
-        state.entities = {};
+        state.blocks = {};
         state.blockPriorities = [];
-        state.expandedEntityIds = [];
-        state.entityIdBeingEdited = undefined;
+        state.expandedBlockIds = [];
+        state.blockIdBeingEdited = undefined;
     },
     clearBoardState (state) {
-        state.entities = {};
+        state.blocks = {};
         state.blockPriorities = [];
-        state.expandedEntityIds = [];
-        state.entityIdBeingEdited = undefined;
+        state.expandedBlockIds = [];
+        state.blockIdBeingEdited = undefined;
     },
 
-    addEntities (state, entities) {
-        for (let entity of entities) {
-            state.entities[entity.id] = entity;
+    addBlocks (state, blocks) {
+        for (let block of blocks) {
+            state.blocks[block.id] = block;
         }
     },
-    setEntities (state, entities) {
-        state.entities = {};
-        for (let entity of entities) {
-            state.entities[entity.id] = entity;
+    setBlocks (state, blocks) {
+        state.blocks = {};
+        for (let block of blocks) {
+            state.blocks[block.id] = block;
         }
     },
-    selectEntities(state, entityIds) {
-        for (let entityId of entityIds) {
-            if (state.entities[entityId]) {
-                state.entities[entityId].isSelected = true;
+    selectBlocks(state, blockIds) {
+        for (let blockId of blockIds) {
+            if (state.blocks[blockId]) {
+                state.blocks[blockId].isSelected = true;
             }
         }
     },
-    deselectAllEntities(state) {
-        Object.keys(state.entities).forEach(key => state.entities[key].isSelected = false);
+    deselectAllBlocks(state) {
+        Object.keys(state.blocks).forEach(key => state.blocks[key].isSelected = false);
     },
-    changeEditedEntity(state, entityId) {
-        state.entityIdBeingEdited = entityId;
+    changeEditedBlock(state, blockId) {
+        state.blockIdBeingEdited = blockId;
     },
-    expandEntity(state, entityId) {
-        let index = state.expandedEntityIds.indexOf(entityId);
+    expandBlock(state, blockId) {
+        let index = state.expandedBlockIds.indexOf(blockId);
         if (index === -1)
-            state.expandedEntityIds.push(entityId);
+            state.expandedBlockIds.push(blockId);
     },
-    contractEntity(state, entityId) {
-        let index = state.expandedEntityIds.indexOf(entityId);
+    contractBlock(state, blockId) {
+        let index = state.expandedBlockIds.indexOf(blockId);
         if (index !== -1)
-            state.expandedEntityIds.splice(index, 1);
+            state.expandedBlockIds.splice(index, 1);
     },
 
-    lockOpenClosed(state, {entityIds, isLockedOpen}) {
-        for (let entityId of entityIds) {
-            state.entities[entityId].isLockedOpen = isLockedOpen;
+    lockOpenClosed(state, {blockIds, isLockedOpen}) {
+        for (let blockId of blockIds) {
+            state.blocks[blockId].isLockedOpen = isLockedOpen;
         }
     },
 
-    moveEntitiesByDelta(state, {entityIds, deltaX, deltaY}) {
-        for (let entityId of entityIds) {
-            state.entities[entityId].location.x += deltaX;
-            state.entities[entityId].location.y += deltaY;
+    moveBlocksByDelta(state, {blockIds, deltaX, deltaY}) {
+        for (let blockId of blockIds) {
+            state.blocks[blockId].location.x += deltaX;
+            state.blocks[blockId].location.y += deltaY;
         }
     },
-    resizeEntitiesByDelta(state, {entityIds, entityScales, deltaX, deltaY}) {
-        for (let entityId of entityIds) {
+    resizeBlocksByDelta(state, {blockIds, blockScales, deltaX, deltaY}) {
+        for (let blockId of blockIds) {
             let normalized = RectangleUtils.normalize(
-                state.entities[entityId].location.x,
-                state.entities[entityId].location.y,
-                state.entities[entityId].location.width + deltaX,
-                state.entities[entityId].location.height + deltaY);
+                state.blocks[blockId].location.x,
+                state.blocks[blockId].location.y,
+                state.blocks[blockId].location.width + deltaX,
+                state.blocks[blockId].location.height + deltaY);
 
-            normalized.width = Math.max(normalized.width, MIN_ENTITY_WIDTH / entityScales[entityId]);
-            normalized.height = Math.max(normalized.height, MIN_ENTITY_HEIGHT / entityScales[entityId]);
+            normalized.width = Math.max(normalized.width, MIN_BLOCK_WIDTH / blockScales[blockId]);
+            normalized.height = Math.max(normalized.height, MIN_BLOCK_HEIGHT / blockScales[blockId]);
 
-            state.entities[entityId].location.x = normalized.x;
-            state.entities[entityId].location.y = normalized.y;
-            state.entities[entityId].location.width = normalized.width;
-            state.entities[entityId].location.height = normalized.height;
+            state.blocks[blockId].location.x = normalized.x;
+            state.blocks[blockId].location.y = normalized.y;
+            state.blocks[blockId].location.width = normalized.width;
+            state.blocks[blockId].location.height = normalized.height;
         }
     },
-    setEntityPosition(state, {entityId, x, y, width, height}) {
-        state.entities[entityId].location.x = x;
-        state.entities[entityId].location.y = y;
-        state.entities[entityId].location.width = width;
-        state.entities[entityId].location.height = height;
+    setBlockPosition(state, {blockId, x, y, width, height}) {
+        state.blocks[blockId].location.x = x;
+        state.blocks[blockId].location.y = y;
+        state.blocks[blockId].location.width = width;
+        state.blocks[blockId].location.height = height;
     },
-    deleteEntities(state, {entityIds}) {
-        for (let entityId of entityIds) {
-            delete state.entities[entityId];
+    deleteBlocks(state, {blockIds}) {
+        for (let blockId of blockIds) {
+            delete state.blocks[blockId];
         }
     },
-    setEntityContent(state, {entityId, newContent}) {
-        state.entities[entityId].content = newContent;
+    setBlockContent(state, {blockId, newContent}) {
+        state.blocks[blockId].content = newContent;
     },
-    setEntityClassificationId(state, {entityId, classificationId, isActive}) {
-        let currentIndex = state.entities[entityId].classificationIds.indexOf(classificationId);
+    setBlockClassificationId(state, {blockId, classificationId, isActive}) {
+        let currentIndex = state.blocks[blockId].classificationIds.indexOf(classificationId);
         if (isActive && currentIndex === -1) {
             // Should be active, but isn't currently present. Add it.
-            state.entities[entityId].classificationIds.push(classificationId);
+            state.blocks[blockId].classificationIds.push(classificationId);
         } else if (!isActive && currentIndex !== -1) {
             // Shouldn't be active, but is currently present. Remove it.
-            state.entities[entityId].classificationIds.splice(currentIndex, 1);
+            state.blocks[blockId].classificationIds.splice(currentIndex, 1);
         }
     },
-    setEntityFieldIds(state, {entityId, fieldIds}) {
-        state.entities[entityId].fieldIds = fieldIds;
+    setBlockFieldIds(state, {blockId, fieldIds}) {
+        state.blocks[blockId].fieldIds = fieldIds;
     },
-    setEntityFieldValue(state, {entityId, fieldId, value}) {
-        state.entities[entityId].fieldValues[fieldId] = value;
+    setBlockFieldValue(state, {blockId, fieldId, value}) {
+        state.blocks[blockId].fieldValues[fieldId] = value;
     },
 
     // Block Priorities
@@ -168,55 +169,55 @@ const entityDataMutations: MutationTree<EntityDataState> & EntityDataMutations =
 // Actions
 // -------
 
-const entityDataActions: ActionTree<EntityDataState, RootState> & EntityDataActions = {
+const blockDataActions: ActionTree<BlockDataState, RootState> & BlockDataActions = {
     resetStore      ({ commit }) { commit('resetStore'); },
     clearBoardState ({ commit }) { commit('clearBoardState'); },
 
     // TODO (later) - should "logout" also reset the store..? (Hint: yes) Other store types need this too. It does reset already in generalStore
 
-    addEntities   ({ commit }, entities) {
-        commit('addEntities', entities);
-        commit('insertBefore', { blockId: entities.map(e => e.id), before: undefined });
+    addBlocks   ({ commit }, blocks) {
+        commit('addBlocks', blocks);
+        commit('insertBefore', { blockId: blocks.map(e => e.id), before: undefined });
     },
-    setEntities   ({ commit }, entities) { commit('setEntities', entities); },
+    setBlocks   ({ commit }, blocks) { commit('setBlocks', blocks); },
 
-    // -- Entity Selection --
-    selectEntity  ({ commit }, {entityId, clearCurrentSelection = true}) {
+    // -- Block Selection --
+    selectBlock  ({ commit }, {blockId, clearCurrentSelection = true}) {
         if (clearCurrentSelection) {
-            commit('deselectAllEntities');
+            commit('deselectAllBlocks');
         }
-        commit('selectEntities', [entityId]);
+        commit('selectBlocks', [blockId]);
     },
-    selectEntities ({ commit }, {entityIds, clearCurrentSelection = true}) {
+    selectBlocks ({ commit }, {blockIds, clearCurrentSelection = true}) {
         if (clearCurrentSelection) {
-            commit('deselectAllEntities');
+            commit('deselectAllBlocks');
         }
-        commit('selectEntities', entityIds);
+        commit('selectBlocks', blockIds);
     },
-    clearEntitySelection ({ commit })           { commit('deselectAllEntities'); },
-    startEditingEntity   ({ commit }, entityId) { commit('changeEditedEntity', entityId); },
-    stopEditingEntity    ({ commit })           { commit('changeEditedEntity', undefined); },
+    clearBlockSelection ({ commit })           { commit('deselectAllBlocks'); },
+    startEditingBlock   ({ commit }, blockId) { commit('changeEditedBlock', blockId); },
+    stopEditingBlock    ({ commit })           { commit('changeEditedBlock', undefined); },
 
-    lockOpenClosed  ({ commit, state }, {entityIds}) {
+    lockOpenClosed  ({ commit, state }, {blockIds}) {
         // If all blocks are open, close them. Otherwise, open them.
-        let shouldLockOpen = !entityIds.every(eid => state.entities[eid].isLockedOpen);
-        commit('lockOpenClosed', {entityIds, isLockedOpen: shouldLockOpen});
+        let shouldLockOpen = !blockIds.every(eid => state.blocks[eid].isLockedOpen);
+        commit('lockOpenClosed', {blockIds, isLockedOpen: shouldLockOpen});
     },
 
-    expandEntity   ({ commit }, entityId) { commit('expandEntity', entityId); },
-    contractEntity ({ commit }, entityId) { commit('contractEntity', entityId); },
+    expandBlock   ({ commit }, blockId) { commit('expandBlock', blockId); },
+    contractBlock ({ commit }, blockId) { commit('contractBlock', blockId); },
 
-    // -- Entity Manipulation --
-    dragSelectedEntities ({ commit, getters }, {deltaX, deltaY}) {
-        commit('moveEntitiesByDelta', { entityIds: getters.selectedEntityIds, deltaX, deltaY});
+    // -- Block Manipulation --
+    dragSelectedBlocks ({ commit, getters }, {deltaX, deltaY}) {
+        commit('moveBlocksByDelta', { blockIds: getters.selectedBlockIds, deltaX, deltaY});
     },
-    resizeSelectedEntities ({ commit, getters }, {deltaX, deltaY}) {
-        commit('resizeEntitiesByDelta', { entityIds: getters.selectedEntityIds, entityScales: getters.entityScales, deltaX, deltaY});
+    resizeSelectedBlocks ({ commit, getters }, {deltaX, deltaY}) {
+        commit('resizeBlocksByDelta', { blockIds: getters.selectedBlockIds, blockScales: getters.blockScales, deltaX, deltaY});
     },
-    setEntityPositions   ({ commit }, entityIdsAndPositions) {
-        for (let idAndPosition of entityIdsAndPositions) {
-            commit('setEntityPosition', {
-                entityId: idAndPosition.entityId,
+    setBlockPositions   ({ commit }, blockIdsAndPositions) {
+        for (let idAndPosition of blockIdsAndPositions) {
+            commit('setBlockPosition', {
+                blockId: idAndPosition.blockId,
                 x: idAndPosition.location.x,
                 y: idAndPosition.location.y,
                 width: idAndPosition.location.width,
@@ -225,38 +226,38 @@ const entityDataActions: ActionTree<EntityDataState, RootState> & EntityDataActi
         }
     },
 
-    // -- Entity Deletion --
-    deleteEntities ({ commit, dispatch }, entityIds: string[]) {
-        // Then, unassign all immedate children of these entities.
-        for (let entityId of entityIds) {
-            dispatch('deleteNode', entityId)
+    // -- Block Deletion --
+    deleteBlocks ({ commit, dispatch }, blockIds: string[]) {
+        // Then, unassign all immedate children of these blocks.
+        for (let blockId of blockIds) {
+            dispatch('deleteNode', blockId)
         }
 
-        // Lastly, delete these entities.
-        commit('deleteEntities', { entityIds });
+        // Lastly, delete these blocks.
+        commit('deleteBlocks', { blockIds });
         // ...and their priorities
-        for (let entityId of entityIds) {
-            commit('deleteEntry', entityId);
+        for (let blockId of blockIds) {
+            commit('deleteEntry', blockId);
         }
     },
-    deleteSelectedEntities ({ commit, dispatch, getters }) {
-        dispatch('deleteEntities', getters.selectedEntityIds);
+    deleteSelectedBlocks ({ commit, dispatch, getters }) {
+        dispatch('deleteBlocks', getters.selectedBlockIds);
     },
 
-    // -- Entity Data --
-    setEntityContent ({ commit }, { entityId, newContent }) {
-        commit('setEntityContent', { entityId, newContent });
+    // -- Block Data --
+    setBlockContent ({ commit }, { blockId, newContent }) {
+        commit('setBlockContent', { blockId, newContent });
     },
 
-    // -- Entity Fields --
-    setEntityClassificationId ({ commit, state }, { entityId, classificationId, isActive }) {
-        commit('setEntityClassificationId', { entityId, classificationId, isActive });
+    // -- Block Fields --
+    setBlockClassificationId ({ commit, state }, { blockId, classificationId, isActive }) {
+        commit('setBlockClassificationId', { blockId, classificationId, isActive });
     },
-    setEntityFieldIds ({ commit, state, rootState }, { entityId, fieldIds }) {
-        commit('setEntityFieldIds', { entityId, fieldIds });
+    setBlockFieldIds ({ commit, state, rootState }, { blockId, fieldIds }) {
+        commit('setBlockFieldIds', { blockId, fieldIds });
     },
-    setEntityFieldValue ({ commit, state, rootState }, { entityId, fieldId, value }) {
-        commit('setEntityFieldValue', { entityId, fieldId, value });
+    setBlockFieldValue ({ commit, state, rootState }, { blockId, fieldId, value }) {
+        commit('setBlockFieldValue', { blockId, fieldId, value });
     },
 
     // -- Block Priorities --
@@ -279,30 +280,30 @@ const entityDataActions: ActionTree<EntityDataState, RootState> & EntityDataActi
 // Getters
 // -------
 
-const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGetters = {
-    visibleEntities: (state) => {
-        return state.entities;
+const blockDataGetters: GetterTree<BlockDataState, RootState> & BlockDataGetters = {
+    visibleBlocks: (state) => {
+        return state.blocks;
     },
-    selectedEntities: (state) => {
-        return Object.values(state.entities)
+    selectedBlocks: (state) => {
+        return Object.values(state.blocks)
             .filter(e => e.isSelected);
     },
-    selectedEntityIds: (state) => {
-        return Object.values(state.entities)
+    selectedBlockIds: (state) => {
+        return Object.values(state.blocks)
             .filter(e => e.isSelected)
             .map(e => e.id);
     },
-    expandedEntityIds: (state) => {
-        return state.expandedEntityIds;
+    expandedBlockIds: (state) => {
+        return state.expandedBlockIds;
     },
     blockPriorities: (state) => {
         return state.blockPriorities;
     },
 
-    entitySearch: (state, getters) => (criteria) => {
+    blockSearch: (state, getters) => (criteria) => {
         if ('searchTerm' in criteria) {
             // -- Basic Search --
-            return Object.values(state.entities)
+            return Object.values(state.blocks)
                 .filter(e => {
                     // Only search fields for blocks that have the associated classification active (if the field has a classification).
                     let activeFieldValues: any[] = [];
@@ -316,12 +317,12 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
                     return e.content.data.text.toLowerCase().includes(criteria.searchTerm.toLowerCase())
                     // Any field values
                     || JSON.stringify(activeFieldValues).toLowerCase().includes(criteria.searchTerm.toLowerCase())
-                }).reduce((results, entity, index) => {
+                }).reduce((results, block, index) => {
                     results.unshift({
-                        breadcrumbs: getters.getParentChain(entity.id).map(id => state.entities[id].content.data.text),
-                        summaryText: entity.content.data.text,
-                        entityId: entity.id,
-                        block: entity,
+                        breadcrumbs: getters.getParentChain(block.id).map(id => state.blocks[id].content.data.text),
+                        summaryText: block.content.data.text,
+                        blockId: block.id,
+                        block: block,
                     })
                     return results;
                 }, [] as SearchResult[]);
@@ -331,16 +332,16 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
         }
     },
 
-    // Returns all fieldIds (grouped by classificationId) that every provided entity has.
-    activeClassificationFieldIds: (state, getters) => (entityIds) => {
-        if (entityIds.length == 0) return {};
+    // Returns all fieldIds (grouped by classificationId) that every provided block has.
+    activeClassificationFieldIds: (state, getters) => (blockIds) => {
+        if (blockIds.length == 0) return {};
 
-        let entities = Object.values(state.entities).filter(e => entityIds.includes(e.id));
+        let blocks = Object.values(state.blocks).filter(e => blockIds.includes(e.id));
 
-        // Reduce down to only the classifications that ALL entities share (the "super-mega-ultra-intersection")
-        let classificationIds = entities
+        // Reduce down to only the classifications that ALL blocks share (the "super-mega-ultra-intersection")
+        let classificationIds = blocks
             .map(e => e.classificationIds)
-            // Keep only the classifications that ALL selected entities have
+            // Keep only the classifications that ALL selected blocks have
             .reduce((prev, curr) => prev.filter(id => curr.includes(id)))
             // Keep only the classifications that still exist
             .filter(cid => getters.classificationIds.includes(cid));
@@ -353,19 +354,19 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
 
         return returnValue;
     },
-    // Returns all fieldIds that every provided entity has defined DIRECTLY on it (ie, no classification fields).
-    activeEntityFieldIds: (state, getters) => (entityIds) => {
-        if (entityIds.length == 0) return [];
+    // Returns all fieldIds that every provided block has defined DIRECTLY on it (ie, no classification fields).
+    activeBlockFieldIds: (state, getters) => (blockIds) => {
+        if (blockIds.length == 0) return [];
 
-        return Object.values(state.entities)
-            // Keep only the entities we're interested in
-            .filter(e => entityIds.includes(e.id))
-            // Map each entity down to an array of its fieldIds
+        return Object.values(state.blocks)
+            // Keep only the blocks we're interested in
+            .filter(e => blockIds.includes(e.id))
+            // Map each block down to an array of its fieldIds
             .map(e => e.fieldIds)
-            // Reduce down to only the fields that ALL entities share (the "super-mega-ultra-intersection")
+            // Reduce down to only the fields that ALL blocks share (the "super-mega-ultra-intersection")
             .reduce((prev, curr) => prev.filter(id => curr.includes(id)));
     },
-    activeFieldValueCounts: (state, getters) => (entityIds) => {
+    activeFieldValueCounts: (state, getters) => (blockIds) => {
         // Returns something like this:
         // {
         //     'field-id': { pvCounts: { 'val1': 3, 'val2': 8 }, outOf: 10 },
@@ -379,11 +380,11 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
         //       unselected classification).
         let returnValue: TypedMap<{pvCounts: TypedMap<number>, outOf: number}> = {};
 
-        let entities = Object.values(state.entities).filter(e => entityIds.includes(e.id));
-        let classificationFieldIds = entities
+        let blocks = Object.values(state.blocks).filter(e => blockIds.includes(e.id));
+        let classificationFieldIds = blocks
             // Map to arrays of classification IDs
             .map(e => e.classificationIds)
-            // Keep only the classifications that ALL selected entities have
+            // Keep only the classifications that ALL selected blocks have
             .reduce((prev, curr) => prev.filter(id => curr.includes(id)))
             // Keep only the classifications that still exist
             .filter(cid => getters.classificationIds.includes(cid))
@@ -392,14 +393,14 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
             // Merge into one super-array
             .reduce((prev, curr) => [...prev, ...curr], []);
 
-        for (let entity of entities) {
-            for (let fieldId of [...classificationFieldIds, ...entity.fieldIds]) {
-                let fieldValue = getFieldValue(getters.fields[fieldId].type, entity.fieldValues[fieldId]);
+        for (let block of blocks) {
+            for (let fieldId of [...classificationFieldIds, ...block.fieldIds]) {
+                let fieldValue = getFieldValue(getters.fields[fieldId].type, block.fieldValues[fieldId]);
 
                 if (returnValue[fieldId] === undefined)
                     returnValue[fieldId] = {
                         pvCounts: {},
-                        outOf: entityIds.length
+                        outOf: blockIds.length
                     };
 
                 if (Array.isArray(fieldValue)) {
@@ -435,7 +436,7 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
             fieldDefs[fieldId].possibleValueIds
                 // Convert this field's pvIds to pvDefs
                 .map(pvId => pvDefs[pvId])
-                // Keep only the ones this entity has a value for
+                // Keep only the ones this block has a value for
                 .filter(pv => fieldValues.includes(pv.name))
                 // Merge their styles.
                 .forEach(pvDef => {
@@ -450,7 +451,7 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
             .filter(cid => block.classificationIds.includes(cid))
             .forEach(cid => {
                 classificationDefs[cid]
-                    // Keep only the fields that are defined on this entity
+                    // Keep only the fields that are defined on this block
                     .fieldIds?.filter((fid) => block.fieldValues[fid])
                     // Apply styles
                     .forEach(fid => applyStylesByFieldId(fid));
@@ -458,8 +459,8 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
 
         // Populate styles from the fields
         block.fieldIds
-            // Keep only the ones defined directly on the entity. (not the classifications - that's handled above.)
-            .filter(fid => fieldDefs[fid].sourceType === 'entity')
+            // Keep only the ones defined directly on the block. (not the classifications - that's handled above.)
+            .filter(fid => fieldDefs[fid].sourceType === 'block')
             // Apply styles
             .forEach(fid => applyStylesByFieldId(fid));
 
@@ -486,9 +487,9 @@ const entityDataGetters: GetterTree<EntityDataState, RootState> & EntityDataGett
 // Store
 // -----
 
-export const entityDataStore: Module<EntityDataState, RootState> = {
-    state: entityDataState,
-    getters: entityDataGetters,
-    mutations: entityDataMutations,
-    actions: entityDataActions
+export const blockDataStore: Module<BlockDataState, RootState> = {
+    state: blockDataState,
+    getters: blockDataGetters,
+    mutations: blockDataMutations,
+    actions: blockDataActions
 }

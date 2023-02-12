@@ -1,6 +1,6 @@
 
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
-import { ViewDataState, ViewDataGetters, ViewDataMutations, ViewDataActions, filterBlocks } from "./Types/ViewDataTypes";
+import { ViewDataState, ViewDataGetters, ViewDataMutations, ViewDataActions, filterBlocks } from "./Types/ViewStoreTypes";
 import { RootState } from "./StoreTypes";
 
 // =====
@@ -78,7 +78,7 @@ const viewDataGetters: GetterTree<ViewDataState, RootState> & ViewDataGetters = 
         }
 
         return filterBlocks(
-            Object.values(rootState.entityData.entities),
+            Object.values(rootState.blockData.blocks),
             state.activeViewConfig.filter,
             getters.possibleValues,
             getters.fieldIdToClassificationId);

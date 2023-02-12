@@ -1,14 +1,12 @@
 
 import fs from 'fs';
 
-import { BoardData } from '../DataTypes/BoardDataTypes';
-
 export class ProjectDataPersistence {
 
     private sourceFile: string | undefined;
 
     private data: {
-        boards: BoardData[],
+        boards: { boardId: string, boardName: string }[],
     };
 
     constructor(sourceFile: string | undefined = undefined) {
@@ -51,9 +49,7 @@ export class ProjectDataPersistence {
     // Board Management
     // ----------------
 
-    async createNewBoard(boardName: string): Promise<BoardData> {
-        return {
-            boardName,
-        };
+    async createNewBoard(boardName: string): Promise<void> {
+        // TODO-const : ProjectDataPersistence.createNewBoard
     }
 }

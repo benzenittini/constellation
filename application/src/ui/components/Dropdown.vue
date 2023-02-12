@@ -24,7 +24,8 @@
 
 <script lang="ts">
 import { defineComponent, computed, watch, Ref, ref } from "vue";
-import { DropdownOption } from "../store/Types/FieldDataTypes";
+
+import { DropdownOption } from "../store/Types/FieldStoreTypes";
 
 export default defineComponent({
     props: {

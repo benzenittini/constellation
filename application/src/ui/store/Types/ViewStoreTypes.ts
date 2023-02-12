@@ -1,11 +1,12 @@
 
 import { AugmentedActionContext, GetterProperties, RootState } from "../StoreTypes";
-import { Entity } from "./EntityDataTypes";
-import { DateTime, PossibleValueDefinition } from "./FieldDataTypes";
 import * as StringUtils from '../../../common/StringUtils';
 import * as DateUtils from '../../../common/DateUtils';
 import * as ErrorLogger from '../../../common/ErrorLogger';
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
+import { BaseViewConfig, Comparator, Conjunction, Filter, FilterChain, FilterType, Inclusion, MultiSelectComparator, SingleSelectComparator, StringComparator, TemporalBeforeAfterFilter, TemporalComparator, TemporalFilterValue, TemporalUnit, TemporalWithinFilter, ViewConfig, ViewType } from "../../../../../common/DataTypes/ViewDataTypes";
+import { Block } from "../../../../../common/DataTypes/BlockDataTypes";
+import { DateTime, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
 
 
 // -- State --
@@ -42,37 +43,15 @@ export interface ViewDataActions {
 
 // -- Getters --
 export type ViewDataGetters<S = ViewDataState> = {
-    displayedBlocks    (state: S, getters: GetterProperties, rootState: RootState): Entity[];
+    displayedBlocks    (state: S, getters: GetterProperties, rootState: RootState): Block[];
     relevantPriorities (state: S, getters: GetterProperties, rootState: RootState): string[];
-    prioritizedBlocks  (state: S, getters: GetterProperties, rootState: RootState): Entity[];
+    prioritizedBlocks  (state: S, getters: GetterProperties, rootState: RootState): Block[];
 }
 
 
-// ==========
-// View Types
-// ----------
-
-// Keep these in sync with types/interfaces in AppDataInterface!
-export enum ViewType {
-    FILTER = 'FILTER',
-    KANBAN = 'KANBAN',
-    CALENDAR = 'CALENDAR',
-};
-export interface BaseViewConfig {
-    id: string;
-    name: string;
-    type: ViewType;
-    filter: FilterChain;
-}
-export interface FilterViewConfig extends BaseViewConfig {
-}
-export interface KanbanViewConfig extends BaseViewConfig {
-    groupingFieldId: string,
-}
-export interface CalendarViewConfig extends BaseViewConfig {
-    // TODO-calendar
-}
-export type ViewConfig = FilterViewConfig | KanbanViewConfig | CalendarViewConfig;
+// ==============
+// View Functions
+// --------------
 
 export function isValidConfig(viewConfig: ViewConfig): boolean {
     // Must have a non-blank name
@@ -93,81 +72,15 @@ export function isValidConfig(viewConfig: ViewConfig): boolean {
 }
 
 
-// ============
-// Filter Types
-// ------------
+// ==========================
+// Filter Functions/Variables
+// --------------------------
 
-// Keep these in sync with types/interfaces in AppDataInterface!
-
-// -- Enums --
-export enum Conjunction { AND = 'AND', OR = 'OR' }
-export enum Inclusion { INCLUDE = 'INCLUDE', EXCLUDE = 'EXCLUDE' }
-export enum FilterType {
-    CLASSIFICATION_EXISTENCE = 'CLASSIFICATION_EXISTENCE',
-    FIELD_VALUE  = 'FIELD_VALUE',
-    SUMMARY_TEXT = 'SUMMARY_TEXT',
-};
-export enum StringComparator { 
-    CONTAINS    = 'STRING_CONTAINS',
-    EQUALS      = 'STRING_EQUALS',
-    STARTS_WITH = 'STRING_STARTS_WITH',
-    ENDS_WITH   = 'STRING_ENDS_WITH',
-}
-export enum SingleSelectComparator {
-    EQUALS       = 'SS_EQUALS',
-    DOESNT_EQUAL = 'SS_DOESNT_EQUAL',
-};
-export enum MultiSelectComparator { 
-    ANY_ONE_OF = 'MS_ANY_ONE_OF',
-    ALL_OF     = 'MS_ALL_OF',
-    NONE_OF    = 'MS_NONE_OF',
-};
-export enum TemporalComparator {
-    BEFORE        = 'TEMPORAL_BEFORE',
-    AFTER         = 'TEMPORAL_AFTER',
-    WITHIN_NEXT_X = 'TEMPORAL_WITHIN_NEXT_X',
-};
-export enum TemporalUnit {
-    MINUTE = "MINUTE",
-    HOUR   = "HOUR",
-    DAY    = "DAY",
-    MONTH  = "MONTH",
-    YEAR   = "YEAR",
-};
 // Certain filter checks only need to be done for the "inclusive" comparators, not the "exclusive" comparators.
 const EXCLUSIVE_COMPARATORS: Comparator[] = [
     MultiSelectComparator.NONE_OF,
 ];
 
-// -- Types --
-export type FilterChain = {
-    filters: Filter[];
-    conjunction: Conjunction;
-};
-export type Filter = ClassificationFilter | FieldValueFilter | SummaryTextFilter;
-export type ClassificationFilter = {
-    type: FilterType.CLASSIFICATION_EXISTENCE;
-    includeExclude: Inclusion;
-    classificationId: string;
-};
-export type FieldValueFilter = {
-    type: FilterType.FIELD_VALUE;
-    fieldId: string;
-    comparator: Comparator | null;
-    value: string | string[] | null | TemporalFilterValue;
-};
-export type SummaryTextFilter = {
-    type: FilterType.SUMMARY_TEXT;
-    comparator: StringComparator;
-    value: string;
-};
-export type Comparator = StringComparator | SingleSelectComparator | MultiSelectComparator | TemporalComparator;
-
-export type TemporalWithinFilter      = { quantity: number, unit: TemporalUnit };
-export type TemporalBeforeAfterFilter = { datetime: DateTime };
-export type TemporalFilterValue = TemporalWithinFilter | TemporalBeforeAfterFilter;
-
-// -- Dropdown Options --
 export const CONJUNCTION_OPTS: { value: Conjunction, display: string }[] = [
     { value: Conjunction.AND, display: 'And' },
     { value: Conjunction.OR,  display: 'Or' },
@@ -265,7 +178,7 @@ function getMultiplier(unit: TemporalUnit): number {
     }
 }
 
-export function passesFilter(block: Entity, filter: Filter, pvLookups: TypedMap<PossibleValueDefinition>, fieldIdToClassificationId: TypedMap<string>) {
+export function passesFilter(block: Block, filter: Filter, pvLookups: TypedMap<PossibleValueDefinition>, fieldIdToClassificationId: TypedMap<string>) {
     switch (filter.type) {
         case FilterType.CLASSIFICATION_EXISTENCE:
             let hasClassification = block.classificationIds.includes(filter.classificationId);
@@ -300,7 +213,7 @@ export function passesFilter(block: Entity, filter: Filter, pvLookups: TypedMap<
     }
 }
 
-export function filterBlocks(blocks: Entity[], filterChain: FilterChain, pvLookups: TypedMap<PossibleValueDefinition>, fieldIdToClassificationId: TypedMap<string>) {
+export function filterBlocks(blocks: Block[], filterChain: FilterChain, pvLookups: TypedMap<PossibleValueDefinition>, fieldIdToClassificationId: TypedMap<string>) {
     return blocks
         .filter((block) => {
             if (filterChain.conjunction === Conjunction.AND) {

@@ -1,4 +1,5 @@
 
+import { BasicBoardData, BasicProjectData, CurrentProjectBoard } from "../../../../../common/DataTypes/BoardDataTypes";
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { AugmentedActionContext, GetterProperties } from "../StoreTypes"
 
@@ -53,27 +54,4 @@ export type GeneralDataGetters<S = GeneralDataState> = {
     currentProjectBoard   (state: S, getters: GetterProperties): CurrentProjectBoard | undefined;
     isCurrentBoardRemote  (state: S, getters: GetterProperties): boolean;
     pointerEventsDisabled (state: S, getters: GetterProperties): boolean;
-}
-
-
-// ==========
-// Data Types
-// ----------
-
-export const LOCAL_PROJECT = "local";
-
-export interface BasicProjectData {
-    projectId: string;
-    projectName: string;
-    boards: TypedMap<BasicBoardData>;
-}
-
-export interface BasicBoardData {
-    boardId: string;   // For local boards, ID is the filepath
-    boardName: string; // Local boards, the name is the filename sans extension
-}
-
-export interface CurrentProjectBoard {
-    projectId: string;
-    boardId: string;
 }

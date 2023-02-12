@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { ViewType } from "../../store/Types/ViewDataTypes";
 
+import { ViewType } from "../../../../../common/DataTypes/ViewDataTypes";
 import { useStore } from "../../store/store";
 
 export default defineComponent({

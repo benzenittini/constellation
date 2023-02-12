@@ -1,6 +1,6 @@
 
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { AugmentedActionContext, EntityLinkPair, GetterProperties } from "../StoreTypes"
+import { AugmentedActionContext, BlockLinkPair, GetterProperties } from "../StoreTypes"
 
 
 // ==========
@@ -18,8 +18,8 @@ export type HierarchyDataMutations<S = HierarchyDataState> = {
     clearBoardState (state: S): void;
     clearHierarchy  (state: S): void;
 
-    createNewNode (state: S, entityId: string): void;
-    deleteNode    (state: S, entityId: string): void;
+    createNewNode (state: S, blockId: string): void;
+    deleteNode    (state: S, blockId: string): void;
 
     assignParent (state: S, payload: {parentId: string, childId: string}): void;
     clearParent  (state: S, childId: string): void;
@@ -34,18 +34,18 @@ export interface HierarchyDataActions {
     clearBoardState ({ commit }: AugmentedActionContext<HierarchyDataState>): void;
     clearHierarchy  ({ commit }: AugmentedActionContext<HierarchyDataState>): void;
 
-    createNode  ({ commit }: AugmentedActionContext<HierarchyDataState>, payload: {entityId: string, parentId: string | undefined}): void;
-    deleteNode  ({ commit }: AugmentedActionContext<HierarchyDataState>, entityId: string): void;
-    setParent   ({ commit, state, getters, rootState }: AugmentedActionContext<HierarchyDataState>, payload: {entityId: string, newParent: string | undefined}): void;
+    createNode  ({ commit }: AugmentedActionContext<HierarchyDataState>, payload: {blockId: string, parentId: string | undefined}): void;
+    deleteNode  ({ commit }: AugmentedActionContext<HierarchyDataState>, blockId: string): void;
+    setParent   ({ commit, state, getters, rootState }: AugmentedActionContext<HierarchyDataState>, payload: {blockId: string, newParent: string | undefined}): void;
 }
 
 // -- Getters --
 export type HierarchyDataGetters<S = HierarchyDataState> = {
-    visibleHierarchyLinkPairs (state: S, getters: GetterProperties): EntityLinkPair[];
-    entityScales (state: S, getters: GetterProperties): TypedMap<number>;
+    visibleHierarchyLinkPairs (state: S, getters: GetterProperties): BlockLinkPair[];
+    blockScales (state: S, getters: GetterProperties): TypedMap<number>;
     getTopLevelBlocks (state: S): string[];
-    getTransitiveDescendants: (state: S) => (parentEntityId: string) => string[];
-    getParentChain: (state: S) => (entityId: string) => string[];
+    getTransitiveDescendants: (state: S) => (parentBlockId: string) => string[];
+    getParentChain: (state: S) => (blockId: string) => string[];
 }
 
 
@@ -54,6 +54,6 @@ export type HierarchyDataGetters<S = HierarchyDataState> = {
 // -------------
 
 export interface HierarchyNode {
-    parentEntityId: string | undefined;
-    childrenEntityIds: string[];
+    parentBlockId: string | undefined;
+    childrenBlockIds: string[];
 }
