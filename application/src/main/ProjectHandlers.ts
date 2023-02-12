@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { BoardDataPersistence } from "../../../common/persistence/BoardDataPersistence";
+import * as GlobalConfig from "./GlobalConfig";
 
 
 export function registerProjectHandlers(ipcMain: Electron.IpcMain) {
@@ -13,13 +14,10 @@ export function registerProjectHandlers(ipcMain: Electron.IpcMain) {
 }
 
 async function getRecentBoards() {
-    // TODO-const : load recent boards ... somehow.
-    // TODO-const : AND MAKE SURE THE FILES STILL EXIST
-    let filepath = '/home/ben/git/moonwafer/constellation/testboards/test board.mw';
-    return [{
+    return GlobalConfig.config.localBoards.map(filepath => ({
         boardId: filepath,
         boardName: path.basename(filepath, '.mw'),
-    }];
+    }));
 }
 
 async function createNewBoard() {
@@ -36,6 +34,7 @@ async function createNewBoard() {
     if (!canceled && filePath) {
         // Create new file with initial data
         fs.writeFileSync(filePath, JSON.stringify(BoardDataPersistence.getInitData()));
+        GlobalConfig.addLocalBoard(filePath);
     }
 
     // Return board data, where ID is filepath and name is filename

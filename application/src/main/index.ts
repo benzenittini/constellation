@@ -4,6 +4,7 @@ import path from 'path';
 
 import { registerProjectHandlers } from './ProjectHandlers';
 import { registerBoardHandlers } from './BoardHandlers';
+import { loadConfigFile } from './GlobalConfig';
 
 const createWindow = () => {
     // TODO-const : Remove all "leftMonitor" lines!
@@ -14,8 +15,6 @@ const createWindow = () => {
         width: 800,
         height: 600,
         webPreferences: {
-            // __static is set by webpack and will point to the public directory
-            // preload: path.resolve(__static, 'preload.js'),
             preload: path.join(__dirname, 'preload.js'),
         },
     });
@@ -28,6 +27,7 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
+    loadConfigFile();
     createWindow();
 
     // Opens a new browser window if app is already running (ex: on Mac)

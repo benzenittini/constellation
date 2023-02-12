@@ -33,6 +33,7 @@ export class GetBoardDataAction extends Action {
         if (data === undefined) {
             // TODO-const : post error
             console.log("Error fetching board data for board: " + this.boardId);
+            useStore().dispatch('setCurrentProjectBoard', undefined);
             return;
         }
 
