@@ -78,8 +78,6 @@ export default defineComponent({
 
 #mw-projects {
     .mw-board-list {
-        width: 200px;
-        height: 200px;
         background: vars.$gray1;
     }
 }

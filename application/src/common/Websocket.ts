@@ -10,15 +10,15 @@ import { useStore } from '../ui/store/store';
 
 // TODO-const : Re-enable all the actions
 // import { GetBoardDataAction } from '../actions/WebsocketActions/GetBoardData';
-// import { CreateNewEntity } from '../actions/WebsocketActions/CreateNewEntity';
-// import { DeleteEntities } from '../actions/WebsocketActions/DeleteEntities';
-// import { SetEntityParent } from '../actions/WebsocketActions/SetEntityParent';
+// import { CreateNewBlock } from '../actions/WebsocketActions/CreateNewBlock';
+// import { DeleteBlocks } from '../actions/WebsocketActions/DeleteBlocks';
+// import { SetBlockParent } from '../actions/WebsocketActions/SetBlockParent';
 // import { UpdateClassificationDefinitions } from '../actions/WebsocketActions/UpdateClassificationDefinitions';
-// import { UpdateClassificationOnEntities } from '../actions/WebsocketActions/UpdateClassificationOnEntities';
-// import { UpdateEntityContent } from '../actions/WebsocketActions/UpdateEntityContent';
-// import { UpdateEntityPositions } from '../actions/WebsocketActions/UpdateEntityPositions';
+// import { UpdateClassificationOnBlocks } from '../actions/WebsocketActions/UpdateClassificationOnBlocks';
+// import { UpdateBlockContent } from '../actions/WebsocketActions/UpdateBlockContent';
+// import { UpdateBlockPositions } from '../actions/WebsocketActions/UpdateBlockPositions';
 // import { UpdateFieldDefinitions } from '../actions/WebsocketActions/UpdateFieldDefinitions';
-// import { UpdateFieldValueOnEntities } from '../actions/WebsocketActions/UpdateFieldValueOnEntities';
+// import { UpdateFieldValueOnBlocks } from '../actions/WebsocketActions/UpdateFieldValueOnBlocks';
 // import { LoadViewData } from '../actions/WebsocketActions/LoadViewData';
 // import { SaveView } from '../actions/WebsocketActions/SaveView';
 // import { DeleteView } from '../actions/WebsocketActions/DeleteView';
@@ -224,17 +224,17 @@ function registerListeners(socket: Socket) {
 
     // TODO-const : Re-enable all the actions
     // socket.on('boardData', (data: any) => { ws.closeConnectionDialog(); ws.closeOutageNotification(true); GetBoardDataAction.processResponse(data); });
-    // // -- Entity Data --
-    // socket.on('updatedEntityPositions', (data: any) => { UpdateEntityPositions.processResponse(data); });
-    // socket.on('updatedEntityContent',   (data: any) => { UpdateEntityContent.processResponse(data); });
-    // socket.on('newEntity',              (data: any) => { CreateNewEntity.processResponse(data); });
-    // socket.on('entitiesDeleted',        (data: any) => { DeleteEntities.processResponse(data); });
-    // socket.on('parentEntitySet',        (data: any) => { SetEntityParent.processResponse(data); });
+    // // -- Block Data --
+    // socket.on('updatedBlockPositions', (data: any) => { UpdateBlockPositions.processResponse(data); });
+    // socket.on('updatedBlockContent',   (data: any) => { UpdateBlockContent.processResponse(data); });
+    // socket.on('newBlock',              (data: any) => { CreateNewBlock.processResponse(data); });
+    // socket.on('blocksDeleted',        (data: any) => { DeleteBlocks.processResponse(data); });
+    // socket.on('parentBlockSet',        (data: any) => { SetBlockParent.processResponse(data); });
     // // -- Fields and Classifications --
     // socket.on('fieldDefinitions',          (data: any) => { UpdateFieldDefinitions.processResponse(data); });
     // socket.on('classificationDefinitions', (data: any) => { UpdateClassificationDefinitions.processResponse(data); });
-    // socket.on('entityFieldValue',          (data: any) => { UpdateFieldValueOnEntities.processResponse(data); });
-    // socket.on('entityClassifications',     (data: any) => { UpdateClassificationOnEntities.processResponse(data); });
+    // socket.on('blockFieldValue',          (data: any) => { UpdateFieldValueOnBlocks.processResponse(data); });
+    // socket.on('blockClassifications',     (data: any) => { UpdateClassificationOnBlocks.processResponse(data); });
     // // -- View Data --
     // socket.on('viewData',         (data: any) => { LoadViewData.processResponse(data); });
     // socket.on('viewSaved',        (data: any) => { SaveView.processResponse(data); });

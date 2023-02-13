@@ -59,9 +59,14 @@ import Triangle        from './svgs/Triangle.vue';
 // Project/Board List
 import Projects from './pages/projects/_.vue';
 
-// Application
-import Mindmap from './pages/mindmap/_.vue';
-import Canvas from './pages/mindmap/Canvas.vue';
+// Mind Map
+import Mindmap       from './pages/mindmap/_.vue';
+import Canvas        from './pages/mindmap/Canvas.vue';
+import Link          from './pages/mindmap/Link.vue';
+import Block         from './pages/mindmap/Block.vue';
+import BlockTray     from './pages/mindmap/BlockTray.vue';
+import ExpandedBlock from './pages/mindmap/ExpandedBlock.vue';
+import TextContent   from './pages/mindmap/TextContent.vue';
 
 
 // -- The exported super-object --
@@ -122,7 +127,12 @@ export let components: any = {
     // -- Pages --
     // Project/Board List
     'eic-page-projects': Projects,
-    // Application
+    // Mind Map
     'eic-page-mindmap': Mindmap,
     'eic-canvas': Canvas,
+    'eic-link': Link,
+    'eic-block': Block,
+    'eic-block-tray': BlockTray,
+    'eic-expanded-block': ExpandedBlock,
+    'eic-text-content': TextContent,
 };

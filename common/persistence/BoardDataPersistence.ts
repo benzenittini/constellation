@@ -82,6 +82,7 @@ export class BoardDataPersistence {
             // throw new TopError('3.3.13', Severity.MEDIUM,
             //     `When creating a new block, the specified parentBlockId does not exist. boardId: ${boardId}, blockId: ${blockId}, parentBlockId: ${parentBlockId}`,
             //     UserErrors.INTERNAL_ERROR);
+            throw new Error('error in createBlock: parent block does not exist');
         }
 
         // Make sure there isn't a duplicate blockId
@@ -90,6 +91,7 @@ export class BoardDataPersistence {
             // throw new TopError('3.3.14', Severity.MEDIUM,
             //     `When creating a new block, the specified block ID already exists. boardId: ${boardId}, blockId: ${blockId}, parentBlockId: ${parentBlockId}`,
             //     UserErrors.INTERNAL_ERROR);
+            throw new Error('error in createBlock: block id already exists');
         }
 
         // All good! Add and persist the block.

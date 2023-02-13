@@ -58,7 +58,7 @@
             <eic-block v-for="blockId of nonExpandedBlockIds"
                 v-bind:id="blockId"
                 v-bind:key="blockId"
-                v-bind:eic-block="eicBlocks[blockId]"
+                v-bind:eic-block="blocks[blockId]"
                 v-bind:eic-scale="zoomScale"
                 v-bind:eic-temp-shift="blockDragDestination"
                 v-bind:eic-temp-resize="blockResizable.deltaDrag"
@@ -75,7 +75,7 @@
                 v-bind:id="blockId"
                 v-bind:key="blockId"
                 v-bind:initial-hover-state="true"
-                v-bind:eic-block="eicBlocks[blockId]"
+                v-bind:eic-block="blocks[blockId]"
                 v-bind:eic-scale="zoomable.scale"
                 v-bind:eic-temp-shift="blockDragDestination"
                 v-bind:eic-temp-resize="blockResizable.deltaDrag"
@@ -88,7 +88,7 @@
                 v-on:mouseLeaveBlock="mouseLeaveBlock"
                 ></eic-block>
 
-            <text v-if="Object.keys(eicBlocks).length === 0" class="canvas-welcome-text" text-anchor="middle" x="0" y="0">Double-click anywhere to get started</text>
+            <text v-if="Object.keys(blocks).length === 0" class="canvas-welcome-text" text-anchor="middle" x="0" y="0">Double-click anywhere to get started</text>
         </g>
 
         <!-- The user's selection box when doing a drag-to-select -->
@@ -463,12 +463,12 @@ export default defineComponent({
             }),
 
             // Computed
-            links,
+            blocks, links,
             nonExpandedBlockIds: computed(() => {
-                return Object.keys(blocks).filter(eId => !expandedBlockIds.value.includes(eId))
+                return Object.keys(blocks.value).filter(eId => !expandedBlockIds.value.includes(eId))
             }),
             expandedBlockIds: computed(() => {
-                return Object.keys(blocks).filter(eId => expandedBlockIds.value.includes(eId))
+                return Object.keys(blocks.value).filter(eId => expandedBlockIds.value.includes(eId))
             }),
             linkStart, linkDestination,
             blockDragDestination,

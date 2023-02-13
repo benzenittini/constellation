@@ -59,7 +59,7 @@ type ClientError = {
  * 
  * 3.<store>.<errnum> = Store
  *     3.1.* = Field Store Files
- *     3.2.* = Entity Store Files
+ *     3.2.* = Block Store Files
  *     3.3.* = View Store Files
  * 
  * 4.<file>.<errnum> = Common / Actions
@@ -162,7 +162,7 @@ const ERROR_LOOKUP: TypedMap<ClientError> = {
 
     // Store / Field Store Files
     '3.1.1': { dismissAfterMillis: 0, clientTemplate: "An unexpected error occurred updating some field values." },
-    // Store / Entity Store Files
+    // Store / Block Store Files
     '3.2.1': { dismissAfterMillis: 0, clientTemplate: "An unexpected error occurred moving your block. Try refreshing the page, and if this error persists, reach out to our support team at support@moonwafer.io" },
     // Store / View Store Files
     '3.3.1': { dismissAfterMillis: 5000, clientTemplate: "View name cannot be blank." },

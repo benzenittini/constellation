@@ -8,7 +8,7 @@ import { TypedMap } from '../../../../common/DataTypes/GenericDataTypes';
 import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from '../../../../common/DataTypes/FieldDataTypes';
 // TODO-const : Re-enable all the actions
 // import { UpdateClassificationDefinitions } from '../actions/WebsocketActions/UpdateClassificationDefinitions';
-// import { UpdateClassificationOnEntities } from '../actions/WebsocketActions/UpdateClassificationOnEntities';
+// import { UpdateClassificationOnBlocks } from '../actions/WebsocketActions/UpdateClassificationOnBlocks';
 
 
 function openEditClassificationsDialog(classificationIds: string[], classificationDefs: TypedMap<ClassificationDefinition>, fieldDefs: TypedMap<FieldDefinition>, possibleValueDefs: TypedMap<PossibleValueDefinition>) {
@@ -76,7 +76,7 @@ function setClassificationOnBlocks(blockIds: string[], classificationId: string,
     let store = useStore();
 
     // TODO-const : Re-enable all the actions
-    // new UpdateClassificationOnEntities(
+    // new UpdateClassificationOnBlocks(
     //     store.state.generalData.currentProjectBoard!.boardId,
     //     blockIds,
     //     classificationId,

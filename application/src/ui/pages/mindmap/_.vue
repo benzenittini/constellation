@@ -2,8 +2,8 @@
     <div class="mw-app-relationship" >
         <!-- TODO-const : remove selectedblocks and ids from parameters..? -->
         <!-- <eic-app-configpane
-            v-bind:mw-selected-blocks="selectedEntities"
-            v-bind:mw-selected-block-ids="selectedEntityIds"
+            v-bind:mw-selected-blocks="selectedBlocks"
+            v-bind:mw-selected-block-ids="selectedBlockIds"
             v-bind:mw-show-alignment-controls="true"
             v-bind:mw-show-after-number-selected="2"
             ></eic-app-configpane> -->
@@ -37,6 +37,8 @@ export default defineComponent({
 
 <style lang="scss">
 .mw-app-relationship {
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
 }
 </style>
