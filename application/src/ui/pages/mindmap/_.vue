@@ -1,9 +1,16 @@
 <template>
-    <div>
-        Mind map page
-        {{ }}
+    <div class="mw-app-relationship" >
+        <!-- TODO-const : remove selectedblocks and ids from parameters..? -->
+        <!-- <eic-app-configpane
+            v-bind:mw-selected-blocks="selectedEntities"
+            v-bind:mw-selected-block-ids="selectedEntityIds"
+            v-bind:mw-show-alignment-controls="true"
+            v-bind:mw-show-after-number-selected="2"
+            ></eic-app-configpane> -->
+        <eic-canvas></eic-canvas>
     </div>
 </template>
+
 
 <script lang="ts">
 import { defineComponent, computed, onMounted } from 'vue';
@@ -29,7 +36,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
-@use "../../styles/variables" as vars;
-
+.mw-app-relationship {
+    height: 100%;
+}
 </style>

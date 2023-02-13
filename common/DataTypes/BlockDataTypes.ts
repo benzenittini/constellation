@@ -22,7 +22,7 @@ export class Block {
     isSelected?: boolean;
     isLockedOpen?: boolean;
 
-    constructor(id: string, location: BoundingBox, parentBlockId: string | undefined, content: BlockContent = DEFAULT_BLOCK_CONTENT,
+    constructor(id: string, location: BoundingBox, parentBlockId?: string | undefined, content: BlockContent = DEFAULT_BLOCK_CONTENT,
                 fieldValues: TypedMap<any> = {}, classificationIds: string[] = [], fieldIds: string[] = []) {
         this.id = id;
         this.location = location;

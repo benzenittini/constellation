@@ -49,10 +49,7 @@ const blockDataMutations: MutationTree<BlockDataState> & BlockDataMutations = {
         }
     },
     setBlocks (state, blocks) {
-        state.blocks = {};
-        for (let block of blocks) {
-            state.blocks[block.id] = block;
-        }
+        state.blocks = blocks;
     },
     selectBlocks(state, blockIds) {
         for (let blockId of blockIds) {
@@ -194,6 +191,20 @@ const blockDataActions: ActionTree<BlockDataState, RootState> & BlockDataActions
         }
         commit('selectBlocks', blockIds);
     },
+    selectBlocksByBoundingBox ({ state, dispatch }, {boundingBox, clearCurrentSelection}) {
+        let blockIds: string[] = [];
+        Object.keys(state.blocks).forEach((key) => {
+            let blockLocation = state.blocks[key].location;
+            // Determine if the bounding box overlaps this block.
+            // If it does, then add it to our blockIds array.
+            if (rangesOverlap(blockLocation.x, blockLocation.width, boundingBox.x, boundingBox.width)
+                && rangesOverlap(blockLocation.y, blockLocation.height, boundingBox.y, boundingBox.height)) {
+                    blockIds.push(key);
+            }
+        });
+
+        dispatch("selectBlocks", {blockIds, clearCurrentSelection});
+    },
     clearBlockSelection ({ commit })           { commit('deselectAllBlocks'); },
     startEditingBlock   ({ commit }, blockId) { commit('changeEditedBlock', blockId); },
     stopEditingBlock    ({ commit })           { commit('changeEditedBlock', undefined); },
@@ -330,6 +341,10 @@ const blockDataGetters: GetterTree<BlockDataState, RootState> & BlockDataGetters
             // Should never come up ... but in case it does, this should be pretty safe handling.
             return [];
         }
+    },
+    blockAtCoordinates: (state, getters) => (coordinates) => {
+        return Object.values(state.blocks)
+            .find(e => RectangleUtils.rectangleContainsPoint(e.location, coordinates));
     },
 
     // Returns all fieldIds (grouped by classificationId) that every provided block has.
@@ -492,4 +507,24 @@ export const blockDataStore: Module<BlockDataState, RootState> = {
     getters: blockDataGetters,
     mutations: blockDataMutations,
     actions: blockDataActions
+}
+
+
+// ================
+// Helper Functions
+// ----------------
+
+function rangesOverlap(x1: number, width1: number, x2: number, width2: number): boolean {
+    let start1 = x1;
+    let stop1 = x1 + width1;
+    let start2 = x2;
+    let stop2 = x2 + width2;
+
+    if (start1 < start2 && start2 < stop1)
+        return true;
+
+    if (start2 < start1 && start1 < stop2)
+        return true;
+
+    return false;
 }

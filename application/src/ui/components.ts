@@ -61,6 +61,7 @@ import Projects from './pages/projects/_.vue';
 
 // Application
 import Mindmap from './pages/mindmap/_.vue';
+import Canvas from './pages/mindmap/Canvas.vue';
 
 
 // -- The exported super-object --
@@ -123,4 +124,5 @@ export let components: any = {
     'eic-page-projects': Projects,
     // Application
     'eic-page-mindmap': Mindmap,
+    'eic-canvas': Canvas,
 };

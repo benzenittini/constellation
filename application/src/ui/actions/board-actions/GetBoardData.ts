@@ -2,6 +2,8 @@
 import { Action } from "../Action";
 import { BoardData } from '../../../../../common/DataTypes/BoardDataTypes';
 import { useStore } from '../../store/store';
+import { Block } from "../../../../../common/DataTypes/BlockDataTypes";
+import { mapify } from "../../../common/ArrayUtils";
 
 export class GetBoardDataAction extends Action {
 
@@ -39,26 +41,25 @@ export class GetBoardDataAction extends Action {
             return;
         }
 
-        console.log("Received: " + JSON.stringify(data));
+        // Field Definitions
+        store.dispatch('setPossibleValueDefinitions',  data.possibleValues);
+        store.dispatch('setFieldDefinitions',          data.fields);
+        store.dispatch('setClassificationDefinitions', {
+            classificationDefinitions: data.classifications,
+            classificationIds: data.classificationIds
+        });
 
+        // Blocks
+        store.dispatch('setBlocks', data.blocks);
+        store.dispatch('setBlockPriorities', data.blockPriorities);
 
-        // // Field Definitions
-        // store.dispatch('setPossibleValueDefinitions',  data.possibleValueDefinitions);
-        // store.dispatch('setFieldDefinitions',          data.fieldDefinitions);
-        // store.dispatch('setClassificationDefinitions', data.classificationsWithOrdering);
+        // Hierarchy
+        store.dispatch('clearHierarchy');
+        for (let block of Object.values(data.blocks)) {
+            store.dispatch('createNode', { blockId: block.id, parentId: block.parentBlockId });
+        }
 
-        // // Entities
-        // let entityDTOs: { entity: Entity, parentEntityId: string }[] = GetBoardDataAction.parseEntities(data);
-        // store.dispatch('setEntities', entityDTOs.map(e => e.entity));
-        // store.dispatch('setBlockPriorities', data.blockPriorities);
-
-        // // Hierarchy
-        // store.dispatch('clearHierarchy');
-        // for (let entity of entityDTOs) {
-        //     store.dispatch('createNode', { entityId: entity.entity.id, parentId: entity.parentEntityId });
-        // }
-
-        // store.dispatch('setAvailableViews', mapify((data.availableViews as BaseViewConfig[]), 'id'));
+        store.dispatch('setAvailableViews', data.views);
     }
 
 }

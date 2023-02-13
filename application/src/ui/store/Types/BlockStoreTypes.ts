@@ -1,6 +1,6 @@
 
 import { Block, BlockContent, BlockIdAndPosition, SearchCriteria, SearchResult } from "../../../../../common/DataTypes/BlockDataTypes";
-import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
+import { BoundingBox, TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { AugmentedActionContext, GetterProperties } from "../StoreTypes";
 
 
@@ -22,7 +22,7 @@ export type BlockDataMutations<S = BlockDataState> = {
     clearBoardState (state: S): void;
 
     addBlocks (state: S, blocks: Block[]): void;
-    setBlocks (state: S, blocks: Block[]): void;
+    setBlocks (state: S, blocks: TypedMap<Block>): void;
 
     selectBlocks      (state: S, blockIds: string[]): void;
     deselectAllBlocks (state: S): void;
@@ -57,13 +57,14 @@ export interface BlockDataActions {
     clearBoardState ({ commit }: AugmentedActionContext<BlockDataState>): void;
 
     addBlocks ({ commit }: AugmentedActionContext<BlockDataState>, blocks: Block[]): void;
-    setBlocks ({ commit }: AugmentedActionContext<BlockDataState>, blocks: Block[]): void;
+    setBlocks ({ commit }: AugmentedActionContext<BlockDataState>, blocks: TypedMap<Block>): void;
 
-    selectBlock         ({ commit }: AugmentedActionContext<BlockDataState>, payload: {blockId: string, clearCurrentSelection?: boolean}): void;
-    selectBlocks        ({ commit }: AugmentedActionContext<BlockDataState>, payload: {blockIds: string[], clearCurrentSelection?: boolean}): void;
-    clearBlockSelection ({ commit }: AugmentedActionContext<BlockDataState>): void;
-    startEditingBlock   ({ commit }: AugmentedActionContext<BlockDataState>, blockId: string): void;
-    stopEditingBlock    ({ commit }: AugmentedActionContext<BlockDataState>): void;
+    selectBlock               ({ commit }: AugmentedActionContext<BlockDataState>, payload: {blockId: string, clearCurrentSelection?: boolean}): void;
+    selectBlocks              ({ commit }: AugmentedActionContext<BlockDataState>, payload: {blockIds: string[], clearCurrentSelection?: boolean}): void;
+    selectBlocksByBoundingBox ({ commit }: AugmentedActionContext<BlockDataState>, payload: {boundingBox: BoundingBox, clearCurrentSelection?: boolean}): void;
+    clearBlockSelection       ({ commit }: AugmentedActionContext<BlockDataState>): void;
+    startEditingBlock         ({ commit }: AugmentedActionContext<BlockDataState>, blockId: string): void;
+    stopEditingBlock          ({ commit }: AugmentedActionContext<BlockDataState>): void;
 
     lockOpenClosed ({ commit }: AugmentedActionContext<BlockDataState>, payload: {blockIds: string[]}): void;
 
@@ -98,6 +99,7 @@ export type BlockDataGetters<S = BlockDataState> = {
     blockPriorities  (state: S): string[];
 
     blockSearch (state: S, getters: GetterProperties): (criteria: SearchCriteria) => SearchResult[];
+    blockAtCoordinates(state: S, getters: GetterProperties): (coordinates: {x: number, y: number}) => Block | undefined;
 
     activeClassificationFieldIds (state: S, getters: GetterProperties): (blockIds: string[]) => TypedMap<string[]>;
     activeBlockFieldIds          (state: S, getters: GetterProperties): (blockIds: string[]) => string[];

@@ -42,10 +42,11 @@ export interface HierarchyDataActions {
 // -- Getters --
 export type HierarchyDataGetters<S = HierarchyDataState> = {
     visibleHierarchyLinkPairs (state: S, getters: GetterProperties): BlockLinkPair[];
-    blockScales (state: S, getters: GetterProperties): TypedMap<number>;
-    getTopLevelBlocks (state: S): string[];
-    getTransitiveDescendants: (state: S) => (parentBlockId: string) => string[];
-    getParentChain: (state: S) => (blockId: string) => string[];
+    blockScales               (state: S, getters: GetterProperties): TypedMap<number>;
+    getTopLevelBlocks         (state: S): string[];
+    getTransitiveDescendants  (state: S): (parentBlockId: string) => string[];
+    getParentChain            (state: S): (blockId: string) => string[];
+    getSiblings               (state: S, getters: GetterProperties): (blockId: string) => string[];
 }
 
 

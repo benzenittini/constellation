@@ -3,6 +3,8 @@
 import fs from 'fs';
 
 import { BoardData } from '../DataTypes/BoardDataTypes';
+import { BoundingBox } from '../DataTypes/GenericDataTypes';
+import { Block } from '../DataTypes/BlockDataTypes';
 
 export class BoardDataPersistence {
 
@@ -33,6 +35,7 @@ export class BoardDataPersistence {
 
     /** This function should be called any time this.data is modified! */
     private scheduleSave() {
+        console.log("Saving data..."); // TODO-const : delete
         if (this.saveTimer) clearTimeout(this.saveTimer);
         this.saveTimer = setTimeout(() => this.saveData(), 5000);
     }
@@ -43,6 +46,7 @@ export class BoardDataPersistence {
             fs.writeFileSync(this.sourceFile, JSON.stringify(this.data));
             // logger.debug('...done!'); // TODO-const : Logger setup
         }
+        console.log("Data saved!"); // TODO-const : delete
     }
 
     static getInitData() {
@@ -58,11 +62,43 @@ export class BoardDataPersistence {
     }
 
 
-    // ================
-    // Category!
-    // ----------------
+    // =============
+    // Miscellaneous
+    // -------------
 
     async getBoardData(): Promise<BoardData> {
         return this.data;
+    }
+
+
+    // ==========
+    // Block CRUD
+    // ----------
+
+    async createBlock(blockId: string, location: BoundingBox, parentBlockId: string | undefined): Promise<Block> {
+        // If specified, make sure the parent block exists
+        if (parentBlockId && this.data.blocks[parentBlockId] === undefined) {
+            // TODO-const : error handling
+            // throw new TopError('3.3.13', Severity.MEDIUM,
+            //     `When creating a new block, the specified parentBlockId does not exist. boardId: ${boardId}, blockId: ${blockId}, parentBlockId: ${parentBlockId}`,
+            //     UserErrors.INTERNAL_ERROR);
+        }
+
+        // Make sure there isn't a duplicate blockId
+        if (this.data.blocks[blockId]) {
+            // TODO-const : error handling
+            // throw new TopError('3.3.14', Severity.MEDIUM,
+            //     `When creating a new block, the specified block ID already exists. boardId: ${boardId}, blockId: ${blockId}, parentBlockId: ${parentBlockId}`,
+            //     UserErrors.INTERNAL_ERROR);
+        }
+
+        // All good! Add and persist the block.
+        let newBlock = new Block(blockId, location, parentBlockId);
+        this.data.blocks[blockId] = newBlock;
+        this.data.blockPriorities.push(blockId);
+
+        this.scheduleSave();
+
+        return newBlock;
     }
 }

@@ -8,5 +8,6 @@ interface Window {
     },
     board: {
         getBoardData: any,
+        createBlock: any,
     },
 }

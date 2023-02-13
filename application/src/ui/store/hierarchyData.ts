@@ -246,7 +246,15 @@ const hierarchyDataGetters: GetterTree<HierarchyDataState, RootState> & Hierarch
         }
 
         return chain;
-    }
+    },
+    getSiblings: (state, getters) => (blockId: string) => {
+        let parentId = state.hierarchy[blockId].parentBlockId;
+        if (parentId !== undefined) {
+            return [...state.hierarchy[parentId].childrenBlockIds];
+        } else {
+            return [...getters.getTopLevelBlocks];
+        }
+    },
 }
 
 
