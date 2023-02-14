@@ -106,7 +106,6 @@ export default defineComponent({
                     return { x: B.x + (h/2)/s, y: B.y - (h/2) };
                 }
             }
-
         }
 
         let sourceBlockEdge = computed(() => {

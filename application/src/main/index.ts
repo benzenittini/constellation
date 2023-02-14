@@ -18,6 +18,7 @@ const createWindow = () => {
             preload: path.join(__dirname, 'preload.js'),
         },
     });
+    win.setMenu(null);
 
     registerProjectHandlers(ipcMain);
     registerBoardHandlers(ipcMain);

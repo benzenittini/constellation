@@ -114,11 +114,13 @@ import { useWindowEvents } from "../../composables/WindowEvents";
 import { useMouseSampler } from "../../composables/MouseSampler";
 import { useTweenGroup } from "../../composables/TweenGroup";
 
-import { Block, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH } from "../../../../../common/DataTypes/BlockDataTypes";
+import { Block, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH } from "../../../../../common/DataTypes/BlockDataTypes";
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
 import { removeEntries } from "../../../common/ArrayUtils";
+import * as RectangleUtils from "../../../common/RectangleUtils";
 
 import { CreateBlockAction } from '../../actions/board-actions/CreateBlock';
+import { UpdateBlockPositionsAction } from '../../actions/board-actions/UpdateBlockPositions';
 
 export default defineComponent({
     props: {},
@@ -547,19 +549,19 @@ export default defineComponent({
                     if (blockDragDestination.deltaX !== 0 || blockDragDestination.deltaY !== 0) {
                         // Update our local store. (This assumes the server accepts the request)
                         let translatedWH = distanceToPersistedCoordinates(blockDragDestination.deltaX, blockDragDestination.deltaY)
-                        store.dispatch("dragSelectedBlocks", { deltaX: translatedWH.dx, deltaY: translatedWH.dy }); // TODO-const : incorporate this into the below action..?
 
-                        // // Send the update request to the server
-                        // TODO-const : UpdateBlockPositions action
-                        // let request = new UpdateBlockPositions(store.state.generalData.currentProjectBoard?.boardId);
-                        // let selectedBlockIds = blockStore.selectedBlockIds().value;
-                        // for (let id of selectedBlockIds) {
-                        //     let block = blockStore.rawState.blocks[id];
-                        //     request.addBlockAndPosition(id,
-                        //         block.location.x,     block.location.y,
-                        //         block.location.width, block.location.height);
-                        // }
-                        // request.send();
+                        // Send the update request to the server
+                        let request = new UpdateBlockPositionsAction(store.state.generalData.currentProjectBoard!.boardId);
+                        for (let id of store.getters.selectedBlockIds) {
+                            let block = store.state.blockData.blocks[id];
+                            request.addBlockAndPosition(id, {
+                                x: block.location.x + translatedWH.dx,
+                                y: block.location.y + translatedWH.dy,
+                                width: block.location.width,
+                                height: block.location.height,
+                            });
+                        }
+                        request.submit();
                     }
 
                     blockDraggable.mouseUp();
@@ -573,24 +575,18 @@ export default defineComponent({
                     let translatedWH = distanceToPersistedCoordinates(blockResizable.deltaDrag.value.deltaWidth, blockResizable.deltaDrag.value.deltaHeight);
                     let translatedDeltaXY = distanceToPersistedCoordinates(blockResizable.deltaDrag.value.deltaX, blockResizable.deltaDrag.value.deltaY);
 
-                    // TODO-const : incorporate these into the below action..?
-                    store.dispatch("resizeSelectedBlocks", { deltaX: translatedWH.dx, deltaY: translatedWH.dy });
-                    store.dispatch("dragSelectedBlocks", { deltaX: translatedDeltaXY.dx, deltaY: translatedDeltaXY.dy });
-
                     // Send the update request to the server
-                    // TODO-const : UpdateBlockPositions action
-                    // let request = new UpdateBlockPositions(store.state.generalData.currentProjectBoard?.boardId);
-                    // let selectedBlockIds = blockStore.selectedBlockIds().value;
-                    // for (let id of selectedBlockIds) {
-                    //     let block = blockStore.rawState.blocks[id];
-                    //     let normalized = RectangleUtils.normalize(
-                    //         block.location.x,     block.location.y,
-                    //         block.location.width, block.location.height);
-                    //     normalized.width = Math.max(normalized.width, MIN_block_WIDTH / blockScales.value[id]);
-                    //     normalized.height = Math.max(normalized.height, MIN_block_HEIGHT / blockScales.value[id]);
-                    //     request.addBlockAndPosition(id, normalized.x, normalized.y, normalized.width, normalized.height);
-                    // }
-                    // request.send();
+                    let request = new UpdateBlockPositionsAction(store.state.generalData.currentProjectBoard!.boardId);
+                    for (let id of store.getters.selectedBlockIds) {
+                        let block = store.state.blockData.blocks[id];
+                        let normalized = RectangleUtils.normalize(
+                            block.location.x + translatedDeltaXY.dx,  block.location.y + translatedDeltaXY.dy,
+                            block.location.width + translatedWH.dx,   block.location.height + translatedWH.dy);
+                        normalized.width  = Math.max(normalized.width,  MIN_BLOCK_WIDTH / blockScales.value[id]);
+                        normalized.height = Math.max(normalized.height, MIN_BLOCK_HEIGHT / blockScales.value[id]);
+                        request.addBlockAndPosition(id, normalized);
+                    }
+                    request.submit();
 
                     blockResizable.mouseUp();
                 }

@@ -2,8 +2,6 @@
 import { Action } from "../Action";
 import { BoardData } from '../../../../../common/DataTypes/BoardDataTypes';
 import { useStore } from '../../store/store';
-import { Block } from "../../../../../common/DataTypes/BlockDataTypes";
-import { mapify } from "../../../common/ArrayUtils";
 
 export class GetBoardDataAction extends Action {
 

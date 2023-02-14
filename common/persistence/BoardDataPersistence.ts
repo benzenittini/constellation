@@ -4,7 +4,7 @@ import fs from 'fs';
 
 import { BoardData } from '../DataTypes/BoardDataTypes';
 import { BoundingBox } from '../DataTypes/GenericDataTypes';
-import { Block } from '../DataTypes/BlockDataTypes';
+import { Block, BlockIdAndPosition } from '../DataTypes/BlockDataTypes';
 
 export class BoardDataPersistence {
 
@@ -102,5 +102,15 @@ export class BoardDataPersistence {
         this.scheduleSave();
 
         return newBlock;
+    }
+
+    async updateBlockPositions(blockIdsAndPositions: BlockIdAndPosition[]): Promise<BlockIdAndPosition[]> {
+        for (let {blockId, location} of blockIdsAndPositions) {
+            this.data.blocks[blockId].location = location;
+        }
+
+        this.scheduleSave();
+
+        return blockIdsAndPositions;
     }
 }

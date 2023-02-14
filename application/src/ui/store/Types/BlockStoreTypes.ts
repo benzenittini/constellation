@@ -33,8 +33,6 @@ export type BlockDataMutations<S = BlockDataState> = {
 
     lockOpenClosed (state: S, payload: {blockIds: string[], isLockedOpen: boolean}): void;
 
-    moveBlocksByDelta   (state: S, payload: {blockIds: string[], deltaX: number, deltaY: number}): void;
-    resizeBlocksByDelta (state: S, payload: {blockIds: string[], blockScales: TypedMap<number>, deltaX: number, deltaY: number}): void;
     setBlockPosition    (state: S, payload: {blockId: string, x: number, y: number, width: number, height: number}): void;
 
     deleteBlocks        (state: S, payload: {blockIds: string[]}): void;
@@ -71,8 +69,6 @@ export interface BlockDataActions {
     expandBlock   ({ commit }: AugmentedActionContext<BlockDataState>, blockId: string): void;
     contractBlock ({ commit }: AugmentedActionContext<BlockDataState>, blockId: string): void;
 
-    dragSelectedBlocks   ({ commit }: AugmentedActionContext<BlockDataState>, payload: {deltaX: number, deltaY: number}): void;
-    resizeSelectedBlocks ({ commit }: AugmentedActionContext<BlockDataState>, payload: {deltaX: number, deltaY: number}): void;
     setBlockPositions    ({ commit }: AugmentedActionContext<BlockDataState>, blockIdsAndPositions: BlockIdAndPosition[]): void;
 
     deleteBlocks         ({ commit }: AugmentedActionContext<BlockDataState>, blockIds: string[]): void;

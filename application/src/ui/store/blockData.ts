@@ -81,29 +81,6 @@ const blockDataMutations: MutationTree<BlockDataState> & BlockDataMutations = {
         }
     },
 
-    moveBlocksByDelta(state, {blockIds, deltaX, deltaY}) {
-        for (let blockId of blockIds) {
-            state.blocks[blockId].location.x += deltaX;
-            state.blocks[blockId].location.y += deltaY;
-        }
-    },
-    resizeBlocksByDelta(state, {blockIds, blockScales, deltaX, deltaY}) {
-        for (let blockId of blockIds) {
-            let normalized = RectangleUtils.normalize(
-                state.blocks[blockId].location.x,
-                state.blocks[blockId].location.y,
-                state.blocks[blockId].location.width + deltaX,
-                state.blocks[blockId].location.height + deltaY);
-
-            normalized.width = Math.max(normalized.width, MIN_BLOCK_WIDTH / blockScales[blockId]);
-            normalized.height = Math.max(normalized.height, MIN_BLOCK_HEIGHT / blockScales[blockId]);
-
-            state.blocks[blockId].location.x = normalized.x;
-            state.blocks[blockId].location.y = normalized.y;
-            state.blocks[blockId].location.width = normalized.width;
-            state.blocks[blockId].location.height = normalized.height;
-        }
-    },
     setBlockPosition(state, {blockId, x, y, width, height}) {
         state.blocks[blockId].location.x = x;
         state.blocks[blockId].location.y = y;
@@ -219,12 +196,6 @@ const blockDataActions: ActionTree<BlockDataState, RootState> & BlockDataActions
     contractBlock ({ commit }, blockId) { commit('contractBlock', blockId); },
 
     // -- Block Manipulation --
-    dragSelectedBlocks ({ commit, getters }, {deltaX, deltaY}) {
-        commit('moveBlocksByDelta', { blockIds: getters.selectedBlockIds, deltaX, deltaY});
-    },
-    resizeSelectedBlocks ({ commit, getters }, {deltaX, deltaY}) {
-        commit('resizeBlocksByDelta', { blockIds: getters.selectedBlockIds, blockScales: getters.blockScales, deltaX, deltaY});
-    },
     setBlockPositions   ({ commit }, blockIdsAndPositions) {
         for (let idAndPosition of blockIdsAndPositions) {
             commit('setBlockPosition', {
