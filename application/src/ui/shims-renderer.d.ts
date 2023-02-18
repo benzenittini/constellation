@@ -10,5 +10,6 @@ interface Window {
         getBoardData: any,
         createBlock: any,
         updateBlockPositions: any,
+        deleteBlocks: any,
     },
 }

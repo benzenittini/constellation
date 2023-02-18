@@ -121,6 +121,7 @@ import * as RectangleUtils from "../../../common/RectangleUtils";
 
 import { CreateBlockAction } from '../../actions/board-actions/CreateBlock';
 import { UpdateBlockPositionsAction } from '../../actions/board-actions/UpdateBlockPositions';
+import { DeleteBlocksAction } from '../../actions/board-actions/DeleteBlocks';
 
 export default defineComponent({
     props: {},
@@ -324,15 +325,11 @@ export default defineComponent({
                         // Certain browsers (firefox) use the "backspace" key to go back a page. We don't want that behavior.
                         keyboardEvent.preventDefault();
 
-                        // Update our local store. (This assumes the server accepts the request)
-                        store.dispatch('deleteSelectedBlocks');
-
                         // Send the update request to the server
-                        // TODO-const : DeleteBlocks action
-                        // new DeleteBlocks(
-                        //     store.state.generalData.currentProjectBoard?.boardId,
-                        //     selectedBlockIds
-                        // ).send();
+                        new DeleteBlocksAction(
+                            store.state.generalData.currentProjectBoard!.boardId,
+                            selectedBlockIds
+                        ).submit();
 
                         return; // Processed a keystroke, so exit.
                     }
@@ -376,12 +373,10 @@ export default defineComponent({
                     if (block.content.data.text.trim().length === 0) {
                         // Delete the final (empty) block
                         blocksBulkCreated.value.shift();
-                        store.dispatch('deleteBlocks', [lastCreatedId]); // TODO-const : Push this into the action when it gets implemented
-                        // TODO-const : DeleteBlocks action
-                        // new DeleteBlocks(
-                        //     store.state.generalData.currentProjectBoard?.boardId,
-                        //     [lastCreatedId],
-                        // ).send();
+                        new DeleteBlocksAction(
+                            store.state.generalData.currentProjectBoard!.boardId,
+                            [lastCreatedId],
+                        ).submit();
                     }
                 }
                 inBulkCreationMode.value = false;

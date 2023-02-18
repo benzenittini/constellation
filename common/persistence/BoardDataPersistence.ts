@@ -113,4 +113,30 @@ export class BoardDataPersistence {
 
         return blockIdsAndPositions;
     }
+
+    async deleteBlocks(blockIds: string[]): Promise<string[]> {
+        // First, update the parent block IDs of all the deleted blocks' children.
+        for (let block of Object.values(this.data.blocks)) {
+            // Traverse up the chain of parentBlockIds until we arrive at one that either isn't deleted, or is undefined.
+            // That'll be this block's new parent.
+            let newParentId = block.parentBlockId;
+            while (newParentId && blockIds.includes(newParentId)) {
+                newParentId = this.data.blocks[newParentId].parentBlockId;
+            }
+            block.parentBlockId = newParentId;
+        }
+
+        // Now, delete the blocks.
+        for (let blockId of blockIds) {
+            delete this.data.blocks[blockId];
+            let index = this.data.blockPriorities.indexOf(blockId);
+            if (index !== -1) {
+                this.data.blockPriorities.splice(index, 1);
+            }
+        }
+
+        this.scheduleSave();
+
+        return blockIds;
+    }
 }

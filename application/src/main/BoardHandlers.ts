@@ -8,9 +8,10 @@ import { BoundingBox } from '../../../common/DataTypes/GenericDataTypes';
 import { BlockIdAndPosition } from '../../../common/DataTypes/BlockDataTypes';
 
 export function registerBoardHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('board:getBoardData', (event, boardId) => getBoardData(boardId));
-    ipcMain.handle('board:createBlock', (event, location, parentBlockId) => createBlock(location, parentBlockId));
+    ipcMain.handle('board:getBoardData',         (event, boardId) => getBoardData(boardId));
+    ipcMain.handle('board:createBlock',          (event, location, parentBlockId) => createBlock(location, parentBlockId));
     ipcMain.handle('board:updateBlockPositions', (event, blocksAndPositions) => updateBlockPositions(blocksAndPositions));
+    ipcMain.handle('board:deleteBlocks',         (event, blockIds) => deleteBlocks(blockIds));
 }
 
 let persistence: BoardDataPersistence | undefined = undefined;
@@ -38,4 +39,8 @@ async function createBlock(location: BoundingBox, parentBlockId: string | undefi
 
 async function updateBlockPositions(blocksAndPositions: BlockIdAndPosition[]) {
     return await persistence?.updateBlockPositions(blocksAndPositions);
+}
+
+async function deleteBlocks(blockIds: string[]) {
+    return await persistence?.deleteBlocks(blockIds);
 }

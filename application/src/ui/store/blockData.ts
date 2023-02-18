@@ -210,7 +210,7 @@ const blockDataActions: ActionTree<BlockDataState, RootState> & BlockDataActions
 
     // -- Block Deletion --
     deleteBlocks ({ commit, dispatch }, blockIds: string[]) {
-        // Then, unassign all immedate children of these blocks.
+        // Unassign all immedate children of these blocks.
         for (let blockId of blockIds) {
             dispatch('deleteNode', blockId)
         }

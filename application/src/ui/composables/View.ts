@@ -5,9 +5,7 @@ import { useStore } from '../store/store';
 import { useWindowEvents } from './WindowEvents';
 import { useEmitter } from './Emitter';
 import { Block } from '../../../../common/DataTypes/BlockDataTypes';
-
-// TODO-const : Re-enable all the actions
-// import { DeleteBlocks } from '../actions/WebsocketActions/DeleteBlocks';
+import { DeleteBlocksAction } from '../actions/board-actions/DeleteBlocks';
 
 export function useView(visibleBlocks: ComputedRef<Block[]>, context: SetupContext<Record<string, any>>) {
     const store = useStore();
@@ -29,15 +27,11 @@ export function useView(visibleBlocks: ComputedRef<Block[]>, context: SetupConte
                 let deletedBlockIds = selectedBlockIds.value;
                 selectedBlocks.value = [];
 
-                // Update our local store. (This assumes the server accepts the request)
-                store.dispatch("deleteBlocks", deletedBlockIds);
-
                 // Send the update request to the server
-                // TODO-const : Re-enable all the actions
-                // new DeleteBlocks(
-                //     store.state.generalData.currentProjectBoard!.boardId,
-                //     deletedBlockIds,
-                // ).send();
+                new DeleteBlocksAction(
+                    store.state.generalData.currentProjectBoard!.boardId,
+                    deletedBlockIds,
+                ).submit();
 
                 return; // Processed a keystroke, so exit.
             }

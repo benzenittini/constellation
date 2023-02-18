@@ -12,7 +12,8 @@ contextBridge.exposeInMainWorld('project', {
 });
 
 contextBridge.exposeInMainWorld('board', {
-    getBoardData:         (boardId: string) => ipcRenderer.invoke('board:getBoardData', boardId),
-    createBlock:          (location: BoundingBox, parentBlockId: string | undefined) => ipcRenderer.invoke('board:createBlock', location, parentBlockId),
-    updateBlockPositions: (blocksAndPositions: BlockIdAndPosition[]) => ipcRenderer.invoke('board:updateBlockPositions', blocksAndPositions),
+    getBoardData:         (boardId: string                                         ) => ipcRenderer.invoke('board:getBoardData',         boardId),
+    createBlock:          (location: BoundingBox, parentBlockId: string | undefined) => ipcRenderer.invoke('board:createBlock',          location, parentBlockId),
+    updateBlockPositions: (blocksAndPositions: BlockIdAndPosition[]                ) => ipcRenderer.invoke('board:updateBlockPositions', blocksAndPositions),
+    deleteBlocks:         (blockIds: string[]                                      ) => ipcRenderer.invoke('board:deleteBlocks',         blockIds),
 });
