@@ -3,20 +3,22 @@ import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
 import * as GlobalConfig from "./GlobalConfig";
+import * as T from '../../../common/DataTypes/ActionDataTypes';
+
 import { BoardDataPersistence } from '../../../common/persistence/BoardDataPersistence';
-import { BoundingBox } from '../../../common/DataTypes/GenericDataTypes';
-import { BlockIdAndPosition } from '../../../common/DataTypes/BlockDataTypes';
+
 
 export function registerBoardHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('board:getBoardData',         (event, boardId) => getBoardData(boardId));
-    ipcMain.handle('board:createBlock',          (event, location, parentBlockId) => createBlock(location, parentBlockId));
-    ipcMain.handle('board:updateBlockPositions', (event, blocksAndPositions) => updateBlockPositions(blocksAndPositions));
-    ipcMain.handle('board:deleteBlocks',         (event, blockIds) => deleteBlocks(blockIds));
+    ipcMain.handle('board:getBoardData',         (event, req) => getBoardData(req));
+    ipcMain.handle('board:createBlock',          (event, req) => createBlock(req));
+    ipcMain.handle('board:updateBlockPositions', (event, req) => updateBlockPositions(req));
+    ipcMain.handle('board:deleteBlocks',         (event, req) => deleteBlocks(req));
+    ipcMain.handle('board:setBlockParent',       (event, req) => setBlockParent(req));
 }
 
 let persistence: BoardDataPersistence | undefined = undefined;
 
-async function getBoardData(filepath: string) {
+async function getBoardData({ boardId: filepath }: T.GetBoardDataRequest): Promise<T.GetBoardDataResponse> {
     if (fs.existsSync(filepath)) {
         try {
             persistence = new BoardDataPersistence(filepath);
@@ -33,14 +35,21 @@ async function getBoardData(filepath: string) {
     return undefined;
 }
 
-async function createBlock(location: BoundingBox, parentBlockId: string | undefined) {
-    return await persistence?.createBlock(uuidv4(), location, parentBlockId);
+async function createBlock({ location, parentBlockId }: T.CreateBlockRequest): Promise<T.CreateBlockResponse> {
+    return await persistence!.createBlock(uuidv4(), location, parentBlockId);
 }
 
-async function updateBlockPositions(blocksAndPositions: BlockIdAndPosition[]) {
-    return await persistence?.updateBlockPositions(blocksAndPositions);
+async function updateBlockPositions({ blocksAndPositions }: T.UpdateBlockPositionsRequest): Promise<T.UpdateBlockPositionsResponse> {
+    return await persistence!.updateBlockPositions(blocksAndPositions);
 }
 
-async function deleteBlocks(blockIds: string[]) {
-    return await persistence?.deleteBlocks(blockIds);
+async function deleteBlocks({ blockIds }: T.DeleteBlocksRequest): Promise<T.DeleteBlocksResponse> {
+    return {
+        blockIds: await persistence!.deleteBlocks(blockIds),
+    };
+}
+
+async function setBlockParent({ blockId, parentBlockId }: T.SetBlockParentRequest): Promise<T.SetBlockParentResponse> {
+    await persistence!.setBlockParent(blockId, parentBlockId);
+    return { blockId, parentBlockId };
 }

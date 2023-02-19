@@ -1,7 +1,6 @@
 
 import { contextBridge, ipcRenderer } from 'electron';
-import { BoundingBox } from '../../../common/DataTypes/GenericDataTypes';
-import { BlockIdAndPosition } from '../../../common/DataTypes/BlockDataTypes';
+import * as T from '../../../common/DataTypes/ActionDataTypes';
 
 // NOTE: When adding new bridged items, make sure to update shims-renderer.d.ts with the new properties
 
@@ -12,8 +11,9 @@ contextBridge.exposeInMainWorld('project', {
 });
 
 contextBridge.exposeInMainWorld('board', {
-    getBoardData:         (boardId: string                                         ) => ipcRenderer.invoke('board:getBoardData',         boardId),
-    createBlock:          (location: BoundingBox, parentBlockId: string | undefined) => ipcRenderer.invoke('board:createBlock',          location, parentBlockId),
-    updateBlockPositions: (blocksAndPositions: BlockIdAndPosition[]                ) => ipcRenderer.invoke('board:updateBlockPositions', blocksAndPositions),
-    deleteBlocks:         (blockIds: string[]                                      ) => ipcRenderer.invoke('board:deleteBlocks',         blockIds),
+    getBoardData:         (req: T.GetBoardDataRequest)         => ipcRenderer.invoke('board:getBoardData', req),
+    createBlock:          (req: T.CreateBlockRequest)          => ipcRenderer.invoke('board:createBlock', req),
+    updateBlockPositions: (req: T.UpdateBlockPositionsRequest) => ipcRenderer.invoke('board:updateBlockPositions', req),
+    deleteBlocks:         (req: T.DeleteBlocksRequest)         => ipcRenderer.invoke('board:deleteBlocks', req),
+    setBlockParent:       (req: T.SetBlockParentRequest)       => ipcRenderer.invoke('board:setBlockParent', req),
 });

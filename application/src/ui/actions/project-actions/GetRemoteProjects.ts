@@ -1,5 +1,5 @@
 
-import { BasicProjectData } from "../../../../../common/DataTypes/BoardDataTypes";
+import { GetRemoteProjectsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { Action } from "../Action";
 
 export class GetRemoteProjectsAction extends Action {
@@ -8,17 +8,10 @@ export class GetRemoteProjectsAction extends Action {
         super();
     }
 
-    getRequestData() {
-        return {
-        }
-    }
-
-    submit(callback: (data: BasicProjectData[]) => void): void {
+    submit(callback: (data: GetRemoteProjectsResponse) => void): void {
         // This request never gets sent to the server - list of remote projects is stored locally.
         window.project.getRemoteProjects()
-            .then((projects: BasicProjectData[]) => {
-                callback(projects);
-            });
+            .then((resp) => callback(resp));
     }
 
     processResponse(): void {

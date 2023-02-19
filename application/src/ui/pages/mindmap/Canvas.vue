@@ -122,6 +122,7 @@ import * as RectangleUtils from "../../../common/RectangleUtils";
 import { CreateBlockAction } from '../../actions/board-actions/CreateBlock';
 import { UpdateBlockPositionsAction } from '../../actions/board-actions/UpdateBlockPositions';
 import { DeleteBlocksAction } from '../../actions/board-actions/DeleteBlocks';
+import { SetBlockParentAction } from '../../actions/board-actions/SetBlockParent';
 
 export default defineComponent({
     props: {},
@@ -326,10 +327,7 @@ export default defineComponent({
                         keyboardEvent.preventDefault();
 
                         // Send the update request to the server
-                        new DeleteBlocksAction(
-                            store.state.generalData.currentProjectBoard!.boardId,
-                            selectedBlockIds
-                        ).submit();
+                        new DeleteBlocksAction(selectedBlockIds).submit();
 
                         return; // Processed a keystroke, so exit.
                     }
@@ -373,10 +371,7 @@ export default defineComponent({
                     if (block.content.data.text.trim().length === 0) {
                         // Delete the final (empty) block
                         blocksBulkCreated.value.shift();
-                        new DeleteBlocksAction(
-                            store.state.generalData.currentProjectBoard!.boardId,
-                            [lastCreatedId],
-                        ).submit();
+                        new DeleteBlocksAction([lastCreatedId]).submit();
                     }
                 }
                 inBulkCreationMode.value = false;
@@ -400,9 +395,7 @@ export default defineComponent({
                                 exitBulkCreateMode();
                             } else {
                                 const heightDifference = block.location.height + (10/blockScales.value[block.id]);
-                                new CreateBlockAction(
-                                    store.state.generalData.currentProjectBoard!.boardId,
-                                    {
+                                new CreateBlockAction({
                                         x: block.location.x,
                                         y: block.location.y + heightDifference,
                                         width: block.location.width,
@@ -475,10 +468,9 @@ export default defineComponent({
             createNewBlock: (mouseEvent: MouseEvent) => {
                 let dropLocation = xyToPersistedCoordinates(mouseEvent.clientX, mouseEvent.clientY);
 
-                new CreateBlockAction(
-                    store.state.generalData.currentProjectBoard!.boardId, {
+                new CreateBlockAction({
                         x: dropLocation.x - (DEFAULT_BLOCK_WIDTH / 2),
-                        y: dropLocation.y - (DEFAULT_BLOCK_HEIGHT / 2 ),
+                        y: dropLocation.y - (DEFAULT_BLOCK_HEIGHT / 2),
                         // TODO (later) : scale width/height based on the block's "depth" (wait ... isn't it already? Can we delete this?)
                         width: DEFAULT_BLOCK_WIDTH,
                         height: DEFAULT_BLOCK_HEIGHT,
@@ -546,7 +538,7 @@ export default defineComponent({
                         let translatedWH = distanceToPersistedCoordinates(blockDragDestination.deltaX, blockDragDestination.deltaY)
 
                         // Send the update request to the server
-                        let request = new UpdateBlockPositionsAction(store.state.generalData.currentProjectBoard!.boardId);
+                        let request = new UpdateBlockPositionsAction();
                         for (let id of store.getters.selectedBlockIds) {
                             let block = store.state.blockData.blocks[id];
                             request.addBlockAndPosition(id, {
@@ -571,7 +563,7 @@ export default defineComponent({
                     let translatedDeltaXY = distanceToPersistedCoordinates(blockResizable.deltaDrag.value.deltaX, blockResizable.deltaDrag.value.deltaY);
 
                     // Send the update request to the server
-                    let request = new UpdateBlockPositionsAction(store.state.generalData.currentProjectBoard!.boardId);
+                    let request = new UpdateBlockPositionsAction();
                     for (let id of store.getters.selectedBlockIds) {
                         let block = store.state.blockData.blocks[id];
                         let normalized = RectangleUtils.normalize(
@@ -598,26 +590,17 @@ export default defineComponent({
                         // (If user dropped onto itself, then do nothing.)
                     } else if (blockTrayLinking.metadata.data.type === 'setCreateChild') {
                         if (targetBlockId) {
-                            // Update the local store
-                            store.dispatch("setParent", {blockId: targetBlockId, newParent: sourceBlockId});
-
                             // Send the update request to the server
-                            // TODO-const : SetBlockParent action
-                            // new SetBlockParent(
-                            //     store.state.generalData.currentProjectBoard?.boardId,
-                            //     targetBlockId,
-                            //     sourceBlockId,
-                            // ).send();
+                            new SetBlockParentAction({
+                                blockId:       targetBlockId,
+                                parentBlockId: sourceBlockId,
+                            }).submit();
                         } else {
                             if (mouseEvent.ctrlKey || mouseEvent.metaKey) { // "meta" is "cmd" for Macs
                                 blocksBulkCreated.value = [];
                                 inBulkCreationMode.value = true;
                             }
-                            new CreateBlockAction(
-                                store.state.generalData.currentProjectBoard!.boardId,
-                                ghostBlock.block.location,
-                                sourceBlockId
-                            ).submit();
+                            new CreateBlockAction({...ghostBlock.block.location}, sourceBlockId).submit();
                         }
                     } else if (blockTrayLinking.metadata.data.type === 'setCreateLink') {
                         // TODO-EL : block linking..?

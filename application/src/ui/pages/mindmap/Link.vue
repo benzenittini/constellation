@@ -38,6 +38,7 @@
 import { defineComponent, computed, reactive, watch } from "vue";
 
 import { useStore } from "../../store/store";
+import { SetBlockParentAction } from "../../actions/board-actions/SetBlockParent";
 
 export default defineComponent({
     props: {
@@ -129,14 +130,11 @@ export default defineComponent({
             isSelected: computed(() => props.source!.isSelected && props.destination!.isSelected),
             isEitherSelected: computed(() => props.source!.isSelected || props.destination!.isSelected),
             deleteLink: function() {
-                store.dispatch("setParent", {blockId: props.destination!.blockId, newParent: undefined}); // TODO-const : move this into the below action..?
                 // Send the update request to the server
-                // TODO-const : SetBlockParent action
-                // new SetBlockParent(
-                //     generalStore.rawState.currentViewData!.boardId,
-                //     props.destination!.blockId,
-                //     undefined,
-                // ).send();
+                new SetBlockParentAction({
+                    blockId:       props.destination!.blockId,
+                    parentBlockId: undefined,
+                }).submit();
             }
         }
     },

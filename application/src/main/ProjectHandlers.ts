@@ -5,22 +5,23 @@ import path from 'path';
 
 import { BoardDataPersistence } from "../../../common/persistence/BoardDataPersistence";
 import * as GlobalConfig from "./GlobalConfig";
+import * as T from "../../../common/DataTypes/ActionDataTypes";
 
 
 export function registerProjectHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('project:getRecentBoards', () => getRecentBoards());
-    ipcMain.handle('project:createNewBoard', () => createNewBoard());
+    ipcMain.handle('project:getRecentBoards',   () => getRecentBoards());
+    ipcMain.handle('project:createNewBoard',    () => createNewBoard());
     ipcMain.handle('project:getRemoteProjects', () => getRemoteProjects());
 }
 
-async function getRecentBoards() {
+async function getRecentBoards(): Promise<T.GetBoardsForProjectResponse> {
     return GlobalConfig.config.localBoards.map(filepath => ({
         boardId: filepath,
         boardName: path.basename(filepath, '.mw'),
     }));
 }
 
-async function createNewBoard() {
+async function createNewBoard(): Promise<T.CreateNewBoardResponse> {
     let { canceled, filePath } = await dialog.showSaveDialog({
         title: "Create Board",
         defaultPath: 'board.mw',
@@ -46,7 +47,7 @@ async function createNewBoard() {
         : undefined;
 }
 
-async function getRemoteProjects() {
+async function getRemoteProjects(): Promise<T.GetRemoteProjectsResponse> {
     // TODO-const : Load remote server list from a file
     return [];
 }

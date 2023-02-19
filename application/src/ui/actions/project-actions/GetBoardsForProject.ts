@@ -4,6 +4,7 @@ import { Action } from "../Action";
 
 import { mapify } from '../../../common/ArrayUtils';
 import { BasicBoardData, LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
+import { GetBoardsForProjectResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 
 export class GetBoardsForProjectAction extends Action {
 
@@ -14,22 +15,18 @@ export class GetBoardsForProjectAction extends Action {
         this.projectId = projectId;
     }
 
-    getRequestData() {
-        return {};
-    }
-
     submit(): void {
         if (this.projectId !== LOCAL_PROJECT) {
-            // If remote project, send message over websocket.
-            // TODO-const : Send GetBoardsForProject over websocket
+            // If remote project, send message over REST.
+            // TODO-const : Send action over REST
         } else {
             // If local project, make the IPC request
             window.project.getRecentBoards()
-                .then((boards: BasicBoardData[]) => this.processResponse(boards));
+                .then((boards) => this.processResponse(boards));
         }
     }
 
-    processResponse(boards: BasicBoardData[]): void {
+    processResponse(boards: GetBoardsForProjectResponse): void {
         useStore().dispatch('setBoardsForProject', {
             projectId: this.projectId,
             boards: mapify<BasicBoardData>(boards, 'boardId'),

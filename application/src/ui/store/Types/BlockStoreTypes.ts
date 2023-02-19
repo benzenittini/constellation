@@ -72,7 +72,6 @@ export interface BlockDataActions {
     setBlockPositions    ({ commit }: AugmentedActionContext<BlockDataState>, blockIdsAndPositions: BlockIdAndPosition[]): void;
 
     deleteBlocks         ({ commit }: AugmentedActionContext<BlockDataState>, blockIds: string[]): void;
-    deleteSelectedBlocks ({ commit }: AugmentedActionContext<BlockDataState>): void;
 
     setBlockContent ({ commit }: AugmentedActionContext<BlockDataState>, payload: { blockId: string, newContent: BlockContent }): void;
 

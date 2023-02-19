@@ -1,38 +1,31 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
+import { DeleteBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 
 export class DeleteBlocksAction extends Action {
 
-    private boardId: string;
     private blockIds: string[];
 
-    constructor(boardId: string, blockIds: string[]) {
+    constructor(blockIds: string[]) {
         super();
-        this.boardId = boardId;
         this.blockIds = blockIds;
-    }
-
-    getRequestData() {
-        return {
-            boardId: this.boardId,
-            blockIds: this.blockIds,
-        };
     }
 
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send GetBoardData over websocket
+            // TODO-const : Send action over websocket
         } else {
             // If local project, make the IPC request
-            window.board.deleteBlocks(this.blockIds)
-                .then((deletedBlockIds: string[]) => this.processResponse(deletedBlockIds));
+            window.board.deleteBlocks({
+                blockIds: this.blockIds
+            }).then((resp) => this.processResponse(resp));
         }
     }
 
-    processResponse(deletedBlockIds: string[]): void {
-        useStore().dispatch('deleteBlocks', deletedBlockIds);
+    processResponse(resp: DeleteBlocksResponse): void {
+        useStore().dispatch('deleteBlocks', resp.blockIds);
     }
 
 }

@@ -28,10 +28,7 @@ export function useView(visibleBlocks: ComputedRef<Block[]>, context: SetupConte
                 selectedBlocks.value = [];
 
                 // Send the update request to the server
-                new DeleteBlocksAction(
-                    store.state.generalData.currentProjectBoard!.boardId,
-                    deletedBlockIds,
-                ).submit();
+                new DeleteBlocksAction(deletedBlockIds).submit();
 
                 return; // Processed a keystroke, so exit.
             }

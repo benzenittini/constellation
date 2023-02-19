@@ -222,9 +222,6 @@ const blockDataActions: ActionTree<BlockDataState, RootState> & BlockDataActions
             commit('deleteEntry', blockId);
         }
     },
-    deleteSelectedBlocks ({ commit, dispatch, getters }) {
-        dispatch('deleteBlocks', getters.selectedBlockIds);
-    },
 
     // -- Block Data --
     setBlockContent ({ commit }, { blockId, newContent }) {

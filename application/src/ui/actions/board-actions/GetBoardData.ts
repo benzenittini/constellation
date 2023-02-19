@@ -1,21 +1,15 @@
 
 import { Action } from "../Action";
-import { BoardData } from '../../../../../common/DataTypes/BoardDataTypes';
 import { useStore } from '../../store/store';
+import { GetBoardDataResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 
 export class GetBoardDataAction extends Action {
 
     private boardId: string;
 
-    constructor(boardId: string) {
+    constructor() {
         super();
-        this.boardId = boardId;
-    }
-
-    getRequestData() {
-        return {
-            boardId: this.boardId
-        }
+        this.boardId = useStore().state.generalData.currentProjectBoard!.boardId;
     }
 
     submit(): void {
@@ -24,12 +18,13 @@ export class GetBoardDataAction extends Action {
             // TODO-const : Send GetBoardData over websocket
         } else {
             // If local project, make the IPC request
-            window.board.getBoardData(this.boardId)
-                .then((boardData: BoardData | undefined) => this.processResponse(boardData));
+            window.board.getBoardData({
+                boardId: this.boardId
+            }).then((boardData) => this.processResponse(boardData));
         }
     }
 
-    processResponse(data: BoardData | undefined): void {
+    processResponse(data: GetBoardDataResponse): void {
         const store = useStore();
 
         if (data === undefined) {

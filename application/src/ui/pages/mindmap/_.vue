@@ -25,7 +25,7 @@ export default defineComponent({
         onMounted(() => {
             let currentBoardId = store.getters.currentProjectBoard?.boardId;
             if (currentBoardId) {
-                new GetBoardDataAction(currentBoardId).submit();
+                new GetBoardDataAction().submit();
             } else {
                 // TODO-const : drop a generic error to try again..?
             }

@@ -3,27 +3,19 @@ import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { BlockIdAndPosition } from "../../../../../common/DataTypes/BlockDataTypes";
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
+import { UpdateBlockPositionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 
 export class UpdateBlockPositionsAction extends Action {
 
-    private boardId: string;
     private blocksAndPositions: BlockIdAndPosition[];
 
-    constructor(boardId: string) {
+    constructor() {
         super();
-        this.boardId = boardId;
         this.blocksAndPositions = [];
     }
 
     addBlockAndPosition(blockId: string, location: BoundingBox) {
         this.blocksAndPositions.push({ blockId, location });
-    }
-
-    getRequestData() {
-        return {
-            boardId: this.boardId,
-            blocksAndPositions: this.blocksAndPositions,
-        }
     }
 
     submit(): void {
@@ -34,13 +26,14 @@ export class UpdateBlockPositionsAction extends Action {
             this.processResponse(this.blocksAndPositions);
         } else {
             // If local project, make the IPC request
-            window.board.updateBlockPositions(this.blocksAndPositions)
-                .then((updatedBlockPositions: BlockIdAndPosition[]) => this.processResponse(updatedBlockPositions));
+            window.board.updateBlockPositions({
+                blocksAndPositions: this.blocksAndPositions
+            }).then((resp) => this.processResponse(resp));
         }
     }
 
-    processResponse(updatedBlockPositions: BlockIdAndPosition[]): void {
-        useStore().dispatch('setBlockPositions', updatedBlockPositions);
+    processResponse(resp: UpdateBlockPositionsResponse): void {
+        useStore().dispatch('setBlockPositions', resp);
     }
 
 }
