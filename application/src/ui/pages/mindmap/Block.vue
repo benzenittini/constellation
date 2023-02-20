@@ -128,6 +128,8 @@ import { Block, BlockContent, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH } from "../../..
 import * as RectangleUtils from '../../../common/RectangleUtils';
 import { ResizeDirection } from "../../composables/Resizable";
 
+import { SetBlockContentAction } from '../../actions/board-actions/SetBlockContent';
+
 export default defineComponent({
     emits: [ 'drag', 'resize', 'blockTrayDragStart', 'mouseEnterBlock', 'mouseLeaveBlock' ],
     props: {
@@ -338,19 +340,7 @@ export default defineComponent({
             },
             exitEditMode: ({cancelled, editEvent}: { cancelled: boolean, editEvent: BlockContent }) => {
                 if (JSON.stringify(props.eicBlock!.content) !== JSON.stringify(editEvent)) {
-                    // Update local store. (We assume the server request will succeed...)
-                    // TODO-const : Move this into the below action..?
-                    store.dispatch('setBlockContent', {
-                        blockId: props.eicBlock!.id,
-                        newContent: editEvent,
-                    });
-
-                    // Update server.
-                    // TODO-const : UpdateBlockContent action
-                    // new UpdateBlockContent(
-                    //     generalStore.rawState.currentViewData!.boardId,
-                    //     props.eicBlock!.id,
-                    //     editEvent).send();
+                    new SetBlockContentAction(props.eicBlock!.id, editEvent).submit();
                 }
 
                 store.dispatch('stopEditingBlock');

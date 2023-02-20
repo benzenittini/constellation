@@ -4,7 +4,7 @@ import fs from 'fs';
 
 import { BoardData } from '../DataTypes/BoardDataTypes';
 import { BoundingBox, TypedMap } from '../DataTypes/GenericDataTypes';
-import { Block, BlockIdAndPosition } from '../DataTypes/BlockDataTypes';
+import { Block, BlockContent, BlockIdAndPosition } from '../DataTypes/BlockDataTypes';
 
 export class BoardDataPersistence {
 
@@ -254,6 +254,22 @@ export class BoardDataPersistence {
 
         // Do the update!
         await this.updateBlockPositions(blockIdsAndPositions);
+    }
+
+    async setBlockContent(blockId: string, content: BlockContent): Promise<void> {
+        // TODO-later : we should add dynamic, run-time checking of content to make sure it's of type EntityContent.
+
+        // Make sure the block exists
+        if (this.data.blocks[blockId] === undefined) {
+            // TODO-const : Error handling
+            throw new Error("Error in setBlockContent: Requested block doesn't exist");
+        }
+
+        // Perform the update
+        this.data.blocks[blockId].content = content;
+
+        // The data's dirty!
+        this.scheduleSave();
     }
 
 }

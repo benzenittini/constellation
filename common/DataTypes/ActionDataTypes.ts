@@ -1,5 +1,5 @@
 
-import { Block, BlockIdAndPosition } from "./BlockDataTypes";
+import { Block, BlockContent, BlockIdAndPosition } from "./BlockDataTypes";
 import { BasicBoardData, BasicProjectData, BoardData } from "./BoardDataTypes";
 import { BoundingBox } from "./GenericDataTypes";
 
@@ -36,3 +36,6 @@ export type DeleteBlocksResponse = { blockIds: string[] };
 
 export type SetBlockParentRequest  = { blockId: string, parentBlockId: string | undefined };
 export type SetBlockParentResponse = { blockId: string, parentBlockId: string | undefined };
+
+export type SetBlockContentRequest  = { blockId: string, content: BlockContent };
+export type SetBlockContentResponse = { blockId: string, content: BlockContent };

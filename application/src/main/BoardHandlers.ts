@@ -14,6 +14,7 @@ export function registerBoardHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('board:updateBlockPositions', (event, req) => updateBlockPositions(req));
     ipcMain.handle('board:deleteBlocks',         (event, req) => deleteBlocks(req));
     ipcMain.handle('board:setBlockParent',       (event, req) => setBlockParent(req));
+    ipcMain.handle('board:setBlockContent',      (event, req) => setBlockContent(req));
 }
 
 let persistence: BoardDataPersistence | undefined = undefined;
@@ -52,4 +53,9 @@ async function deleteBlocks({ blockIds }: T.DeleteBlocksRequest): Promise<T.Dele
 async function setBlockParent({ blockId, parentBlockId }: T.SetBlockParentRequest): Promise<T.SetBlockParentResponse> {
     await persistence!.setBlockParent(blockId, parentBlockId);
     return { blockId, parentBlockId };
+}
+
+async function setBlockContent({ blockId, content }: T.SetBlockContentRequest): Promise<T.SetBlockContentResponse> {
+    await persistence!.setBlockContent(blockId, content);
+    return { blockId, content };
 }

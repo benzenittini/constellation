@@ -16,6 +16,7 @@ declare global {
             updateBlockPositions: (req: T.UpdateBlockPositionsRequest) => Promise<T.UpdateBlockPositionsResponse>,
             deleteBlocks:         (req: T.DeleteBlocksRequest)         => Promise<T.DeleteBlocksResponse>,
             setBlockParent:       (req: T.SetBlockParentRequest)       => Promise<T.SetBlockParentResponse>,
+            setBlockContent:      (req: T.SetBlockContentRequest)      => Promise<T.SetBlockContentResponse>,
         },
     }
 }
