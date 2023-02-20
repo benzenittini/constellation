@@ -104,7 +104,7 @@ export class BoardDataPersistence {
         return newBlock;
     }
 
-    async updateBlockPositions(blockIdsAndPositions: BlockIdAndPosition[]): Promise<BlockIdAndPosition[]> {
+    async setBlockPositions(blockIdsAndPositions: BlockIdAndPosition[]): Promise<BlockIdAndPosition[]> {
         for (let {blockId, location} of blockIdsAndPositions) {
             this.data.blocks[blockId].location = location;
         }
@@ -253,7 +253,7 @@ export class BoardDataPersistence {
         }
 
         // Do the update!
-        await this.updateBlockPositions(blockIdsAndPositions);
+        await this.setBlockPositions(blockIdsAndPositions);
     }
 
     async setBlockContent(blockId: string, content: BlockContent): Promise<void> {

@@ -3,9 +3,9 @@ import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { BlockIdAndPosition } from "../../../../../common/DataTypes/BlockDataTypes";
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
-import { UpdateBlockPositionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { SetBlockPositionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 
-export class UpdateBlockPositionsAction extends Action {
+export class SetBlockPositionsAction extends Action {
 
     private blocksAndPositions: BlockIdAndPosition[];
 
@@ -26,13 +26,13 @@ export class UpdateBlockPositionsAction extends Action {
             this.processResponse(this.blocksAndPositions);
         } else {
             // If local project, make the IPC request
-            window.board.updateBlockPositions({
+            window.board.setBlockPositions({
                 blocksAndPositions: this.blocksAndPositions
             }).then((resp) => this.processResponse(resp));
         }
     }
 
-    processResponse(resp: UpdateBlockPositionsResponse): void {
+    processResponse(resp: SetBlockPositionsResponse): void {
         useStore().dispatch('setBlockPositions', resp);
     }
 

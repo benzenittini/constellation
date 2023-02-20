@@ -28,8 +28,8 @@ export type GetBoardDataResponse = BoardData | undefined;
 export type CreateBlockRequest  = { location: BoundingBox, parentBlockId: string | undefined };
 export type CreateBlockResponse = Block | undefined;
 
-export type UpdateBlockPositionsRequest  = { blocksAndPositions: BlockIdAndPosition[] };
-export type UpdateBlockPositionsResponse = BlockIdAndPosition[];
+export type SetBlockPositionsRequest  = { blocksAndPositions: BlockIdAndPosition[] };
+export type SetBlockPositionsResponse = BlockIdAndPosition[];
 
 export type DeleteBlocksRequest  = { blockIds: string[] };
 export type DeleteBlocksResponse = { blockIds: string[] };

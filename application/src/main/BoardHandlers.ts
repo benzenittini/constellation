@@ -9,12 +9,12 @@ import { BoardDataPersistence } from '../../../common/persistence/BoardDataPersi
 
 
 export function registerBoardHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('board:getBoardData',         (event, req) => getBoardData(req));
-    ipcMain.handle('board:createBlock',          (event, req) => createBlock(req));
-    ipcMain.handle('board:updateBlockPositions', (event, req) => updateBlockPositions(req));
-    ipcMain.handle('board:deleteBlocks',         (event, req) => deleteBlocks(req));
-    ipcMain.handle('board:setBlockParent',       (event, req) => setBlockParent(req));
-    ipcMain.handle('board:setBlockContent',      (event, req) => setBlockContent(req));
+    ipcMain.handle('board:getBoardData',      (event, req) => getBoardData(req));
+    ipcMain.handle('board:createBlock',       (event, req) => createBlock(req));
+    ipcMain.handle('board:setBlockPositions', (event, req) => setBlockPositions(req));
+    ipcMain.handle('board:deleteBlocks',      (event, req) => deleteBlocks(req));
+    ipcMain.handle('board:setBlockParent',    (event, req) => setBlockParent(req));
+    ipcMain.handle('board:setBlockContent',   (event, req) => setBlockContent(req));
 }
 
 let persistence: BoardDataPersistence | undefined = undefined;
@@ -40,8 +40,8 @@ async function createBlock({ location, parentBlockId }: T.CreateBlockRequest): P
     return await persistence!.createBlock(uuidv4(), location, parentBlockId);
 }
 
-async function updateBlockPositions({ blocksAndPositions }: T.UpdateBlockPositionsRequest): Promise<T.UpdateBlockPositionsResponse> {
-    return await persistence!.updateBlockPositions(blocksAndPositions);
+async function setBlockPositions({ blocksAndPositions }: T.SetBlockPositionsRequest): Promise<T.SetBlockPositionsResponse> {
+    return await persistence!.setBlockPositions(blocksAndPositions);
 }
 
 async function deleteBlocks({ blockIds }: T.DeleteBlocksRequest): Promise<T.DeleteBlocksResponse> {

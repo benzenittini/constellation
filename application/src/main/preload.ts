@@ -11,10 +11,10 @@ contextBridge.exposeInMainWorld('project', {
 });
 
 contextBridge.exposeInMainWorld('board', {
-    getBoardData:         (req: T.GetBoardDataRequest)         => ipcRenderer.invoke('board:getBoardData', req),
-    createBlock:          (req: T.CreateBlockRequest)          => ipcRenderer.invoke('board:createBlock', req),
-    updateBlockPositions: (req: T.UpdateBlockPositionsRequest) => ipcRenderer.invoke('board:updateBlockPositions', req),
-    deleteBlocks:         (req: T.DeleteBlocksRequest)         => ipcRenderer.invoke('board:deleteBlocks', req),
-    setBlockParent:       (req: T.SetBlockParentRequest)       => ipcRenderer.invoke('board:setBlockParent', req),
-    setBlockContent:      (req: T.SetBlockContentRequest)      => ipcRenderer.invoke('board:setBlockContent', req),
+    getBoardData:      (req: T.GetBoardDataRequest)      => ipcRenderer.invoke('board:getBoardData', req),
+    createBlock:       (req: T.CreateBlockRequest)       => ipcRenderer.invoke('board:createBlock', req),
+    setBlockPositions: (req: T.SetBlockPositionsRequest) => ipcRenderer.invoke('board:setBlockPositions', req),
+    deleteBlocks:      (req: T.DeleteBlocksRequest)      => ipcRenderer.invoke('board:deleteBlocks', req),
+    setBlockParent:    (req: T.SetBlockParentRequest)    => ipcRenderer.invoke('board:setBlockParent', req),
+    setBlockContent:   (req: T.SetBlockContentRequest)   => ipcRenderer.invoke('board:setBlockContent', req),
 });

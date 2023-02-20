@@ -120,7 +120,7 @@ import { removeEntries } from "../../../common/ArrayUtils";
 import * as RectangleUtils from "../../../common/RectangleUtils";
 
 import { CreateBlockAction } from '../../actions/board-actions/CreateBlock';
-import { UpdateBlockPositionsAction } from '../../actions/board-actions/UpdateBlockPositions';
+import { SetBlockPositionsAction } from '../../actions/board-actions/SetBlockPositions';
 import { DeleteBlocksAction } from '../../actions/board-actions/DeleteBlocks';
 import { SetBlockParentAction } from '../../actions/board-actions/SetBlockParent';
 
@@ -538,7 +538,7 @@ export default defineComponent({
                         let translatedWH = distanceToPersistedCoordinates(blockDragDestination.deltaX, blockDragDestination.deltaY)
 
                         // Send the update request to the server
-                        let request = new UpdateBlockPositionsAction();
+                        let request = new SetBlockPositionsAction();
                         for (let id of store.getters.selectedBlockIds) {
                             let block = store.state.blockData.blocks[id];
                             request.addBlockAndPosition(id, {
@@ -563,7 +563,7 @@ export default defineComponent({
                     let translatedDeltaXY = distanceToPersistedCoordinates(blockResizable.deltaDrag.value.deltaX, blockResizable.deltaDrag.value.deltaY);
 
                     // Send the update request to the server
-                    let request = new UpdateBlockPositionsAction();
+                    let request = new SetBlockPositionsAction();
                     for (let id of store.getters.selectedBlockIds) {
                         let block = store.state.blockData.blocks[id];
                         let normalized = RectangleUtils.normalize(

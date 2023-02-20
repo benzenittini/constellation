@@ -21,6 +21,7 @@ import NextPrevious          from './components/NextPrevious.vue';
 import Close                 from './components/Close.vue';
 import ReleaseNoteDisplay    from './components/ReleaseNoteDisplay.vue';
 import ReleaseNotesFormatted from './components/ReleaseNotesFormatted.vue';
+import DynamicField          from './components/DynamicField.vue';
 // Slide-Open Tray
 import SlideOpenTray     from './components/SlideOpenTray.vue';
 import ControlsContainer from './components/controls/ControlsContainer.vue';
@@ -89,6 +90,7 @@ export let components: any = {
     'eic-close': Close,
     'eic-release-note-display': ReleaseNoteDisplay,
     'eic-release-notes-formatted': ReleaseNotesFormatted,
+    'eic-dynamic-field': DynamicField,
     'eic-savecancel': SaveCancel,
     'eic-savedontsavecancel': SaveDontSaveCancel,
     'eic-nextprevious': NextPrevious,
