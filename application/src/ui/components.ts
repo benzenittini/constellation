@@ -68,6 +68,15 @@ import Block         from './pages/mindmap/Block.vue';
 import BlockTray     from './pages/mindmap/BlockTray.vue';
 import ExpandedBlock from './pages/mindmap/ExpandedBlock.vue';
 import TextContent   from './pages/mindmap/TextContent.vue';
+// Mind Map / Action Pane
+import ActionPane                from './pages/mindmap/action-pane/_.vue';
+import EditClassificationsDialog from './pages/mindmap/action-pane/EditClassificationsDialog.vue';
+import EditFieldsDialog          from './pages/mindmap/action-pane/EditFieldsDialog.vue';
+import FieldRow                  from './pages/mindmap/action-pane/FieldRow.vue';
+import PossibleValuePane         from './pages/mindmap/action-pane/PossibleValuePane.vue';
+import RecentColorPicker         from './pages/mindmap/action-pane/RecentColorPicker.vue';
+import StyleEditor               from './pages/mindmap/action-pane/StyleEditor.vue';
+import AlignmentControls         from './pages/mindmap/action-pane/AlignmentControls.vue';
 
 
 // -- The exported super-object --
@@ -137,4 +146,14 @@ export let components: any = {
     'eic-block-tray': BlockTray,
     'eic-expanded-block': ExpandedBlock,
     'eic-text-content': TextContent,
+    // Mind Map / Action Pane
+    'eic-action-pane': ActionPane,
+    'eic-edit-classifications-dialog': EditClassificationsDialog,
+    'eic-edit-fields-dialog': EditFieldsDialog,
+    'eic-field-row': FieldRow,
+    'eic-possible-value-pane': PossibleValuePane,
+    'eic-recent-color-picker': RecentColorPicker,
+    'eic-style-editor': StyleEditor,
+    'eic-alignment-controls': AlignmentControls,
+
 };
