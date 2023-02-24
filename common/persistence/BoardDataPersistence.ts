@@ -2,9 +2,11 @@
 
 import fs from 'fs';
 
-import { BoardData } from '../DataTypes/BoardDataTypes';
+import { BoardData, TemplateClassification } from '../DataTypes/BoardDataTypes';
 import { BoundingBox, TypedMap } from '../DataTypes/GenericDataTypes';
 import { Block, BlockContent, BlockIdAndPosition } from '../DataTypes/BlockDataTypes';
+import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes } from '../DataTypes/FieldDataTypes';
+import * as T from '../DataTypes/ActionDataTypes';
 
 export class BoardDataPersistence {
 
@@ -170,7 +172,7 @@ export class BoardDataPersistence {
         let currentBlockId: string | undefined = parentBlockId;
         while (currentBlockId !== undefined) {
             currentBlockId = this.data.blocks[currentBlockId].parentBlockId;
-            // If we ever return to the original entity, then we're caught in a loop. Abandon ship!
+            // If we ever return to the original block, then we're caught in a loop. Abandon ship!
             if (currentBlockId === blockId) {
                 // TODO-const : Error handling
                 throw new Error("Error in setBlockParent: circular dependency detected!");
@@ -257,7 +259,7 @@ export class BoardDataPersistence {
     }
 
     async setBlockContent(blockId: string, content: BlockContent): Promise<void> {
-        // TODO-later : we should add dynamic, run-time checking of content to make sure it's of type EntityContent.
+        // TODO-later : we should add dynamic, run-time checking of content to make sure it's of type BlockContent.
 
         // Make sure the block exists
         if (this.data.blocks[blockId] === undefined) {
@@ -270,6 +272,166 @@ export class BoardDataPersistence {
 
         // The data's dirty!
         this.scheduleSave();
+    }
+
+    async setClassificationDefinitions({ classificationIds, classifications, fields, possibleValues }: T.SetClassificationDefinitionsRequest): Promise<T.SetClassificationDefinitionsResponse> {
+        // Validating the request will work before changing any values.
+        await this.verifyValidFieldTypeTransitions(fields);
+
+        // Since classifications can point to fields, and fields can point to possible values, we're updating them in
+        // reverse order to make sure the "target IDs" exist before we try and point to them.
+        let changedPVs = await this.updatePossibleValueDefinitions(possibleValues);
+        await this.updateFieldDefinitions(fields);
+        await this.updateClassificationDefinitions(classifications, classificationIds);
+
+        let changedFieldValues = await this.updatePossibleValueNames(changedPVs);
+
+        // Lastly, build up the persisted template classifications, flattening out the objects and removing the IDs
+        let template: TemplateClassification[] = classificationIds.map(cid => ({
+            name: classifications[cid].name,
+            fields: classifications[cid].fieldIds.map(fid => ({
+                name: fields[fid].name,
+                type: fields[fid].type,
+                sourceType: 'classification',
+                possibleValues: fields[fid].possibleValueIds.map(pvid => ({
+                    name: possibleValues[pvid].name,
+                    style: possibleValues[pvid].style,
+                })),
+            })),
+        }));
+        // TODO-const : persist the template somewhere/somehow..? Should these be just client-side, or server-side too?
+
+        this.scheduleSave();
+
+        return {
+            classificationIds,
+            classifications,
+            fields,
+            possibleValues,
+            changedFieldValues,
+        };
+    }
+
+    async updatePossibleValueDefinitions(possibleValues: TypedMap<PossibleValueDefinition>): Promise<ChangedPVName[]> {
+        // Update the PVs, tracking any that have changed their names. Need these changes to update fields that have those values.
+        let changedPVs: ChangedPVName[] = [];
+        for (let pvId of Object.keys(possibleValues)) {
+            let currentValue = this.data.possibleValues[pvId]?.name;
+            if (currentValue && currentValue !== possibleValues[pvId].name) {
+                changedPVs.push({ pvId, oldName: currentValue, newName: possibleValues[pvId].name });
+            }
+            // Just set each key/value pair, replacing existing IDs, but not worrying about having stale IDs
+            // left over. We can clean those up some other time if they become a problem.
+            this.data.possibleValues[pvId] = possibleValues[pvId];
+        }
+
+        return changedPVs;
+    }
+
+    async updateFieldDefinitions(fields: TypedMap<FieldDefinition>): Promise<void> {
+        // Just set each key/value pair, replacing existing IDs, but not worrying about having stale IDs
+        // left over. We can clean those up some other time if they're a problem..
+        this.data.fields = { ...this.data.fields, ...fields };
+    }
+
+    async updateClassificationDefinitions(classifications: TypedMap<ClassificationDefinition>, classificationIds: string[]): Promise<void> {
+        // Unlike updating field definitions, whenever we update "classifications", we will be updating ALL of them.
+        // This means it's ok to just replace whatever's stored with whatever's passed in.
+        this.data.classifications = classifications;
+        this.data.classificationIds = classificationIds;
+    }
+
+    async updatePossibleValueNames(changedPVNames: ChangedPVName[]): Promise<ChangedFieldValue[]> {
+        // Make the data updates
+        let changedFieldValues: ChangedFieldValue[] = [];
+        for (let changedPV of changedPVNames) {
+            // Determine which field has this PV.
+            // NOTE: This assumes PVs cannot be moved across fields, which was true at the time of writing.
+            let fieldId = Object.values(this.data.fields).find(f => f.possibleValueIds.includes(changedPV.pvId))?.id;
+            if (fieldId) {
+                // Determine which blocks have the "old value" for this field. We update them *after*
+                // generating the full list so the updates don't interfere with future iterations of the
+                // loop. (This was a bug. All 1's updated to 2. All 2's updated to 3. Suddenly, everything
+                // was a 3.)
+                for (let block of Object.values(this.data.blocks)) {
+                    if (Array.isArray(block.fieldValues[fieldId])) {
+                        let index = block.fieldValues[fieldId].indexOf(changedPV.oldName);
+                        if (index !== -1) {
+                            let newValue = [...block.fieldValues[fieldId]]; // Copy the current value so we don't change it in-place.
+                            newValue[index] = changedPV.newName;            // Then, update it to the new PV name
+                            changedFieldValues.push({
+                                blockId: block.id,
+                                fieldId: fieldId,
+                                newValue: newValue
+                            });
+                        }
+                    } else if (block.fieldValues[fieldId] === changedPV.oldName) {
+                        changedFieldValues.push({
+                            blockId: block.id,
+                            fieldId: fieldId,
+                            newValue: changedPV.newName,
+                        });
+                    }
+                }
+            } else {
+                // TODO-const : error handling
+                throw new Error("Error in updatePossibleValueNames: the PV didn't have an associated field.");
+                // throw new TopError('3.6.15', Severity.HIGH,
+                //     `When updating possible value names, the possible value didn't have an associated field. boardId: ${boardId}, changedPV: ${JSON.stringify(changedPV)}, changedPVNames: ${JSON.stringify(changedPVNames)}`,
+                //     UserErrors.INTERNAL_ERROR);
+            }
+        }
+
+        // Now that we know what to update, actually do the update!
+        for (let cfv of changedFieldValues) {
+            this.data.blocks[cfv.blockId].fieldValues[cfv.fieldId] = cfv.newValue;
+        }
+
+        return changedFieldValues;
+    }
+
+    async verifyValidFieldTypeTransitions(newFields: TypedMap<FieldDefinition>): Promise<void> {
+        // Make sure none of the fields are being changed into incompatible types
+        for (let newField of Object.values(newFields)) {
+            let originalField = this.data.fields[newField.id];
+            if (originalField && !getCompatibleFieldTypes(originalField.type).includes(newField.type)) {
+                // TODO-const : error handling
+                throw new Error('Error in verifyValidFieldTypeTransitions: attempted to change between incompatible field types.');
+            }
+        }
+    }
+
+    async setClassificationOnBlocks({ blockIds, classificationId, isActive }: T.SetClassificationOnBlocksRequest): Promise<T.SetClassificationOnBlocksResponse> {
+        // Make sure the blocks exist
+        for (let blockId of blockIds) {
+            if (this.data.blocks[blockId] === undefined) {
+                // TODO-const : error handling
+                throw new Error("Error in setClassificationOnBlocks: requested block does not exist.");
+            }
+        }
+
+        // Make sure the classification exists
+        if (this.data.classifications[classificationId] === undefined) {
+            // TODO-const : error handling
+            throw new Error("Error in setClassificationOnBlocks: requested classification does not exist.");
+        }
+
+        // Make the data updates
+        for (let blockId of blockIds) {
+            let currentIndex = this.data.blocks[blockId].classificationIds.indexOf(classificationId);
+
+            if (isActive && currentIndex === -1) {
+                // Should be active, but isn't currently present. Add it.
+                this.data.blocks[blockId].classificationIds.push(classificationId);
+            } else if (!isActive && currentIndex !== -1) {
+                // Shouldn't be active, but is currently present. Remove it.
+                this.data.blocks[blockId].classificationIds.splice(currentIndex, 1);
+            }
+        }
+
+        this.scheduleSave();
+
+        return { blockIds, classificationId, isActive, };
     }
 
 }

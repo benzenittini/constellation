@@ -2,17 +2,13 @@
 import { reactive } from 'vue';
 import { useVueModals } from 'mw-vue-modals';
 
-import { useStore } from '../store/store';
-
 import { TypedMap } from '../../../../common/DataTypes/GenericDataTypes';
 import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from '../../../../common/DataTypes/FieldDataTypes';
-// TODO-const : Re-enable all the actions
-// import { UpdateClassificationDefinitions } from '../actions/WebsocketActions/UpdateClassificationDefinitions';
-// import { UpdateClassificationOnBlocks } from '../actions/WebsocketActions/UpdateClassificationOnBlocks';
+import { SetClassificationDefinitionsAction } from '../actions/board-actions/SetClassificationDefinitions';
+import { SetClassificationOnBlocksAction } from '../actions/board-actions/SetClassificationOnBlocks';
 
 
 function openEditClassificationsDialog(classificationIds: string[], classificationDefs: TypedMap<ClassificationDefinition>, fieldDefs: TypedMap<FieldDefinition>, possibleValueDefs: TypedMap<PossibleValueDefinition>) {
-    let store = useStore();
     let mwVueModals = useVueModals();
 
     let dialogId = "edit-classifications";
@@ -45,14 +41,12 @@ function openEditClassificationsDialog(classificationIds: string[], classificati
                             mwVueModals.closeModal(dialogId);
                         },
                         'mw-save': (event: any) => {
-
-                            // TODO-const : Re-enable all the actions
-                            // new UpdateClassificationDefinitions(
-                            //     store.state.generalData.currentProjectBoard!.boardId,
-                            //     modalData.classificationIds,
-                            //     modalData.classificationDefs,
-                            //     modalData.fieldDefs,
-                            //     modalData.possibleValueDefs).send();
+                            new SetClassificationDefinitionsAction(
+                                JSON.parse(JSON.stringify(modalData.classificationIds)),
+                                JSON.parse(JSON.stringify(modalData.classificationDefs)),
+                                JSON.parse(JSON.stringify(modalData.fieldDefs)),
+                                JSON.parse(JSON.stringify(modalData.possibleValueDefs)),
+                            ).submit();
 
                             mwVueModals.closeModal(dialogId);
                         },
@@ -73,15 +67,11 @@ function openEditClassificationsDialog(classificationIds: string[], classificati
 }
 
 function setClassificationOnBlocks(blockIds: string[], classificationId: string, isActive: boolean) {
-    let store = useStore();
-
-    // TODO-const : Re-enable all the actions
-    // new UpdateClassificationOnBlocks(
-    //     store.state.generalData.currentProjectBoard!.boardId,
-    //     blockIds,
-    //     classificationId,
-    //     isActive
-    // ).send();
+    new SetClassificationOnBlocksAction(
+        JSON.parse(JSON.stringify(blockIds)),
+        classificationId,
+        isActive,
+    ).submit();
 }
 
 export function useEditableClassifications() {

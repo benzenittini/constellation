@@ -10,11 +10,15 @@ import { BoardDataPersistence } from '../../../common/persistence/BoardDataPersi
 
 export function registerBoardHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('board:getBoardData',      (event, req) => getBoardData(req));
+    // Blocks
     ipcMain.handle('board:createBlock',       (event, req) => createBlock(req));
     ipcMain.handle('board:setBlockPositions', (event, req) => setBlockPositions(req));
     ipcMain.handle('board:deleteBlocks',      (event, req) => deleteBlocks(req));
     ipcMain.handle('board:setBlockParent',    (event, req) => setBlockParent(req));
     ipcMain.handle('board:setBlockContent',   (event, req) => setBlockContent(req));
+    // Fields and Classifications
+    ipcMain.handle('board:setClassificationDefinitions',   (event, req) => setClassificationDefinitions(req));
+    ipcMain.handle('board:setClassificationOnBlocks',   (event, req) => setClassificationOnBlocks(req));
 }
 
 let persistence: BoardDataPersistence | undefined = undefined;
@@ -58,4 +62,12 @@ async function setBlockParent({ blockId, parentBlockId }: T.SetBlockParentReques
 async function setBlockContent({ blockId, content }: T.SetBlockContentRequest): Promise<T.SetBlockContentResponse> {
     await persistence!.setBlockContent(blockId, content);
     return { blockId, content };
+}
+
+async function setClassificationDefinitions(req: T.SetClassificationDefinitionsRequest): Promise<T.SetClassificationDefinitionsResponse> {
+    return await persistence!.setClassificationDefinitions(req);
+}
+
+async function setClassificationOnBlocks(req: T.SetClassificationOnBlocksRequest): Promise<T.SetClassificationOnBlocksResponse> {
+    return await persistence!.setClassificationOnBlocks(req);
 }
