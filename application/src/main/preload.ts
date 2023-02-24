@@ -11,14 +11,16 @@ contextBridge.exposeInMainWorld('project', {
 });
 
 contextBridge.exposeInMainWorld('board', {
-    getBoardData:                 (req: T.GetBoardDataRequest)                 => ipcRenderer.invoke('board:getBoardData', req),
-    // Blocks
-    createBlock:                  (req: T.CreateBlockRequest)                  => ipcRenderer.invoke('board:createBlock', req),
-    setBlockPositions:            (req: T.SetBlockPositionsRequest)            => ipcRenderer.invoke('board:setBlockPositions', req),
-    deleteBlocks:                 (req: T.DeleteBlocksRequest)                 => ipcRenderer.invoke('board:deleteBlocks', req),
-    setBlockParent:               (req: T.SetBlockParentRequest)               => ipcRenderer.invoke('board:setBlockParent', req),
-    setBlockContent:              (req: T.SetBlockContentRequest)              => ipcRenderer.invoke('board:setBlockContent', req),
-    // Fields / Classifications
+    getBoardData: (req: T.GetBoardDataRequest) => ipcRenderer.invoke('board:getBoardData', req),
+    // -- Blocks --
+    createBlock:       (req: T.CreateBlockRequest)       => ipcRenderer.invoke('board:createBlock', req),
+    setBlockPositions: (req: T.SetBlockPositionsRequest) => ipcRenderer.invoke('board:setBlockPositions', req),
+    deleteBlocks:      (req: T.DeleteBlocksRequest)      => ipcRenderer.invoke('board:deleteBlocks', req),
+    setBlockParent:    (req: T.SetBlockParentRequest)    => ipcRenderer.invoke('board:setBlockParent', req),
+    setBlockContent:   (req: T.SetBlockContentRequest)   => ipcRenderer.invoke('board:setBlockContent', req),
+    // -- Fields / Classifications --
     setClassificationDefinitions: (req: T.SetClassificationDefinitionsRequest) => ipcRenderer.invoke('board:setClassificationDefinitions', req),
     setClassificationOnBlocks:    (req: T.SetClassificationOnBlocksRequest)    => ipcRenderer.invoke('board:setClassificationOnBlocks', req),
+    setFieldDefinitions:          (req: T.SetFieldDefinitionsRequest)          => ipcRenderer.invoke('board:setFieldDefinitions', req),
+    setFieldOnBlocks:             (req: T.SetFieldOnBlocksRequest)             => ipcRenderer.invoke('board:setFieldOnBlocks', req),
 });

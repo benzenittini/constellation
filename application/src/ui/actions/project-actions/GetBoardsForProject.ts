@@ -2,7 +2,7 @@
 import { useStore } from "../../store/store";
 import { Action } from "../Action";
 
-import { mapify } from '../../../common/ArrayUtils';
+import { mapify } from '../../../../../common/utilities/ArrayUtils';
 import { BasicBoardData, LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
 import { GetBoardsForProjectResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 

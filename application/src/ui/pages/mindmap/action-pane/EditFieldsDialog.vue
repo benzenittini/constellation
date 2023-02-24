@@ -104,7 +104,7 @@ export default defineComponent({
         let addNewField = () => {
             props.fieldDefs!.push(reactive({
                 id: uuidv4(),
-                sourceType: 'entity',
+                sourceType: 'block',
                 name: '',
                 type: FieldType.TEXTBOX,
                 possibleValueIds: [],

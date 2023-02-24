@@ -116,8 +116,8 @@ import { useTweenGroup } from "../../composables/TweenGroup";
 
 import { Block, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH } from "../../../../../common/DataTypes/BlockDataTypes";
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
-import { removeEntries } from "../../../common/ArrayUtils";
-import * as RectangleUtils from "../../../common/RectangleUtils";
+import { removeEntries } from "../../../../../common/utilities/ArrayUtils";
+import * as RectangleUtils from "../../../../../common/utilities/RectangleUtils";
 
 import { CreateBlockAction } from '../../actions/board-actions/CreateBlock';
 import { SetBlockPositionsAction } from '../../actions/board-actions/SetBlockPositions';

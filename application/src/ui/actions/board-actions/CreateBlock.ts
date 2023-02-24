@@ -3,7 +3,7 @@ import { Action } from "../Action";
 import { BoardData } from '../../../../../common/DataTypes/BoardDataTypes';
 import { useStore } from '../../store/store';
 import { Block } from "../../../../../common/DataTypes/BlockDataTypes";
-import { mapify } from "../../../common/ArrayUtils";
+import { mapify } from "../../../../../common/utilities/ArrayUtils";
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
 import { useEmitter } from "../../composables/Emitter";
 import { CreateBlockResponse } from "../../../../../common/DataTypes/ActionDataTypes";

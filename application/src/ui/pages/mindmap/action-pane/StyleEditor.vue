@@ -52,7 +52,7 @@
 
         <!-- Sample Swatch -->
         <div class="sample-swatch">
-            <div class="sample-entity" v-bind:style="sampleEntityStyle">
+            <div class="sample-block" v-bind:style="sampleBlockStyle">
                 <span>Sample Style</span>
             </div>
         </div>
@@ -132,7 +132,7 @@ export default defineComponent({
             },
 
             // Computed Variables
-            sampleEntityStyle: computed(() => {
+            sampleBlockStyle: computed(() => {
                 let style: any = {
                     width: '175px',
                     height: '70px'
@@ -197,7 +197,7 @@ export default defineComponent({
     .sample-swatch {
         align-self: center;
 
-        .sample-entity {
+        .sample-block {
             border-radius: 20px;
             font-size: 16px;
             position: relative;

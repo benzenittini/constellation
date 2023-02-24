@@ -125,7 +125,7 @@ import { useStore } from "../../store/store";
 import { useEmitter } from "../../composables/Emitter";
 
 import { Block, BlockContent, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH } from "../../../../../common/DataTypes/BlockDataTypes";
-import * as RectangleUtils from '../../../common/RectangleUtils';
+import * as RectangleUtils from '../../../../../common/utilities/RectangleUtils';
 import { ResizeDirection } from "../../composables/Resizable";
 
 import { SetBlockContentAction } from '../../actions/board-actions/SetBlockContent';

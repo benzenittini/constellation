@@ -4,18 +4,15 @@ import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../store/store';
 
-import * as ObjectUtils from '../../common/ObjectUtils';
+import * as ObjectUtils from '../../../../common/utilities/ObjectUtils';
 import { TypedMap } from '../../../../common/DataTypes/GenericDataTypes';
 import { FieldDefinition, FieldType, PossibleValueDefinition, getFieldValue } from '../../../../common/DataTypes/FieldDataTypes';
 import { Block } from '../../../../common/DataTypes/BlockDataTypes';
-
-// TODO-const : Re-enable all the actions
-// import { UpdateFieldDefinitions } from '../actions/WebsocketActions/UpdateFieldDefinitions';
-// import { UpdateFieldValueOnBlocks } from '../actions/WebsocketActions/UpdateFieldValueOnBlocks';
+import { SetFieldDefinitionsAction } from '../actions/board-actions/SetFieldDefinitions';
+import { SetFieldOnBlocksAction } from '../actions/board-actions/SetFieldOnBlocks';
 
 
 function openEditFieldsDialog(blockIds: string[], fieldIds: string[], fieldDefs: TypedMap<FieldDefinition>, possibleValueDefs: TypedMap<PossibleValueDefinition>) {
-    let store = useStore();
     let mwVueModals = useVueModals();
 
     let dialogId = "edit-fields";
@@ -60,14 +57,13 @@ function openEditFieldsDialog(blockIds: string[], fieldIds: string[], fieldDefs:
                                 return prev;
                             }, {});
 
-                            // TODO-const : Re-enable all the actions
-                            // new UpdateFieldDefinitions(
-                            //     store.state.generalData.currentProjectBoard!.boardId,
-                            //     blockIdsToUpdate,
-                            //     fieldDefinitions,
-                            //     fieldIds,
-                            //     possibleValueDefinitions,
-                            //     deletedFieldIds).send();
+                            new SetFieldDefinitionsAction(
+                                JSON.parse(JSON.stringify(blockIdsToUpdate)),
+                                JSON.parse(JSON.stringify(fieldDefinitions)),
+                                JSON.parse(JSON.stringify(fieldIds)),
+                                JSON.parse(JSON.stringify(possibleValueDefinitions)),
+                                JSON.parse(JSON.stringify(deletedFieldIds)),
+                            ).submit();
 
                             mwVueModals.closeModal(dialogId);
                         },
@@ -145,12 +141,10 @@ function setFieldValueOnBlocks(blocks: Block[], fieldId: string, valueChangeEven
         blocks.forEach(e => { blockIdToFieldValue[e.id] = valueChangeEvent; });
     }
 
-    // TODO-const : Re-enable all the actions
-    // new UpdateFieldValueOnBlocks(
-    //     store.state.generalData.currentProjectBoard!.boardId,
-    //     fieldId,
-    //     blockIdToFieldValue,
-    // ).send();
+    new SetFieldOnBlocksAction(
+        fieldId,
+        JSON.parse(JSON.stringify(blockIdToFieldValue)),
+    ).submit();
 }
 
 export function useEditableFields() {

@@ -1,7 +1,7 @@
 
 import { AugmentedActionContext, GetterProperties, RootState } from "../StoreTypes";
-import * as StringUtils from '../../../common/StringUtils';
-import * as DateUtils from '../../../common/DateUtils';
+import * as StringUtils from '../../../../../common/utilities/StringUtils';
+import * as DateUtils from '../../../../../common/utilities/DateUtils';
 import * as ErrorLogger from '../../../common/ErrorLogger';
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { BaseViewConfig, Comparator, Conjunction, Filter, FilterChain, FilterType, Inclusion, MultiSelectComparator, SingleSelectComparator, StringComparator, TemporalBeforeAfterFilter, TemporalComparator, TemporalFilterValue, TemporalUnit, TemporalWithinFilter, ViewConfig, ViewType } from "../../../../../common/DataTypes/ViewDataTypes";

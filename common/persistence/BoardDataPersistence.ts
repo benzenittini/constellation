@@ -7,6 +7,7 @@ import { BoundingBox, TypedMap } from '../DataTypes/GenericDataTypes';
 import { Block, BlockContent, BlockIdAndPosition } from '../DataTypes/BlockDataTypes';
 import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes } from '../DataTypes/FieldDataTypes';
 import * as T from '../DataTypes/ActionDataTypes';
+import * as ArrayUtils from '../utilities/ArrayUtils';
 
 export class BoardDataPersistence {
 
@@ -432,6 +433,97 @@ export class BoardDataPersistence {
         this.scheduleSave();
 
         return { blockIds, classificationId, isActive, };
+    }
+
+    async setFieldDefinitions({ blockIds, fieldDefinitions, fieldIds, possibleValueDefinitions, deletedFieldIds }: T.SetFieldDefinitionsRequest): Promise<T.SetFieldDefinitionsResponse> {
+        // Validating the request will work before changing any values.
+        await this.verifyValidFieldTypeTransitions(fieldDefinitions);
+
+        // Update the field and possibleValue definitions on the board. Since fields can point to possible values,
+        // we're updating them in reverse order to make sure the "target IDs" exist before we try and point to them.)
+        let changedPVs = await this.updatePossibleValueDefinitions(possibleValueDefinitions);
+        await this.updateFieldDefinitions(fieldDefinitions);
+
+        let changedFieldValues = await this.updatePossibleValueNames(changedPVs);
+
+        // Remove the deleted fields from the blocks
+        for (let fieldId of deletedFieldIds) {
+            let blockIdToFieldValue: TypedMap<any> = blockIds.reduce((prev: TypedMap<any>, curr) => {
+                prev[curr] = undefined;
+                return prev;
+            }, {});
+            await this.setFieldOnBlocks({ fieldId, blockIdToFieldValue });
+        }
+
+        // Ensure all the blocks have the new/updated fields on them.
+        let blockFieldIds = await this.addFieldIdsToBlocks(blockIds, Object.keys(fieldDefinitions));
+
+        this.scheduleSave();
+
+        // We want to return the blockIds and ALL their field definitions.
+        return {
+            fieldDefinitions: fieldDefinitions,
+            possibleValueDefinitions: possibleValueDefinitions,
+            blockFieldIds,
+            changedFieldValues,
+        };
+    }
+
+    async addFieldIdsToBlocks(blockIds: string[], fieldIds: string[]): Promise<TypedMap<string[]>> {
+        // Make sure the block exists
+        for (let blockId of blockIds) {
+            if (this.data.blocks[blockId] === undefined) {
+                // TODO-const : error handling
+                throw new Error("Error in addFieldIdsToBlocks: requested block does not exist.");
+            }
+        }
+
+        // Make the data changes
+        let blockFieldIds: TypedMap<string[]> = {};
+        for (let blockId of blockIds) {
+            let block = this.data.blocks[blockId];
+            let additionalFieldIdsOnBlock = block.fieldIds.filter(fid => !fieldIds.includes(fid));
+
+            // We need to keep the order of the fields passed into this function ("fieldIds")... but
+            // also merge them with the other fields already on the block ("additionalFieldIdsOnBlock").
+            block.fieldIds = [...additionalFieldIdsOnBlock, ...fieldIds];
+
+            blockFieldIds[blockId] = block.fieldIds;
+        }
+
+        return blockFieldIds;
+    }
+
+    /**
+     * fieldValue meanings:
+     *   - undefined = delete this field
+     *   - anything else = set to the given value
+     */
+    async setFieldOnBlocks({ fieldId, blockIdToFieldValue }: T.SetFieldOnBlocksRequest): Promise<T.SetFieldOnBlocksResponse> {
+        // Make sure the block exists
+        for (let blockId of Object.keys(blockIdToFieldValue)) {
+            if (this.data.blocks[blockId] === undefined) {
+                // TODO-const : error handling
+                throw new Error("Error in setFieldOnBlocks: specified block does not exist.");
+            }
+        }
+
+        // Make the data updates
+        for (let blockId in blockIdToFieldValue) {
+            let fieldValue = blockIdToFieldValue[blockId];
+            if (fieldValue === undefined) {
+                // "undefined" means "delete this field"
+                delete this.data.blocks[blockId].fieldValues[fieldId];
+                ArrayUtils.removeItem(this.data.blocks[blockId].fieldIds, fieldId);
+            } else {
+                // any other value means to initialize/set to the given value
+                this.data.blocks[blockId].fieldValues[fieldId] = fieldValue;
+            }
+        }
+
+        this.scheduleSave();
+
+        return { fieldId, blockIdToFieldValue, };
     }
 
 }

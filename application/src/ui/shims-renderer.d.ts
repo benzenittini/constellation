@@ -11,16 +11,18 @@ declare global {
             getRemoteProjects: (req: T.GetRemoteProjectsRequest)   => Promise<T.GetRemoteProjectsResponse>,
         },
         board: {
-            getBoardData:                 (req: T.GetBoardDataRequest)                 => Promise<T.GetBoardDataResponse>,
-            // Blocks
-            createBlock:                  (req: T.CreateBlockRequest)                  => Promise<T.CreateBlockResponse>,
-            setBlockPositions:            (req: T.SetBlockPositionsRequest)            => Promise<T.SetBlockPositionsResponse>,
-            deleteBlocks:                 (req: T.DeleteBlocksRequest)                 => Promise<T.DeleteBlocksResponse>,
-            setBlockParent:               (req: T.SetBlockParentRequest)               => Promise<T.SetBlockParentResponse>,
-            setBlockContent:              (req: T.SetBlockContentRequest)              => Promise<T.SetBlockContentResponse>,
-            // Fields and Classifications
+            getBoardData: (req: T.GetBoardDataRequest) => Promise<T.GetBoardDataResponse>,
+            // -- Blocks --
+            createBlock:       (req: T.CreateBlockRequest)       => Promise<T.CreateBlockResponse>,
+            setBlockPositions: (req: T.SetBlockPositionsRequest) => Promise<T.SetBlockPositionsResponse>,
+            deleteBlocks:      (req: T.DeleteBlocksRequest)      => Promise<T.DeleteBlocksResponse>,
+            setBlockParent:    (req: T.SetBlockParentRequest)    => Promise<T.SetBlockParentResponse>,
+            setBlockContent:   (req: T.SetBlockContentRequest)   => Promise<T.SetBlockContentResponse>,
+            // -- Fields and Classifications --
             setClassificationDefinitions: (req: T.SetClassificationDefinitionsRequest) => Promise<T.SetClassificationDefinitionsResponse>,
             setClassificationOnBlocks:    (req: T.SetClassificationOnBlocksRequest)    => Promise<T.SetClassificationOnBlocksResponse>,
+            setFieldDefinitions:          (req: T.SetFieldDefinitionsRequest)          => Promise<T.SetFieldDefinitionsResponse>,
+            setFieldOnBlocks:             (req: T.SetFieldOnBlocksRequest)             => Promise<T.SetFieldOnBlocksResponse>,
         },
     }
 }

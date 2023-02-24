@@ -36,7 +36,7 @@
 
 import { computed, defineComponent } from "vue";
 
-import { mode } from "../../../../common/ArrayUtils";
+import { mode } from "../../../../../../common/utilities/ArrayUtils";
 import { useStore } from "../../../store/store";
 
 import { SetBlockPositionsAction } from '../../../actions/board-actions/SetBlockPositions';

@@ -46,3 +46,16 @@ export type SetClassificationDefinitionsResponse = { classificationIds: string[]
 
 export type SetClassificationOnBlocksRequest  = { blockIds: string[], classificationId: string, isActive: boolean };
 export type SetClassificationOnBlocksResponse = { blockIds: string[], classificationId: string, isActive: boolean };
+
+export type SetFieldDefinitionsRequest  = { blockIds: string[], fieldDefinitions: TypedMap<FieldDefinition>, fieldIds: string[], possibleValueDefinitions: TypedMap<PossibleValueDefinition>, deletedFieldIds: string[] };
+export type SetFieldDefinitionsResponse = {
+    fieldDefinitions: TypedMap<FieldDefinition>;
+    possibleValueDefinitions: TypedMap<PossibleValueDefinition>;
+    blockFieldIds: TypedMap<string[]>; // Block ID --> fieldIds[] on that block
+
+    // When possible values are renamed, blocks with that value are updated too.
+    changedFieldValues: ChangedFieldValue[];
+};
+
+export type SetFieldOnBlocksRequest  = { fieldId: string, blockIdToFieldValue: TypedMap<any> };
+export type SetFieldOnBlocksResponse = { fieldId: string, blockIdToFieldValue: TypedMap<any> };

@@ -17,7 +17,7 @@ import { useStore } from "../store/store";
 import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
 import { DataType, DateTime, FieldDefinition, FieldType, getFieldDataType } from "../../../../common/DataTypes/FieldDataTypes";
 import { DropdownOption } from "../store/Types/FieldStoreTypes";
-import { isString } from "../../common/StringUtils";
+import { isString } from "../../../../common/utilities/StringUtils";
 
 type ElementType = {
     key: string,

@@ -1,5 +1,5 @@
 
-import { TypedMap } from "../../../common/DataTypes/GenericDataTypes";
+import { TypedMap } from "../DataTypes/GenericDataTypes";
 
 // TODO-test : Needs tests
 export function arraysAreEqual(array1: any[] | undefined, array2: any[] | undefined, equalityCheck: (a: any, b: any) => boolean) {
@@ -71,6 +71,12 @@ export function removeEntries<T>(array: T[], removals: T[]) {
             array.splice(index, 1);
         }
     }
+}
+
+export function removeItem(array: any[], item: any) {
+    let index = array.indexOf(item);
+    if (index !== -1)
+        array.splice(index, 1);
 }
 
 /**

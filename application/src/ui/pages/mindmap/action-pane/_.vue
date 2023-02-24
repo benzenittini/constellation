@@ -64,9 +64,9 @@
                 </div>
             </div>
 
-            <!-- Entity Fields -->
+            <!-- Block Fields -->
             <div class="field-grouping">
-                <div v-for="fieldId in activeEntityFieldIds" v-bind:key="fieldId" class="field">
+                <div v-for="fieldId in activeBlockFieldIds" v-bind:key="fieldId" class="field">
                     <div class="field-name">{{ fieldDefs[fieldId].name }}</div>
                     <eic-dynamic-field
                         v-bind:eicFieldDef="fieldDefs[fieldId]"
@@ -119,11 +119,11 @@ export default defineComponent({
         // Displayed items
         let activeClassificationFieldIds  = computed(() => store.getters.activeClassificationFieldIds(props.mwSelectedBlockIds));
         let activeClassificationIdsSorted = computed(() => store.getters.classificationIds.filter(cid => activeClassificationFieldIds.value[cid]));
-        let activeEntityFieldIds          = computed(() => store.getters.activeBlockFieldIds(props.mwSelectedBlockIds));
+        let activeBlockFieldIds           = computed(() => store.getters.activeBlockFieldIds(props.mwSelectedBlockIds));
         let activeFieldValueCounts        = computed(() => store.getters.activeFieldValueCounts(props.mwSelectedBlockIds));
 
         let hiddenFieldCount = computed(() => {
-            // Get a complete set of the fields all our selected entities have
+            // Get a complete set of the fields all our selected blocks have
             let fieldSet = new Set<string>();
             let classificationSet = new Set<string>();
             props.mwSelectedBlocks.forEach(e => {
@@ -137,7 +137,7 @@ export default defineComponent({
             });
 
             // Count the number of fields we're displaying
-            let displayedFieldCount = activeEntityFieldIds.value.length;
+            let displayedFieldCount = activeBlockFieldIds.value.length;
             Object.values(activeClassificationFieldIds.value).forEach(fieldIdArray => displayedFieldCount += fieldIdArray.length);
 
             // Return the difference
@@ -146,20 +146,20 @@ export default defineComponent({
         let classificationCounts = computed(() => {
             // Initialize the "counts" object
             let returnVal = classificationIds.value.reduce((prev: any, curr) => {
-                prev[curr] = { entitiesWithThis: 0, outOf: props.mwSelectedBlockIds.length };
+                prev[curr] = { blocksWithThis: 0, outOf: props.mwSelectedBlockIds.length };
                 return prev;
             }, {});
 
-            // Iterate over our entities, counting each selected classification
+            // Iterate over our blocks, counting each selected classification
             props.mwSelectedBlocks.forEach(e => {
                 e.classificationIds
                     .filter(cid => classificationIds.value.includes(cid))
-                    .forEach(cid => returnVal[cid].entitiesWithThis++);
+                    .forEach(cid => returnVal[cid].blocksWithThis++);
             });
 
             // Appropriately set the "isSelected" flag for each classification
             Object.values(returnVal).forEach((val: any) => {
-                val.isSelected = val.entitiesWithThis > 0 && val.entitiesWithThis === val.outOf;
+                val.isSelected = val.blocksWithThis > 0 && val.blocksWithThis === val.outOf;
             });
 
             return returnVal;
@@ -169,9 +169,9 @@ export default defineComponent({
             let label = classification.name;
 
             // Conditionally add on a "count" label
-            let entitiesWithThis = classificationCounts.value[classification.id].entitiesWithThis;
-            if (props.mwSelectedBlocks.length > 1 && entitiesWithThis !== 0) {
-                label += ` [${entitiesWithThis}/${props.mwSelectedBlocks.length}]`
+            let blocksWithThis = classificationCounts.value[classification.id].blocksWithThis;
+            if (props.mwSelectedBlocks.length > 1 && blocksWithThis !== 0) {
+                label += ` [${blocksWithThis}/${props.mwSelectedBlocks.length}]`
             }
 
             return label;
@@ -185,7 +185,7 @@ export default defineComponent({
         let editFields = () => {
             editableFields.openEditFieldsDialog(
                 props.mwSelectedBlockIds,
-                activeEntityFieldIds.value,
+                activeBlockFieldIds.value,
                 fieldDefs.value,
                 possibleValueDefs.value);
         };
@@ -209,7 +209,7 @@ export default defineComponent({
 
             // Computed
             classificationIds, classificationDefs, fieldDefs,
-            activeClassificationFieldIds, activeClassificationIdsSorted, activeEntityFieldIds,
+            activeClassificationFieldIds, activeClassificationIdsSorted, activeBlockFieldIds,
             classificationCounts, activeFieldValueCounts, hiddenFieldCount,
             pointerEventsDisabled: computed(() => store.getters.pointerEventsDisabled),
 

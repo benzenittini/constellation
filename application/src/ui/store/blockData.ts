@@ -5,8 +5,8 @@ import { RootState } from "./StoreTypes";
 import { BlockDataState, BlockDataGetters, BlockDataMutations, BlockDataActions } from "./Types/BlockStoreTypes";
 
 import * as ErrorLogger from "../../common/ErrorLogger";
-import * as RectangleUtils from '../../common/RectangleUtils';
-import * as ObjectUtils from '../../common/ObjectUtils';
+import * as RectangleUtils from '../../../../common/utilities/RectangleUtils';
+import * as ObjectUtils from '../../../../common/utilities/ObjectUtils';
 import { GRAY8 } from '../styles/styleVariables';
 import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
 import { MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, SearchResult } from "../../../../common/DataTypes/BlockDataTypes";
