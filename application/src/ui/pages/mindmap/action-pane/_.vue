@@ -1,11 +1,11 @@
 <template>
     <div class="mw-app-actionpane"
-        v-bind:style="{width: paneWidth, right: selectedBlocks.length >= mwShowAfterNumberSelected ? '0' : `-${paneWidth}`}"
+        v-bind:style="{width: `${paneWidth}px`, right: mwSelectedBlocks.length >= mwShowAfterNumberSelected ? '0' : `${-paneWidth-10}px`}"
         v-bind:class="{ 'disable-pointer-events': pointerEventsDisabled }">
 
         <h1>Bulk Actions</h1>
 
-        <template v-if="selectedBlockIds.length == 0">
+        <template v-if="mwSelectedBlockIds.length == 0">
             Select some blocks to perform bulk actions.
         </template>
 
@@ -32,7 +32,7 @@
                 <eic-checkbox v-for="cid in classificationIds" v-bind:key="cid"
                     v-bind:eic-label="getClassificationLabel(classificationDefs[cid])"
                     v-model="classificationCounts[cid].isSelected"
-                    v-on:click="setClassificationOnBlocks(selectedBlocks, cid, !classificationCounts[cid].isSelected)"
+                    v-on:click="setClassificationOnBlocks(mwSelectedBlocks, cid, !classificationCounts[cid].isSelected)"
                     ></eic-checkbox>
 
                 <div v-if="Object.keys(classificationDefs).length === 0">
@@ -46,7 +46,7 @@
             <div class="actionpane-heading">
                 <h2>Fields</h2>
             </div>
-            <div class="edit-button" v-if="selectedBlockIds.length === 1" v-on:click="editFields">edit</div>
+            <div class="edit-button" v-if="mwSelectedBlockIds.length === 1" v-on:click="editFields">edit</div>
 
             <!-- Classification Fields -->
             <div class="field-grouping eic-classification-flex" v-for="cid in activeClassificationIdsSorted" v-bind:key="cid">
@@ -59,7 +59,7 @@
                             v-bind:eicFieldDef="fieldDefs[fieldId]"
                             v-bind:possibleValueCounts="activeFieldValueCounts[fieldId]"
                             v-bind:keyPrefix="'actionpane-'"
-                            v-on:eic-val-set="setFieldValueOnBlocks(selectedBlocks, fieldId, $event)"></eic-dynamic-field>
+                            v-on:eic-val-set="setFieldValueOnBlocks(mwSelectedBlocks, fieldId, $event)"></eic-dynamic-field>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                         v-bind:eicFieldDef="fieldDefs[fieldId]"
                         v-bind:possibleValueCounts="activeFieldValueCounts[fieldId]"
                         v-bind:keyPrefix="'actionpane-'"
-                        v-on:eic-val-set="setFieldValueOnBlocks(selectedBlocks, fieldId, $event)"></eic-dynamic-field>
+                        v-on:eic-val-set="setFieldValueOnBlocks(mwSelectedBlocks, fieldId, $event)"></eic-dynamic-field>
                 </div>
             </div>
             <p class="eic-hidden-fields" v-bind:class="{ highlight: hiddenFieldCount !== 0 }" title="Only fields that exist on all selected blocks are displayed.">
@@ -95,16 +95,20 @@ export default defineComponent({
     props: {
         mwShowAfterNumberSelected: Number,
         mwShowAlignmentControls: Boolean,
+        mwSelectedBlocks: {
+            type: Array as PropType<Block[]>,
+            default: () => [],
+        },
+        mwSelectedBlockIds: {
+            type: Array as PropType<string[]>,
+            default: () => [],
+        },
     },
     setup(props) {
         const store = useStore();
 
         let editableFields = useEditableFields();
         let editableClassifications = useEditableClassifications();
-
-        // TODO-const : Do these need to be computed..?
-        let selectedBlocks   = store.getters.selectedBlocks;
-        let selectedBlockIds = store.getters.selectedBlockIds;
 
         // Definition lookup maps
         let classificationIds  = computed(() => store.getters.classificationIds);
@@ -113,16 +117,16 @@ export default defineComponent({
         let possibleValueDefs  = computed(() => store.getters.possibleValues);
 
         // Displayed items
-        let activeClassificationFieldIds  = computed(() => store.getters.activeClassificationFieldIds(selectedBlockIds));
+        let activeClassificationFieldIds  = computed(() => store.getters.activeClassificationFieldIds(props.mwSelectedBlockIds));
         let activeClassificationIdsSorted = computed(() => store.getters.classificationIds.filter(cid => activeClassificationFieldIds.value[cid]));
-        let activeEntityFieldIds          = computed(() => store.getters.activeBlockFieldIds(selectedBlockIds));
-        let activeFieldValueCounts        = computed(() => store.getters.activeFieldValueCounts(selectedBlockIds));
+        let activeEntityFieldIds          = computed(() => store.getters.activeBlockFieldIds(props.mwSelectedBlockIds));
+        let activeFieldValueCounts        = computed(() => store.getters.activeFieldValueCounts(props.mwSelectedBlockIds));
 
         let hiddenFieldCount = computed(() => {
             // Get a complete set of the fields all our selected entities have
             let fieldSet = new Set<string>();
             let classificationSet = new Set<string>();
-            selectedBlocks.forEach(e => {
+            props.mwSelectedBlocks.forEach(e => {
                 store.getters.activeBlockFieldIds([e.id]).forEach(fid => fieldSet.add(fid));
                 e.classificationIds
                     .filter(cid => classificationIds.value.includes(cid))
@@ -142,12 +146,12 @@ export default defineComponent({
         let classificationCounts = computed(() => {
             // Initialize the "counts" object
             let returnVal = classificationIds.value.reduce((prev: any, curr) => {
-                prev[curr] = { entitiesWithThis: 0, outOf: selectedBlockIds.length };
+                prev[curr] = { entitiesWithThis: 0, outOf: props.mwSelectedBlockIds.length };
                 return prev;
             }, {});
 
             // Iterate over our entities, counting each selected classification
-            selectedBlocks.forEach(e => {
+            props.mwSelectedBlocks.forEach(e => {
                 e.classificationIds
                     .filter(cid => classificationIds.value.includes(cid))
                     .forEach(cid => returnVal[cid].entitiesWithThis++);
@@ -166,8 +170,8 @@ export default defineComponent({
 
             // Conditionally add on a "count" label
             let entitiesWithThis = classificationCounts.value[classification.id].entitiesWithThis;
-            if (selectedBlocks.length > 1 && entitiesWithThis !== 0) {
-                label += ` [${entitiesWithThis}/${selectedBlocks.length}]`
+            if (props.mwSelectedBlocks.length > 1 && entitiesWithThis !== 0) {
+                label += ` [${entitiesWithThis}/${props.mwSelectedBlocks.length}]`
             }
 
             return label;
@@ -180,7 +184,7 @@ export default defineComponent({
 
         let editFields = () => {
             editableFields.openEditFieldsDialog(
-                selectedBlockIds,
+                props.mwSelectedBlockIds,
                 activeEntityFieldIds.value,
                 fieldDefs.value,
                 possibleValueDefs.value);
@@ -201,10 +205,9 @@ export default defineComponent({
 
         return {
             // Constants
-            paneWidth: '300px', // (If you ever want to change this, grep for '300px'. This value is in a couple places because bad reasons.)
+            paneWidth: 300, // (If you ever want to change this, grep for '300px'. This value is in a couple places because bad reasons.)
 
             // Computed
-            selectedBlocks, selectedBlockIds,
             classificationIds, classificationDefs, fieldDefs,
             activeClassificationFieldIds, activeClassificationIdsSorted, activeEntityFieldIds,
             classificationCounts, activeFieldValueCounts, hiddenFieldCount,

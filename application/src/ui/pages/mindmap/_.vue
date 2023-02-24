@@ -3,6 +3,8 @@
         <eic-action-pane
             v-bind:mw-show-alignment-controls="true"
             v-bind:mw-show-after-number-selected="2"
+            v-bind:mw-selected-blocks="selectedBlocks"
+            v-bind:mw-selected-block-ids="selectedBlockIds"
             ></eic-action-pane>
         <eic-canvas></eic-canvas>
     </div>
@@ -19,6 +21,9 @@ export default defineComponent({
     setup() {
         const store = useStore();
 
+        let selectedBlocks   = computed(() => store.getters.selectedBlocks);
+        let selectedBlockIds = computed(() => store.getters.selectedBlockIds);
+
         onMounted(() => {
             let currentBoardId = store.getters.currentProjectBoard?.boardId;
             if (currentBoardId) {
@@ -27,7 +32,10 @@ export default defineComponent({
                 // TODO-const : drop a generic error to try again..?
             }
         });
-        return {}
+        return {
+            selectedBlocks,
+            selectedBlockIds,
+        }
     },
 });
 </script>

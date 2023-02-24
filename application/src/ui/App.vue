@@ -55,7 +55,6 @@ export default defineComponent({
         flex-grow: 1;
         background: vars.$gray-dark;
         z-index: 0;
-        border-radius: vars.$radius-xlarge;
 
         display: flex;
         align-items: stretch; // Children stretch to fill height of main
