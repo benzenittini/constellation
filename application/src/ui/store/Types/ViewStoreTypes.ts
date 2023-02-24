@@ -43,9 +43,10 @@ export interface ViewDataActions {
 
 // -- Getters --
 export type ViewDataGetters<S = ViewDataState> = {
-    displayedBlocks    (state: S, getters: GetterProperties, rootState: RootState): Block[];
-    relevantPriorities (state: S, getters: GetterProperties, rootState: RootState): string[];
-    prioritizedBlocks  (state: S, getters: GetterProperties, rootState: RootState): Block[];
+    availableViewsForType (state: S, getters: GetterProperties, rootState: RootState): (viewType: ViewType) => BaseViewConfig[];
+    displayedBlocks       (state: S, getters: GetterProperties, rootState: RootState): Block[];
+    relevantPriorities    (state: S, getters: GetterProperties, rootState: RootState): string[];
+    prioritizedBlocks     (state: S, getters: GetterProperties, rootState: RootState): Block[];
 }
 
 

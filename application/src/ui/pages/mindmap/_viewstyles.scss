@@ -1,0 +1,74 @@
+
+@use "sass:color";
+@use '../../styles/variables.scss' as vars;
+@use '../../styles/mixins.scss' as mixins;
+
+.mwe-config-heading {
+    margin: 0;
+    padding: 0;
+    color: vars.$gray4;
+    &.mwm-inline {
+        display: inline-block;
+        padding-right: 20px;
+    }
+}
+
+@mixin block-is-selected {
+    box-shadow: 0 0 15px 3px vars.$gray-very-light;
+}
+
+
+.mwe-selected-but-filtered {
+    background: vars.$gray2;
+    border-radius: vars.$radius-medium;
+    border: 1px solid vars.$gray-very-dark;
+    box-shadow: vars.$shadow-inset-down-medium;
+    margin: 16px;
+
+    p { margin: 0; padding: 10px; }
+
+    .mwe-filtered-block-section {
+        padding: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        align-content: flex-start;
+        overflow-x: auto;
+        @include mixins.scrollbars;
+
+        .mwe-block {
+            margin: 5px;
+            width: 300px;
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+    }
+}
+
+.mwe-block {
+    position: relative;
+    margin: 10px;
+    cursor: pointer;
+
+    text-align: center;
+    border-radius: 20px;
+    border: 3px solid vars.$gray3;
+    background: vars.$gray-very-dark;
+    color: vars.$gray-very-light;
+
+    .mwe-breadcrumbs {
+        color: vars.$gray5;
+        background: color.adjust(vars.$gray-very-dark, $alpha: -0.1);
+        border-radius: 17px 17px 0 0;
+        border-bottom: 1px solid color.adjust(vars.$gray4, $alpha: -0.6);
+        padding: 5px;
+        // If there are breadcrumbs, we want the main block text to be shifted up
+        // by ~10px so it looks "more centered" on the block.
+        margin-bottom: -10px;
+    }
+    .mwe-block-content {
+        padding: 25px 15px 25px 15px;
+    }
+
+    &.mwm-selected { @include block-is-selected; }
+}

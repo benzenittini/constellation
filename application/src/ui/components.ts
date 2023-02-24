@@ -77,6 +77,11 @@ import PossibleValuePane         from './pages/mindmap/action-pane/PossibleValue
 import RecentColorPicker         from './pages/mindmap/action-pane/RecentColorPicker.vue';
 import StyleEditor               from './pages/mindmap/action-pane/StyleEditor.vue';
 import AlignmentControls         from './pages/mindmap/action-pane/AlignmentControls.vue';
+// Mind Map / Titlebar
+import Titlebar     from './pages/mindmap/titlebar/_.vue';
+import Search       from './pages/mindmap/titlebar/Search.vue';
+import BasicSearch  from './pages/mindmap/titlebar/BasicSearch.vue';
+import ViewSelector from './pages/mindmap/titlebar/ViewSelector.vue';
 
 
 // -- The exported super-object --
@@ -155,5 +160,9 @@ export let components: any = {
     'eic-recent-color-picker': RecentColorPicker,
     'eic-style-editor': StyleEditor,
     'eic-alignment-controls': AlignmentControls,
-
+    // Mind Map / Titlebar
+    'eic-titlebar': Titlebar,
+    'eic-search': Search,
+    'eic-basic-search': BasicSearch,
+    'eic-view-selector': ViewSelector,
 };

@@ -2,6 +2,7 @@
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 import { ViewDataState, ViewDataGetters, ViewDataMutations, ViewDataActions, filterBlocks } from "./Types/ViewStoreTypes";
 import { RootState } from "./StoreTypes";
+import { computed } from "vue";
 
 // =====
 // State
@@ -72,6 +73,11 @@ const viewDataActions: ActionTree<ViewDataState, RootState> & ViewDataActions = 
 // -------
 
 const viewDataGetters: GetterTree<ViewDataState, RootState> & ViewDataGetters = {
+    availableViewsForType: (state, getters, rootState) => (viewType) => {
+        return Object.values(state.availableViews)
+            .sort((a, b) => ('' + a.name).localeCompare(b.name))
+            .filter(view => viewType ? view.type === viewType : true);
+    },
     displayedBlocks: (state, getters, rootState) => {
         if (!state.activeViewConfig) {
             return [];
