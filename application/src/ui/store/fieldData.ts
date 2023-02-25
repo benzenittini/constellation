@@ -4,6 +4,7 @@ import { FieldDataState, FieldDataGetters, FieldDataMutations, FieldDataActions 
 import { RootState } from "./StoreTypes";
 import * as ErrorLogger from "../../common/ErrorLogger";
 import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
+import { getFieldDataType } from "../../../../common/DataTypes/FieldDataTypes";
 
 
 // =====
@@ -143,6 +144,43 @@ const fieldDataGetters: GetterTree<FieldDataState, RootState> & FieldDataGetters
                 classification.fieldIds.forEach(fv => lookup[fv] = classification.id);
                 return lookup;
             }, {} as TypedMap<string>);
+    },
+    classificationOptions: (state, getters) => {
+        return Object.values(getters.classifications)
+            .map(c => ({ value: c.id, display: c.name }));
+    },
+    classificationFieldPairOptions: (state, getters) => (filter) => {
+        // Groups classifications/fields as an array of:
+        // { value: '<field-id>', display: 'Classification > Field' }
+        let fields = getters.fields;
+        return Object.values(getters.classifications)
+            .reduce((pairs, curr) => {
+                pairs.push(...curr.fieldIds
+                    .filter(f => filter ? filter(fields[f]) : true)
+                    .map(fieldId => ({
+                        value: fieldId,
+                        display: `${curr.name} > ${fields[fieldId].name}`
+                    })));
+                return pairs;
+            }, [] as { value: string, display: string }[]);
+    },
+    getPossibleValueOptsForField: (state, getters) => (fieldId) => {
+        if (!fieldId) { return []; }
+        let pvs = getters.possibleValues;
+        return getters.fields[fieldId].possibleValueIds
+            .map(pvid => ({
+                value: pvid,
+                display: pvs[pvid].name
+            }));
+    },
+
+    getFieldTypeGivenFieldId: (state, getters) => (fieldId) => {
+        if (!fieldId) { return null; }
+        return getters.fields[fieldId].type;
+    },
+    getFieldDataTypeGivenFieldId: (state, getters) => (fieldId) => {
+        if (!fieldId) { return null; }
+        return getFieldDataType(getters.fields[fieldId].type);
     },
 }
 

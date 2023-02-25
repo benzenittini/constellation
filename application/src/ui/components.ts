@@ -82,6 +82,13 @@ import Titlebar     from './pages/mindmap/titlebar/_.vue';
 import Search       from './pages/mindmap/titlebar/Search.vue';
 import BasicSearch  from './pages/mindmap/titlebar/BasicSearch.vue';
 import ViewSelector from './pages/mindmap/titlebar/ViewSelector.vue';
+// Mind Map / Views
+import ViewContainer     from './pages/mindmap/views/ViewContainer.vue';
+import FilterChainConfig from './pages/mindmap/views/FilterChainConfig.vue';
+import KanbanContents    from './pages/mindmap/views/KanbanView/KanbanContents.vue';
+import KanbanConfig      from './pages/mindmap/views/KanbanView/KanbanConfig.vue';
+import FilterContents    from './pages/mindmap/views/FilterView/FilterContents.vue';
+import FilterConfig      from './pages/mindmap/views/FilterView/FilterConfig.vue';
 
 
 // -- The exported super-object --
@@ -165,4 +172,11 @@ export let components: any = {
     'eic-search': Search,
     'eic-basic-search': BasicSearch,
     'eic-view-selector': ViewSelector,
+    // Mind Map / Views
+    'eic-view-container': ViewContainer,
+    'eic-filter-chain-config': FilterChainConfig,
+    'eic-kanban-contents': KanbanContents,
+    'eic-kanban-config': KanbanConfig,
+    'eic-filter-contents': FilterContents,
+    'eic-filter-config': FilterConfig,
 };

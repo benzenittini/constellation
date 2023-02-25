@@ -4,25 +4,27 @@
         <eic-titlebar></eic-titlebar>
 
         <div class="mw-app-content">
-            <!-- TODO-const : this is where the view-container should go, possibly nesting actionpane and canvas inside their own div. -->
-            <!-- <eic-view-container
+            <eic-view-container
                 v-on:viewOpened="showHideMindMap(false)"
                 v-on:viewClosed="showHideMindMap(true)"
-                ></eic-view-container> -->
-            <eic-action-pane
-                v-bind:mw-show-alignment-controls="true"
-                v-bind:mw-show-after-number-selected="2"
-                v-bind:mw-selected-blocks="selectedBlocks"
-                v-bind:mw-selected-block-ids="selectedBlockIds"
-                ></eic-action-pane>
-            <eic-canvas></eic-canvas>
+                ></eic-view-container>
+
+            <div class="mw-mind-map" v-show="showMindMap">
+                <eic-action-pane
+                    v-bind:mw-show-alignment-controls="true"
+                    v-bind:mw-show-after-number-selected="2"
+                    v-bind:mw-selected-blocks="selectedBlocks"
+                    v-bind:mw-selected-block-ids="selectedBlockIds"
+                    ></eic-action-pane>
+                <eic-canvas></eic-canvas>
+            </div>
         </div>
     </div>
 </template>
 
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, onUnmounted } from 'vue';
+import { defineComponent, computed, onMounted, onUnmounted, ref } from 'vue';
 
 import { GetBoardDataAction } from '../../actions/board-actions/GetBoardData';
 import { useEmitter } from '../../composables/Emitter';
@@ -76,9 +78,19 @@ export default defineComponent({
             windowEvents.deregisterAll();
         });
 
+        let showMindMap = ref(true);
+
         return {
             selectedBlocks,
             selectedBlockIds,
+            showMindMap,
+            showHideMindMap: (show: boolean) => {
+                if (show) {
+                    showMindMap.value = true;
+                } else {
+                    setTimeout(() => showMindMap.value = false, 400);
+                }
+            }
         }
     },
 });
@@ -95,6 +107,10 @@ export default defineComponent({
     .mw-app-content {
         position: relative;
         flex-grow: 1;
+
+        .mw-mind-map {
+            height: 100%;
+        }
     }
 }
 </style>

@@ -47,7 +47,14 @@ export type FieldDataGetters<S = FieldDataState> = {
     boardColors               (state: S): string[];
     fieldIdToClassificationId (state: S): TypedMap<string>;
 
-    getChangedFieldValues (state: S, getters: GetterProperties, rootState: RootState): (newPVDefs: TypedMap<PossibleValueDefinition>) => { blockId: string, fieldId: string, newValue: any }[];
+    getChangedFieldValues          (state: S, getters: GetterProperties, rootState: RootState): (newPVDefs: TypedMap<PossibleValueDefinition>) => { blockId: string, fieldId: string, newValue: any }[];
+
+    classificationOptions          (state: S, getters: GetterProperties): DropdownOption[];
+    classificationFieldPairOptions (state: S, getters: GetterProperties): (filter?: (f: FieldDefinition) => boolean) => DropdownOption[];
+    getPossibleValueOptsForField   (state: S, getters: GetterProperties): (fieldId: string) => DropdownOption[];
+
+    getFieldTypeGivenFieldId     (state: S, getters: GetterProperties): (fieldId: string) => FieldType | null;
+    getFieldDataTypeGivenFieldId (state: S, getters: GetterProperties): (fieldId: string) => DataType | null;
 }
 
 
