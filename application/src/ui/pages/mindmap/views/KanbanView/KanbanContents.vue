@@ -76,6 +76,7 @@ import { TypedMap } from "../../../../../../../common/DataTypes/GenericDataTypes
 import { Block } from "../../../../../../../common/DataTypes/BlockDataTypes";
 import { KanbanViewConfig } from "../../../../../../../common/DataTypes/ViewDataTypes";
 import { SetFieldOnBlocksAction } from "../../../../actions/board-actions/SetFieldOnBlocks";
+import { SetBlockPriorityAction } from "../../../../actions/board-actions/SetBlockPriority";
 
 const CONFIG_PANE_WIDTH = 300; // px
 
@@ -181,12 +182,10 @@ export default defineComponent({
                 // already the current block. When that happens, we're trying to put the block before
                 // itself, which causes an error of sadness. Let's skip the priority if that happens.
                 if (blockId !== beforeBlockId) {
-                    // TODO-const : SetBlockPriority action
-                    // new SetBlockPriority(
-                    //     generalStore.rawState.currentViewData!.boardId,
-                    //     [blockId],
-                    //     beforeBlockId,
-                    // ).send();
+                    new SetBlockPriorityAction(
+                        [blockId],
+                        beforeBlockId,
+                    ).submit();
                 }
 
                 // Only update the field value if it changes

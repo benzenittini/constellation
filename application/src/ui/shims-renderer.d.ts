@@ -23,6 +23,11 @@ declare global {
             setClassificationOnBlocks:    (req: T.SetClassificationOnBlocksRequest)    => Promise<T.SetClassificationOnBlocksResponse>,
             setFieldDefinitions:          (req: T.SetFieldDefinitionsRequest)          => Promise<T.SetFieldDefinitionsResponse>,
             setFieldOnBlocks:             (req: T.SetFieldOnBlocksRequest)             => Promise<T.SetFieldOnBlocksResponse>,
+            // -- Views --
+            saveView:         (req: T.SaveViewRequest)         => Promise<T.SaveViewResponse>,
+            deleteView:       (req: T.DeleteViewRequest)       => Promise<T.DeleteViewResponse>,
+            setBlockPriority: (req: T.SetBlockPriorityRequest) => Promise<T.SetBlockPriorityResponse>,
+            loadView:         (req: T.LoadViewRequest)         => Promise<T.LoadViewResponse>,
         },
     }
 }

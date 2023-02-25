@@ -23,4 +23,9 @@ contextBridge.exposeInMainWorld('board', {
     setClassificationOnBlocks:    (req: T.SetClassificationOnBlocksRequest)    => ipcRenderer.invoke('board:setClassificationOnBlocks', req),
     setFieldDefinitions:          (req: T.SetFieldDefinitionsRequest)          => ipcRenderer.invoke('board:setFieldDefinitions', req),
     setFieldOnBlocks:             (req: T.SetFieldOnBlocksRequest)             => ipcRenderer.invoke('board:setFieldOnBlocks', req),
+    // -- Views --
+    saveView:         (req: T.SaveViewRequest)         => ipcRenderer.invoke('board:saveView', req),
+    deleteView:       (req: T.DeleteViewRequest)       => ipcRenderer.invoke('board:deleteView', req),
+    setBlockPriority: (req: T.SetBlockPriorityRequest) => ipcRenderer.invoke('board:setBlockPriority', req),
+    loadView:         (req: T.LoadViewRequest)         => ipcRenderer.invoke('board:loadView', req),
 });

@@ -56,11 +56,15 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUnmounted, Ref, ref, watch } from "vue";
 import { v4 as uuidv4 } from 'uuid';
+
 import { useStore } from "../../../store/store";
 import { useEmitter } from "../../../composables/Emitter";
 import { ViewConfig } from "../../../../../../common/DataTypes/ViewDataTypes";
 import { isValidConfig } from "../../../store/Types/ViewStoreTypes";
 import { areEqual } from "../../../../../../common/utilities/ObjectUtils";
+
+import { SaveViewAction } from '../../../actions/board-actions/SaveView';
+import { DeleteViewAction } from '../../../actions/board-actions/DeleteView';
 
 export default defineComponent({
     emits: ['viewClosed', 'viewOpened'],
@@ -152,8 +156,7 @@ export default defineComponent({
             let boardId = store.getters.currentProjectBoard?.boardId;
             if (boardId && currentView.value) {
                 if (isValidConfig(currentView.value)) {
-                    // TODO-const : SaveView action
-                    // new SaveView(boardId, currentView.value).send();
+                    new SaveViewAction(JSON.parse(JSON.stringify(currentView.value))).submit();
                 }
             }
         }
@@ -170,8 +173,7 @@ export default defineComponent({
                 showConfiguration.value = false;
                 setTimeout(() => {
                     if (boardId && currentView.value) {
-                        // TODO-const : DeleteView action
-                        // new DeleteView(boardId, currentView.value.id).send();
+                        new DeleteViewAction(currentView.value.id).submit();
                     }
                 }, 500); // Long enough for the "close" transition to complete.
             }

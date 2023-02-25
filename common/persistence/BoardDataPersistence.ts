@@ -526,4 +526,70 @@ export class BoardDataPersistence {
         return { fieldId, blockIdToFieldValue, };
     }
 
+    async saveView({ viewConfig }: T.SaveViewRequest): Promise<T.SaveViewResponse> {
+        // TODO-later : Do some validation on viewConfig
+        this.data.views[viewConfig.id] = viewConfig;
+
+        this.scheduleSave();
+
+        return {
+            baseViewConfig: {
+                id: viewConfig.id,
+                name: viewConfig.name,
+                type: viewConfig.type,
+                filter: viewConfig.filter,
+            },
+        };
+    }
+
+    async deleteView({ viewId }: T.DeleteViewRequest): Promise<T.DeleteViewResponse> {
+        delete this.data.views[viewId];
+
+        this.scheduleSave();
+
+        return { viewId };
+    }
+
+    async setBlockPriority({ blockId, beforeId }: T.SetBlockPriorityRequest): Promise<T.SetBlockPriorityResponse> {
+        // Make sure the "before" block exists if it was defined.
+        let beforeIndex = -1;
+        if (beforeId !== undefined) {
+            beforeIndex = this.data.blockPriorities.indexOf(beforeId);
+            if (beforeIndex === -1) {
+                // TODO-const : error handling
+                throw new Error("Error in setBlockPriority: the 'beforeId' block was not found in the priority list.");
+            }
+        }
+
+        // Remove the blocks from their current locations
+        for (let id of blockId) {
+            let originalIndex = this.data.blockPriorities.indexOf(id);
+
+            // Remove it if it exists.
+            if (originalIndex !== -1) {
+                this.data.blockPriorities.splice(originalIndex, 1);
+            }
+        }
+
+        if (beforeId === undefined) {
+            // If "beforeId" is undefined, insert the blocks at the end of the list.
+            this.data.blockPriorities.push(...blockId);
+        } else {
+            // Otherwise, insert them before the location of "beforeId".
+            // ...need to re-look-up the index since we've since updated the array.
+            beforeIndex = this.data.blockPriorities.indexOf(beforeId);
+            this.data.blockPriorities.splice(beforeIndex, 0, ...blockId);
+        }
+
+        this.scheduleSave();
+
+        return { blockId, beforeId };
+    }
+
+    async loadView({ viewId }: T.LoadViewRequest): Promise<T.LoadViewResponse> {
+        return {
+            viewConfig: this.data.views[viewId],
+        };
+    }
+
 }

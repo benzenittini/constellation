@@ -27,6 +27,7 @@ import { useEmitter } from "../../../composables/Emitter";
 
 import * as ErrorLogger from '../../../../common/ErrorLogger';
 import { Conjunction, ViewConfig, ViewType } from "../../../../../../common/DataTypes/ViewDataTypes";
+import { LoadViewAction } from "../../../actions/board-actions/LoadView";
 
 export default defineComponent({
     props: {
@@ -69,11 +70,7 @@ export default defineComponent({
                 if (!store.getters.currentProjectBoard?.boardId) {
                     ErrorLogger.showError('2.2.1');
                 } else {
-                    // TODO-const : LoadViewData action
-                    // new LoadViewData(
-                    //     generalStore.rawState.currentViewData.boardId,
-                    //     viewId,
-                    // ).send();
+                    new LoadViewAction(viewId).submit();
                 }
             },
         };

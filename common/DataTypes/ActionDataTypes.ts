@@ -3,6 +3,7 @@ import { Block, BlockContent, BlockIdAndPosition } from "./BlockDataTypes";
 import { BasicBoardData, BasicProjectData, BoardData } from "./BoardDataTypes";
 import { ChangedFieldValue, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "./FieldDataTypes";
 import { BoundingBox, TypedMap } from "./GenericDataTypes";
+import { BaseViewConfig, ViewConfig } from "./ViewDataTypes";
 
 // ================
 // Project Requests
@@ -59,3 +60,15 @@ export type SetFieldDefinitionsResponse = {
 
 export type SetFieldOnBlocksRequest  = { fieldId: string, blockIdToFieldValue: TypedMap<any> };
 export type SetFieldOnBlocksResponse = { fieldId: string, blockIdToFieldValue: TypedMap<any> };
+
+export type SaveViewRequest  = { viewConfig: ViewConfig };
+export type SaveViewResponse = { baseViewConfig: BaseViewConfig };
+
+export type DeleteViewRequest  = { viewId: string };
+export type DeleteViewResponse = { viewId: string };
+
+export type SetBlockPriorityRequest  = { blockId: string[], beforeId: string | undefined };
+export type SetBlockPriorityResponse = { blockId: string[], beforeId: string | undefined };
+
+export type LoadViewRequest  = { viewId: string };
+export type LoadViewResponse = { viewConfig: ViewConfig };

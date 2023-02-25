@@ -10,17 +10,22 @@ import { BoardDataPersistence } from '../../../common/persistence/BoardDataPersi
 
 export function registerBoardHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('board:getBoardData',      (event, req) => getBoardData(req));
-    // Blocks
+    // -- Blocks --
     ipcMain.handle('board:createBlock',       (event, req) => createBlock(req));
     ipcMain.handle('board:setBlockPositions', (event, req) => setBlockPositions(req));
     ipcMain.handle('board:deleteBlocks',      (event, req) => deleteBlocks(req));
     ipcMain.handle('board:setBlockParent',    (event, req) => setBlockParent(req));
     ipcMain.handle('board:setBlockContent',   (event, req) => setBlockContent(req));
-    // Fields and Classifications
+    // -- Fields and Classifications --
     ipcMain.handle('board:setClassificationDefinitions', (event, req) => setClassificationDefinitions(req));
     ipcMain.handle('board:setClassificationOnBlocks',    (event, req) => setClassificationOnBlocks(req));
     ipcMain.handle('board:setFieldDefinitions',          (event, req) => setFieldDefinitions(req));
     ipcMain.handle('board:setFieldOnBlocks',             (event, req) => setFieldOnBlocks(req));
+    // -- Views --
+    ipcMain.handle('board:saveView',         (event, req) => saveView(req));
+    ipcMain.handle('board:deleteView',       (event, req) => deleteView(req));
+    ipcMain.handle('board:setBlockPriority', (event, req) => setBlockPriority(req));
+    ipcMain.handle('board:loadView',         (event, req) => loadView(req));
 }
 
 let persistence: BoardDataPersistence | undefined = undefined;
@@ -80,4 +85,20 @@ async function setFieldDefinitions(req: T.SetFieldDefinitionsRequest): Promise<T
 
 async function setFieldOnBlocks(req: T.SetFieldOnBlocksRequest): Promise<T.SetFieldOnBlocksResponse> {
     return await persistence!.setFieldOnBlocks(req);
+}
+
+async function saveView(req: T.SaveViewRequest): Promise<T.SaveViewResponse> {
+    return await persistence!.saveView(req);
+}
+
+async function deleteView(req: T.DeleteViewRequest): Promise<T.DeleteViewResponse> {
+    return await persistence!.deleteView(req);
+}
+
+async function setBlockPriority(req: T.SetBlockPriorityRequest): Promise<T.SetBlockPriorityResponse> {
+    return await persistence!.setBlockPriority(req);
+}
+
+async function loadView(req: T.LoadViewRequest): Promise<T.LoadViewResponse> {
+    return await persistence!.loadView(req);
 }
