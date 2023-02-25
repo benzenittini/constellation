@@ -45,9 +45,7 @@ export class BoardDataPersistence {
 
     private saveData() {
         if (this.sourceFile) {
-            // logger.debug('Saving web data...'); // TODO-const : Logger setup
             fs.writeFileSync(this.sourceFile, JSON.stringify(this.data));
-            // logger.debug('...done!'); // TODO-const : Logger setup
         }
         console.log("Data saved!"); // TODO-const : delete
     }

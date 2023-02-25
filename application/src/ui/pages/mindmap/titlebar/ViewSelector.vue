@@ -44,8 +44,7 @@ export default defineComponent({
         return {
             isOpen,
             showAvailableViews: ref(false),
-            // TODO-const : Does this need to be wrapped in a computed..?
-            availableViews: store.getters.availableViewsForType(props.mwViewType!.toUpperCase() as ViewType),
+            availableViews: computed(() => store.getters.availableViewsForType(props.mwViewType!.toUpperCase() as ViewType)),
             closeIfOpen: () => {
                 if (isOpen.value) {
                     emitter.emit('closeView', activeViewConfig.value?.id);
