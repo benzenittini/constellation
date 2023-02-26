@@ -19,6 +19,9 @@ export type CreateNewBoardResponse = BasicBoardData | undefined;
 export type GetRemoteProjectsRequest = void;
 export type GetRemoteProjectsResponse = BasicProjectData[];
 
+export type ImportBoardRequest = void;
+export type ImportBoardResponse = BasicBoardData | undefined;
+
 
 // ==============
 // Board Requests

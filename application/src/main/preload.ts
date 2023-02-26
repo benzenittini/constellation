@@ -8,6 +8,7 @@ contextBridge.exposeInMainWorld('project', {
     getRecentBoards:   () => ipcRenderer.invoke('project:getRecentBoards'),
     createNewBoard:    () => ipcRenderer.invoke('project:createNewBoard'),
     getRemoteProjects: () => ipcRenderer.invoke('project:getRemoteProjects'),
+    importBoard:       () => ipcRenderer.invoke('project:importBoard'),
 });
 
 contextBridge.exposeInMainWorld('board', {

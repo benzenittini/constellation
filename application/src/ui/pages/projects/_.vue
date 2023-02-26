@@ -8,6 +8,7 @@
                     v-bind:key="board.boardId"
                     v-on:click="openBoard(LOCAL_PROJECT, board.boardId)">{{ board.boardName }} - {{ board.boardId }}</li>
             </ul>
+            <button class="secondary green" v-on:click="importBoard(LOCAL_PROJECT)">Import Board</button>
             <button class="primary green" v-on:click="createBoard(LOCAL_PROJECT)">Create Board</button>
         </div>
 
@@ -27,14 +28,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, ref } from 'vue';
+import { defineComponent, computed, onMounted } from 'vue';
 
 import { useStore } from '../../store/store';
+import { LOCAL_PROJECT } from '../../../../../common/DataTypes/BoardDataTypes';
 
-import { CreateNewBoardAction } from '../../actions/project-actions/CreateNewBoard';
 import { GetBoardsForProjectAction } from '../../actions/project-actions/GetBoardsForProject';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
-import { LOCAL_PROJECT } from '../../../../../common/DataTypes/BoardDataTypes';
+import { CreateNewBoardAction } from '../../actions/project-actions/CreateNewBoard';
+import { ImportBoardAction } from '../../actions/project-actions/ImportBoard';
 
 export default defineComponent({
     setup() {
@@ -63,6 +65,9 @@ export default defineComponent({
 
             createBoard: (projectId: string, boardName?: string) => {
                 new CreateNewBoardAction(projectId, boardName).submit();
+            },
+            importBoard: (projectId: string) => {
+                new ImportBoardAction(projectId).submit();
             },
             openBoard: (projectId: string, boardId: string) => {
                 store.dispatch('setCurrentProjectBoard', { projectId, boardId });
