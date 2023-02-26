@@ -12,7 +12,9 @@ declare global {
             importBoard:       (req: T.ImportBoardRequest)         => Promise<T.ImportBoardResponse>,
         },
         board: {
-            getBoardData: (req: T.GetBoardDataRequest) => Promise<T.GetBoardDataResponse>,
+            getBoardData:       (req: T.GetBoardDataRequest) => Promise<T.GetBoardDataResponse>,
+            updateSaveStatus:   any,
+            clearSaveListeners: any,
             // -- Blocks --
             createBlock:       (req: T.CreateBlockRequest)       => Promise<T.CreateBlockResponse>,
             setBlockPositions: (req: T.SetBlockPositionsRequest) => Promise<T.SetBlockPositionsResponse>,

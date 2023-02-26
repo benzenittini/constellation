@@ -1,5 +1,5 @@
 
-import { contextBridge, ipcRenderer } from 'electron';
+import { IpcRendererEvent, contextBridge, ipcRenderer } from 'electron';
 import * as T from '../../../common/DataTypes/ActionDataTypes';
 
 // NOTE: When adding new bridged items, make sure to update shims-renderer.d.ts with the new properties
@@ -12,7 +12,10 @@ contextBridge.exposeInMainWorld('project', {
 });
 
 contextBridge.exposeInMainWorld('board', {
-    getBoardData: (req: T.GetBoardDataRequest) => ipcRenderer.invoke('board:getBoardData', req),
+    getBoardData:     (req: T.GetBoardDataRequest) => ipcRenderer.invoke('board:getBoardData', req),
+    updateSaveStatus:   (callback: any) => ipcRenderer.on('board:updateSaveStatus', callback),
+    clearSaveListeners: () => ipcRenderer.removeAllListeners('board:updateSaveStatus'),
+
     // -- Blocks --
     createBlock:       (req: T.CreateBlockRequest)       => ipcRenderer.invoke('board:createBlock', req),
     setBlockPositions: (req: T.SetBlockPositionsRequest) => ipcRenderer.invoke('board:setBlockPositions', req),

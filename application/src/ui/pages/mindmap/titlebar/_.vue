@@ -7,22 +7,41 @@
 
         <eic-search class="app-search"></eic-search>
 
-        <div class="go-to-projects" v-on:click="backToProjects()">
-            <eic-svg-arrow-2 width="30" height="30"></eic-svg-arrow-2>
-            <span>Board Selection</span>
+        <div class="mw-right-side">
+            <span class="go-to-projects" v-on:click="backToProjects()">
+                <eic-svg-arrow-2 width="30" height="30"></eic-svg-arrow-2>
+                <span>Board Selection</span>
+            </span>
+            <svg class="save-indicator" width="15" height="15">
+                <title>{{ isSaved ? 'Saved!' : 'Saving...' }}</title>
+                <circle v-bind:class="{ saving: !isSaved, saved: isSaved }"
+                    r="5" cx="7" cy="7" />
+            </svg>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, onUnmounted, ref } from "vue";
 
 import { useStore } from "../../../store/store";
 
 export default defineComponent({
     props: {},
     setup() {
+        let isSaved = ref(true);
+
+        onMounted(() => {
+            (window as any).board.updateSaveStatus((_event: any, newStatus: boolean) => {
+                isSaved.value = newStatus;
+            });
+        });
+        onUnmounted(() => {
+            (window as any).board.clearSaveListeners();
+        });
+
         return {
+            isSaved,
             backToProjects: () => {
                 useStore().dispatch('clearBoardState');
             },
@@ -53,23 +72,34 @@ export default defineComponent({
     }
     .app-search { flex-grow: 1; }
 
-    .go-to-projects {
+    .mw-right-side {
         text-align: right;
-        cursor: pointer;
-        span {
+        .save-indicator {
             vertical-align: middle;
-            margin-left: 5px;
-            color: vars.$gray3;
+            margin: 0 -20px 0 20px;
+            circle {
+                &.saving { fill: vars.$yellow2; }
+                &.saved  { fill: vars.$green1; }
+                stroke: transparent;
+            }
         }
-        .mw-svg-arrow2 {
-            transform: scaleX(-1);
-            transform-origin: center;
-            transition: transform 0.4s;
-            stroke: vars.$gray3;
-        }
-        &:hover {
-            span { color: vars.$gray-very-light; }
-            .mw-svg-arrow2 { stroke: vars.$gray-very-light; transform: translateX(-10px) scaleX(-1); }
+        .go-to-projects {
+            cursor: pointer;
+            span {
+                vertical-align: middle;
+                margin-left: 5px;
+                color: vars.$gray3;
+            }
+            .mw-svg-arrow2 {
+                transform: scaleX(-1);
+                transform-origin: center;
+                transition: transform 0.4s;
+                stroke: vars.$gray3;
+            }
+            &:hover {
+                span { color: vars.$gray-very-light; }
+                .mw-svg-arrow2 { stroke: vars.$gray-very-light; transform: translateX(-10px) scaleX(-1); }
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import { Block, BlockContent, BlockIdAndPosition } from '../DataTypes/BlockDataT
 import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes } from '../DataTypes/FieldDataTypes';
 import * as T from '../DataTypes/ActionDataTypes';
 import * as ArrayUtils from '../utilities/ArrayUtils';
+import { BrowserWindow } from 'electron';
 
 export class BoardDataPersistence {
 
@@ -38,7 +39,7 @@ export class BoardDataPersistence {
 
     /** This function should be called any time this.data is modified! */
     private scheduleSave() {
-        console.log("Saving data..."); // TODO-const : delete
+        BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', false);
         if (this.saveTimer) clearTimeout(this.saveTimer);
         this.saveTimer = setTimeout(() => this.saveData(), 5000);
     }
@@ -46,8 +47,8 @@ export class BoardDataPersistence {
     private saveData() {
         if (this.sourceFile) {
             fs.writeFileSync(this.sourceFile, JSON.stringify(this.data));
+            BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', true);
         }
-        console.log(`Data saved for ${this.sourceFile}!`); // TODO-const : delete
     }
 
     static getInitData() {

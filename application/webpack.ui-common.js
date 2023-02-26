@@ -10,6 +10,7 @@ module.exports = {
     // The "electron-renderer" target is more correct, but it doesn't export "global", which is required by Dragula.
     // Using the "web" target includes it, and works for all our other needs too.
     target: 'web',
+    // target: 'electron-renderer',
 
     entry: {
         renderer: './src/ui/renderer.ts',
