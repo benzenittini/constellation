@@ -7,18 +7,25 @@
 
         <eic-search class="app-search"></eic-search>
 
-        <!-- TODO-const : This is a placeholder until we add a project/board navigator here. -->
-        <div></div>
+        <div class="go-to-projects" v-on:click="backToProjects()">
+            <eic-svg-arrow-2 width="30" height="30"></eic-svg-arrow-2>
+            <span>Board Selection</span>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
+import { useStore } from "../../../store/store";
+
 export default defineComponent({
     props: {},
     setup() {
         return {
+            backToProjects: () => {
+                useStore().dispatch('clearBoardState');
+            },
         }
     }
 })
@@ -45,6 +52,26 @@ export default defineComponent({
         margin: 0 10px;
     }
     .app-search { flex-grow: 1; }
+
+    .go-to-projects {
+        text-align: right;
+        cursor: pointer;
+        span {
+            vertical-align: middle;
+            margin-left: 5px;
+            color: vars.$gray3;
+        }
+        .mw-svg-arrow2 {
+            transform: scaleX(-1);
+            transform-origin: center;
+            transition: transform 0.4s;
+            stroke: vars.$gray3;
+        }
+        &:hover {
+            span { color: vars.$gray-very-light; }
+            .mw-svg-arrow2 { stroke: vars.$gray-very-light; transform: translateX(-10px) scaleX(-1); }
+        }
+    }
 }
 
 </style>

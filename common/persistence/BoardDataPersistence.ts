@@ -47,7 +47,7 @@ export class BoardDataPersistence {
         if (this.sourceFile) {
             fs.writeFileSync(this.sourceFile, JSON.stringify(this.data));
         }
-        console.log("Data saved!"); // TODO-const : delete
+        console.log(`Data saved for ${this.sourceFile}!`); // TODO-const : delete
     }
 
     static getInitData() {
