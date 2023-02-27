@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "description": "A visual organization tool",
-  "author": "<ben.zenittini@gmail.com>",
+  "author": "<ben@zenittini.dev>",
+  "private": true,
   "scripts": {
     "build-ui": "webpack --config webpack.ui-dev.js",
     "watch-ui": "webpack --watch --config webpack.ui-dev.js",

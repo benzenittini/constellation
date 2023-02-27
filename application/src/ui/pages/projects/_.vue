@@ -43,6 +43,8 @@ export default defineComponent({
         const store = useStore();
 
         onMounted(() => {
+            document.title = "Spacia";
+
             // Prep the local project/boards
             store.dispatch('addProject', { projectId: LOCAL_PROJECT, projectName: "Local Boards", boards: {} });
             new GetBoardsForProjectAction(LOCAL_PROJECT).submit();
