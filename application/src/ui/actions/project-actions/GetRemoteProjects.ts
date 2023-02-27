@@ -10,7 +10,7 @@ export class GetRemoteProjectsAction extends Action {
 
     submit(callback: (data: GetRemoteProjectsResponse) => void): void {
         // This request never gets sent to the server - list of remote projects is stored locally.
-        window.project.getRemoteProjects()
+        window.config.getRemoteProjects()
             .then((resp) => callback(resp));
     }
 

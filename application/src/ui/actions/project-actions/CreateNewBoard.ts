@@ -23,7 +23,7 @@ export class CreateNewBoardAction extends Action {
             // TODO-const : Send action over REST
         } else {
             // If local project, make the IPC request
-            window.project.createNewBoard()
+            window.config.createNewBoard()
                 .then((resp) => this.processResponse(resp));
         }
     }

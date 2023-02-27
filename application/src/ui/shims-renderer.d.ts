@@ -5,7 +5,7 @@ import * as T from "../../../common/DataTypes/ActionDataTypes";
 /** Tells typescript what properties are available on the global "window" object. Useful for preloads. */
 declare global {
     interface Window {
-        project: {
+        config: {
             getRecentBoards:   (req: T.GetBoardsForProjectRequest) => Promise<T.GetBoardsForProjectResponse>,
             createNewBoard:    (req: T.CreateNewBoardRequest)      => Promise<T.CreateNewBoardResponse>,
             getRemoteProjects: (req: T.GetRemoteProjectsRequest)   => Promise<T.GetRemoteProjectsResponse>,

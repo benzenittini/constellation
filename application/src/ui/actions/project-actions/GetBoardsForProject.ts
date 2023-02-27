@@ -21,7 +21,7 @@ export class GetBoardsForProjectAction extends Action {
             // TODO-const : Send action over REST
         } else {
             // If local project, make the IPC request
-            window.project.getRecentBoards()
+            window.config.getRecentBoards()
                 .then((boards) => this.processResponse(boards));
         }
     }

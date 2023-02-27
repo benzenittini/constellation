@@ -4,19 +4,19 @@ import fs from 'fs';
 import path from 'path';
 
 import { BoardDataPersistence } from "../../../common/persistence/BoardDataPersistence";
-import * as GlobalConfig from "./GlobalConfig";
+import * as ConfigDataPersistence from "../../../common/persistence/ConfigDataPersistence";
 import * as T from "../../../common/DataTypes/ActionDataTypes";
 
 
-export function registerProjectHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('project:getRecentBoards',   () => getRecentBoards());
-    ipcMain.handle('project:createNewBoard',    () => createNewBoard());
-    ipcMain.handle('project:getRemoteProjects', () => getRemoteProjects());
-    ipcMain.handle('project:importBoard',       () => importBoard());
+export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
+    ipcMain.handle('config:getRecentBoards',   () => getRecentBoards());
+    ipcMain.handle('config:createNewBoard',    () => createNewBoard());
+    ipcMain.handle('config:getRemoteProjects', () => getRemoteProjects());
+    ipcMain.handle('config:importBoard',       () => importBoard());
 }
 
 async function getRecentBoards(): Promise<T.GetBoardsForProjectResponse> {
-    return GlobalConfig.config.localBoards.map(filepath => ({
+    return ConfigDataPersistence.config.localBoards.map(filepath => ({
         boardId: filepath,
         boardName: path.basename(filepath, '.mw'),
     }));
@@ -36,7 +36,7 @@ async function createNewBoard(): Promise<T.CreateNewBoardResponse> {
     if (!canceled && filePath) {
         // Create new file with initial data
         fs.writeFileSync(filePath, JSON.stringify(BoardDataPersistence.getInitData()));
-        GlobalConfig.addLocalBoard(filePath);
+        ConfigDataPersistence.addLocalBoard(filePath);
         // Return board data, where ID is filepath and name is filename
         return {
             boardId: filePath,
@@ -68,7 +68,7 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
 
     if (!canceled && filePaths.length > 0) {
         const chosenFile = filePaths[0];
-        GlobalConfig.addLocalBoard(chosenFile);
+        ConfigDataPersistence.addLocalBoard(chosenFile);
         // Return board data, where ID is filepath and name is filename
         return {
             boardId: chosenFile,

@@ -38,14 +38,16 @@ export class BoardDataPersistence {
 
     /** This function should be called any time this.data is modified! */
     private scheduleSave() {
-        BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', false);
         if (this.saveTimer) clearTimeout(this.saveTimer);
         this.saveTimer = setTimeout(() => this.saveData(), 3000);
+        // BrowserWindow.getFocusedWindow() should be undefined on the server, making this a no-op.
+        BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', false);
     }
 
     private saveData() {
         if (this.sourceFile) {
             fs.writeFileSync(this.sourceFile, JSON.stringify(this.data));
+            // BrowserWindow.getFocusedWindow() should be undefined on the server, making this a no-op.
             BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', true);
         }
     }

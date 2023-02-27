@@ -16,7 +16,7 @@ export class ImportBoardAction extends Action {
     submit(): void {
         if (this.projectId === LOCAL_PROJECT) {
             // If local project, make the IPC request. (Remote projects you can't import a board into from the UI.)
-            window.project.importBoard()
+            window.config.importBoard()
                 .then((resp) => this.processResponse(resp));
         }
     }

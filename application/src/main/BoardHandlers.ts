@@ -2,7 +2,7 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-import * as GlobalConfig from "./GlobalConfig";
+import * as ConfigDataPersistence from "../../../common/persistence/ConfigDataPersistence";
 import * as T from '../../../common/DataTypes/ActionDataTypes';
 
 import { BoardDataPersistence } from '../../../common/persistence/BoardDataPersistence';
@@ -37,13 +37,13 @@ async function getBoardData({ boardId: filepath }: T.GetBoardDataRequest): Promi
             return persistence.getBoardData();
         } catch(err) {
             // TODO-const : Log an error
-            GlobalConfig.removeLocalBoard(filepath)
+            ConfigDataPersistence.removeLocalBoard(filepath)
             return undefined;
         }
     }
 
     // TODO-const : Log an error
-    GlobalConfig.removeLocalBoard(filepath)
+    ConfigDataPersistence.removeLocalBoard(filepath)
     return undefined;
 }
 

@@ -2,9 +2,9 @@
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import path from 'path';
 
-import { registerProjectHandlers } from './ProjectHandlers';
+import { registerConfigHandlers } from './ConfigHandlers';
 import { registerBoardHandlers } from './BoardHandlers';
-import { loadConfigFile } from './GlobalConfig';
+import { loadConfigFile } from '../../../common/persistence/ConfigDataPersistence';
 
 const createWindow = () => {
     // TODO-const : Remove all "leftMonitor" lines!
@@ -20,7 +20,7 @@ const createWindow = () => {
     });
     win.setMenu(null);
 
-    registerProjectHandlers(ipcMain);
+    registerConfigHandlers(ipcMain);
     registerBoardHandlers(ipcMain);
 
     win.webContents.openDevTools();
