@@ -5,11 +5,13 @@ import express from 'express';
 // -- Internal --
 import * as Rest from './RestHandlers';
 import { properties, populateProperties } from './PropertyLoader';
+import { initializeLogger, logger } from './Logger';
 
 (async () => {
     try {
-        // Set up the property loader
+        // Set up the property loader and logger
         populateProperties(process.argv[2]);
+        initializeLogger(properties.log_level, properties.log_dir);
 
         // ========================
         // Datastore Initialization
@@ -67,14 +69,10 @@ import { properties, populateProperties } from './PropertyLoader';
         // --------------------
 
         app.listen(properties.server_port, () => {
-            // TODO-const : Logger
-            console.log(`Web server listening at http://${properties.server_host}:${properties.server_port}`);
-            // logger.info(`Web server listening at http://${server.host}:${server.port}`);
+            logger.info(`Web server listening at http://${properties.server_host}:${properties.server_port}`);
         });
 
     } catch(err) {
-        // TODO-const : Logger
-        console.log(err);
-        // logger.error(err);
+        logger.error(err);
     }
 })();

@@ -2,8 +2,9 @@
 import fs from 'fs';
 
 // Keep these in sync!
-const VALID_PROPS: (keyof Properties)[] = [ 'log_dir', 'board_dir', 'backup_dir', 'user_auth', 'server_host', 'server_port' ];
+const VALID_PROPS: (keyof Properties)[] = [ 'log_level', 'log_dir', 'board_dir', 'backup_dir', 'user_auth', 'server_host', 'server_port' ];
 type Properties = {
+    log_level: string,
     log_dir: string,
     board_dir: string,
     backup_dir: string,
@@ -13,6 +14,7 @@ type Properties = {
 };
 
 export const properties: Properties = {
+    log_level:   '',
     log_dir:     '',
     board_dir:   '',
     backup_dir:  '',
@@ -26,15 +28,25 @@ export function populateProperties(configFile: string) {
         // Parse the file
         let keyValues = fs.readFileSync(configFile, 'utf-8')
             .split('\n')
-            .map(line => line.trim())
-            .filter(line => !line.startsWith('#')) // Remove comments
-            .map(line => line.split("="))          // Split into key/values
-            .filter(kv => kv.length === 2)         // Remove incomplete key/values
-            .map(kv => ({                          // Parse into useful objects
+            // Remove comments
+            .filter(line => !line.startsWith('#'))
+            // Remove inline comments
+            .map(line => {
+                let commentIndex = line.indexOf('#');
+                return commentIndex === -1
+                    ? line : line.substring(0, commentIndex);
+            })
+            // Split into key/values
+            .map(line => line.split("="))
+            // Remove incomplete key/values
+            .filter(kv => kv.length === 2)
+            // Parse into useful objects
+            .map(kv => ({
                 key: (kv[0].trim() as keyof Properties),
                 value: kv[1].trim()
             }))
-            .filter(kv => VALID_PROPS.includes(kv.key)); // Remove invalid keys
+            // Remove invalid keys
+            .filter(kv => VALID_PROPS.includes(kv.key));
 
         // Save into our properties object
         for (let {key, value} of keyValues) {
@@ -44,14 +56,32 @@ export function populateProperties(configFile: string) {
         // Validate our properties
         for (let prop of VALID_PROPS) {
             if (properties[prop as keyof Properties].trim() === '') {
-                // TODO-const : logger
-                console.log(`Required property was not properly set: ${prop}`);
+                console.error(`Required property was not properly set: ${prop}`);
                 throw new Error();
             }
         }
+
+        // Create any directories/files that don't exist.
+        createDirIfNeeded(properties.log_dir);
+        createDirIfNeeded(properties.board_dir);
+        createDirIfNeeded(properties.backup_dir);
+        if (!fs.existsSync(properties.user_auth)) {
+            const contents = {
+                registrationKeys: [],
+                authorizedUsers: [],
+                revokedUsers: [],
+            }
+            fs.writeFileSync(properties.user_auth, JSON.stringify(contents));
+        }
     } catch (err) {
-        // TODO-const : logger
-        console.log("Failed to read/parse provided properties file.");
+        console.error(err);
+        console.error("Failed to read/parse provided properties file.");
         process.exit(1);
+    }
+}
+
+function createDirIfNeeded(dir: string) {
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir, { recursive: true });
     }
 }
