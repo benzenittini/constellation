@@ -1,15 +1,15 @@
 
-// -- Server Setup --
+// -- Third-Party Libraries --
 import express from 'express';
-// TODO-const : Do we need session cookies?
-// import cookieSession from 'cookie-session';
 
-// -- REST Endpoint Setup --
+// -- Internal --
 import * as Rest from './RestHandlers';
+import { properties, populateProperties } from './PropertyLoader';
 
 (async () => {
     try {
-        // TODO-const : Set up property loader
+        // Set up the property loader
+        populateProperties(process.argv[2]);
 
         // ========================
         // Datastore Initialization
@@ -54,10 +54,6 @@ import * as Rest from './RestHandlers';
         // Required for receiving JSON bodies
         app.use(express.json());
 
-        // Session cookies
-        // TODO-const : Do we need session cookies?
-        // app.use(cookieSession({ ...properties.shared.sessionCookie, sameSite: 'strict' }));
-
 
         // ==========================
         // REST Endpoint Registration
@@ -70,12 +66,9 @@ import * as Rest from './RestHandlers';
         // Here we go! (Wheee!)
         // --------------------
 
-        // TODO-const : load host:port from properties
-        // let server = properties.web.server;
-        let server = { host: 'localhost', port: '3000' };
-        app.listen(server.port, () => {
+        app.listen(properties.server_port, () => {
             // TODO-const : Logger
-            console.log(`Web server listening at http://${server.host}:${server.port}`);
+            console.log(`Web server listening at http://${properties.server_host}:${properties.server_port}`);
             // logger.info(`Web server listening at http://${server.host}:${server.port}`);
         });
 
