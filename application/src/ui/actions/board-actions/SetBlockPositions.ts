@@ -19,16 +19,17 @@ export class SetBlockPositionsAction extends Action {
     }
 
     submit(): void {
+        // Optimistically, assume it's going to work. Otherwise, we get some really spazzy movements.
+        this.processResponse(this.blocksAndPositions);
+
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
             // TODO-const : Send GetBoardData over websocket
-            // Optimistically, assume it's going to work.
-            this.processResponse(this.blocksAndPositions);
         } else {
             // If local project, make the IPC request
             window.board.setBlockPositions({
                 blocksAndPositions: this.blocksAndPositions
-            }).then((resp) => this.processResponse(resp));
+            });
         }
     }
 

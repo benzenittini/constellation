@@ -7,14 +7,14 @@
                     <div class="mw-controls-inner-flex">
                         <figure>
                             <div class="fig-icon">
-                                <img src="/graphics/mouse-left-click.png">
+                                <img src="../../graphics/mouse-left-click.png">
                             </div>
                             <figcaption>Left-click to select a block</figcaption>
                         </figure>
                         <figure>
                             <div class="fig-icon">
                                 <span><eic-keyboard-key mwKeyText="Shift"></eic-keyboard-key></span>
-                                <img src="/graphics/mouse-left-click.png">
+                                <img src="../../graphics/mouse-left-click.png">
                             </div>
                             <figcaption>Hold shift and left-click to toggle a selection</figcaption>
                         </figure>
@@ -40,7 +40,7 @@
                     <h2>Jump to Block</h2>
                     <figure>
                         <div class="fig-icon">
-                            <img src="/graphics/mouse-left-click.png">
+                            <img src="../../graphics/mouse-left-click.png">
                             <span class="x2-text">x2</span>
                         </div>
                         <figcaption class="long-caption">Double-click a block to jump to its location on the mind map</figcaption>

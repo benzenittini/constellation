@@ -19,6 +19,8 @@
                 <eic-canvas></eic-canvas>
             </div>
         </div>
+
+        <eic-slide-open-tray></eic-slide-open-tray>
     </div>
 </template>
 

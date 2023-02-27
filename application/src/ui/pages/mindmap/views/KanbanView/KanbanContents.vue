@@ -326,7 +326,6 @@ export default defineComponent({
 
 .mw-app-kanban-contents {
     background: vars.$gray1;
-    border-radius: vars.$radius-xlarge vars.$radius-xlarge 0 0;
 
     h2 { color: vars.$gray7; font-weight: bold; }
 

@@ -7,9 +7,6 @@
             <eic-page-mindmap v-if="hasBoardOpen"></eic-page-mindmap>
             <eic-page-projects v-else></eic-page-projects>
         </main>
-
-        <!-- TODO-const : Re-enable slide-open-tray on app page..? -->
-        <!-- <eic-slide-open-tray></eic-slide-open-tray> -->
     </div>
 </template>
 

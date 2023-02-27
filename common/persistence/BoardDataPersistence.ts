@@ -1,5 +1,4 @@
 
-
 import fs from 'fs';
 
 import { BoardData, TemplateClassification } from '../DataTypes/BoardDataTypes';
@@ -41,7 +40,7 @@ export class BoardDataPersistence {
     private scheduleSave() {
         BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', false);
         if (this.saveTimer) clearTimeout(this.saveTimer);
-        this.saveTimer = setTimeout(() => this.saveData(), 5000);
+        this.saveTimer = setTimeout(() => this.saveData(), 3000);
     }
 
     private saveData() {

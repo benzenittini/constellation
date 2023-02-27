@@ -90,7 +90,6 @@ export default defineComponent({
 .mw-app-filter-contents {
 
     background: vars.$gray1;
-    border-radius: vars.$radius-xlarge vars.$radius-xlarge 0 0;
     display: flex;
 
     $block-width: 250px;
