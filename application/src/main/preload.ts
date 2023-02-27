@@ -5,7 +5,7 @@ import * as T from '../../../common/DataTypes/ActionDataTypes';
 // NOTE: When adding new bridged items, make sure to update shims-renderer.d.ts with the new properties
 
 contextBridge.exposeInMainWorld('config', {
-    getRecentBoards:   () => ipcRenderer.invoke('config:getRecentBoards'),
+    getProjectData:    () => ipcRenderer.invoke('config:getProjectData'),
     createNewBoard:    () => ipcRenderer.invoke('config:createNewBoard'),
     getRemoteProjects: () => ipcRenderer.invoke('config:getRemoteProjects'),
     importBoard:       () => ipcRenderer.invoke('config:importBoard'),

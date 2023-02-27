@@ -6,20 +6,28 @@ import path from 'path';
 import { BoardDataPersistence } from "../../../common/persistence/BoardDataPersistence";
 import * as ConfigDataPersistence from "../../../common/persistence/ConfigDataPersistence";
 import * as T from "../../../common/DataTypes/ActionDataTypes";
+import { mapify } from "../../../common/utilities/ArrayUtils";
+import { BasicBoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME } from "../../../common/DataTypes/BoardDataTypes";
 
 
 export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('config:getRecentBoards',   () => getRecentBoards());
+    ipcMain.handle('config:getProjectData',    () => getProjectData());
     ipcMain.handle('config:createNewBoard',    () => createNewBoard());
     ipcMain.handle('config:getRemoteProjects', () => getRemoteProjects());
     ipcMain.handle('config:importBoard',       () => importBoard());
 }
 
-async function getRecentBoards(): Promise<T.GetBoardsForProjectResponse> {
-    return ConfigDataPersistence.config.localBoards.map(filepath => ({
+async function getProjectData(): Promise<T.GetProjectDataResponse> {
+    let boards = ConfigDataPersistence.config.localBoards.map(filepath => ({
         boardId: filepath,
         boardName: path.basename(filepath, '.mw'),
     }));
+
+    return {
+        projectId: LOCAL_PROJECT,
+        projectName: LOCAL_PROJECT_NAME,
+        boards: mapify<BasicBoardData>(boards, 'boardId'),
+    };
 }
 
 async function createNewBoard(): Promise<T.CreateNewBoardResponse> {

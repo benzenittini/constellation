@@ -1,6 +1,7 @@
 
 import { GetRemoteProjectsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { Action } from "../Action";
+import { GetProjectDataAction } from "./GetProjectData";
 
 export class GetRemoteProjectsAction extends Action {
 
@@ -8,14 +9,16 @@ export class GetRemoteProjectsAction extends Action {
         super();
     }
 
-    submit(callback: (data: GetRemoteProjectsResponse) => void): void {
+    submit(): void {
         // This request never gets sent to the server - list of remote projects is stored locally.
         window.config.getRemoteProjects()
-            .then((resp) => callback(resp));
+            .then((resp) => this.processResponse(resp));
     }
 
-    processResponse(): void {
-        // no-op - it's handled in submit's "callback" parameter
+    processResponse(resp: GetRemoteProjectsResponse): void {
+        resp.forEach(remote => {
+            new GetProjectDataAction(remote).submit();
+        });
     }
 
 }

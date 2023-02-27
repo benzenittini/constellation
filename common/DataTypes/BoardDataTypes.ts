@@ -11,6 +11,7 @@ import { ClassificationDefinition, FieldDefinition, FieldType, PossibleValueDefi
 // -----------
 
 export const LOCAL_PROJECT = "local";
+export const LOCAL_PROJECT_NAME = "Local Boards";
 
 export interface BasicProjectData {
     projectId: string;

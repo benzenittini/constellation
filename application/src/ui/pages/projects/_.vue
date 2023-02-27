@@ -33,7 +33,7 @@ import { defineComponent, computed, onMounted } from 'vue';
 import { useStore } from '../../store/store';
 import { LOCAL_PROJECT } from '../../../../../common/DataTypes/BoardDataTypes';
 
-import { GetBoardsForProjectAction } from '../../actions/project-actions/GetBoardsForProject';
+import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
 import { CreateNewBoardAction } from '../../actions/project-actions/CreateNewBoard';
 import { ImportBoardAction } from '../../actions/project-actions/ImportBoard';
@@ -46,16 +46,10 @@ export default defineComponent({
             document.title = "Spacia";
 
             // Prep the local project/boards
-            store.dispatch('addProject', { projectId: LOCAL_PROJECT, projectName: "Local Boards", boards: {} });
-            new GetBoardsForProjectAction(LOCAL_PROJECT).submit();
+            new GetProjectDataAction().submit();
 
             // Prep the remote projects/boards
-            new GetRemoteProjectsAction().submit((projectList) => {
-                projectList.forEach(project => {
-                    store.dispatch('addProject', project);
-                    new GetBoardsForProjectAction(project.projectId).submit();
-                })
-            });
+            new GetRemoteProjectsAction().submit();
         });
 
 

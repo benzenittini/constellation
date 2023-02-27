@@ -6,5 +6,10 @@ export type UserFile = {
 
 export type ConfigFile = {
     localBoards: string[];
-    remoteProjects: any[]; // TODO-const : properly set the server config data type
+    remoteProjects: RemoteProject[];
 };
+
+export type RemoteProject = {
+    serverUrl: string; // Includes port.
+    credentials: string;
+}

@@ -4,20 +4,21 @@ import { BasicBoardData, BasicProjectData, BoardData } from "./BoardDataTypes";
 import { ChangedFieldValue, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "./FieldDataTypes";
 import { BoundingBox, TypedMap } from "./GenericDataTypes";
 import { BaseViewConfig, ViewConfig } from "./ViewDataTypes";
+import { RemoteProject } from "./FileDataTypes";
 
 // ================
 // Project Requests
 // ----------------
 
-export type GetBoardsForProjectRequest = void;
-export type GetBoardsForProjectResponse = BasicBoardData[];
+export type GetProjectDataRequest = void;
+export type GetProjectDataResponse = BasicProjectData;
 
 // Only remote boards get a name.
 export type CreateNewBoardRequest = void | { boardName?: string };
 export type CreateNewBoardResponse = BasicBoardData | undefined;
 
 export type GetRemoteProjectsRequest = void;
-export type GetRemoteProjectsResponse = BasicProjectData[];
+export type GetRemoteProjectsResponse = RemoteProject[];
 
 export type ImportBoardRequest = void;
 export type ImportBoardResponse = BasicBoardData | undefined;

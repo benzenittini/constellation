@@ -6,7 +6,7 @@ import * as T from "../../../common/DataTypes/ActionDataTypes";
 declare global {
     interface Window {
         config: {
-            getRecentBoards:   (req: T.GetBoardsForProjectRequest) => Promise<T.GetBoardsForProjectResponse>,
+            getProjectData:    (req: T.GetProjectDataRequest)      => Promise<T.GetProjectDataResponse>,
             createNewBoard:    (req: T.CreateNewBoardRequest)      => Promise<T.CreateNewBoardResponse>,
             getRemoteProjects: (req: T.GetRemoteProjectsRequest)   => Promise<T.GetRemoteProjectsResponse>,
             importBoard:       (req: T.ImportBoardRequest)         => Promise<T.ImportBoardResponse>,
