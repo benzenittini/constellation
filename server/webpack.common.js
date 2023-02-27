@@ -10,7 +10,8 @@ module.exports = {
     externals: [nodeExternals()],
 
     entry: {
-        server: './src/index.ts',
+        'server': './src/server.ts',
+        'user-management': './src/user-management.ts',
     },
 
     module: {

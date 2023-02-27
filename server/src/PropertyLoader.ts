@@ -1,6 +1,8 @@
 
 import fs from 'fs';
 
+import { UserFile } from '../../common/DataTypes/FileDataTypes';
+
 // Keep these in sync!
 const VALID_PROPS: (keyof Properties)[] = [ 'log_level', 'log_dir', 'board_dir', 'backup_dir', 'user_auth', 'server_host', 'server_port' ];
 type Properties = {
@@ -66,10 +68,9 @@ export function populateProperties(configFile: string) {
         createDirIfNeeded(properties.board_dir);
         createDirIfNeeded(properties.backup_dir);
         if (!fs.existsSync(properties.user_auth)) {
-            const contents = {
+            const contents: UserFile = {
                 registrationKeys: [],
                 authorizedUsers: [],
-                revokedUsers: [],
             }
             fs.writeFileSync(properties.user_auth, JSON.stringify(contents));
         }
