@@ -1,7 +1,5 @@
 
-import path from 'path';
 import fs from 'fs';
-import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UserFile } from '../../common/DataTypes/FileDataTypes';
@@ -10,9 +8,8 @@ import { properties } from './PropertyLoader';
 
 let lastLoadedData: UserFile | undefined = undefined;
 
-function saveConfig(newConfig: UserFile) {
-    lastLoadedData = newConfig;
-    fs.writeFileSync(properties.user_data, JSON.stringify(newConfig));
+function saveConfig() {
+    fs.writeFileSync(properties.user_data, JSON.stringify(lastLoadedData));
 }
 
 function loadConfigFile() {
@@ -27,16 +24,17 @@ function loadConfigFile() {
 }
 
 export function consumeRegistrationKey(key: string, clientName: string, token: string) {
-    let data = loadConfigFile();
-    let keyIndex = data.registrationKeys.indexOf(key);
+    if (!lastLoadedData) loadConfigFile();
+
+    let keyIndex = lastLoadedData!.registrationKeys.indexOf(key);
     if (keyIndex === -1) {
         throw new Error("Registration key not found.");
     }
 
-    data.registrationKeys.splice(keyIndex, 1);
-    data.authorizedUsers.push({ clientId: uuidv4(), clientName, token });
+    lastLoadedData!.registrationKeys.splice(keyIndex, 1);
+    lastLoadedData!.authorizedUsers.push({ clientId: uuidv4(), clientName, token, registrationDate: new Date().toISOString() });
 
-    saveConfig(data);
+    saveConfig();
 }
 
 export function verifyCreds(token: string | undefined): boolean {
@@ -51,4 +49,14 @@ export function verifyCreds(token: string | undefined): boolean {
     }
 
     return true;
+}
+
+export function removeUserFromProject(token: string | undefined): void {
+    if (!lastLoadedData) loadConfigFile();
+
+    let index = lastLoadedData!.authorizedUsers.findIndex(user => user.token === token);
+    if (index !== -1) {
+        lastLoadedData!.authorizedUsers.splice(index, 1);
+        saveConfig();
+    }
 }

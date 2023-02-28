@@ -4,7 +4,7 @@ import fs from 'fs';
 import { app } from 'electron';
 
 import { ConfigFile } from '../../common/DataTypes/FileDataTypes';
-import { AddRemoteProjectRequest } from '../DataTypes/ActionDataTypes';
+import { AddRemoteProjectRequest, RemoveRemoteProjectRequest } from '../DataTypes/ActionDataTypes';
 
 const CONFIG_FILE_PATH = path.join(app.getPath('userData'), 'constellation.config');
 
@@ -35,8 +35,8 @@ export function removeLocalBoard(boardFilePath: string) {
     let index = config.localBoards.indexOf(boardFilePath);
     if (index !== -1) {
         config.localBoards.splice(index, 1);
+        saveConfig();
     }
-    saveConfig();
 }
 
 export function getRemoteServers() {
@@ -46,4 +46,12 @@ export function getRemoteServers() {
 export function addRemoteServer({ serverUrl, credentials }: AddRemoteProjectRequest) {
     config.remoteProjects.push({ serverUrl, credentials });
     saveConfig();
+}
+
+export function removeRemoteServer({ remoteProject }: RemoveRemoteProjectRequest) {
+    let index = config.remoteProjects.findIndex(proj => proj.serverUrl === remoteProject.serverUrl && proj.credentials === remoteProject.credentials);
+    if (index !== -1) {
+        config.remoteProjects.splice(index, 1);
+        saveConfig();
+    }
 }

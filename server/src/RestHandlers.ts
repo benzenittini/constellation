@@ -41,6 +41,20 @@ export async function postUser(req: Request, res: Response) {
     }
 }
 
+export async function deleteUser(req: Request, res: Response) {
+    try {
+        let jwt = getJwt(req);
+
+        UserDataPersistence.removeUserFromProject(jwt);
+
+        // Return the projectId to the client
+        res.json({});
+    } catch(err) {
+        logger.error(err);
+        res.status(500).json({});
+    }
+}
+
 export async function getProject(req: Request, res: Response) {
     try {
         requireAuthorization(req, res, async () => {

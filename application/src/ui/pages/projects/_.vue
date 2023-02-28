@@ -23,6 +23,7 @@
                     v-on:click="openBoard(project.projectId, board.boardId)">{{ board.boardName }}</li>
             </ul>
             <!-- TODO-const : Allow creating remote boards. Requires a board name. -->
+            <button class="primary red" v-on:click="leaveRemoteProject(project.projectId)">Leave Project</button>
         </div>
 
         <button class="primary pink" v-on:click="addRemoteProject()">Add Remote Project</button>
@@ -40,6 +41,7 @@ import { GetProjectDataAction } from '../../actions/project-actions/GetProjectDa
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
 import { CreateNewBoardAction } from '../../actions/project-actions/CreateNewBoard';
 import { ImportBoardAction } from '../../actions/project-actions/ImportBoard';
+import { LeaveProjectAction } from '../../actions/project-actions/LeaveProject';
 import { JoinProjectAction } from '../../actions/project-actions/JoinProject';
 
 export default defineComponent({
@@ -71,6 +73,15 @@ export default defineComponent({
             },
             openBoard: (projectId: string, boardId: string) => {
                 store.dispatch('setCurrentProjectBoard', { projectId, boardId });
+            },
+            leaveRemoteProject: (projectId: string) => {
+                let remoteProject = store.getters.getRemoteProjectById(projectId);
+                if (remoteProject) {
+                    new LeaveProjectAction(JSON.parse(JSON.stringify(remoteProject)), projectId).submit();
+                } else {
+                    // TODO-const : shouldn't ever come up ... throw an error if it does..? or ignore?
+                    console.error("Unexpected error when leaving a remote project.");
+                }
             },
             addRemoteProject: () => {
                 const MODAL_ID = 'add-remote-project';

@@ -34,7 +34,11 @@ export class GetProjectDataAction extends Action {
     }
 
     processResponse(resp: GetProjectDataResponse): void {
-        useStore().dispatch('addProject', resp);
+        const store = useStore();
+        store.dispatch('addProject', resp);
+        if (this.remoteProject) {
+            store.dispatch('registerRemoteProject', { remoteProject: this.remoteProject, projectId: resp.projectId });
+        }
     }
 
 }

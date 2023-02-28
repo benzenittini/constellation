@@ -1,5 +1,6 @@
 
 import { GetRemoteProjectsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { useStore } from "../../store/store";
 import { Action } from "../Action";
 import { GetProjectDataAction } from "./GetProjectData";
 
@@ -16,7 +17,9 @@ export class GetRemoteProjectsAction extends Action {
     }
 
     processResponse(resp: GetRemoteProjectsResponse): void {
+        const store = useStore();
         resp.forEach(remote => {
+            store.dispatch('registerRemoteProject', {remoteProject: remote});
             new GetProjectDataAction(remote).submit();
         });
     }

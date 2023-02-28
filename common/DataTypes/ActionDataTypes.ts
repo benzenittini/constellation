@@ -26,8 +26,14 @@ export type ImportBoardResponse = BasicBoardData | undefined;
 export type JoinProjectRequest = { registrationKey: string, clientName: string };
 export type JoinProjectResponse = { token: string };
 
+export type LeaveProjectRequest = void;
+export type LeaveProjectResponse = {};
+
 export type AddRemoteProjectRequest = { serverUrl: string, credentials: string };
 export type AddRemoteProjectResponse = void;
+
+export type RemoveRemoteProjectRequest = { remoteProject: RemoteProject};
+export type RemoveRemoteProjectResponse = void;
 
 
 // ==============

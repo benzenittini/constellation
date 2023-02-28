@@ -1,5 +1,6 @@
 
 import { BasicBoardData, BasicProjectData, CurrentProjectBoard } from "../../../../../common/DataTypes/BoardDataTypes";
+import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { AugmentedActionContext, GetterProperties } from "../StoreTypes"
 
@@ -11,6 +12,7 @@ import { AugmentedActionContext, GetterProperties } from "../StoreTypes"
 // -- State --
 export interface GeneralDataState {
     projectData: TypedMap<BasicProjectData>;
+    remoteProjectLookup: { remoteProject: RemoteProject, projectId?: string }[];
     currentProjectBoard: CurrentProjectBoard | undefined;
     uiFlags: { disablePointerEvents: boolean };
 }
@@ -26,6 +28,9 @@ export type GeneralDataMutations<S = GeneralDataState> = {
     removeProject       (state: S, projectId: string): void;
     setBoardsForProject (state: S, data: { projectId: string, boards: TypedMap<BasicBoardData> }): void;
     addBoardToProject   (state: S, data: { projectId: string, boardData: BasicBoardData }): void;
+
+    registerRemoteProject   (state: S, data: { remoteProject: RemoteProject, projectId?: string }): void;
+    deregisterRemoteProject (state: S, data: { remoteProject: RemoteProject }): void;
 
     // UI Flags
     disablePointerEvents (state: S): void;
@@ -45,6 +50,9 @@ export interface GeneralDataActions {
     setBoardsForProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boards: TypedMap<BasicBoardData> }): void;
     addBoardToProject   ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardData: BasicBoardData }): void;
 
+    registerRemoteProject   ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject, projectId?: string }): void;
+    deregisterRemoteProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject }): void;
+
     // UI Flags
     setDisablePointerEvents ({ commit }: AugmentedActionContext<GeneralDataState>, disablePointerEvents: boolean): void;
 }
@@ -54,4 +62,5 @@ export type GeneralDataGetters<S = GeneralDataState> = {
     currentProjectBoard   (state: S, getters: GetterProperties): CurrentProjectBoard | undefined;
     isCurrentBoardRemote  (state: S, getters: GetterProperties): boolean;
     pointerEventsDisabled (state: S, getters: GetterProperties): boolean;
+    getRemoteProjectById  (state: S, getters: GetterProperties): (projectId: string) => RemoteProject | undefined;
 }

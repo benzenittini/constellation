@@ -61,8 +61,9 @@ import { initializeLogger, logger } from './Logger';
         // REST Endpoint Registration
         // --------------------------
 
-        app.post('/user',    Rest.postUser);   // User joining this project
-        app.get ('/project', Rest.getProject); // Fetching a project's name, id, and boards
+        app.post  ('/user',    Rest.postUser);   // User joining this project
+        app.delete('/user',    Rest.deleteUser); // User leaving this project
+        app.get   ('/project', Rest.getProject); // Fetching a project's name, id, and boards
 
 
         // ====================

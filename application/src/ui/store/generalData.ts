@@ -11,6 +11,7 @@ import { LOCAL_PROJECT } from "../../../../common/DataTypes/BoardDataTypes";
 
 const generalDataState: GeneralDataState = {
     projectData: {},
+    remoteProjectLookup: [],
     currentProjectBoard: undefined,
     uiFlags: {
         // When dragging on the canvas, we disable all pointer events on other UI components
@@ -28,13 +29,15 @@ const generalDataState: GeneralDataState = {
 const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutations = {
     resetStore (state) {
         state.projectData         = {};
+        state.remoteProjectLookup = [];
         state.currentProjectBoard = undefined;
         state.uiFlags             = { disablePointerEvents: false }
     },
     clearBoardState (state) {
-        state.projectData = {};
+        state.projectData         = {};
+        state.remoteProjectLookup = [];
         state.currentProjectBoard = undefined;
-        state.uiFlags = { disablePointerEvents: false }
+        state.uiFlags             = { disablePointerEvents: false }
     },
 
     setCurrentProjectBoard (state, currentProjectBoard) { state.currentProjectBoard = currentProjectBoard;   },
@@ -50,6 +53,21 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
     },
     addBoardToProject (state, {projectId, boardData}) {
         state.projectData[projectId].boards[boardData.boardId] = boardData;
+    },
+
+    registerRemoteProject (state, { remoteProject, projectId }) {
+        let index = state.remoteProjectLookup.findIndex(proj => proj.remoteProject.serverUrl === remoteProject.serverUrl);
+        if (index !== -1) {
+            state.remoteProjectLookup[index] = { remoteProject, projectId };
+        } else {
+            state.remoteProjectLookup.push({ remoteProject, projectId });
+        }
+    },
+    deregisterRemoteProject (state, { remoteProject }) {
+        let index = state.remoteProjectLookup.findIndex(proj => proj.remoteProject.serverUrl === remoteProject.serverUrl);
+        if (index !== -1) {
+            state.remoteProjectLookup.splice(index, 1);
+        }
     },
 
     // UI Flags
@@ -74,6 +92,9 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
     setBoardsForProject ({ commit }, { projectId, boards })      { commit('setBoardsForProject', { projectId, boards }); },
     addBoardToProject   ({ commit }, { projectId, boardData })   { commit('addBoardToProject', { projectId, boardData }); },
 
+    registerRemoteProject   ({ commit }, data) { commit('registerRemoteProject', data); },
+    deregisterRemoteProject ({ commit }, data) { commit('deregisterRemoteProject', data); },
+
     // UI Flags
     setDisablePointerEvents ({ commit }, disablePointerEvents) {
         commit(disablePointerEvents ? 'disablePointerEvents' : 'enablePointerEvents');
@@ -95,7 +116,11 @@ const generalDataGetters: GetterTree<GeneralDataState, RootState> & GeneralDataG
     },
     pointerEventsDisabled: (state) => {
         return state.uiFlags.disablePointerEvents;
-    }
+    },
+    getRemoteProjectById: (state) => (projectId) => {
+        let entry = state.remoteProjectLookup.find(proj => proj.projectId === projectId);
+        return entry?.remoteProject;
+    },
 }
 
 

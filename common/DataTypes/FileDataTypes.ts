@@ -1,7 +1,7 @@
 
 export type UserFile = {
     registrationKeys: string[];
-    authorizedUsers: { clientId: string, clientName: string, token: string }[];
+    authorizedUsers: { clientId: string, clientName: string, token: string, registrationDate: string }[];
 };
 
 export type ConfigFile = {

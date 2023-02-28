@@ -13,7 +13,6 @@ export class JoinProjectAction extends Action {
     private registrationKey: string;
     private clientName: string;
 
-    /** If remoteProject is undefined, then will fetch local data. */
     constructor(projectUrl: string, registrationKey: string, clientName: string) {
         super();
 

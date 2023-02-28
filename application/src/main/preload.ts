@@ -5,11 +5,12 @@ import * as T from '../../../common/DataTypes/ActionDataTypes';
 // NOTE: When adding new bridged items, make sure to update shims-renderer.d.ts with the new properties
 
 contextBridge.exposeInMainWorld('config', {
-    getProjectData:    () => ipcRenderer.invoke('config:getProjectData'),
-    createNewBoard:    () => ipcRenderer.invoke('config:createNewBoard'),
-    getRemoteProjects: () => ipcRenderer.invoke('config:getRemoteProjects'),
-    addRemoteProject:  (req: T.AddRemoteProjectRequest) => ipcRenderer.invoke('config:addRemoteProject', req),
-    importBoard:       () => ipcRenderer.invoke('config:importBoard'),
+    getProjectData:      () => ipcRenderer.invoke('config:getProjectData'),
+    createNewBoard:      () => ipcRenderer.invoke('config:createNewBoard'),
+    getRemoteProjects:   () => ipcRenderer.invoke('config:getRemoteProjects'),
+    addRemoteProject:    (req: T.AddRemoteProjectRequest) => ipcRenderer.invoke('config:addRemoteProject', req),
+    removeRemoteProject: (req: T.RemoveRemoteProjectRequest) => ipcRenderer.invoke('config:removeRemoteProject', req),
+    importBoard:         () => ipcRenderer.invoke('config:importBoard'),
 });
 
 contextBridge.exposeInMainWorld('board', {

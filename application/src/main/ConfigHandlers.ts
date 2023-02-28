@@ -11,11 +11,12 @@ import { BasicBoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME } from "../../../comm
 
 
 export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('config:getProjectData',    () => getProjectData());
-    ipcMain.handle('config:createNewBoard',    () => createNewBoard());
-    ipcMain.handle('config:getRemoteProjects', () => getRemoteProjects());
-    ipcMain.handle('config:addRemoteProject',  (event, req) => addRemoteProject(req));
-    ipcMain.handle('config:importBoard',       () => importBoard());
+    ipcMain.handle('config:getProjectData',      () => getProjectData());
+    ipcMain.handle('config:createNewBoard',      () => createNewBoard());
+    ipcMain.handle('config:getRemoteProjects',   () => getRemoteProjects());
+    ipcMain.handle('config:addRemoteProject',    (event, req) => addRemoteProject(req));
+    ipcMain.handle('config:removeRemoteProject', (event, req) => removeRemoteProject(req));
+    ipcMain.handle('config:importBoard',         () => importBoard());
 }
 
 async function getProjectData(): Promise<T.GetProjectDataResponse> {
@@ -62,6 +63,10 @@ async function getRemoteProjects(): Promise<T.GetRemoteProjectsResponse> {
 
 async function addRemoteProject(req: T.AddRemoteProjectRequest): Promise<T.AddRemoteProjectResponse> {
     ConfigDataPersistence.addRemoteServer(req);
+}
+
+async function removeRemoteProject(req: T.RemoveRemoteProjectRequest): Promise<T.RemoveRemoteProjectResponse> {
+    ConfigDataPersistence.removeRemoteServer(req);
 }
 
 async function importBoard(): Promise<T.ImportBoardResponse> {
