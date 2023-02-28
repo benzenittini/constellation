@@ -58,7 +58,8 @@ import Triangle        from './svgs/Triangle.vue';
 // -- Pages --
 
 // Project/Board List
-import Projects from './pages/projects/_.vue';
+import Projects               from './pages/projects/_.vue';
+import AddRemoteProjectDialog from './pages/projects/AddRemoteProjectDialog.vue';
 
 // Mind Map
 import Mindmap       from './pages/mindmap/_.vue';
@@ -150,6 +151,7 @@ export let components: any = {
     // -- Pages --
     // Project/Board List
     'eic-page-projects': Projects,
+    'eic-add-remote-project-dialog': AddRemoteProjectDialog,
     // Mind Map
     'eic-page-mindmap': Mindmap,
     'eic-canvas': Canvas,

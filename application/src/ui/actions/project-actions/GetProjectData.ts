@@ -20,6 +20,7 @@ export class GetProjectDataAction extends Action {
         if (this.remoteProject) {
             // If remote project, send message over REST.
             // TODO-const : Send action over REST
+            console.log("GetProjectData.submit() not implemented for remote projects");
         } else {
             // If local project, make the IPC request
             window.config.getProjectData()
@@ -30,10 +31,6 @@ export class GetProjectDataAction extends Action {
     processResponse(resp: GetProjectDataResponse): void {
         useStore().dispatch('addProject', resp);
         // TODO-const : Delete
-        // store.dispatch('setBoardsForProject', {
-        //     projectId: this.projectId,
-        //     boards: mapify<BasicBoardData>(boards, 'boardId'),
-        // });
     }
 
 }

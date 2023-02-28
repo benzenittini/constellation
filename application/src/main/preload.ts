@@ -8,6 +8,7 @@ contextBridge.exposeInMainWorld('config', {
     getProjectData:    () => ipcRenderer.invoke('config:getProjectData'),
     createNewBoard:    () => ipcRenderer.invoke('config:createNewBoard'),
     getRemoteProjects: () => ipcRenderer.invoke('config:getRemoteProjects'),
+    addRemoteProject:  (req: T.AddRemoteProjectRequest) => ipcRenderer.invoke('config:addRemoteProject', req),
     importBoard:       () => ipcRenderer.invoke('config:importBoard'),
 });
 

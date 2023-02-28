@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserFile } from '../../common/DataTypes/FileDataTypes';
 
 const LIST_COMMAND     = "   node ./user-management.js ./users.json list";
-const REVOKE_COMMAND   = "   node ./user-management.js ./users.json revoke <user-id>";
+const REVOKE_COMMAND   = "   node ./user-management.js ./users.json revoke <client-id>";
 const GENERATE_COMMAND = "   node ./user-management.js ./users.json generate";
 const DELETE_COMMAND   = "   node ./user-management.js ./users.json delete <key>";
 const PURGE_COMMAND    = "   node ./user-management.js ./users.json purge";
@@ -58,16 +58,16 @@ function listUsers() {
     console.log("");
 }
 
-function revokeUser(userId: string | undefined) {
-    if (!userId) {
+function revokeUser(clientId: string | undefined) {
+    if (!clientId) {
         console.log("");
-        console.error("You must provide a userId to revoke.");
+        console.error("You must provide a clientId to revoke.");
         console.error(LIST_COMMAND);
         console.error(REVOKE_COMMAND);
         console.log("");
     } else {
         let contents = readUsersFile();
-        let index = contents.authorizedUsers.findIndex(user => user.userId === userId);
+        let index = contents.authorizedUsers.findIndex(user => user.clientId === clientId);
         if (index === -1) {
             console.log("");
             console.log("User not found.");

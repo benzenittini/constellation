@@ -1,8 +1,10 @@
 
-import { app } from 'electron';
 import path from 'path';
 import fs from 'fs';
+import { app } from 'electron';
+
 import { ConfigFile } from '../../common/DataTypes/FileDataTypes';
+import { AddRemoteProjectRequest } from '../DataTypes/ActionDataTypes';
 
 const CONFIG_FILE_PATH = path.join(app.getPath('userData'), 'constellation.config');
 
@@ -37,6 +39,11 @@ export function removeLocalBoard(boardFilePath: string) {
     saveConfig();
 }
 
-export function addRemoteServer(/* config? */) {
-    throw new Error("GlobalConfig.addRemoteServer not implemented.");
+export function getRemoteServers() {
+    return config.remoteProjects;
+}
+
+export function addRemoteServer({ serverUrl, credentials }: AddRemoteProjectRequest) {
+    config.remoteProjects.push({ serverUrl, credentials });
+    saveConfig();
 }

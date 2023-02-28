@@ -1,5 +1,5 @@
 
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import * as ErrorLogger from '../../common/ErrorLogger';
 
 export const HTTP_GET = 'get';
@@ -8,7 +8,7 @@ export const HTTP_DELETE = 'delete';
 
 type HttpMethod = 'get' | 'post' | 'delete';
 
-export function send(httpMethod: HttpMethod, endpoint: string, data: any, callback: (response: any) => void): void {
+export function send<T>(httpMethod: HttpMethod, endpoint: string, data: any, callback: (response: AxiosResponse<T, any>) => void): void {
     let request: AxiosRequestConfig = {
         method: httpMethod,
         url: endpoint

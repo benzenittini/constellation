@@ -9,6 +9,7 @@ declare global {
             getProjectData:    (req: T.GetProjectDataRequest)      => Promise<T.GetProjectDataResponse>,
             createNewBoard:    (req: T.CreateNewBoardRequest)      => Promise<T.CreateNewBoardResponse>,
             getRemoteProjects: (req: T.GetRemoteProjectsRequest)   => Promise<T.GetRemoteProjectsResponse>,
+            addRemoteProject:  (req: T.AddRemoteProjectRequest)    => Promise<T.AddRemoteProjectResponse>,
             importBoard:       (req: T.ImportBoardRequest)         => Promise<T.ImportBoardResponse>,
         },
         board: {

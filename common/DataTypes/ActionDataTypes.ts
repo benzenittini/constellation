@@ -23,6 +23,12 @@ export type GetRemoteProjectsResponse = RemoteProject[];
 export type ImportBoardRequest = void;
 export type ImportBoardResponse = BasicBoardData | undefined;
 
+export type JoinProjectRequest = { registrationKey: string, clientName: string };
+export type JoinProjectResponse = { token: string };
+
+export type AddRemoteProjectRequest = { serverUrl: string, credentials: string };
+export type AddRemoteProjectResponse = void;
+
 
 // ==============
 // Board Requests

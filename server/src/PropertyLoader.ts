@@ -4,7 +4,7 @@ import fs from 'fs';
 import { UserFile } from '../../common/DataTypes/FileDataTypes';
 
 // Keep these in sync!
-const VALID_PROPS: (keyof Properties)[] = [ 'log_level', 'log_dir', 'board_dir', 'backup_dir', 'user_auth', 'server_host', 'server_port' ];
+const VALID_PROPS: (keyof Properties)[] = [ 'log_level', 'log_dir', 'board_dir', 'backup_dir', 'user_auth', 'server_host', 'server_port', 'token_private_key' ];
 type Properties = {
     log_level: string,
     log_dir: string,
@@ -13,6 +13,7 @@ type Properties = {
     user_auth: string,
     server_host: string,
     server_port: string,
+    token_private_key: string,
 };
 
 export const properties: Properties = {
@@ -23,6 +24,7 @@ export const properties: Properties = {
     user_auth:   '',
     server_host: '',
     server_port: '',
+    token_private_key: '',
 };
 
 export function populateProperties(configFile: string) {

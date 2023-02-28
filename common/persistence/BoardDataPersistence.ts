@@ -1,5 +1,6 @@
 
 import fs from 'fs';
+import { BrowserWindow } from 'electron';
 
 import { BoardData, TemplateClassification } from '../DataTypes/BoardDataTypes';
 import { BoundingBox, TypedMap } from '../DataTypes/GenericDataTypes';
@@ -7,7 +8,6 @@ import { Block, BlockContent, BlockIdAndPosition } from '../DataTypes/BlockDataT
 import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes } from '../DataTypes/FieldDataTypes';
 import * as T from '../DataTypes/ActionDataTypes';
 import * as ArrayUtils from '../utilities/ArrayUtils';
-import { BrowserWindow } from 'electron';
 
 export class BoardDataPersistence {
 

@@ -14,6 +14,7 @@ export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('config:getProjectData',    () => getProjectData());
     ipcMain.handle('config:createNewBoard',    () => createNewBoard());
     ipcMain.handle('config:getRemoteProjects', () => getRemoteProjects());
+    ipcMain.handle('config:addRemoteProject',  (event, req) => addRemoteProject(req));
     ipcMain.handle('config:importBoard',       () => importBoard());
 }
 
@@ -56,8 +57,11 @@ async function createNewBoard(): Promise<T.CreateNewBoardResponse> {
 }
 
 async function getRemoteProjects(): Promise<T.GetRemoteProjectsResponse> {
-    // TODO-const : Load remote server list from a file
-    return [];
+    return ConfigDataPersistence.getRemoteServers();
+}
+
+async function addRemoteProject(req: T.AddRemoteProjectRequest): Promise<T.AddRemoteProjectResponse> {
+    ConfigDataPersistence.addRemoteServer(req);
 }
 
 async function importBoard(): Promise<T.ImportBoardResponse> {

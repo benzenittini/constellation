@@ -61,7 +61,7 @@ import { initializeLogger, logger } from './Logger';
         // REST Endpoint Registration
         // --------------------------
 
-        app.get ('/example', Rest.example); // Example endpoint
+        app.post('/user', Rest.postUser); // User joining this project
 
 
         // ====================
