@@ -1,5 +1,4 @@
 
-import { useStore } from "../../store/store";
 import { Action } from "../Action";
 
 import { send } from '../../communications/RestComms';
@@ -25,10 +24,15 @@ export class JoinProjectAction extends Action {
 
     submit(): void {
         // This is a "remote server only" action
-        send<JoinProjectResponse>('post', `${this.projectUrl}/user`, {
-            registrationKey: this.registrationKey,
-            clientName: this.clientName,
-        }, (resp) => this.processResponse(resp.data));
+        send<JoinProjectResponse>({
+            httpMethod: 'post',
+            endpoint: `${this.projectUrl}/user`,
+            data: {
+                registrationKey: this.registrationKey,
+                clientName: this.clientName,
+            },
+            callback: (resp) => this.processResponse(resp.data)
+        });
     }
 
     processResponse(resp: JoinProjectResponse): void {

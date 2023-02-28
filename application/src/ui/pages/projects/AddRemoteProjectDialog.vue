@@ -1,6 +1,5 @@
 <template>
     <div class="mw-add-remote-project">
-        Add remote project
         <eic-textbox v-model="saveData.projectUrl"      eic-placeholder="ex: https://localhost:3000"></eic-textbox>
         <eic-textbox v-model="saveData.registrationKey" eic-placeholder="ex: 51b51563-ebaf-433c-8864-37a63a15668d"></eic-textbox>
         <eic-textbox v-model="saveData.clientName"      eic-placeholder="ex: Ben's 2019 Sys76"></eic-textbox>

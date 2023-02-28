@@ -4,6 +4,7 @@ import { Action } from "../Action";
 
 import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
 import { GetProjectDataResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { send } from "../../communications/RestComms";
 
 export class GetProjectDataAction extends Action {
 
@@ -19,8 +20,12 @@ export class GetProjectDataAction extends Action {
     submit(): void {
         if (this.remoteProject) {
             // If remote project, send message over REST.
-            // TODO-const : Send action over REST
-            console.log("GetProjectData.submit() not implemented for remote projects");
+            send<GetProjectDataResponse>({
+                httpMethod: 'get',
+                endpoint: `${this.remoteProject.serverUrl}/project`,
+                creds: this.remoteProject.credentials,
+                callback: (resp) => this.processResponse(resp.data)
+            });
         } else {
             // If local project, make the IPC request
             window.config.getProjectData()
@@ -30,7 +35,6 @@ export class GetProjectDataAction extends Action {
 
     processResponse(resp: GetProjectDataResponse): void {
         useStore().dispatch('addProject', resp);
-        // TODO-const : Delete
     }
 
 }

@@ -1,11 +1,17 @@
 
 import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+
+import { BasicBoardData, BasicProjectData } from '../../common/DataTypes/BoardDataTypes';
+import { properties } from './PropertyLoader';
+import { mapify } from '../../common/utilities/ArrayUtils';
 
 export class ProjectDataPersistence {
 
     private sourceFile: string | undefined;
 
     private data: {
+        projectId: string,
         boards: { boardId: string, boardName: string }[],
     };
 
@@ -22,9 +28,6 @@ export class ProjectDataPersistence {
                 fileData = JSON.stringify(ProjectDataPersistence.getInitData());
             }
             this.data = JSON.parse(fileData);
-
-            // Set up the autosave timer to write to the file
-            setInterval(() => this.saveData(), 5000);
         } else {
             this.data = ProjectDataPersistence.getInitData();
         }
@@ -34,22 +37,33 @@ export class ProjectDataPersistence {
         if (this.sourceFile) {
             // logger.debug('Saving web data...'); // TODO-const : Logger setup
             fs.writeFileSync(this.sourceFile, JSON.stringify(this.data));
+            console.log("Project data saved!");
             // logger.debug('...done!'); // TODO-const : Logger setup
         }
     }
 
     static getInitData() {
         return {
+            projectId: uuidv4(),
             boards: [],
         };
     }
 
 
-    // ================
-    // Board Management
-    // ----------------
+    // ========
+    // Handlers
+    // --------
+
+    async getBasicProjectData(): Promise<BasicProjectData> {
+        return {
+            projectId: this.data.projectId,
+            projectName: properties.project_name,
+            boards: mapify<BasicBoardData>(this.data.boards, 'boardId'),
+        };
+    }
 
     async createNewBoard(boardName: string): Promise<void> {
         // TODO-const : ProjectDataPersistence.createNewBoard
+        this.saveData();
     }
 }

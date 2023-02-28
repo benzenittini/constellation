@@ -8,10 +8,20 @@ export const HTTP_DELETE = 'delete';
 
 type HttpMethod = 'get' | 'post' | 'delete';
 
-export function send<T>(httpMethod: HttpMethod, endpoint: string, data: any, callback: (response: AxiosResponse<T, any>) => void): void {
+export function send<T>({httpMethod, endpoint, data, creds, callback}: {
+    httpMethod: HttpMethod,
+    endpoint: string,
+    data?: any,
+    creds?: string,
+    callback: (response: AxiosResponse<T, any>) => void
+}): void {
     let request: AxiosRequestConfig = {
         method: httpMethod,
-        url: endpoint
+        url: endpoint,
+    }
+
+    if (creds) {
+        request.headers = { "Authorization" : `Bearer ${creds}` };
     }
 
     if (httpMethod === HTTP_POST) {

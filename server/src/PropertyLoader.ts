@@ -4,27 +4,31 @@ import fs from 'fs';
 import { UserFile } from '../../common/DataTypes/FileDataTypes';
 
 // Keep these in sync!
-const VALID_PROPS: (keyof Properties)[] = [ 'log_level', 'log_dir', 'board_dir', 'backup_dir', 'user_auth', 'server_host', 'server_port', 'token_private_key' ];
+const VALID_PROPS: (keyof Properties)[] = [ 'log_level', 'log_dir', 'board_dir', 'backup_dir', 'user_data', 'project_data', 'server_host', 'server_port', 'token_private_key', 'project_name' ];
 type Properties = {
     log_level: string,
     log_dir: string,
     board_dir: string,
     backup_dir: string,
-    user_auth: string,
+    user_data: string,
+    project_data: string,
     server_host: string,
     server_port: string,
     token_private_key: string,
+    project_name: string,
 };
 
 export const properties: Properties = {
-    log_level:   '',
-    log_dir:     '',
-    board_dir:   '',
-    backup_dir:  '',
-    user_auth:   '',
-    server_host: '',
-    server_port: '',
+    log_level:    '',
+    log_dir:      '',
+    board_dir:    '',
+    backup_dir:   '',
+    user_data:    '',
+    project_data: '',
+    server_host:  '',
+    server_port:  '',
     token_private_key: '',
+    project_name: '',
 };
 
 export function populateProperties(configFile: string) {
@@ -69,12 +73,12 @@ export function populateProperties(configFile: string) {
         createDirIfNeeded(properties.log_dir);
         createDirIfNeeded(properties.board_dir);
         createDirIfNeeded(properties.backup_dir);
-        if (!fs.existsSync(properties.user_auth)) {
+        if (!fs.existsSync(properties.user_data)) {
             const contents: UserFile = {
                 registrationKeys: [],
                 authorizedUsers: [],
             }
-            fs.writeFileSync(properties.user_auth, JSON.stringify(contents));
+            fs.writeFileSync(properties.user_data, JSON.stringify(contents));
         }
     } catch (err) {
         console.error(err);
