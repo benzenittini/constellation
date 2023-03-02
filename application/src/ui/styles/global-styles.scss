@@ -81,7 +81,6 @@ a {
     }
 }
 @mixin button-tertiary($text, $hover-border) {
-    font-weight: bold;
     color: $text;
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;

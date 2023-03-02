@@ -1,6 +1,7 @@
 
 import fs from 'fs';
 import { BrowserWindow } from 'electron';
+import { v4 as uuidv4 } from 'uuid';
 
 import { BoardData, TemplateClassification } from '../DataTypes/BoardDataTypes';
 import { BoundingBox, TypedMap } from '../DataTypes/GenericDataTypes';
@@ -52,15 +53,63 @@ export class BoardDataPersistence {
         }
     }
 
-    static getInitData() {
+    static getInitData(templateClassifications?: TemplateClassification[]) {
+        let classificationIds: string[] = [];
+        let classifications: TypedMap<ClassificationDefinition> = {};
+        let fields: TypedMap<FieldDefinition> = {};
+        let possibleValues: TypedMap<PossibleValueDefinition> = {};
+
+        if (templateClassifications) {
+            // Process each classification, generating an ID and converting its fields and PVs to be references.
+            for (let classification of templateClassifications) {
+
+                // Process this classification's fields
+                let fieldIds: string[] = [];
+                for (let field of classification.fields) {
+
+                    // Process this field's possible values
+                    let pvIds: string[] = [];
+                    for (let pv of field.possibleValues) {
+                        let pvid = uuidv4();
+                        pvIds.push(pvid);
+                        possibleValues[pvid] = {
+                            id: pvid,
+                            name: pv.name,
+                            style: pv.style,
+                        };
+                    }
+
+                    // Build/save the field lookup
+                    let fid = uuidv4();
+                    fieldIds.push(fid);
+                    fields[fid] = {
+                        id: fid,
+                        name: field.name,
+                        type: field.type,
+                        possibleValueIds: pvIds,
+                        sourceType: field.sourceType,
+                    };
+                }
+
+                // Build/save the classification lookup
+                let cid = uuidv4();
+                classificationIds.push(cid);
+                classifications[cid] = {
+                    id: cid,
+                    name: classification.name,
+                    fieldIds: fieldIds,
+                }
+            }
+        }
+
         return {
             blocks: {},
             views: {},
-            fields: {},
-            classifications: {},
-            possibleValues: {},
             blockPriorities: [],
-            classificationIds: [],
+            classificationIds,
+            classifications,
+            fields,
+            possibleValues,
         };
     }
 

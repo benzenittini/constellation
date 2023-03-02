@@ -1,20 +1,20 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
+import { LOCAL_PROJECT, TemplateClassification } from "../../../../../common/DataTypes/BoardDataTypes";
 import { CreateNewBoardResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 
 export class CreateNewBoardAction extends Action {
 
     private projectId: string;
+    private template: TemplateClassification[];
+    private boardOrFileName: string; // Remote boards get a board name. Local boards get a filepath.
 
-    // *Only remote boards get a name. Local boards should be undefined!*
-    private boardName?: string;
-
-    constructor(projectId: string, boardName?: string) {
+    constructor(projectId: string, template: TemplateClassification[], boardOrFileName: string) {
         super();
         this.projectId = projectId;
-        this.boardName = boardName;
+        this.boardOrFileName = boardOrFileName;
+        this.template = template;
     }
 
     submit(): void {
@@ -23,8 +23,10 @@ export class CreateNewBoardAction extends Action {
             // TODO-const : Send action over REST
         } else {
             // If local project, make the IPC request
-            window.config.createNewBoard()
-                .then((resp) => this.processResponse(resp));
+            window.config.createNewBoard({
+                boardOrFileName: this.boardOrFileName,
+                template: this.template,
+            }).then((resp) => this.processResponse(resp));
         }
     }
 

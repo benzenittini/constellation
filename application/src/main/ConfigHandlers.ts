@@ -12,7 +12,8 @@ import { BasicBoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME } from "../../../comm
 
 export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('config:getProjectData',      () => getProjectData());
-    ipcMain.handle('config:createNewBoard',      () => createNewBoard());
+    ipcMain.handle('config:getPathForNewBoard',  () => getPathForNewBoard());
+    ipcMain.handle('config:createNewBoard',      (event, req) => createNewBoard(req));
     ipcMain.handle('config:getRemoteProjects',   () => getRemoteProjects());
     ipcMain.handle('config:addRemoteProject',    (event, req) => addRemoteProject(req));
     ipcMain.handle('config:removeRemoteProject', (event, req) => removeRemoteProject(req));
@@ -32,8 +33,8 @@ async function getProjectData(): Promise<T.GetProjectDataResponse> {
     };
 }
 
-async function createNewBoard(): Promise<T.CreateNewBoardResponse> {
-    let { canceled, filePath } = await dialog.showSaveDialog({
+async function getPathForNewBoard(): Promise<string | undefined> {
+    let { filePath } = await dialog.showSaveDialog({
         title: "Create Board",
         defaultPath: 'board.mw',
         buttonLabel: "Create",
@@ -43,14 +44,18 @@ async function createNewBoard(): Promise<T.CreateNewBoardResponse> {
         ]
     });
 
-    if (!canceled && filePath) {
+    return filePath;
+}
+
+async function createNewBoard({ boardOrFileName, template }: T.CreateNewBoardRequest): Promise<T.CreateNewBoardResponse> {
+    if (boardOrFileName) {
         // Create new file with initial data
-        fs.writeFileSync(filePath, JSON.stringify(BoardDataPersistence.getInitData()));
-        ConfigDataPersistence.addLocalBoard(filePath);
+        fs.writeFileSync(boardOrFileName, JSON.stringify(BoardDataPersistence.getInitData(template)));
+        ConfigDataPersistence.addLocalBoard(boardOrFileName);
         // Return board data, where ID is filepath and name is filename
         return {
-            boardId: filePath,
-            boardName: path.basename(filePath, '.mw'),
+            boardId: boardOrFileName,
+            boardName: path.basename(boardOrFileName, '.mw'),
         };
     }
 
@@ -74,7 +79,7 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
         title: "Open Board",
         buttonLabel: "Import",
         filters: [{
-            name: 'Spacia Board',
+            name: 'Constellation Board',
             extensions: ['mw'],
         }],
         properties: [

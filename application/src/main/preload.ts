@@ -6,7 +6,8 @@ import * as T from '../../../common/DataTypes/ActionDataTypes';
 
 contextBridge.exposeInMainWorld('config', {
     getProjectData:      () => ipcRenderer.invoke('config:getProjectData'),
-    createNewBoard:      () => ipcRenderer.invoke('config:createNewBoard'),
+    getPathForNewBoard:  () => ipcRenderer.invoke('config:getPathForNewBoard'),
+    createNewBoard:      (req: T.CreateNewBoardRequest) => ipcRenderer.invoke('config:createNewBoard', req),
     getRemoteProjects:   () => ipcRenderer.invoke('config:getRemoteProjects'),
     addRemoteProject:    (req: T.AddRemoteProjectRequest) => ipcRenderer.invoke('config:addRemoteProject', req),
     removeRemoteProject: (req: T.RemoveRemoteProjectRequest) => ipcRenderer.invoke('config:removeRemoteProject', req),
@@ -14,7 +15,7 @@ contextBridge.exposeInMainWorld('config', {
 });
 
 contextBridge.exposeInMainWorld('board', {
-    getBoardData:     (req: T.GetBoardDataRequest) => ipcRenderer.invoke('board:getBoardData', req),
+    getBoardData:       (req: T.GetBoardDataRequest) => ipcRenderer.invoke('board:getBoardData', req),
     updateSaveStatus:   (callback: any) => ipcRenderer.on('board:updateSaveStatus', callback),
     clearSaveListeners: () => ipcRenderer.removeAllListeners('board:updateSaveStatus'),
 
