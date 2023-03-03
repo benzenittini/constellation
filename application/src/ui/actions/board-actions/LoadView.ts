@@ -21,11 +21,11 @@ export class LoadViewAction extends Action {
             // If local project, make the IPC request
             window.board.loadView({
                 viewId: this.viewId,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => LoadViewAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: LoadViewResponse): void {
+    static processResponse(resp: LoadViewResponse): void {
         const store = useStore();
 
         store.dispatch('openView', resp.viewConfig);

@@ -2,7 +2,7 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 
-import { SetBlockContentRequest, SetBlockContentResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { SetBlockContentResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { BlockContent } from "../../../../../common/DataTypes/BlockDataTypes";
 
 export class SetBlockContentAction extends Action {
@@ -25,11 +25,11 @@ export class SetBlockContentAction extends Action {
             window.board.setBlockContent({
                 blockId: this.blockId,
                 content: this.content,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => SetBlockContentAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: SetBlockContentResponse): void {
+    static processResponse(resp: SetBlockContentResponse): void {
         useStore().dispatch("setBlockContent", {
             blockId: resp.blockId,
             newContent: resp.content,

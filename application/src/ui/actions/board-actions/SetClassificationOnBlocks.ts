@@ -2,9 +2,7 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
-import { useEmitter } from "../../composables/Emitter";
-import { CreateBlockResponse, SetClassificationOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { SetClassificationOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 
 export class SetClassificationOnBlocksAction extends Action {
 
@@ -30,11 +28,11 @@ export class SetClassificationOnBlocksAction extends Action {
                 blockIds: this.blockIds,
                 classificationId: this.classificationId,
                 isActive: this.isActive,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => SetClassificationOnBlocksAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: SetClassificationOnBlocksResponse): void {
+    static processResponse(resp: SetClassificationOnBlocksResponse): void {
         const store = useStore();
 
         for (let blockId of resp.blockIds) {

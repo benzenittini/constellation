@@ -24,11 +24,11 @@ export class SetBlockParentAction extends Action {
             window.board.setBlockParent({
                 blockId: this.blockId,
                 parentBlockId: this.parentBlockId,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => SetBlockParentAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: SetBlockParentResponse): void {
+    static processResponse(resp: SetBlockParentResponse): void {
         useStore().dispatch("setParent", {
             blockId: resp.blockId,
             newParent: resp.parentBlockId, // FYI, data.parentBlockId may be undefined

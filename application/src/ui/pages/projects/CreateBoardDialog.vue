@@ -3,7 +3,7 @@
         <!-- File Name -->
         <div class="mwe-config-section" v-if="projectId === LOCAL_PROJECT">
             <h3>Save File:</h3>
-            <p class="mw-file-picker" v-bind:class="{ 'mw-yellow-text': saveData.fileName === '' }" v-on:click="chooseFileLocation()">{{ saveData.fileName !== '' ? saveData.fileName : 'Click to choose a location.' }}</p>
+            <p class="mw-file-picker" v-bind:class="{ 'mw-warning-text': saveData.fileName === '' }" v-on:click="chooseFileLocation()">{{ saveData.fileName !== '' ? saveData.fileName : 'Click to choose a location.' }}</p>
         </div>
 
         <!-- Board Name -->
@@ -319,8 +319,8 @@ export default defineComponent({
 
     .mw-file-picker {
         cursor: pointer;
-        &.mw-yellow-text {
-            color: vars.$yellow4;
+        &.mw-warning-text {
+            color: vars.$red-error;
         }
     }
 

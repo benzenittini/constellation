@@ -23,11 +23,11 @@ export class DeleteViewAction extends Action {
             // If local project, make the IPC request
             window.board.deleteView({
                 viewId: this.viewId,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => DeleteViewAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: DeleteViewResponse): void {
+    static processResponse(resp: DeleteViewResponse): void {
         const store = useStore();
 
         if (store.state.viewData.activeViewConfig?.id === resp.viewId) {

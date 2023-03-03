@@ -20,7 +20,7 @@ export class SetBlockPositionsAction extends Action {
 
     submit(): void {
         // Optimistically, assume it's going to work. Otherwise, we get some really spazzy movements.
-        this.processResponse(this.blocksAndPositions);
+        SetBlockPositionsAction.processResponse(this.blocksAndPositions);
 
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
@@ -33,7 +33,7 @@ export class SetBlockPositionsAction extends Action {
         }
     }
 
-    processResponse(resp: SetBlockPositionsResponse): void {
+    static processResponse(resp: SetBlockPositionsResponse): void {
         useStore().dispatch('setBlockPositions', resp);
     }
 

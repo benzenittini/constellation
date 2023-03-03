@@ -24,11 +24,11 @@ export class SetBlockPriorityAction extends Action {
             window.board.setBlockPriority({
                 blockId: this.blockId,
                 beforeId: this.beforeId,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => SetBlockPriorityAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: SetBlockPriorityResponse): void {
+    static processResponse(resp: SetBlockPriorityResponse): void {
         const store = useStore();
 
         store.dispatch("setBlockPriority", {blockId: resp.blockId, higherThan: resp.beforeId});

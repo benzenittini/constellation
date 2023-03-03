@@ -1,9 +1,6 @@
 
 import { Action } from "../Action";
-import { BoardData } from '../../../../../common/DataTypes/BoardDataTypes';
 import { useStore } from '../../store/store';
-import { Block } from "../../../../../common/DataTypes/BlockDataTypes";
-import { mapify } from "../../../../../common/utilities/ArrayUtils";
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
 import { useEmitter } from "../../composables/Emitter";
 import { CreateBlockResponse } from "../../../../../common/DataTypes/ActionDataTypes";
@@ -29,11 +26,11 @@ export class CreateBlockAction extends Action {
             window.board.createBlock({
                 location: this.location,
                 parentBlockId: this.parentBlockId
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => CreateBlockAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: CreateBlockResponse): void {
+    static processResponse(resp: CreateBlockResponse): void {
         const store = useStore();
         const emitter = useEmitter();
 

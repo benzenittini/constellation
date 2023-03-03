@@ -25,11 +25,11 @@ export class SaveViewAction extends Action {
             // If local project, make the IPC request
             window.board.saveView({
                 viewConfig: this.viewConfig,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => SaveViewAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: SaveViewResponse): void {
+    static processResponse(resp: SaveViewResponse): void {
         const store = useStore();
 
         store.dispatch('addView', resp.baseViewConfig);

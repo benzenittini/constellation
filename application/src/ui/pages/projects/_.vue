@@ -236,7 +236,7 @@ export default defineComponent({
             display: flex;
             margin: 24px;
             .mw-board-block {
-                @include mixins.lift-up;
+                @include mixins.lift-up(5px);
                 background: vars.$gray0;
                 border-radius: vars.$radius-small;
                 border: 2px solid vars.$pink-medium;

@@ -1,9 +1,8 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { BoundingBox, TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { useEmitter } from "../../composables/Emitter";
-import { CreateBlockResponse, SetClassificationDefinitionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
+import { SetClassificationDefinitionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
 
 export class SetClassificationDefinitionsAction extends Action {
@@ -33,11 +32,11 @@ export class SetClassificationDefinitionsAction extends Action {
                 classifications: this.classifications,
                 fields: this.fields,
                 possibleValues: this.possibleValues,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => SetClassificationDefinitionsAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: SetClassificationDefinitionsResponse): void {
+    static processResponse(resp: SetClassificationDefinitionsResponse): void {
         const store = useStore();
 
         // Update the Field definitions

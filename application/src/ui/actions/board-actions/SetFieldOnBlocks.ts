@@ -3,7 +3,6 @@ import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { SetFieldOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
-import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
 
 export class SetFieldOnBlocksAction extends Action {
 
@@ -26,11 +25,11 @@ export class SetFieldOnBlocksAction extends Action {
             window.board.setFieldOnBlocks({
                 fieldId: this.fieldId,
                 blockIdToFieldValue: this.blockIdToFieldValue,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => SetFieldOnBlocksAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: SetFieldOnBlocksResponse): void {
+    static processResponse(resp: SetFieldOnBlocksResponse): void {
         const store = useStore();
 
         for (let blockId in resp.blockIdToFieldValue) {

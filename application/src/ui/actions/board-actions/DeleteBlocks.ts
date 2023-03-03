@@ -20,11 +20,11 @@ export class DeleteBlocksAction extends Action {
             // If local project, make the IPC request
             window.board.deleteBlocks({
                 blockIds: this.blockIds
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => DeleteBlocksAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: DeleteBlocksResponse): void {
+    static processResponse(resp: DeleteBlocksResponse): void {
         useStore().dispatch('deleteBlocks', resp.blockIds);
     }
 

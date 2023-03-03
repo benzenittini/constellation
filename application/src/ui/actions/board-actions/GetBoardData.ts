@@ -20,16 +20,16 @@ export class GetBoardDataAction extends Action {
             // If local project, make the IPC request
             window.board.getBoardData({
                 boardId: this.boardId
-            }).then((boardData) => this.processResponse(boardData));
+            }).then((boardData) => GetBoardDataAction.processResponse(boardData));
         }
     }
 
-    processResponse(data: GetBoardDataResponse): void {
+    static processResponse(data: GetBoardDataResponse): void {
         const store = useStore();
 
         if (data === undefined) {
             // TODO-const : post error to user
-            console.error("Error fetching board data for board: " + this.boardId);
+            console.error("Error fetching board data.");
             store.dispatch('setCurrentProjectBoard', undefined);
             return;
         }

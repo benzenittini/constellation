@@ -35,11 +35,11 @@ export class SetFieldDefinitionsAction extends Action {
                 fieldIds: this.fieldIds,
                 possibleValueDefinitions: this.possibleValueDefinitions,
                 deletedFieldIds: this.deletedFieldIds,
-            }).then((resp) => this.processResponse(resp));
+            }).then((resp) => SetFieldDefinitionsAction.processResponse(resp));
         }
     }
 
-    processResponse(resp: SetFieldDefinitionsResponse): void {
+    static processResponse(resp: SetFieldDefinitionsResponse): void {
         const store = useStore();
 
         // Update the Field definitions
