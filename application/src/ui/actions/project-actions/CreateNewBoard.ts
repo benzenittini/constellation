@@ -3,6 +3,7 @@ import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { LOCAL_PROJECT, TemplateClassification } from "../../../../../common/DataTypes/BoardDataTypes";
 import { CreateNewBoardResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { send } from "../../communications/RestComms";
 
 export class CreateNewBoardAction extends Action {
 
@@ -20,7 +21,21 @@ export class CreateNewBoardAction extends Action {
     submit(): void {
         if (this.projectId !== LOCAL_PROJECT) {
             // If remote project, send message over REST.
-            // TODO-const : Send action over REST
+            let remoteProject = useStore().getters.getRemoteProjectById(this.projectId);
+            if (remoteProject) {
+                send<CreateNewBoardResponse>({
+                    httpMethod: 'post',
+                    endpoint: `${remoteProject.serverUrl}/board`,
+                    creds: remoteProject.credentials,
+                    data: {
+                        boardOrFileName: this.boardOrFileName,
+                        template: this.template,
+                    },
+                    callback: (resp) => this.processResponse(resp.data)
+                });
+            } else {
+                // TODO-const : show an error, recommend a reload.
+            }
         } else {
             // If local project, make the IPC request
             window.config.createNewBoard({

@@ -1,6 +1,7 @@
 
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import { BrowserWindow } from 'electron';
 
 import * as ConfigDataPersistence from "../../../common/persistence/ConfigDataPersistence";
 import * as T from '../../../common/DataTypes/ActionDataTypes';
@@ -33,7 +34,7 @@ let persistence: BoardDataPersistence | undefined = undefined;
 async function getBoardData({ boardId: filepath }: T.GetBoardDataRequest): Promise<T.GetBoardDataResponse> {
     if (fs.existsSync(filepath)) {
         try {
-            persistence = new BoardDataPersistence(filepath);
+            persistence = new BoardDataPersistence(filepath, undefined, (status) => BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', status));
             return persistence.getBoardData();
         } catch(err) {
             // TODO-const : Log an error

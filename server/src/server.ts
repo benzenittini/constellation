@@ -12,6 +12,7 @@ import { initializeLogger, logger } from './Logger';
         // Set up the property loader and logger
         populateProperties(process.argv[2]);
         initializeLogger(properties.log_level, properties.log_dir);
+        Rest.initializePersistence(properties.project_data);
 
         // ========================
         // Datastore Initialization
@@ -64,6 +65,7 @@ import { initializeLogger, logger } from './Logger';
         app.post  ('/user',    Rest.postUser);   // User joining this project
         app.delete('/user',    Rest.deleteUser); // User leaving this project
         app.get   ('/project', Rest.getProject); // Fetching a project's name, id, and boards
+        app.post  ('/board',   Rest.postBoard);  // Creating a new board
 
 
         // ====================

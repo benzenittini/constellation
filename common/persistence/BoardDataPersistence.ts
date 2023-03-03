@@ -1,6 +1,5 @@
 
 import fs from 'fs';
-import { BrowserWindow } from 'electron';
 import { v4 as uuidv4 } from 'uuid';
 
 import { BoardData, TemplateClassification } from '../DataTypes/BoardDataTypes';
@@ -18,9 +17,11 @@ export class BoardDataPersistence {
 
     private saveTimer: ReturnType<typeof setTimeout> | undefined = undefined;
 
-    constructor(sourceFile: string | undefined = undefined) {
+    private reportSaveStatus;
 
+    constructor(sourceFile: string | undefined = undefined, initialData: BoardData = BoardDataPersistence.getInitData(), reportSaveStatus: (status: boolean) => void = (s) => {}) {
         this.sourceFile = sourceFile;
+        this.reportSaveStatus = reportSaveStatus;
 
         if (this.sourceFile) {
             // Get the file's data (or initialize the data if file is empty)
@@ -28,12 +29,12 @@ export class BoardDataPersistence {
             if (fs.existsSync(this.sourceFile)) {
                 fileData = fs.readFileSync(this.sourceFile, 'utf8');
             } else {
-                fileData = JSON.stringify(BoardDataPersistence.getInitData());
+                fileData = JSON.stringify(initialData);
             }
             this.data = JSON.parse(fileData);
-
+            this.saveData(); // Save the initial state
         } else {
-            this.data = BoardDataPersistence.getInitData();
+            this.data = initialData;
         }
     }
 
@@ -41,15 +42,13 @@ export class BoardDataPersistence {
     private scheduleSave() {
         if (this.saveTimer) clearTimeout(this.saveTimer);
         this.saveTimer = setTimeout(() => this.saveData(), 3000);
-        // BrowserWindow.getFocusedWindow() should be undefined on the server, making this a no-op.
-        BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', false);
+        this.reportSaveStatus(false);
     }
 
     private saveData() {
         if (this.sourceFile) {
             fs.writeFileSync(this.sourceFile, JSON.stringify(this.data));
-            // BrowserWindow.getFocusedWindow() should be undefined on the server, making this a no-op.
-            BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', true);
+            this.reportSaveStatus(true);
         }
     }
 

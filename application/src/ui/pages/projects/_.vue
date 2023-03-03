@@ -23,11 +23,12 @@
             v-bind:key="project.projectId">
             <h2>{{ project.projectName }}</h2>
             <button class="tertiary yellow" v-on:click="leaveRemoteProject(project.projectId)">Leave Project</button>
-            <ul>
-                <li v-for="board in Object.values(project.boards)"
+            <div class="mw-board-blocks">
+                <div class="mw-board-block" v-for="board in Object.values(project.boards)"
                     v-bind:key="board.boardId"
-                    v-on:click="openBoard(project.projectId, board.boardId)">{{ board.boardName }}</li>
-            </ul>
+                    v-on:click="openBoard(project.projectId, board.boardId)"
+                    >{{ board.boardName }}</div>
+            </div>
             <div class="mw-button-group">
                 <button class="tertiary green" v-on:click="importBoard(project.projectId)">Import Board</button>
                 <button class="primary green" v-on:click="createBoard(project.projectId)">Create Board</button>
@@ -193,6 +194,7 @@ export default defineComponent({
 <style lang="scss">
 
 @use "../../styles/variables" as vars;
+@use "../../styles/mixins";
 
 #mw-projects {
     width: 100%;
@@ -228,6 +230,19 @@ export default defineComponent({
         .mw-button-group {
             text-align: right;
             button { margin: 0 5px; }
+        }
+
+        .mw-board-blocks {
+            display: flex;
+            margin: 24px;
+            .mw-board-block {
+                @include mixins.lift-up;
+                background: vars.$gray0;
+                border-radius: vars.$radius-small;
+                border: 2px solid vars.$pink-medium;
+                padding: 32px 48px;
+                cursor: pointer;
+            }
         }
     }
 }

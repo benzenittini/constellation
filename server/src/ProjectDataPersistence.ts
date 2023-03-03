@@ -6,6 +6,8 @@ import { BasicBoardData, BasicProjectData } from '../../common/DataTypes/BoardDa
 import { properties } from './PropertyLoader';
 import { mapify } from '../../common/utilities/ArrayUtils';
 
+import * as T from '../../common/DataTypes/ActionDataTypes';
+
 export class ProjectDataPersistence {
 
     private sourceFile: string | undefined;
@@ -16,7 +18,6 @@ export class ProjectDataPersistence {
     };
 
     constructor(sourceFile: string | undefined = undefined) {
-
         this.sourceFile = sourceFile;
 
         if (this.sourceFile) {
@@ -28,6 +29,7 @@ export class ProjectDataPersistence {
                 fileData = JSON.stringify(ProjectDataPersistence.getInitData());
             }
             this.data = JSON.parse(fileData);
+            this.saveData();
         } else {
             this.data = ProjectDataPersistence.getInitData();
         }
@@ -62,8 +64,15 @@ export class ProjectDataPersistence {
         };
     }
 
-    async createNewBoard(boardName: string): Promise<void> {
-        // TODO-const : ProjectDataPersistence.createNewBoard
+    async createNewBoard({ boardOrFileName, template }: T.CreateNewBoardRequest): Promise<T.CreateNewBoardResponse> {
+        let board = {
+            boardId: uuidv4(),
+            boardName: boardOrFileName,
+        };
+        this.data.boards.push(board);
+
         this.saveData();
+
+        return board;
     }
 }
