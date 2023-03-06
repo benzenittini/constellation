@@ -2,6 +2,7 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { GetBoardDataResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { ws } from "../../communications/Websocket";
 
 export class GetBoardDataAction extends Action {
 
@@ -15,7 +16,9 @@ export class GetBoardDataAction extends Action {
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send GetBoardData over websocket
+            ws.emit('getBoardData', JSON.stringify({
+                boardId: this.boardId,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.getBoardData({

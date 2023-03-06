@@ -8,6 +8,7 @@ import { properties, populateProperties } from './PropertyLoader';
 import { initializeLogger, logger } from './Logger';
 import { createServer } from 'http';
 import { initializeSingleton } from './WebsocketManager';
+import { initializePersistence } from './Persistence';
 
 (async () => {
     try {
@@ -18,7 +19,7 @@ import { initializeSingleton } from './WebsocketManager';
 
         populateProperties(process.argv[2]);
         initializeLogger(properties.log_level, properties.log_dir);
-        Rest.initializePersistence(properties.project_data);
+        await initializePersistence(properties.project_data);
 
 
         // ============

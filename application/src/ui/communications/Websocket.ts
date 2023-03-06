@@ -8,23 +8,8 @@ import { useVueNotify } from 'mw-vue-notify';
 import * as ErrorLogger from '../../common/ErrorLogger';
 import { useStore } from '../store/store';
 import { RemoteProject } from '../../../../common/DataTypes/FileDataTypes';
+import { GetBoardDataAction } from '../actions/board-actions/GetBoardData';
 
-// TODO-const : Re-enable all the actions
-// import { GetBoardDataAction } from '../actions/WebsocketActions/GetBoardData';
-// import { CreateNewBlock } from '../actions/WebsocketActions/CreateNewBlock';
-// import { DeleteBlocks } from '../actions/WebsocketActions/DeleteBlocks';
-// import { SetBlockParent } from '../actions/WebsocketActions/SetBlockParent';
-// import { UpdateClassificationDefinitions } from '../actions/WebsocketActions/UpdateClassificationDefinitions';
-// import { UpdateClassificationOnBlocks } from '../actions/WebsocketActions/UpdateClassificationOnBlocks';
-// import { UpdateBlockContent } from '../actions/WebsocketActions/UpdateBlockContent';
-// import { UpdateBlockPositions } from '../actions/WebsocketActions/UpdateBlockPositions';
-// import { UpdateFieldDefinitions } from '../actions/WebsocketActions/UpdateFieldDefinitions';
-// import { UpdateFieldValueOnBlocks } from '../actions/WebsocketActions/UpdateFieldValueOnBlocks';
-// import { LoadViewData } from '../actions/WebsocketActions/LoadViewData';
-// import { SaveView } from '../actions/WebsocketActions/SaveView';
-// import { DeleteView } from '../actions/WebsocketActions/DeleteView';
-// import { SetBlockPriority } from '../actions/WebsocketActions/SetBlockPriority';
-// import { GetOutageRequest } from '../actions/RestActions/GetOutage';
 
 const WS_DIALOG_ID = 'ws-connecting-dialog';
 
@@ -81,8 +66,7 @@ class Websocket {
                 this.socket.on('clientValidated', () => {
                     this.socket!.emit('subscribeToBoard', { boardId });
                     this.setConnectionDialogMessage('fetching data...');
-                    // TODO-const : Re-enable all the actions
-                    // new GetBoardDataAction(boardId).send();
+                    new GetBoardDataAction().submit();
                     resolve();
                 });
 
@@ -135,7 +119,7 @@ export let ws = new Websocket();
 
 function registerListeners(socket: Socket) {
     // TODO-const : Re-enable all the actions
-    // socket.on('boardData', (data: any) => { ws.closeConnectionDialog(); ws.closeOutageNotification(true); GetBoardDataAction.processResponse(data); });
+    socket.on('boardData', (data: any) => { ws.closeConnectionDialog(); GetBoardDataAction.processResponse(data); });
     // // -- Block Data --
     // socket.on('updatedBlockPositions', (data: any) => { UpdateBlockPositions.processResponse(data); });
     // socket.on('updatedBlockContent',   (data: any) => { UpdateBlockContent.processResponse(data); });

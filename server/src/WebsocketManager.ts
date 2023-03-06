@@ -84,22 +84,22 @@ export class WebsocketManager {
 
     registerApplicationHandlers(socket: Socket): void {
         socket.on('getBoardData', WebsocketHandlers.getBoardData(this.io, socket));
-        // Entities
-        socket.on('updateEntityPositions', WebsocketHandlers.updateEntityPositions(this.io, socket));
-        socket.on('updateEntityContent',   WebsocketHandlers.updateEntityContent(this.io, socket));
-        socket.on('createNewEntity',       WebsocketHandlers.createNewEntity(this.io, socket));
-        socket.on('deleteEntities',        WebsocketHandlers.deleteEntities(this.io, socket));
-        socket.on('setEntityParent',       WebsocketHandlers.setEntityParent(this.io, socket));
-        // Fields & Classifications
-        socket.on('updateClassificationOnEntities',  WebsocketHandlers.updateClassificationOnEntities(this.io, socket));
-        socket.on('updateFieldDefinitions',          WebsocketHandlers.updateFieldDefinitions(this.io, socket));
-        socket.on('updateFieldValueOnEntities',      WebsocketHandlers.updateFieldValueOnEntities(this.io, socket));
-        socket.on('updateClassificationDefinitions', WebsocketHandlers.updateClassificationDefinitions(this.io, socket));
-        // Views
-        socket.on('loadViewData',      WebsocketHandlers.loadViewData(this.io, socket));
-        socket.on('saveView',          WebsocketHandlers.saveView(this.io, socket));
-        socket.on('deleteView',        WebsocketHandlers.deleteView(this.io, socket));
-        socket.on('setBlockPriority',  WebsocketHandlers.setBlockPriority(this.io, socket));
+        // -- Blocks --
+        socket.on('createBlock',       WebsocketHandlers.createBlock(this.io, socket));
+        socket.on('setBlockPositions', WebsocketHandlers.setBlockPositions(this.io, socket));
+        socket.on('deleteBlocks',      WebsocketHandlers.deleteBlocks(this.io, socket));
+        socket.on('setBlockParent',    WebsocketHandlers.setBlockParent(this.io, socket));
+        socket.on('setBlockContent',   WebsocketHandlers.setBlockContent(this.io, socket));
+        // -- Fields and Classifications --
+        socket.on('setClassificationDefinitions', WebsocketHandlers.setClassificationDefinitions(this.io, socket));
+        socket.on('setClassificationOnBlocks',    WebsocketHandlers.setClassificationOnBlocks(this.io, socket));
+        socket.on('setFieldDefinitions',          WebsocketHandlers.setFieldDefinitions(this.io, socket));
+        socket.on('setFieldOnBlocks',             WebsocketHandlers.setFieldOnBlocks(this.io, socket));
+        // -- Views --
+        socket.on('saveView',         WebsocketHandlers.saveView(this.io, socket));
+        socket.on('deleteView',       WebsocketHandlers.deleteView(this.io, socket));
+        socket.on('setBlockPriority', WebsocketHandlers.setBlockPriority(this.io, socket));
+        socket.on('loadView',         WebsocketHandlers.loadView(this.io, socket));
     }
 
     onSocketDisconnect(socket: Socket): void {

@@ -6,16 +6,9 @@ import path from 'path';
 import { logger } from "./Logger";
 import { properties } from "./PropertyLoader";
 import * as UserDataPersistence from './UserDataPersistence';
-import { ProjectDataPersistence } from './ProjectDataPersistence';
-import { BoardDataPersistence } from '../../common/persistence/BoardDataPersistence';
-import { TypedMap } from "../../common/DataTypes/GenericDataTypes";
 import * as T from "../../common/DataTypes/ActionDataTypes";
 
-let projectDataPersistence: ProjectDataPersistence | undefined = undefined;
-let boardDataPersistence: TypedMap<BoardDataPersistence> = {};
-export function initializePersistence(filepath: string) {
-    projectDataPersistence = new ProjectDataPersistence(filepath);
-}
+import { projectDataPersistence, boardDataPersistence, addBoardPersistence } from "./Persistence";
 
 
 function getJwt(req: Request) {
@@ -85,9 +78,7 @@ export async function postBoard(req: Request, res: Response) {
             if (!result) throw new Error('Board creation failed.');
 
             // Create the board in our board persistence
-            boardDataPersistence[result.boardId] = new BoardDataPersistence(
-                path.resolve(properties.board_dir, result.boardId + ".mw"),
-                BoardDataPersistence.getInitData(data.template));
+            addBoardPersistence(result.boardId, data.template);
             res.json(result);
         });
     } catch(err) {
