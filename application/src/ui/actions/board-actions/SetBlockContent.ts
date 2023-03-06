@@ -4,6 +4,7 @@ import { useStore } from '../../store/store';
 
 import { SetBlockContentResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { BlockContent } from "../../../../../common/DataTypes/BlockDataTypes";
+import { ws } from "../../communications/Websocket";
 
 export class SetBlockContentAction extends Action {
 
@@ -19,7 +20,11 @@ export class SetBlockContentAction extends Action {
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send action over websocket
+            ws.emit('setBlockContent', JSON.stringify({
+                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                blockId: this.blockId,
+                content: this.content,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.setBlockContent({

@@ -1,19 +1,31 @@
 
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import io, { Socket } from 'socket.io-client';
 
 import { useVueModals } from 'mw-vue-modals';
 import { useVueNotify } from 'mw-vue-notify';
 
 import * as ErrorLogger from '../../common/ErrorLogger';
-import { useStore } from '../store/store';
 import { RemoteProject } from '../../../../common/DataTypes/FileDataTypes';
+
+// -- Actions --
 import { GetBoardDataAction } from '../actions/board-actions/GetBoardData';
+import { CreateBlockAction } from '../actions/board-actions/CreateBlock';
+import { DeleteBlocksAction } from '../actions/board-actions/DeleteBlocks';
+import { SetBlockContentAction } from '../actions/board-actions/SetBlockContent';
+import { SetBlockParentAction } from '../actions/board-actions/SetBlockParent';
+import { SetBlockPositionsAction } from '../actions/board-actions/SetBlockPositions';
+import { SetClassificationDefinitionsAction } from '../actions/board-actions/SetClassificationDefinitions';
+import { SetClassificationOnBlocksAction } from '../actions/board-actions/SetClassificationOnBlocks';
+import { SetFieldDefinitionsAction } from '../actions/board-actions/SetFieldDefinitions';
+import { SetFieldOnBlocksAction } from '../actions/board-actions/SetFieldOnBlocks';
+import { SaveViewAction } from '../actions/board-actions/SaveView';
+import { DeleteViewAction } from '../actions/board-actions/DeleteView';
+import { SetBlockPriorityAction } from '../actions/board-actions/SetBlockPriority';
+import { LoadViewAction } from '../actions/board-actions/LoadView';
 
 
 const WS_DIALOG_ID = 'ws-connecting-dialog';
-
-let store = useStore();
 
 let isOutdated = false;
 
@@ -118,22 +130,21 @@ export let ws = new Websocket();
 
 
 function registerListeners(socket: Socket) {
-    // TODO-const : Re-enable all the actions
-    socket.on('boardData', (data: any) => { ws.closeConnectionDialog(); GetBoardDataAction.processResponse(data); });
+    socket.on('getBoardData', (data: any) => { ws.closeConnectionDialog(); GetBoardDataAction.processResponse(data); });
     // // -- Block Data --
-    // socket.on('updatedBlockPositions', (data: any) => { UpdateBlockPositions.processResponse(data); });
-    // socket.on('updatedBlockContent',   (data: any) => { UpdateBlockContent.processResponse(data); });
-    // socket.on('newBlock',              (data: any) => { CreateNewBlock.processResponse(data); });
-    // socket.on('blocksDeleted',         (data: any) => { DeleteBlocks.processResponse(data); });
-    // socket.on('parentBlockSet',        (data: any) => { SetBlockParent.processResponse(data); });
+    socket.on('createBlock',       (data: any) => { CreateBlockAction.processResponse(data); });
+    socket.on('setBlockPositions', (data: any) => { SetBlockPositionsAction.processResponse(data); });
+    socket.on('deleteBlocks',      (data: any) => { DeleteBlocksAction.processResponse(data); });
+    socket.on('setBlockParent',    (data: any) => { SetBlockParentAction.processResponse(data); });
+    socket.on('setBlockContent',   (data: any) => { SetBlockContentAction.processResponse(data); });
     // // -- Fields and Classifications --
-    // socket.on('fieldDefinitions',          (data: any) => { UpdateFieldDefinitions.processResponse(data); });
-    // socket.on('classificationDefinitions', (data: any) => { UpdateClassificationDefinitions.processResponse(data); });
-    // socket.on('blockFieldValue',           (data: any) => { UpdateFieldValueOnBlocks.processResponse(data); });
-    // socket.on('blockClassifications',      (data: any) => { UpdateClassificationOnBlocks.processResponse(data); });
+    socket.on('setClassificationDefinitions', (data: any) => { SetClassificationDefinitionsAction.processResponse(data); });
+    socket.on('setClassificationOnBlocks',    (data: any) => { SetClassificationOnBlocksAction.processResponse(data); });
+    socket.on('setFieldDefinitions',          (data: any) => { SetFieldDefinitionsAction.processResponse(data); });
+    socket.on('setFieldOnBlocks',             (data: any) => { SetFieldOnBlocksAction.processResponse(data); });
     // // -- View Data --
-    // socket.on('viewData',         (data: any) => { LoadViewData.processResponse(data); });
-    // socket.on('viewSaved',        (data: any) => { SaveView.processResponse(data); });
-    // socket.on('viewDeleted',      (data: any) => { DeleteView.processResponse(data); });
-    // socket.on('blockPrioritySet', (data: any) => { SetBlockPriority.processResponse(data); });
+    socket.on('saveView',         (data: any) => { SaveViewAction.processResponse(data); });
+    socket.on('deleteView',       (data: any) => { DeleteViewAction.processResponse(data); });
+    socket.on('setBlockPriority', (data: any) => { SetBlockPriorityAction.processResponse(data); });
+    socket.on('loadView',         (data: any) => { LoadViewAction.processResponse(data); });
 }

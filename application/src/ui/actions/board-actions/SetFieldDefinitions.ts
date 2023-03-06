@@ -4,6 +4,7 @@ import { useStore } from '../../store/store';
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { SetFieldDefinitionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { FieldDefinition, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
+import { ws } from "../../communications/Websocket";
 
 export class SetFieldDefinitionsAction extends Action {
 
@@ -26,7 +27,14 @@ export class SetFieldDefinitionsAction extends Action {
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send action over websocket
+            ws.emit('setFieldDefinitions', JSON.stringify({
+                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                blockIds: this.blockIds,
+                fieldDefinitions: this.fieldDefinitions,
+                fieldIds: this.fieldIds,
+                possibleValueDefinitions: this.possibleValueDefinitions,
+                deletedFieldIds: this.deletedFieldIds,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.setFieldDefinitions({

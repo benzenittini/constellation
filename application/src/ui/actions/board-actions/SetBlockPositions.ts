@@ -4,6 +4,7 @@ import { useStore } from '../../store/store';
 import { BlockIdAndPosition } from "../../../../../common/DataTypes/BlockDataTypes";
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
 import { SetBlockPositionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { ws } from "../../communications/Websocket";
 
 export class SetBlockPositionsAction extends Action {
 
@@ -24,8 +25,10 @@ export class SetBlockPositionsAction extends Action {
 
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send GetBoardData over websocket
-            // TODO-const : Make sure we don't double-process this response when the websocket response comes in since we've already processed it above.
+            ws.emit('setBlockPositions', JSON.stringify({
+                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                blocksAndPositions: this.blocksAndPositions,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.setBlockPositions({

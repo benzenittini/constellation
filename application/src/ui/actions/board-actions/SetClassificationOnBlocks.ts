@@ -3,6 +3,7 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { SetClassificationOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { ws } from "../../communications/Websocket";
 
 export class SetClassificationOnBlocksAction extends Action {
 
@@ -21,7 +22,12 @@ export class SetClassificationOnBlocksAction extends Action {
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send GetBoardData over websocket
+            ws.emit('setClassificationOnBlocks', JSON.stringify({
+                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                blockIds: this.blockIds,
+                classificationId: this.classificationId,
+                isActive: this.isActive,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.setClassificationOnBlocks({

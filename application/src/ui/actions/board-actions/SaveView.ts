@@ -6,6 +6,7 @@ import { useStore } from '../../store/store';
 import { SaveViewResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ViewConfig } from "../../../../../common/DataTypes/ViewDataTypes";
 import { LoadViewAction } from "./LoadView";
+import { ws } from "../../communications/Websocket";
 
 export class SaveViewAction extends Action {
 
@@ -20,7 +21,10 @@ export class SaveViewAction extends Action {
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send action over websocket
+            ws.emit('saveView', JSON.stringify({
+                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                viewConfig: this.viewConfig,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.saveView({

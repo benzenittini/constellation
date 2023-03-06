@@ -2,6 +2,7 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { SetBlockPriorityResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { ws } from "../../communications/Websocket";
 
 export class SetBlockPriorityAction extends Action {
 
@@ -18,7 +19,11 @@ export class SetBlockPriorityAction extends Action {
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send action over websocket
+            ws.emit('setBlockPriority', JSON.stringify({
+                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                blockId: this.blockId,
+                beforeId: this.beforeId,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.setBlockPriority({

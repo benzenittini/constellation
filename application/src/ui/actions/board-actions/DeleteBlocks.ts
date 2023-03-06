@@ -2,6 +2,7 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { DeleteBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { ws } from "../../communications/Websocket";
 
 export class DeleteBlocksAction extends Action {
 
@@ -15,7 +16,10 @@ export class DeleteBlocksAction extends Action {
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send action over websocket
+            ws.emit('deleteBlocks', JSON.stringify({
+                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                blockIds: this.blockIds,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.deleteBlocks({

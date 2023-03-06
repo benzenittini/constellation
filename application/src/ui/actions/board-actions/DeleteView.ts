@@ -4,6 +4,7 @@ import { useVueNotify } from "mw-vue-notify";
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { DeleteViewResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { ws } from "../../communications/Websocket";
 
 export class DeleteViewAction extends Action {
 
@@ -18,7 +19,10 @@ export class DeleteViewAction extends Action {
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send action over websocket
+            ws.emit('deleteView', JSON.stringify({
+                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                viewId: this.viewId,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.deleteView({

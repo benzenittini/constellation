@@ -4,6 +4,7 @@ import { useStore } from '../../store/store';
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { SetClassificationDefinitionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
+import { ws } from "../../communications/Websocket";
 
 export class SetClassificationDefinitionsAction extends Action {
 
@@ -24,7 +25,13 @@ export class SetClassificationDefinitionsAction extends Action {
     submit(): void {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
-            // TODO-const : Send action over websocket
+            ws.emit('setClassificationDefinitions', JSON.stringify({
+                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                classificationIds: this.classificationIds,
+                classifications: this.classifications,
+                fields: this.fields,
+                possibleValues: this.possibleValues,
+            }));
         } else {
             // If local project, make the IPC request
             window.board.setClassificationDefinitions({
