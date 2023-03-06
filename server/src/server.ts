@@ -11,42 +11,14 @@ import { initializeSingleton } from './WebsocketManager';
 
 (async () => {
     try {
-        // Set up the property loader and logger
+
+        // ===============
+        // Singleton Setup
+        // ---------------
+
         populateProperties(process.argv[2]);
         initializeLogger(properties.log_level, properties.log_dir);
         Rest.initializePersistence(properties.project_data);
-
-        // ========================
-        // Datastore Initialization
-        // ------------------------
-
-        // TODO-const : set up datastore
-        // if (process.env.NODE_ENV === 'production') {
-        //     if (properties.web.persistence.type === 'postgres') {
-        //         DataInterface.initializeForWebServer(new WebDataPostgres(properties.web.persistence.connectionInfo), stripeData);
-        //     } else if (properties.web.persistence.type === 'file') {
-        //         DataInterface.initializeForWebServer(new WebDataInMemory(properties.web.persistence.location), stripeData);
-        //     } else {
-        //         throw new TopError('1.0.0', Severity.FATAL,
-        //             `Unrecognized persistence type: ${properties.web.persistence.type}`,
-        //             UserErrors.INTERNAL_ERROR);
-        //     }
-        // } else if (process.env.NODE_ENV !== 'production') {
-        //     if (properties.web.persistence.type === 'postgres') {
-        //         DataInterface.initializeForWebServer(new WebDataPostgres(properties.web.persistence.connectionInfo), stripeData);
-        //     } else if (properties.web.persistence.type === 'memory') {
-        //         DataInterface.initializeForWebServer(new WebDataInMemory(), stripeData);
-        //     } else if (properties.web.persistence.type === 'file') {
-        //         DataInterface.initializeForWebServer(new WebDataInMemory(properties.web.persistence.location), stripeData);
-        //     } else {
-        //         throw new TopError('1.0.0', Severity.FATAL,
-        //             `Unrecognized persistence type: ${(properties.web.persistence as any).type}`,
-        //             UserErrors.INTERNAL_ERROR);
-        //     }
-        //     if (properties.web.persistence.loadTestData) {
-        //         DatabaseBootstrapper.initializeWebServer();
-        //     }
-        // }
 
 
         // ============

@@ -10,6 +10,7 @@ import http from 'http';
 // -- Internal --
 import { logger } from "./Logger";
 import * as WebsocketHandlers from './WebsocketHandlers';
+import { verifyCreds } from "./UserDataPersistence";
 
 // -- Singleton Management --
 export let singleton: WebsocketManager;
@@ -40,13 +41,16 @@ export class WebsocketManager {
             socket.disconnect();
         } else {
             // Verify the user's auth token.
-            let token = socket.handshake.auth.token;
-            console.log(`User connected with token: ${token}`);
-            // TODO-const
-            let clientId = '';
+            let clientInfo = verifyCreds(socket.handshake.auth.token);
+            if (!clientInfo) {
+                socket.disconnect();
+                logger.error("User with invalid credentials attempted to connect.");
+                return;
+            }
+            socket.data.clientInfo = clientInfo;
 
             // All good. Let's save off the user.
-            logger.info(`User established connection. userId: ${clientId}`);
+            logger.info(`User established connection: [${clientInfo.clientName} - ${clientInfo.clientId}]`);
             socket.join("all-users");
 
             // Register socket events
@@ -99,9 +103,7 @@ export class WebsocketManager {
     }
 
     onSocketDisconnect(socket: Socket): void {
-        // TODO-const : Populate the clientId..? (or remove from the log message?)
-        let clientId = '';
-        logger.info(`User with id ${clientId} disconnected.`);
+        logger.info(`User [${socket.data.clientInfo.clientName} - ${socket.data.clientInfo.clientId}] disconnected.`);
         socket.leave("all-users");
     }
 

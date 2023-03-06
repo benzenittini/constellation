@@ -2,7 +2,7 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { UserFile } from '../../common/DataTypes/FileDataTypes';
+import { AuthorizedUser, UserFile } from '../../common/DataTypes/FileDataTypes';
 import { logger } from './Logger';
 import { properties } from './PropertyLoader';
 
@@ -37,18 +37,18 @@ export function consumeRegistrationKey(key: string, clientName: string, token: s
     saveConfig();
 }
 
-export function verifyCreds(token: string | undefined): boolean {
-    if (!token) return false;
+export function verifyCreds(token: string | undefined): AuthorizedUser | undefined {
+    if (!token) return undefined;
     if (!lastLoadedData) loadConfigFile();
 
     let user = lastLoadedData!.authorizedUsers.find(user => user.token === token);
 
     if (!user) {
         logger.error("Provided auth token doesn't match any registered users.");
-        return false;
+        return undefined;
     }
 
-    return true;
+    return user;
 }
 
 export function removeUserFromProject(token: string | undefined): void {
