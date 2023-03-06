@@ -25,6 +25,7 @@ export class SetBlockPositionsAction extends Action {
         if (useStore().getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
             // TODO-const : Send GetBoardData over websocket
+            // TODO-const : Make sure we don't double-process this response when the websocket response comes in since we've already processed it above.
         } else {
             // If local project, make the IPC request
             window.board.setBlockPositions({

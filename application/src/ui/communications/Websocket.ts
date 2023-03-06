@@ -5,8 +5,9 @@ import io, { Socket } from 'socket.io-client';
 import { useVueModals } from 'mw-vue-modals';
 import { useVueNotify } from 'mw-vue-notify';
 
-import * as ErrorLogger from './ErrorLogger';
-import { useStore } from '../ui/store/store';
+import * as ErrorLogger from '../../common/ErrorLogger';
+import { useStore } from '../store/store';
+import { RemoteProject } from '../../../../common/DataTypes/FileDataTypes';
 
 // TODO-const : Re-enable all the actions
 // import { GetBoardDataAction } from '../actions/WebsocketActions/GetBoardData';
@@ -35,8 +36,6 @@ class Websocket {
 
     private socket: Socket | undefined;
 
-    private outageNotificationId?: string;
-
     isConnected(): boolean {
         return (this.socket !== undefined) && this.socket.connected;
     }
@@ -50,57 +49,40 @@ class Websocket {
         }
     }
 
-    connectWebsocket(projectId: string, boardId: string): Promise<void> {
+    connectWebsocket(remote: RemoteProject, boardId: string): Promise<void> {
         this.openConnectionDialog();
         this.setConnectionDialogMessage('connecting...');
 
         return new Promise((resolve, reject) => {
             // TODO-later handle reject
             if (!this.isConnected()) {
-                this.socket = io({
-                    path: `/ws/app/${projectId}`,
+                this.socket = io(remote.serverUrl, {
+                    path: `/ws`,
                     transports: ['websocket'],
-                    query: { clientVersion: WEBPACK.APP_VERSION }
+                    query: { clientVersion: WEBPACK.APP_VERSION },
+                    auth: { token: remote.credentials },
                 });
-
-                // Make a parallel (or sequential?) web request to check for a planned outage. If one exists,
-                // cease the WS connection attempt.
-                // TODO-const : Re-enable all the actions
-                // new GetOutageRequest()
-                //     .send(({data}: any) => {
-                //         if (data?.timestamp) {
-                //             useVueNotify().showNotification({
-                //                 cssClasses: [ 'mw-notification-failure' ],
-                //                 position: 'middle-center',
-                //                 dismissButton: false,
-                //                 data: { message: "Due to a planned outage, we're currently not accepting new connections. Please try back in a few minutes." }
-                //             });
-                //             this.disconnectWebsocket();
-                //         }
-                //     });
 
                 // Listen for incoming messages
                 registerListeners(this.socket);
 
-                // Once connected, one of the following two events will be called depending on the success
-                // of the connection.
+                // Once connected, one of the following two events will be called depending on the success of the connection.
                 this.socket.on('oldClient', () => {
                     isOutdated = true;
                     this.closeConnectionDialog();
                     useVueNotify().showNotification({
                         cssClasses: ['mw-notification-failure'],
-                        data: { message: "You have an outdated client. Please refresh your browser to continue using Spacia." },
+                        data: { message: "You have an outdated client. Please update your app to connect to this server." },
                         dismissButton: false,
                         dismissAfterMillis: 0,
                         position: 'middle-center'
                     });
                 });
                 this.socket.on('clientValidated', () => {
-                    let authToken = store.state.generalData.authToken;
-                    this.socket!.emit('subscribeToBoard', { boardId, authToken });
-
+                    this.socket!.emit('subscribeToBoard', { boardId });
                     this.setConnectionDialogMessage('fetching data...');
-
+                    // TODO-const : Re-enable all the actions
+                    // new GetBoardDataAction(boardId).send();
                     resolve();
                 });
 
@@ -146,100 +128,28 @@ class Websocket {
     closeConnectionDialog() {
         useVueModals().closeModal(WS_DIALOG_ID);
     }
-
-    // ===================
-    // Outage Notification
-    // -------------------
-
-    showOutageNotification(timestamp: number | undefined) {
-        this.closeOutageNotification();
-        if (timestamp) {
-            this.outageNotificationId = useVueNotify().showNotification({
-                cssClasses: [ 'mw-notification-warning' ],
-                position: 'middle-center',
-                data: { message: `Heads up! We planned a service outage for ${new Date(timestamp).toLocaleString()}. Outages usually last less than 15 minutes, during which you'll lose connection and will not be able to make any changes. We're sorry for this inconvenience!` },
-            });
-        }
-    }
-    closeOutageNotification(showBackMessage: boolean = false) {
-        if (this.outageNotificationId) {
-            useVueNotify().deleteNotification(this.outageNotificationId);
-            if (showBackMessage) {
-                this.outageNotificationId = useVueNotify().showNotification({
-                    cssClasses: [ 'mw-notification-success' ],
-                    position: 'top-center',
-                    dismissAfterMillis: 2000,
-                    data: { message: "And we're back!"},
-                });
-            }
-        }
-    }
 }
 
 export let ws = new Websocket();
 
 
-// Copied from server's "AppDataInterface.ts". Keep these two locations in sync.
-interface InitializationStatus {
-    status: 'INITIALIZING' | 'NEEDS_RECOVERY' | 'RECOVERING' | 'OK' | 'FAILED';
-}
-
 function registerListeners(socket: Socket) {
-    const DATA_RECOVERY_DIALOG_ID = "data-recovery";
-    let dataRecoveryModal = {
-        id: DATA_RECOVERY_DIALOG_ID,
-        styleOverrides: { 'width': '600px' },
-        layout: {
-            componentName: 'mw-vm-no-layout',
-            panes: {
-                'main': {
-                    componentName: 'eic-data-recovery-dialog',
-                    eventHandlers: {
-                        'mw-close-modal': () => { useVueModals().closeModal(DATA_RECOVERY_DIALOG_ID); }
-                    }
-                }
-            }
-        }
-    }
-
-    socket.on('initializationStatus', (data: InitializationStatus) => {
-
-        if (data.status === 'OK') {
-            // Refresh the board data
-            let boardId = store.state.generalData.currentProjectBoard.boardId;
-            if (boardId) {
-                // TODO-const : Re-enable all the actions
-                // new GetBoardDataAction(boardId).send();
-            } else {
-                // App data initialized OK on the server, but locally we don't have a boardId
-                ErrorLogger.showError('5.1.2');
-            }
-        } else if (data.status === 'FAILED') {
-            useVueModals().createOrUpdateModal(dataRecoveryModal);
-        } else if (['INITIALIZING', 'NEEDS_RECOVERY', 'RECOVERING'].includes(data.status)) {
-            // We don't really care about these statuses (nor should we receive them).
-            // Data recovery goes by so quickly, waiting for 'OK' and 'FAILED' should be enough.
-        }
-    });
-
     // TODO-const : Re-enable all the actions
     // socket.on('boardData', (data: any) => { ws.closeConnectionDialog(); ws.closeOutageNotification(true); GetBoardDataAction.processResponse(data); });
     // // -- Block Data --
     // socket.on('updatedBlockPositions', (data: any) => { UpdateBlockPositions.processResponse(data); });
     // socket.on('updatedBlockContent',   (data: any) => { UpdateBlockContent.processResponse(data); });
     // socket.on('newBlock',              (data: any) => { CreateNewBlock.processResponse(data); });
-    // socket.on('blocksDeleted',        (data: any) => { DeleteBlocks.processResponse(data); });
+    // socket.on('blocksDeleted',         (data: any) => { DeleteBlocks.processResponse(data); });
     // socket.on('parentBlockSet',        (data: any) => { SetBlockParent.processResponse(data); });
     // // -- Fields and Classifications --
     // socket.on('fieldDefinitions',          (data: any) => { UpdateFieldDefinitions.processResponse(data); });
     // socket.on('classificationDefinitions', (data: any) => { UpdateClassificationDefinitions.processResponse(data); });
-    // socket.on('blockFieldValue',          (data: any) => { UpdateFieldValueOnBlocks.processResponse(data); });
-    // socket.on('blockClassifications',     (data: any) => { UpdateClassificationOnBlocks.processResponse(data); });
+    // socket.on('blockFieldValue',           (data: any) => { UpdateFieldValueOnBlocks.processResponse(data); });
+    // socket.on('blockClassifications',      (data: any) => { UpdateClassificationOnBlocks.processResponse(data); });
     // // -- View Data --
     // socket.on('viewData',         (data: any) => { LoadViewData.processResponse(data); });
     // socket.on('viewSaved',        (data: any) => { SaveView.processResponse(data); });
     // socket.on('viewDeleted',      (data: any) => { DeleteView.processResponse(data); });
     // socket.on('blockPrioritySet', (data: any) => { SetBlockPriority.processResponse(data); });
-    // -- Misc --
-    socket.on('outage', (data: any) => { ws.showOutageNotification(data.timestamp); });
 }

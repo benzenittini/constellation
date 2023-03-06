@@ -6,6 +6,8 @@ import express from 'express';
 import * as Rest from './RestHandlers';
 import { properties, populateProperties } from './PropertyLoader';
 import { initializeLogger, logger } from './Logger';
+import { createServer } from 'http';
+import { initializeSingleton } from './WebsocketManager';
 
 (async () => {
     try {
@@ -51,11 +53,13 @@ import { initializeLogger, logger } from './Logger';
         // Server Setup
         // ------------
 
-        // Express
+        // HTTP server setup
         const app = express();
-
-        // Required for receiving JSON bodies
         app.use(express.json());
+
+        // Websocket setup
+        const httpServer = createServer(app);
+        initializeSingleton(httpServer);
 
 
         // ==========================
@@ -72,7 +76,7 @@ import { initializeLogger, logger } from './Logger';
         // Here we go! (Wheee!)
         // --------------------
 
-        app.listen(properties.server_port, () => {
+        httpServer.listen(properties.server_port, () => {
             logger.info(`Web server listening at http://${properties.server_host}:${properties.server_port}`);
         });
 

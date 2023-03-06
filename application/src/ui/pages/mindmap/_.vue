@@ -27,11 +27,13 @@
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, onUnmounted, ref } from 'vue';
+import { LOCAL_PROJECT } from '../../../../../common/DataTypes/BoardDataTypes';
 
 import { GetBoardDataAction } from '../../actions/board-actions/GetBoardData';
 import { useEmitter } from '../../composables/Emitter';
 import { useWindowEvents } from '../../composables/WindowEvents';
 import { useStore } from '../../store/store';
+import { ws } from '../../communications/Websocket';
 
 export default defineComponent({
     setup() {
@@ -54,7 +56,6 @@ export default defineComponent({
             if (projectBoard?.boardId) {
                 let currentProject = store.state.generalData.projectData[projectBoard.projectId]
                 setTabName(currentProject?.projectName, currentProject?.boards[projectBoard.boardId].boardName);
-                new GetBoardDataAction().submit();
 
                 // Register some global event handlers
                 windowEvents.register('globalAppKeyDown', 'keydown', (keyboardEvent: KeyboardEvent) => {
@@ -71,6 +72,20 @@ export default defineComponent({
                         store.dispatch("lockOpenClosed", { blockIds: store.getters.selectedBlockIds });
                     }
                 });
+
+                // If it's a local project, request the data.
+                if (projectBoard.projectId === LOCAL_PROJECT) {
+                    new GetBoardDataAction().submit();
+                } else {
+                    // If it's a remote project, set up the websocket connection
+                    let remoteProject = store.getters.getRemoteProjectById(projectBoard.projectId);
+                    if (!remoteProject) {
+                        // TODO-const : drop a generic error to try again..?
+                        console.error("Could not find remote project.");
+                    } else {
+                        ws.connectWebsocket(remoteProject, projectBoard.boardId);
+                    }
+                }
             } else {
                 // TODO-const : drop a generic error to try again..?
             }
@@ -78,6 +93,7 @@ export default defineComponent({
 
         onUnmounted(() => {
             windowEvents.deregisterAll();
+            ws.disconnectWebsocket();
         });
 
         let showMindMap = ref(true);
