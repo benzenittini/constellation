@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, reactive } from 'vue';
+import { defineComponent, computed, onMounted, reactive, onUnmounted } from 'vue';
 import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../../store/store';

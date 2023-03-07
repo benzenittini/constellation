@@ -37,7 +37,7 @@ export class WebsocketManager {
         // First, check their client version. If it's old, then disconnect them and prompt them to refresh their page.
         let clientVersion = (socket.request as any)?._query?.clientVersion;
         if (WEBPACK.APP_VERSION !== clientVersion) {
-            socket.emit('oldClient');
+            socket.emit('oldClient', WEBPACK.APP_VERSION);
             socket.disconnect();
         } else {
             // Verify the user's auth token.

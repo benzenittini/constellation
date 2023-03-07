@@ -94,6 +94,7 @@ export default defineComponent({
         onUnmounted(() => {
             windowEvents.deregisterAll();
             ws.disconnectWebsocket();
+            ws.closeOutdatedNotification();
         });
 
         let showMindMap = ref(true);

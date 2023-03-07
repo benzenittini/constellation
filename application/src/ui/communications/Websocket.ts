@@ -32,6 +32,7 @@ let isOutdated = false;
 class Websocket {
 
     private socket: Socket | undefined;
+    private outdatedClientNotifId: string | undefined;
 
     isConnected(): boolean {
         return (this.socket !== undefined) && this.socket.connected;
@@ -64,12 +65,19 @@ class Websocket {
                 registerListeners(this.socket);
 
                 // Once connected, one of the following two events will be called depending on the success of the connection.
-                this.socket.on('oldClient', () => {
+                this.socket.on('oldClient', (serverVersion) => {
                     isOutdated = true;
                     this.closeConnectionDialog();
-                    useVueNotify().showNotification({
+                    this.outdatedClientNotifId = useVueNotify().showNotification({
                         cssClasses: ['mw-notification-failure'],
-                        data: { message: "You have an outdated client. Please update your app to connect to this server." },
+                        componentName: 'mw-vn-message-with-list',
+                        data: {
+                            message: `Version mismatch between client and server. Please synchronize the versions to connect to this server.`,
+                            items: [
+                                `Client: ${WEBPACK.APP_VERSION}`,
+                                `Server: ${serverVersion}`,
+                            ]
+                        },
                         dismissButton: false,
                         dismissAfterMillis: 0,
                         position: 'middle-center'
@@ -123,6 +131,10 @@ class Websocket {
     }
     closeConnectionDialog() {
         useVueModals().closeModal(WS_DIALOG_ID);
+    }
+
+    closeOutdatedNotification() {
+        if (this.outdatedClientNotifId) useVueNotify().deleteNotification(this.outdatedClientNotifId);
     }
 }
 
