@@ -5,6 +5,7 @@
   "description": "A visual organization tool",
   "author": "<ben@zenittini.dev>",
   "private": true,
+  "main": "build/index.js",
   "scripts": {
     "build-ui": "webpack --config webpack.ui-dev.js",
     "watch-ui": "webpack --watch --config webpack.ui-dev.js",

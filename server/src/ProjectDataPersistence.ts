@@ -77,11 +77,21 @@ export class ProjectDataPersistence {
     }
 
     async deleteBoard({ boardId }: T.DeleteBoardRequest): Promise<T.DeleteBoardResponse> {
-        // TODO-const
+        let index = this.data.boards.findIndex(board => board.boardId === boardId);
+
+        if (index === -1) {
+            return {
+                wasSuccessful: false,
+                boardId,
+                projectId: this.data.projectId,
+            };
+        }
+        this.data.boards.splice(index, 1);
+
         return {
             wasSuccessful: true,
             boardId,
             projectId: this.data.projectId,
-        };
+        }
     }
 }

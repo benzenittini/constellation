@@ -7,7 +7,7 @@ import { properties } from "./PropertyLoader";
 import * as UserDataPersistence from './UserDataPersistence';
 import * as T from "../../common/DataTypes/ActionDataTypes";
 
-import { projectDataPersistence, boardDataPersistence, addBoardPersistence } from "./Persistence";
+import { projectDataPersistence, deleteBoardPersistence, addBoardPersistence } from "./Persistence";
 
 
 function getJwt(req: Request) {
@@ -26,6 +26,11 @@ function requireAuthorization(req: Request, res: Response, callback: () => void)
         res.status(401).json({});
     }
 }
+
+
+// ==============
+// User Endpoints
+// --------------
 
 export async function postUser(req: Request, res: Response) {
     try {
@@ -56,6 +61,11 @@ export async function deleteUser(req: Request, res: Response) {
     }
 }
 
+
+// =================
+// Project Endpoints
+// -----------------
+
 export async function getProject(req: Request, res: Response) {
     try {
         requireAuthorization(req, res, async () => {
@@ -66,6 +76,11 @@ export async function getProject(req: Request, res: Response) {
         res.status(500).json({});
     }
 }
+
+
+// ===============
+// Board Endpoints
+// ---------------
 
 export async function postBoard(req: Request, res: Response) {
     try {
@@ -79,6 +94,19 @@ export async function postBoard(req: Request, res: Response) {
             // Create the board in our board persistence
             addBoardPersistence(result.boardId, data.template);
             res.json(result);
+        });
+    } catch(err) {
+        logger.error(err);
+        res.status(500).json({});
+    }
+}
+
+export async function deleteBoard(req: Request, res: Response) {
+    try {
+        requireAuthorization(req, res, async () => {
+            let boardId = req?.params?.id;
+            deleteBoardPersistence(boardId);
+            res.json(await projectDataPersistence!.deleteBoard({boardId}));
         });
     } catch(err) {
         logger.error(err);

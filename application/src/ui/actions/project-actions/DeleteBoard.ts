@@ -21,23 +21,18 @@ export class DeleteBoardAction extends Action {
 
     submit(): void {
         if (this.projectId !== LOCAL_PROJECT) {
-            // TODO-const
-            // // If remote project, send message over REST.
-            // let remoteProject = useStore().getters.getRemoteProjectById(this.projectId);
-            // if (remoteProject) {
-            //     send<DeleteBoardResponse>({
-            //         httpMethod: 'post',
-            //         endpoint: `${remoteProject.serverUrl}/board`,
-            //         creds: remoteProject.credentials,
-            //         data: {
-            //             boardOrFileName: this.boardOrFileName,
-            //             template: this.template,
-            //         },
-            //         callback: (resp) => this.processResponse(resp.data)
-            //     });
-            // } else {
-            //     // TODO-const : show an error, recommend a reload.
-            // }
+            // If remote project, send message over REST.
+            let remoteProject = useStore().getters.getRemoteProjectById(this.projectId);
+            if (remoteProject) {
+                send<DeleteBoardResponse>({
+                    httpMethod: 'delete',
+                    endpoint: `${remoteProject.serverUrl}/board/${this.boardId}`,
+                    creds: remoteProject.credentials,
+                    callback: (resp) => this.processResponse(resp.data)
+                });
+            } else {
+                // TODO-const : show an error, recommend a reload.
+            }
         } else {
             // If local project, make the IPC request
             window.config.deleteBoard({

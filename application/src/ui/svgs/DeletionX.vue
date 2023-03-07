@@ -30,6 +30,14 @@ export default defineComponent({
         circle { fill: vars.$red4; }
         line { stroke: vars.$gray-very-dark; }
     }
+
+    &.inversion {
+        circle { fill: vars.$red4; }
+        line { stroke: vars.$gray-very-dark; }
+        &:hover {
+            circle { fill: vars.$red6; }
+        }
+    }
 }
 
 </style>

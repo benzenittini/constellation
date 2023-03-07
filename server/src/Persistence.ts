@@ -1,5 +1,6 @@
 
 import path from "path";
+import fs from 'fs';
 
 import { TemplateClassification } from "../../common/DataTypes/BoardDataTypes";
 import { TypedMap } from "../../common/DataTypes/GenericDataTypes";
@@ -27,3 +28,12 @@ export function addBoardPersistence(boardId: string, template?: TemplateClassifi
         path.resolve(properties.board_dir, boardId + ".mw"),
         BoardDataPersistence.getInitData(template));
 }
+
+export function deleteBoardPersistence(boardId: string) {
+    delete boardDataPersistence[boardId];
+    const file = path.resolve(properties.board_dir, boardId + ".mw");
+    if (fs.existsSync(file)) {
+        fs.rmSync(file);
+    }
+}
+

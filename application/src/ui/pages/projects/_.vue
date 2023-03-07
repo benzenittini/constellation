@@ -9,7 +9,7 @@
                     v-on:click="openBoard(LOCAL_PROJECT, board.boardId)">
                     <td>{{ board.boardName }}</td>
                     <td>{{ board.boardId }}</td>
-                    <td><eic-svg-deletion-x width="20px"
+                    <td><eic-svg-deletion-x width="25px"
                         v-on:click.stop="deleteBoard(LOCAL_PROJECT, board.boardId)"
                         ></eic-svg-deletion-x></td>
                 </tr>
@@ -29,8 +29,12 @@
             <div class="mw-board-blocks">
                 <div class="mw-board-block" v-for="board in Object.values(project.boards)"
                     v-bind:key="board.boardId"
-                    v-on:click="openBoard(project.projectId, board.boardId)"
-                    >{{ board.boardName }}</div>
+                    v-on:click="openBoard(project.projectId, board.boardId)">
+                    {{ board.boardName }}
+                    <eic-svg-deletion-x class="inversion" width="25px"
+                        v-on:click.stop="deleteBoard(project.projectId, board.boardId)"
+                        ></eic-svg-deletion-x>
+                </div>
             </div>
             <div class="mw-button-group">
                 <button class="tertiary green" v-on:click="importBoard(project.projectId)">Import Board</button>
@@ -290,6 +294,12 @@ export default defineComponent({
                 border: 2px solid vars.$pink-medium;
                 padding: 32px 48px;
                 cursor: pointer;
+
+                .mw-svg-deletionx {
+                    position: absolute;
+                    top: -12px;
+                    right: -12px;
+                }
             }
         }
     }

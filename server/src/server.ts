@@ -39,10 +39,14 @@ import { initializePersistence } from './Persistence';
         // REST Endpoint Registration
         // --------------------------
 
-        app.post  ('/user',    Rest.postUser);   // User joining this project
-        app.delete('/user',    Rest.deleteUser); // User leaving this project
-        app.get   ('/project', Rest.getProject); // Fetching a project's name, id, and boards
-        app.post  ('/board',   Rest.postBoard);  // Creating a new board
+        // -- User --
+        app.post  ('/user',      Rest.postUser);    // User joining this project
+        app.delete('/user',      Rest.deleteUser);  // User leaving this project
+        // -- Project --
+        app.get   ('/project',   Rest.getProject);  // Fetching a project's name, id, and boards
+        // -- Board --
+        app.post  ('/board',     Rest.postBoard);   // Creating a new board
+        app.delete('/board/:id', Rest.deleteBoard); // Deletes a board by id
 
 
         // ====================
