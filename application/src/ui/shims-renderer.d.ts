@@ -1,5 +1,6 @@
 
 import * as T from "../../../common/DataTypes/ActionDataTypes";
+import { BoardData } from "../../../common/DataTypes/BoardDataTypes";
 
 
 /** Tells typescript what properties are available on the global "window" object. Useful for preloads. */
@@ -14,6 +15,7 @@ declare global {
             addRemoteProject:    (req: T.AddRemoteProjectRequest)    => Promise<T.AddRemoteProjectResponse>,
             removeRemoteProject: (req: T.RemoveRemoteProjectRequest) => Promise<T.RemoveRemoteProjectResponse>,
             importBoard:         (req: T.ImportBoardRequest)         => Promise<T.ImportBoardResponse>,
+            readFileAsBoard:     () => Promise<T.ReadFileAsBoardResponse>,
         },
         board: {
             getBoardData:       (req: T.GetBoardDataRequest) => Promise<T.GetBoardDataResponse>,

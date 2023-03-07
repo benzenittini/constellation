@@ -62,6 +62,7 @@ import Triangle        from './svgs/Triangle.vue';
 import Projects               from './pages/projects/_.vue';
 import AddRemoteProjectDialog from './pages/projects/AddRemoteProjectDialog.vue';
 import CreateBoardDialog      from './pages/projects/CreateBoardDialog.vue';
+import ImportBoardDialog      from './pages/projects/ImportBoardDialog.vue';
 import DeleteBoardDialog      from './pages/projects/DeleteBoardDialog.vue';
 
 // Mind Map
@@ -157,6 +158,7 @@ export let components: any = {
     'eic-page-projects': Projects,
     'eic-add-remote-project-dialog': AddRemoteProjectDialog,
     'eic-create-board-dialog': CreateBoardDialog,
+    'eic-import-board-dialog': ImportBoardDialog,
     'eic-delete-board-dialog': DeleteBoardDialog,
     // Mind Map
     'eic-page-mindmap': Mindmap,

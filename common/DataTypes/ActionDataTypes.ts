@@ -22,8 +22,9 @@ export type DeleteBoardResponse = { wasSuccessful: boolean, boardId: string, pro
 export type GetRemoteProjectsRequest = void;
 export type GetRemoteProjectsResponse = RemoteProject[];
 
-export type ImportBoardRequest = void;
+export type ImportBoardRequest = undefined | { boardName: string, initialData: BoardData };
 export type ImportBoardResponse = BasicBoardData | undefined;
+export type ReadFileAsBoardResponse = { filepath?: string, filename?: string, boardData?: BoardData };
 
 export type JoinProjectRequest = { registrationKey: string, clientName: string };
 export type JoinProjectResponse = { token: string };

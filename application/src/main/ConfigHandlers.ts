@@ -7,7 +7,7 @@ import { BoardDataPersistence } from "../../../common/persistence/BoardDataPersi
 import * as ConfigDataPersistence from "../../../common/persistence/ConfigDataPersistence";
 import * as T from "../../../common/DataTypes/ActionDataTypes";
 import { mapify } from "../../../common/utilities/ArrayUtils";
-import { BasicBoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME } from "../../../common/DataTypes/BoardDataTypes";
+import { BasicBoardData, BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME } from "../../../common/DataTypes/BoardDataTypes";
 
 
 export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
@@ -19,6 +19,7 @@ export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('config:addRemoteProject',    (event, req) => addRemoteProject(req));
     ipcMain.handle('config:removeRemoteProject', (event, req) => removeRemoteProject(req));
     ipcMain.handle('config:importBoard',         () => importBoard());
+    ipcMain.handle('config:readFileAsBoard',     () => readFileAsBoard());
 }
 
 async function getProjectData(): Promise<T.GetProjectDataResponse> {
@@ -116,4 +117,33 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
     }
 
     return undefined;
+}
+
+async function readFileAsBoard(): Promise<T.ReadFileAsBoardResponse> {
+    let { canceled, filePaths } = await dialog.showOpenDialog({
+        title: "Import Board",
+        buttonLabel: "Select",
+        filters: [{
+            name: 'Constellation Board',
+            extensions: ['mw'],
+        }],
+        properties: [
+            'openFile',
+            'createDirectory',
+        ],
+    });
+
+    if (!canceled && filePaths.length > 0) {
+        const chosenFile = filePaths[0];
+        let boardData = JSON.parse(fs.readFileSync(chosenFile, 'utf8')) as BoardData;
+
+        // Return board data, where ID is filepath and name is filename
+        return {
+            filepath: chosenFile,
+            filename: path.basename(chosenFile, '.mw'),
+            boardData,
+        };
+    }
+
+    return {};
 }

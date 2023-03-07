@@ -53,7 +53,7 @@ import { defineComponent, computed, onMounted, reactive, onUnmounted } from 'vue
 import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../../store/store';
-import { LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification } from '../../../../../common/DataTypes/BoardDataTypes';
+import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification } from '../../../../../common/DataTypes/BoardDataTypes';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
@@ -68,6 +68,7 @@ export default defineComponent({
         const store = useStore();
 
         const CREATE_BOARD_DIALOG_ID = 'create-board-dialog';
+        const IMPORT_BOARD_DIALOG_ID = 'import-board-dialog';
         const DELETE_BOARD_DIALOG_ID = 'delete-board-dialog';
 
         onMounted(() => {
@@ -181,7 +182,56 @@ export default defineComponent({
                 });
             },
             importBoard: (projectId: string) => {
-                new ImportBoardAction(projectId).submit();
+                if (projectId === LOCAL_PROJECT) {
+                    new ImportBoardAction(projectId).submit();
+                } else {
+                    // For remote projects, we need both the file data and a board name ... so launching a dialog.
+                    type ImportBoardModalData = {
+                        saveData: { boardName: string, initialData?: BoardData },
+                    };
+                    let modalData: ImportBoardModalData = reactive(JSON.parse(JSON.stringify({
+                        saveData: { boardName: '' },
+                    })));
+
+                    let mwVueModals = useVueModals();
+                    mwVueModals.createOrUpdateModal({
+                        id: IMPORT_BOARD_DIALOG_ID,
+                        styleOverrides: {
+                            'width': '650px',
+                        },
+                        layout: {
+                            componentName: 'mw-vm-fixed-bottom',
+                            panes: {
+                                'bottom': {
+                                    name: 'eic-savecancel',
+                                    componentData: { mwSaveText: 'Import Board' },
+                                    eventHandlers: {
+                                        'mw-cancel': (event: any) => { mwVueModals.closeModal(IMPORT_BOARD_DIALOG_ID); },
+                                        'mw-save':  (event: any) => {
+                                            let { boardName, initialData } = modalData.saveData;
+                                            new ImportBoardAction(
+                                                projectId,
+                                                boardName,
+                                                JSON.parse(JSON.stringify(initialData)),
+                                            ).submit();
+                                            // TODO-const : Close modal if successful, or show error if it's not!
+                                            mwVueModals.closeModal(IMPORT_BOARD_DIALOG_ID);
+                                        },
+                                    }
+                                },
+                                'main': {
+                                    componentName: 'eic-import-board-dialog',
+                                    componentData: modalData,
+                                    styleOverrides: {
+                                        'max-height': '500px',
+                                    },
+                                    eventHandlers: {
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
             },
             openBoard: (projectId: string, boardId: string) => {
                 store.dispatch('setCurrentProjectBoard', { projectId, boardId });
@@ -287,6 +337,7 @@ export default defineComponent({
         .mw-board-blocks {
             display: flex;
             margin: 24px;
+            gap: 20px;
             .mw-board-block {
                 @include mixins.lift-up(5px);
                 background: vars.$gray0;

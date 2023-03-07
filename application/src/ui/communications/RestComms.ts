@@ -2,11 +2,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import * as ErrorLogger from '../../common/ErrorLogger';
 
-export const HTTP_GET = 'get';
-export const HTTP_POST = 'post';
+export const HTTP_GET    = 'get';
+export const HTTP_POST   = 'post';
+export const HTTP_PUT    = 'put';
 export const HTTP_DELETE = 'delete';
 
-type HttpMethod = 'get' | 'post' | 'delete';
+type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
 export function send<T>({httpMethod, endpoint, data, creds, callback}: {
     httpMethod: HttpMethod,
@@ -24,7 +25,7 @@ export function send<T>({httpMethod, endpoint, data, creds, callback}: {
         request.headers = { "Authorization" : `Bearer ${creds}` };
     }
 
-    if (httpMethod === HTTP_POST) {
+    if ([HTTP_POST, HTTP_PUT].includes(httpMethod)) {
         request.data = data;
     }
 

@@ -7,7 +7,7 @@ import { properties } from "./PropertyLoader";
 import * as UserDataPersistence from './UserDataPersistence';
 import * as T from "../../common/DataTypes/ActionDataTypes";
 
-import { projectDataPersistence, deleteBoardPersistence, addBoardPersistence } from "./Persistence";
+import { projectDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "./Persistence";
 
 
 function getJwt(req: Request) {
@@ -93,6 +93,26 @@ export async function postBoard(req: Request, res: Response) {
 
             // Create the board in our board persistence
             addBoardPersistence(result.boardId, data.template);
+            res.json(result);
+        });
+    } catch(err) {
+        logger.error(err);
+        res.status(500).json({});
+    }
+}
+
+export async function putBoard(req: Request, res: Response) {
+    try {
+        requireAuthorization(req, res, async () => {
+            console.log("Received: " + JSON.stringify(req.body));
+            let { boardName, initialData } = (req.body as T.ImportBoardRequest)!;
+
+            // Create the board in our project persistence
+            let result = await projectDataPersistence!.createNewBoard({ boardOrFileName: boardName, template: [] });
+            if (!result) throw new Error('Board creation failed.');
+
+            // Create the board in our board persistence
+            importBoardPersistence(result.boardId, initialData);
             res.json(result);
         });
     } catch(err) {

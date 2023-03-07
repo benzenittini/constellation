@@ -46,6 +46,7 @@ import { initializePersistence } from './Persistence';
         app.get   ('/project',   Rest.getProject);  // Fetching a project's name, id, and boards
         // -- Board --
         app.post  ('/board',     Rest.postBoard);   // Creating a new board
+        app.put   ('/board',     Rest.putBoard);    // Importing existing board data into new board
         app.delete('/board/:id', Rest.deleteBoard); // Deletes a board by id
 
 

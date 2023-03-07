@@ -64,7 +64,7 @@ export class ProjectDataPersistence {
         };
     }
 
-    async createNewBoard({ boardOrFileName, template }: T.CreateNewBoardRequest): Promise<T.CreateNewBoardResponse> {
+    async createNewBoard({ boardOrFileName }: T.CreateNewBoardRequest): Promise<T.CreateNewBoardResponse> {
         let board = {
             boardId: uuidv4(),
             boardName: boardOrFileName,
@@ -87,6 +87,8 @@ export class ProjectDataPersistence {
             };
         }
         this.data.boards.splice(index, 1);
+
+        this.saveData();
 
         return {
             wasSuccessful: true,

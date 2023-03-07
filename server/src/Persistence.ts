@@ -2,7 +2,7 @@
 import path from "path";
 import fs from 'fs';
 
-import { TemplateClassification } from "../../common/DataTypes/BoardDataTypes";
+import { BoardData, TemplateClassification } from "../../common/DataTypes/BoardDataTypes";
 import { TypedMap } from "../../common/DataTypes/GenericDataTypes";
 import { BoardDataPersistence } from "../../common/persistence/BoardDataPersistence";
 import { ProjectDataPersistence } from "./ProjectDataPersistence";
@@ -27,6 +27,12 @@ export function addBoardPersistence(boardId: string, template?: TemplateClassifi
     boardDataPersistence[boardId] = new BoardDataPersistence(
         path.resolve(properties.board_dir, boardId + ".mw"),
         BoardDataPersistence.getInitData(template));
+}
+
+export function importBoardPersistence(boardId: string, initialData: BoardData) {
+    boardDataPersistence[boardId] = new BoardDataPersistence(
+        path.resolve(properties.board_dir, boardId + ".mw"),
+        initialData);
 }
 
 export function deleteBoardPersistence(boardId: string) {
