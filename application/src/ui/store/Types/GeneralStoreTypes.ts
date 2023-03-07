@@ -24,10 +24,11 @@ export type GeneralDataMutations<S = GeneralDataState> = {
 
     setCurrentProjectBoard (state: S, currentProjectBoard: CurrentProjectBoard): void;
 
-    addProject          (state: S, projectData: BasicProjectData): void;
-    removeProject       (state: S, projectId: string): void;
-    setBoardsForProject (state: S, data: { projectId: string, boards: TypedMap<BasicBoardData> }): void;
-    addBoardToProject   (state: S, data: { projectId: string, boardData: BasicBoardData }): void;
+    addProject             (state: S, projectData: BasicProjectData): void;
+    removeProject          (state: S, projectId: string): void;
+    setBoardsForProject    (state: S, data: { projectId: string, boards: TypedMap<BasicBoardData> }): void;
+    addBoardToProject      (state: S, data: { projectId: string, boardData: BasicBoardData }): void;
+    removeBoardFromProject (state: S, data: { projectId: string, boardId: string }): void;
 
     registerRemoteProject   (state: S, data: { remoteProject: RemoteProject, projectId?: string }): void;
     deregisterRemoteProject (state: S, data: { remoteProject: RemoteProject }): void;
@@ -45,10 +46,11 @@ export interface GeneralDataActions {
 
     setCurrentProjectBoard ({ commit }: AugmentedActionContext<GeneralDataState>, currentProjectBoard: CurrentProjectBoard): void;
 
-    addProject          ({ commit }: AugmentedActionContext<GeneralDataState>, data: BasicProjectData): void;
-    removeProject       ({ commit }: AugmentedActionContext<GeneralDataState>, projectId: string): void;
-    setBoardsForProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boards: TypedMap<BasicBoardData> }): void;
-    addBoardToProject   ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardData: BasicBoardData }): void;
+    addProject             ({ commit }: AugmentedActionContext<GeneralDataState>, data: BasicProjectData): void;
+    removeProject          ({ commit }: AugmentedActionContext<GeneralDataState>, projectId: string): void;
+    setBoardsForProject    ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boards: TypedMap<BasicBoardData> }): void;
+    addBoardToProject      ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardData: BasicBoardData }): void;
+    removeBoardFromProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string }): void;
 
     registerRemoteProject   ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject, projectId?: string }): void;
     deregisterRemoteProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject }): void;

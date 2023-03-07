@@ -9,6 +9,9 @@
                     v-on:click="openBoard(LOCAL_PROJECT, board.boardId)">
                     <td>{{ board.boardName }}</td>
                     <td>{{ board.boardId }}</td>
+                    <td><eic-svg-deletion-x width="20px"
+                        v-on:click.stop="deleteBoard(LOCAL_PROJECT, board.boardId)"
+                        ></eic-svg-deletion-x></td>
                 </tr>
             </table>
             <div class="mw-button-group">
@@ -54,12 +57,14 @@ import { CreateNewBoardAction } from '../../actions/project-actions/CreateNewBoa
 import { ImportBoardAction } from '../../actions/project-actions/ImportBoard';
 import { LeaveProjectAction } from '../../actions/project-actions/LeaveProject';
 import { JoinProjectAction } from '../../actions/project-actions/JoinProject';
+import { DeleteBoardAction } from '../../actions/project-actions/DeleteBoard';
 
 export default defineComponent({
     setup() {
         const store = useStore();
 
         const CREATE_BOARD_DIALOG_ID = 'create-board-dialog';
+        const DELETE_BOARD_DIALOG_ID = 'delete-board-dialog';
 
         onMounted(() => {
             document.title = "Constellation";
@@ -117,6 +122,49 @@ export default defineComponent({
                             },
                             'main': {
                                 componentName: 'eic-create-board-dialog',
+                                componentData: modalData,
+                                styleOverrides: {
+                                    'max-height': '500px',
+                                },
+                                eventHandlers: {
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+            deleteBoard: (projectId: string, boardId: string) => {
+                type DeleteBoardModalData = {
+                    saveData: { projectId: string, boardId: string, deleteFile?: boolean },
+                };
+                let modalData: DeleteBoardModalData = reactive(JSON.parse(JSON.stringify({
+                    saveData: { projectId, boardId, deleteFile: false },
+                })));
+
+                const mwVueModals = useVueModals();
+                mwVueModals.createOrUpdateModal({
+                    id: DELETE_BOARD_DIALOG_ID,
+                    styleOverrides: {
+                        'width': '650px',
+                    },
+                    layout: {
+                        componentName: 'mw-vm-fixed-bottom',
+                        panes: {
+                            'bottom': {
+                                name: 'eic-savecancel',
+                                componentData: { mwSaveText: 'Yes' },
+                                eventHandlers: {
+                                    'mw-cancel':  (event: any) => { mwVueModals.closeModal(DELETE_BOARD_DIALOG_ID); },
+                                    'mw-save':  (event: any) => {
+                                        let { projectId, boardId, deleteFile } = modalData.saveData;
+                                        new DeleteBoardAction(projectId, boardId, deleteFile).submit();
+                                        // // TODO-const : Close modal if successful, or show error if it's not!
+                                        mwVueModals.closeModal(DELETE_BOARD_DIALOG_ID);
+                                    },
+                                }
+                            },
+                            'main': {
+                                componentName: 'eic-delete-board-dialog',
                                 componentData: modalData,
                                 styleOverrides: {
                                     'max-height': '500px',

@@ -9,6 +9,7 @@ declare global {
             getProjectData:      (req: T.GetProjectDataRequest)      => Promise<T.GetProjectDataResponse>,
             getPathForNewBoard:  () => Promise<string | undefined>,
             createNewBoard:      (req: T.CreateNewBoardRequest)      => Promise<T.CreateNewBoardResponse>,
+            deleteBoard:         (req: T.DeleteBoardRequest)         => Promise<T.DeleteBoardResponse>,
             getRemoteProjects:   (req: T.GetRemoteProjectsRequest)   => Promise<T.GetRemoteProjectsResponse>,
             addRemoteProject:    (req: T.AddRemoteProjectRequest)    => Promise<T.AddRemoteProjectResponse>,
             removeRemoteProject: (req: T.RemoveRemoteProjectRequest) => Promise<T.RemoveRemoteProjectResponse>,

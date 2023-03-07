@@ -14,6 +14,7 @@ export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('config:getProjectData',      () => getProjectData());
     ipcMain.handle('config:getPathForNewBoard',  () => getPathForNewBoard());
     ipcMain.handle('config:createNewBoard',      (event, req) => createNewBoard(req));
+    ipcMain.handle('config:deleteBoard',         (event, req) => deleteBoard(req));
     ipcMain.handle('config:getRemoteProjects',   () => getRemoteProjects());
     ipcMain.handle('config:addRemoteProject',    (event, req) => addRemoteProject(req));
     ipcMain.handle('config:removeRemoteProject', (event, req) => removeRemoteProject(req));
@@ -60,6 +61,22 @@ async function createNewBoard({ boardOrFileName, template }: T.CreateNewBoardReq
     }
 
     return undefined;
+}
+
+async function deleteBoard({ boardId, deleteFile }: T.DeleteBoardRequest): Promise<T.DeleteBoardResponse> {
+    ConfigDataPersistence.removeLocalBoard(boardId);
+
+    // TODO-const : Also delete this board's backups
+
+    if (deleteFile && fs.existsSync(boardId)) {
+        fs.rmSync(boardId);
+    }
+
+    return {
+        wasSuccessful: true,
+        boardId,
+        projectId: LOCAL_PROJECT,
+    };
 }
 
 async function getRemoteProjects(): Promise<T.GetRemoteProjectsResponse> {

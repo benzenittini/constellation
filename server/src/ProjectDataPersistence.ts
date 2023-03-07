@@ -75,4 +75,13 @@ export class ProjectDataPersistence {
 
         return board;
     }
+
+    async deleteBoard({ boardId }: T.DeleteBoardRequest): Promise<T.DeleteBoardResponse> {
+        // TODO-const
+        return {
+            wasSuccessful: true,
+            boardId,
+            projectId: this.data.projectId,
+        };
+    }
 }

@@ -16,6 +16,9 @@ export type GetProjectDataResponse = BasicProjectData;
 export type CreateNewBoardRequest = { boardOrFileName: string, template: TemplateClassification[] };
 export type CreateNewBoardResponse = BasicBoardData | undefined;
 
+export type DeleteBoardRequest = { boardId: string, deleteFile?: boolean };
+export type DeleteBoardResponse = { wasSuccessful: boolean, boardId: string, projectId: string };
+
 export type GetRemoteProjectsRequest = void;
 export type GetRemoteProjectsResponse = RemoteProject[];
 

@@ -54,6 +54,9 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
     addBoardToProject (state, {projectId, boardData}) {
         state.projectData[projectId].boards[boardData.boardId] = boardData;
     },
+    removeBoardFromProject (state, {projectId, boardId}) {
+        delete state.projectData[projectId].boards[boardId];
+    },
 
     registerRemoteProject (state, { remoteProject, projectId }) {
         let index = state.remoteProjectLookup.findIndex(proj => proj.remoteProject.serverUrl === remoteProject.serverUrl);
@@ -87,10 +90,11 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
 
     setCurrentProjectBoard ({ commit }, currentProjectBoard) { commit('setCurrentProjectBoard', currentProjectBoard); },
 
-    addProject          ({ commit }, projectData) { commit('addProject', projectData); },
-    removeProject       ({ commit }, projectId)                  { commit('removeProject', projectId); },
-    setBoardsForProject ({ commit }, { projectId, boards })      { commit('setBoardsForProject', { projectId, boards }); },
-    addBoardToProject   ({ commit }, { projectId, boardData })   { commit('addBoardToProject', { projectId, boardData }); },
+    addProject             ({ commit }, projectData)              { commit('addProject', projectData); },
+    removeProject          ({ commit }, projectId)                { commit('removeProject', projectId); },
+    setBoardsForProject    ({ commit }, { projectId, boards })    { commit('setBoardsForProject', { projectId, boards }); },
+    addBoardToProject      ({ commit }, { projectId, boardData }) { commit('addBoardToProject', { projectId, boardData }); },
+    removeBoardFromProject ({ commit }, { projectId, boardId })   { commit('removeBoardFromProject', { projectId, boardId }); },
 
     registerRemoteProject   ({ commit }, data) { commit('registerRemoteProject', data); },
     deregisterRemoteProject ({ commit }, data) { commit('deregisterRemoteProject', data); },

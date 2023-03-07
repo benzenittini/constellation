@@ -8,6 +8,7 @@ contextBridge.exposeInMainWorld('config', {
     getProjectData:      () => ipcRenderer.invoke('config:getProjectData'),
     getPathForNewBoard:  () => ipcRenderer.invoke('config:getPathForNewBoard'),
     createNewBoard:      (req: T.CreateNewBoardRequest) => ipcRenderer.invoke('config:createNewBoard', req),
+    deleteBoard:         (req: T.DeleteBoardRequest) => ipcRenderer.invoke('config:deleteBoard', req),
     getRemoteProjects:   () => ipcRenderer.invoke('config:getRemoteProjects'),
     addRemoteProject:    (req: T.AddRemoteProjectRequest) => ipcRenderer.invoke('config:addRemoteProject', req),
     removeRemoteProject: (req: T.RemoveRemoteProjectRequest) => ipcRenderer.invoke('config:removeRemoteProject', req),

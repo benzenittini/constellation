@@ -1,7 +1,6 @@
 
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
-import path from 'path';
 
 import { logger } from "./Logger";
 import { properties } from "./PropertyLoader";
