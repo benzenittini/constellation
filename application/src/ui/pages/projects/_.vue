@@ -9,7 +9,7 @@
                     v-on:click="openBoard(LOCAL_PROJECT, board.boardId)">
                     <td>{{ board.boardName }}</td>
                     <td>{{ board.boardId }}</td>
-                    <td><eic-svg-deletion-x width="25px"
+                    <td class="mw-deletion-column"><eic-svg-deletion-x width="25px"
                         v-on:click.stop="deleteBoard(LOCAL_PROJECT, board.boardId)"
                         ></eic-svg-deletion-x></td>
                 </tr>
@@ -29,8 +29,15 @@
             <div class="mw-board-blocks">
                 <div class="mw-board-block" v-for="board in Object.values(project.boards)"
                     v-bind:key="board.boardId"
-                    v-on:click="openBoard(project.projectId, board.boardId)">
-                    {{ board.boardName }}
+                    v-on:click="boardBeingEdited.boardId !== board.boardId && openBoard(project.projectId, board.boardId)">
+                    <span v-if="boardBeingEdited.boardId !== board.boardId">{{ board.boardName }}</span>
+                    <input v-else type="text"
+                        :ref="el => { if (el) editNameRefs[board.boardId] = el }"
+                        v-bind:value="board.boardName"
+                        v-on:blur="endEditBoard($event.target.value)"
+                        v-on:keydown="blurIfEnter($event)"/>
+                    <eic-svg-pencil width="20px"
+                        v-on:click.stop="beginEditBoard(project.projectId, board.boardId)"></eic-svg-pencil>
                     <eic-svg-deletion-x class="inversion" width="25px"
                         v-on:click.stop="deleteBoard(project.projectId, board.boardId)"
                         ></eic-svg-deletion-x>
@@ -49,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, reactive, onUnmounted } from 'vue';
+import { defineComponent, computed, onMounted, reactive, ref, Ref, onBeforeUpdate } from 'vue';
 import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../../store/store';
@@ -67,6 +74,7 @@ export default defineComponent({
     setup() {
         const store = useStore();
 
+        const ADD_PROJECT_DIALOG_ID  = 'add-remote-project';
         const CREATE_BOARD_DIALOG_ID = 'create-board-dialog';
         const IMPORT_BOARD_DIALOG_ID = 'import-board-dialog';
         const DELETE_BOARD_DIALOG_ID = 'delete-board-dialog';
@@ -81,9 +89,16 @@ export default defineComponent({
             new GetRemoteProjectsAction().submit();
         });
 
+        let boardBeingEdited: Ref<{projectId?: string, boardId?: string}> = ref({projectId: undefined, boardId: undefined});
+        // (see: https://v3.vuejs.org/guide/composition-api-template-refs.html#usage-inside-v-for)
+        let editNameRefs: Ref<any[]> = ref([]); // classificationElements[]
+        onBeforeUpdate(() => editNameRefs.value = []);
 
         return {
             LOCAL_PROJECT, LOCAL_PROJECT_NAME,
+
+            boardBeingEdited,
+            editNameRefs,
 
             localBoards: computed(() => Object.values(store.state.generalData.projectData[LOCAL_PROJECT]?.boards || [])),
             remoteProjects: computed(() => Object.values(store.state.generalData.projectData).filter(project => project.projectId !== LOCAL_PROJECT)),
@@ -137,6 +152,21 @@ export default defineComponent({
                         }
                     }
                 });
+            },
+            beginEditBoard: (projectId: string, boardId: string) => {
+                boardBeingEdited.value = { projectId, boardId };
+                setTimeout(() => (editNameRefs.value as any)[boardId].select(), 0);
+            },
+            blurIfEnter: (event: KeyboardEvent) => {
+                if (event.key === 'Enter') {
+                    (editNameRefs.value as any)[boardBeingEdited.value.boardId].blur();
+                }
+            },
+            endEditBoard: (newName: string) => {
+                console.log(`New name for ${boardBeingEdited.value.boardId} is [${newName}]`);
+                // TODO-const : send request to the server
+
+                boardBeingEdited.value = {};
             },
             deleteBoard: (projectId: string, boardId: string) => {
                 type DeleteBoardModalData = {
@@ -246,8 +276,6 @@ export default defineComponent({
                 }
             },
             addRemoteProject: () => {
-                const MODAL_ID = 'add-remote-project';
-
                 let modalData: {
                     saveData: {
                         projectUrl: string,
@@ -262,7 +290,7 @@ export default defineComponent({
                     },
                 })));
                 useVueModals().createOrUpdateModal({
-                    id: MODAL_ID,
+                    id: ADD_PROJECT_DIALOG_ID,
                     layout: {
                         componentName: 'mw-vm-fixed-bottom',
                         panes: {
@@ -274,13 +302,13 @@ export default defineComponent({
                                 name: 'eic-savecancel',
                                 componentData: { mwSaveText: 'Add Project' },
                                 eventHandlers: {
-                                    'mw-cancel':  (event: any) => { useVueModals().closeModal(MODAL_ID); },
+                                    'mw-cancel':  (event: any) => { useVueModals().closeModal(ADD_PROJECT_DIALOG_ID); },
                                     'mw-save':  (event: any) => {
                                         let { projectUrl, registrationKey, clientName } = modalData.saveData;
-                                        // Submit request to server. On success, close dialog. On error, show error.
-                                        // TODO-const
+                                        // Submit request to server.
                                         new JoinProjectAction(projectUrl, registrationKey, clientName).submit();
-                                        // useVueModals().closeModal(MODAL_ID);
+                                        // TODO-const : On success, close dialog. On error, show error.
+                                        useVueModals().closeModal(ADD_PROJECT_DIALOG_ID);
                                     },
                                 }
                             },
@@ -322,10 +350,19 @@ export default defineComponent({
                 border-top: 2px solid vars.$gray2;
                 border-bottom: 2px solid vars.$gray2;
                 padding: 12px 8px;
+
+                &.mw-deletion-column { text-align: right; }
             }
             tr {
                 cursor: pointer;
-                &:hover { background: vars.$gray2; }
+                .mw-svg-deletionx {
+                    transition: opacity 0.2s;
+                    opacity: 0;
+                }
+                &:hover {
+                    background: vars.$gray2;
+                    .mw-svg-deletionx { opacity: 1; }
+                }
             }
         }
 
@@ -345,11 +382,35 @@ export default defineComponent({
                 border: 2px solid vars.$pink-medium;
                 padding: 32px 48px;
                 cursor: pointer;
+                position: relative;
 
+                &:hover {
+                    .mw-svg-pencil, .mw-svg-deletionx { opacity: 1; }
+                }
+
+                .mw-svg-pencil {
+                    transition: opacity 0.2s;
+                    position: absolute;
+                    top: 5px;
+                    left: 5px;
+                    opacity: 0;
+                }
                 .mw-svg-deletionx {
+                    transition: opacity 0.2s;
                     position: absolute;
                     top: -12px;
                     right: -12px;
+                    opacity: 0;
+                }
+
+                input[type=text] {
+                    background: vars.$gray1;
+                    color: vars.$gray-very-light;
+                    border: none;
+                    padding: 8px 12px;
+                    border-radius: vars.$component-radius;
+                    font-size: 16px;
+                    &:focus { outline: 1px solid vars.$gray3; }
                 }
             }
         }

@@ -23,6 +23,9 @@ export default defineComponent({
 
 .mw-svg-pencil {
     stroke: vars.$gray3;
+    &:hover {
+        stroke: vars.$gray-very-light;
+    }
 }
 
 </style>
