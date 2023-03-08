@@ -69,6 +69,7 @@ import { ImportBoardAction } from '../../actions/project-actions/ImportBoard';
 import { LeaveProjectAction } from '../../actions/project-actions/LeaveProject';
 import { JoinProjectAction } from '../../actions/project-actions/JoinProject';
 import { DeleteBoardAction } from '../../actions/project-actions/DeleteBoard';
+import { UpdateBoardConfigAction } from '../../actions/project-actions/UpdateBoardConfig';
 
 export default defineComponent({
     setup() {
@@ -158,13 +159,16 @@ export default defineComponent({
                 setTimeout(() => (editNameRefs.value as any)[boardId].select(), 0);
             },
             blurIfEnter: (event: KeyboardEvent) => {
-                if (event.key === 'Enter') {
+                if (event.key === 'Enter' && boardBeingEdited.value.boardId) {
                     (editNameRefs.value as any)[boardBeingEdited.value.boardId].blur();
                 }
             },
             endEditBoard: (newName: string) => {
-                console.log(`New name for ${boardBeingEdited.value.boardId} is [${newName}]`);
-                // TODO-const : send request to the server
+                new UpdateBoardConfigAction(
+                    boardBeingEdited.value.projectId!,
+                    boardBeingEdited.value.boardId!,
+                    { name: newName, },
+                ).submit();
 
                 boardBeingEdited.value = {};
             },

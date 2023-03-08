@@ -57,6 +57,9 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
     removeBoardFromProject (state, {projectId, boardId}) {
         delete state.projectData[projectId].boards[boardId];
     },
+    updateBoardConfig (state, {projectId, boardId, boardConfig}) {
+        state.projectData[projectId].boards[boardId].boardName = boardConfig.name;
+    },
 
     registerRemoteProject (state, { remoteProject, projectId }) {
         let index = state.remoteProjectLookup.findIndex(proj => proj.remoteProject.serverUrl === remoteProject.serverUrl);
@@ -90,11 +93,12 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
 
     setCurrentProjectBoard ({ commit }, currentProjectBoard) { commit('setCurrentProjectBoard', currentProjectBoard); },
 
-    addProject             ({ commit }, projectData)              { commit('addProject', projectData); },
-    removeProject          ({ commit }, projectId)                { commit('removeProject', projectId); },
-    setBoardsForProject    ({ commit }, { projectId, boards })    { commit('setBoardsForProject', { projectId, boards }); },
-    addBoardToProject      ({ commit }, { projectId, boardData }) { commit('addBoardToProject', { projectId, boardData }); },
-    removeBoardFromProject ({ commit }, { projectId, boardId })   { commit('removeBoardFromProject', { projectId, boardId }); },
+    addProject             ({ commit }, projectData)                         { commit('addProject', projectData); },
+    removeProject          ({ commit }, projectId)                           { commit('removeProject', projectId); },
+    setBoardsForProject    ({ commit }, { projectId, boards })               { commit('setBoardsForProject', { projectId, boards }); },
+    addBoardToProject      ({ commit }, { projectId, boardData })            { commit('addBoardToProject', { projectId, boardData }); },
+    removeBoardFromProject ({ commit }, { projectId, boardId })              { commit('removeBoardFromProject', { projectId, boardId }); },
+    updateBoardConfig      ({ commit }, { projectId, boardId, boardConfig }) { commit('updateBoardConfig', { projectId, boardId, boardConfig }); },
 
     registerRemoteProject   ({ commit }, data) { commit('registerRemoteProject', data); },
     deregisterRemoteProject ({ commit }, data) { commit('deregisterRemoteProject', data); },

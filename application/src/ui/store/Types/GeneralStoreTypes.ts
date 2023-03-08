@@ -1,4 +1,5 @@
 
+import { BoardConfig } from "../../../../../common/DataTypes/ActionDataTypes";
 import { BasicBoardData, BasicProjectData, CurrentProjectBoard } from "../../../../../common/DataTypes/BoardDataTypes";
 import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
@@ -29,6 +30,7 @@ export type GeneralDataMutations<S = GeneralDataState> = {
     setBoardsForProject    (state: S, data: { projectId: string, boards: TypedMap<BasicBoardData> }): void;
     addBoardToProject      (state: S, data: { projectId: string, boardData: BasicBoardData }): void;
     removeBoardFromProject (state: S, data: { projectId: string, boardId: string }): void;
+    updateBoardConfig      (state: S, data: { projectId: string, boardId: string, boardConfig: BoardConfig }): void;
 
     registerRemoteProject   (state: S, data: { remoteProject: RemoteProject, projectId?: string }): void;
     deregisterRemoteProject (state: S, data: { remoteProject: RemoteProject }): void;
@@ -51,6 +53,7 @@ export interface GeneralDataActions {
     setBoardsForProject    ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boards: TypedMap<BasicBoardData> }): void;
     addBoardToProject      ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardData: BasicBoardData }): void;
     removeBoardFromProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string }): void;
+    updateBoardConfig      ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string, boardConfig: BoardConfig }): void;
 
     registerRemoteProject   ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject, projectId?: string }): void;
     deregisterRemoteProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject }): void;

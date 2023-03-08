@@ -40,14 +40,15 @@ import { initializePersistence } from './Persistence';
         // --------------------------
 
         // -- User --
-        app.post  ('/user',      Rest.postUser);    // User joining this project
-        app.delete('/user',      Rest.deleteUser);  // User leaving this project
+        app.post  ('/user',      Rest.postUser);     // User joining this project
+        app.delete('/user',      Rest.deleteUser);   // User leaving this project
         // -- Project --
-        app.get   ('/project',   Rest.getProject);  // Fetching a project's name, id, and boards
+        app.get   ('/project',   Rest.getProject);   // Fetching a project's name, id, and boards
         // -- Board --
-        app.post  ('/board',     Rest.postBoard);   // Creating a new board
-        app.put   ('/board',     Rest.putBoard);    // Importing existing board data into new board
-        app.delete('/board/:id', Rest.deleteBoard); // Deletes a board by id
+        app.post  ('/board',     Rest.postBoard);    // Creating a new board
+        app.put   ('/board',     Rest.putBoard);     // Importing existing board data into new board
+        app.delete('/board/:id', Rest.deleteBoard);  // Deletes a board by id
+        app.put   ('/board/:id', Rest.putBoardById); // Update a board's config (ex: name)
 
 
         // ====================

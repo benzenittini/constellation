@@ -96,4 +96,20 @@ export class ProjectDataPersistence {
             projectId: this.data.projectId,
         }
     }
+
+    async updateBoardConfig(boardId: string, { boardConfig }: T.UpdateBoardConfigRequest): Promise<T.UpdateBoardConfigResponse> {
+        let board = this.data.boards.find(b => b.boardId === boardId);
+        if (!board) return { wasSuccessful: false };
+
+        board.boardName = boardConfig.name;
+
+        this.saveData();
+
+        return {
+            wasSuccessful: true,
+            projectId: this.data.projectId,
+            boardId,
+            boardConfig
+        };
+    }
 }

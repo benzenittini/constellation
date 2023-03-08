@@ -19,6 +19,10 @@ export type CreateNewBoardResponse = BasicBoardData | undefined;
 export type DeleteBoardRequest = { boardId: string, deleteFile?: boolean };
 export type DeleteBoardResponse = { wasSuccessful: boolean, boardId: string, projectId: string };
 
+export type BoardConfig = { name: string };
+export type UpdateBoardConfigRequest = { boardConfig: BoardConfig };
+export type UpdateBoardConfigResponse = { wasSuccessful: boolean, projectId?: string, boardId?: string, boardConfig?: BoardConfig };
+
 export type GetRemoteProjectsRequest = void;
 export type GetRemoteProjectsResponse = RemoteProject[];
 

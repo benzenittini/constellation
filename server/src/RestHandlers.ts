@@ -27,6 +27,7 @@ function requireAuthorization(req: Request, res: Response, callback: () => void)
     }
 }
 
+// TODO-const : Move all the "try/catch" blocks in these handlers into a single helper function..?
 
 // ==============
 // User Endpoints
@@ -127,6 +128,18 @@ export async function deleteBoard(req: Request, res: Response) {
             let boardId = req?.params?.id;
             deleteBoardPersistence(boardId);
             res.json(await projectDataPersistence!.deleteBoard({boardId}));
+        });
+    } catch(err) {
+        logger.error(err);
+        res.status(500).json({});
+    }
+}
+
+export async function putBoardById(req: Request, res: Response) {
+    try {
+        requireAuthorization(req, res, async () => {
+            let boardId = req?.params?.id;
+            res.json(await projectDataPersistence!.updateBoardConfig(boardId, req.body));
         });
     } catch(err) {
         logger.error(err);
