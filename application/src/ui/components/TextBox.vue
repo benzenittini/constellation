@@ -58,7 +58,7 @@ export default defineComponent({
         width: 100%;
         transition: background-position 0.2s ease-out; // "ease-out" to help counteract the "roundedness" of the radial gradient
         background: radial-gradient(51% 50% at bottom, vars.$gray-very-light 100%, vars.$gray4 100%) top;
-        background-size: 100% 200%;
+        background-size: 100% 201%; // It's "201%" instead of "200%" to avoid a small underline from appearing inside certain layouts, like grids.
         &.eic-invalid-value { background: vars.$red-error !important; }
     }
     .eic-textbox-border:focus-within {

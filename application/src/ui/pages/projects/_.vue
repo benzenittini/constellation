@@ -295,6 +295,9 @@ export default defineComponent({
                 })));
                 useVueModals().createOrUpdateModal({
                     id: ADD_PROJECT_DIALOG_ID,
+                    styleOverrides: {
+                        'width': '550px',
+                    },
                     layout: {
                         componentName: 'mw-vm-fixed-bottom',
                         panes: {
