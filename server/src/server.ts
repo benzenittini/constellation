@@ -40,10 +40,11 @@ import { initializePersistence } from './Persistence';
         // --------------------------
 
         // -- User --
-        app.post  ('/user',      Rest.postUser);     // User joining this project
-        app.delete('/user',      Rest.deleteUser);   // User leaving this project
+        app.post  ('/user', Rest.postUser);     // User joining this project
+        app.delete('/user', Rest.deleteUser);   // User leaving this project
         // -- Project --
-        app.get   ('/project',   Rest.getProject);   // Fetching a project's name, id, and boards
+        app.get   ('/project',           Rest.getProject);          // Fetching a project's name, id, and boards
+        app.get   ('/project/templates', Rest.getProjectTemplates); // Fetches all of a project's board templates.
         // -- Board --
         app.post  ('/board',     Rest.postBoard);    // Creating a new board
         app.put   ('/board',     Rest.putBoard);     // Importing existing board data into new board

@@ -8,6 +8,7 @@ declare global {
     interface Window {
         config: {
             getProjectData:      (req: T.GetProjectDataRequest)      => Promise<T.GetProjectDataResponse>,
+            getTemplates:        () => Promise<T.GetBoardTemplatesResponse>,
             getPathForNewBoard:  () => Promise<string | undefined>,
             createNewBoard:      (req: T.CreateNewBoardRequest)      => Promise<T.CreateNewBoardResponse>,
             deleteBoard:         (req: T.DeleteBoardRequest)         => Promise<T.DeleteBoardResponse>,

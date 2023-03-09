@@ -5,12 +5,21 @@ import { app } from 'electron';
 
 import { ConfigFile } from '../../common/DataTypes/FileDataTypes';
 import { AddRemoteProjectRequest, RemoveRemoteProjectRequest } from '../DataTypes/ActionDataTypes';
+import { TemplateClassification } from '../DataTypes/BoardDataTypes';
+
+
+// ===================
+// Config file helpers
+// -------------------
 
 const CONFIG_FILE_PATH = path.join(app.getPath('userData'), 'constellation.config');
 
 export const config: ConfigFile = {
     localBoards: [],
     remoteProjects: [],
+    boardTemplates: {},
+    backups: {},
+    // NOTE: When adding things to this list, remember to update "loadConfigFile()" below.
 };
 
 function saveConfig() {
@@ -24,7 +33,14 @@ export function loadConfigFile() {
 
     config.localBoards = appConfig.localBoards;
     config.remoteProjects = appConfig.remoteProjects;
+    config.boardTemplates = appConfig.boardTemplates;
+    config.backups = appConfig.backups;
 }
+
+
+// =======
+// Actions
+// -------
 
 export function addLocalBoard(boardFilePath: string) {
     config.localBoards.push(boardFilePath);
@@ -54,4 +70,14 @@ export function removeRemoteServer({ remoteProject }: RemoveRemoteProjectRequest
         config.remoteProjects.splice(index, 1);
         saveConfig();
     }
+}
+
+export function addOrUpdateTemplate(boardId: string, template: TemplateClassification[]) {
+    config.boardTemplates[boardId] = template;
+    saveConfig();
+}
+
+export function deleteTemplate(boardId: string) {
+    delete config.boardTemplates[boardId];
+    saveConfig();
 }

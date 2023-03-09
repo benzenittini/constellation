@@ -6,6 +6,7 @@ import * as T from '../../../common/DataTypes/ActionDataTypes';
 
 contextBridge.exposeInMainWorld('config', {
     getProjectData:      () => ipcRenderer.invoke('config:getProjectData'),
+    getTemplates:        () => ipcRenderer.invoke('config:getTemplates'),
     getPathForNewBoard:  () => ipcRenderer.invoke('config:getPathForNewBoard'),
     createNewBoard:      (req: T.CreateNewBoardRequest) => ipcRenderer.invoke('config:createNewBoard', req),
     deleteBoard:         (req: T.DeleteBoardRequest) => ipcRenderer.invoke('config:deleteBoard', req),

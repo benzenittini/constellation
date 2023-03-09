@@ -1,3 +1,5 @@
+import { TemplateClassification } from "./BoardDataTypes";
+import { TypedMap } from "./GenericDataTypes";
 
 export type AuthorizedUser = {
     clientId: string;
@@ -13,6 +15,13 @@ export type UserFile = {
 export type ConfigFile = {
     localBoards: string[];
     remoteProjects: RemoteProject[];
+    // Keyed by boardId (ie, filepath)
+    boardTemplates: TypedMap<TemplateClassification[]>
+    // Keyed by boardId (ie, filepath)
+    backups: TypedMap<{
+        file: string,
+        dateSaved: Date,
+    }[]>;
 };
 
 export type RemoteProject = {

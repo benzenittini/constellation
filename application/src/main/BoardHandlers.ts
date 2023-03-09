@@ -73,7 +73,10 @@ async function setBlockContent({ blockId, content }: T.SetBlockContentRequest): 
 }
 
 async function setClassificationDefinitions(req: T.SetClassificationDefinitionsRequest): Promise<T.SetClassificationDefinitionsResponse> {
-    return await persistence!.setClassificationDefinitions(req);
+    let result = await persistence!.setClassificationDefinitions(req);
+    let template = persistence!.getBoardTemplate();
+    ConfigDataPersistence.addOrUpdateTemplate(persistence!.sourceFile!, template)
+    return result;
 }
 
 async function setClassificationOnBlocks(req: T.SetClassificationOnBlocksRequest): Promise<T.SetClassificationOnBlocksResponse> {

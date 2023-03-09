@@ -1,4 +1,5 @@
 
+import { BoardTemplateClient } from "../../../../../common/DataTypes/BoardDataTypes";
 import { ClassificationDefinition, DataType, FieldDefinition, FieldType, PossibleValueDefinition, getFieldDataType } from "../../../../../common/DataTypes/FieldDataTypes";
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { AugmentedActionContext, GetterProperties, RootState } from "../StoreTypes"
@@ -111,34 +112,6 @@ export type ComponentData = MappableLabelComponentData | TextboxComponentData | 
 // ========================
 // Built-In Board Templates
 // ------------------------
-
-// =============================================
-// !!! Keep these in sync with WebDataInterface!
-export type BoardTemplate = {
-    projectId: string,
-    boardId: string,
-    classifications: TemplateClassification[],
-}
-// Only populated for responses to the client, not for persistence.
-export type BoardTemplateClient = BoardTemplate & {
-    projectName: string, 
-    boardName: string,
-}
-export type TemplateClassification = {
-    name: string,
-    fields: TemplateField[],
-}
-export type TemplateField = {
-    name: string,
-    type: FieldType,
-    possibleValues: TemplatePV[],
-    sourceType: 'classification';
-}
-export type TemplatePV = {
-    name: string;
-    style?: any;
-};
-// =============================================
 
 export const BUILT_IN = 'Built-In';
 export const BUILT_IN_TEMPLATES: BoardTemplateClient[] = [

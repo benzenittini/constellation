@@ -2,7 +2,7 @@
 import { Socket, Server } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
 
-import { boardDataPersistence } from './Persistence';
+import { boardDataPersistence, projectDataPersistence } from './Persistence';
 import { logger } from './Logger';
 
 export function getBoardData(io: Server, socket: Socket) {
@@ -104,6 +104,8 @@ export function setClassificationDefinitions(io: Server, socket: Socket) {
         try {
             let { boardId, ...req } = JSON.parse(message);
             let result = await boardDataPersistence[boardId].setClassificationDefinitions(req);
+            let template = boardDataPersistence[boardId].getBoardTemplate();
+            projectDataPersistence?.addOrUpdateTemplate(boardId, template);
             io.in(boardId).emit('setClassificationDefinitions', result);
         } catch(err) {
             // TODO-const : error handling

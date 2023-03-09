@@ -7,7 +7,7 @@ import { properties } from "./PropertyLoader";
 import * as UserDataPersistence from './UserDataPersistence';
 import * as T from "../../common/DataTypes/ActionDataTypes";
 
-import { projectDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "./Persistence";
+import { projectDataPersistence, boardDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "./Persistence";
 
 
 function getJwt(req: Request) {
@@ -78,6 +78,17 @@ export async function getProject(req: Request, res: Response) {
     }
 }
 
+export async function getProjectTemplates(req: Request, res: Response) {
+    try {
+        requireAuthorization(req, res, async () => {
+            res.json(await projectDataPersistence!.getTemplates());
+        });
+    } catch(err) {
+        logger.error(err);
+        res.status(500).json({});
+    }
+}
+
 
 // ===============
 // Board Endpoints
@@ -94,6 +105,10 @@ export async function postBoard(req: Request, res: Response) {
 
             // Create the board in our board persistence
             addBoardPersistence(result.boardId, data.template);
+
+            // Save the initial template
+            projectDataPersistence!.addOrUpdateTemplate(result.boardId, data.template);
+
             res.json(result);
         });
     } catch(err) {
@@ -105,7 +120,6 @@ export async function postBoard(req: Request, res: Response) {
 export async function putBoard(req: Request, res: Response) {
     try {
         requireAuthorization(req, res, async () => {
-            console.log("Received: " + JSON.stringify(req.body));
             let { boardName, initialData } = (req.body as T.ImportBoardRequest)!;
 
             // Create the board in our project persistence
@@ -114,6 +128,11 @@ export async function putBoard(req: Request, res: Response) {
 
             // Create the board in our board persistence
             importBoardPersistence(result.boardId, initialData);
+
+            // Save the initial template
+            let template = boardDataPersistence[result.boardId].getBoardTemplate();
+            projectDataPersistence!.addOrUpdateTemplate(result.boardId, template);
+
             res.json(result);
         });
     } catch(err) {
@@ -127,7 +146,9 @@ export async function deleteBoard(req: Request, res: Response) {
         requireAuthorization(req, res, async () => {
             let boardId = req?.params?.id;
             deleteBoardPersistence(boardId);
-            res.json(await projectDataPersistence!.deleteBoard({boardId}));
+            let response = await projectDataPersistence!.deleteBoard({boardId});
+            projectDataPersistence!.removeTemplate(boardId);
+            res.json(response);
         });
     } catch(err) {
         logger.error(err);

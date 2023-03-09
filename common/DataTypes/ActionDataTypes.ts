@@ -1,6 +1,6 @@
 
 import { Block, BlockContent, BlockIdAndPosition } from "./BlockDataTypes";
-import { BasicBoardData, BasicProjectData, BoardData, TemplateClassification } from "./BoardDataTypes";
+import { BasicBoardData, BasicProjectData, BoardData, BoardTemplateClient, TemplateClassification } from "./BoardDataTypes";
 import { ChangedFieldValue, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "./FieldDataTypes";
 import { BoundingBox, TypedMap } from "./GenericDataTypes";
 import { BaseViewConfig, ViewConfig } from "./ViewDataTypes";
@@ -12,6 +12,9 @@ import { RemoteProject } from "./FileDataTypes";
 
 export type GetProjectDataRequest = void;
 export type GetProjectDataResponse = BasicProjectData;
+
+export type GetBoardTemplatesRequest = void;
+export type GetBoardTemplatesResponse = BoardTemplateClient[];
 
 export type CreateNewBoardRequest = { boardOrFileName: string, template: TemplateClassification[] };
 export type CreateNewBoardResponse = BasicBoardData | undefined;

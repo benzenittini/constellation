@@ -2,11 +2,12 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { BasicBoardData, BasicProjectData } from '../../common/DataTypes/BoardDataTypes';
+import { BasicBoardData, BasicProjectData, BoardTemplateClient, TemplateClassification } from '../../common/DataTypes/BoardDataTypes';
 import { properties } from './PropertyLoader';
 import { mapify } from '../../common/utilities/ArrayUtils';
 
 import * as T from '../../common/DataTypes/ActionDataTypes';
+import { TypedMap } from '../../common/DataTypes/GenericDataTypes';
 
 export class ProjectDataPersistence {
 
@@ -15,6 +16,8 @@ export class ProjectDataPersistence {
     private data: {
         projectId: string,
         boards: { boardId: string, boardName: string }[],
+        // Keyed by boardId
+        templates: TypedMap<TemplateClassification[]>,
     };
 
     constructor(sourceFile: string | undefined = undefined) {
@@ -48,6 +51,7 @@ export class ProjectDataPersistence {
         return {
             projectId: uuidv4(),
             boards: [],
+            templates: {},
         };
     }
 
@@ -111,5 +115,27 @@ export class ProjectDataPersistence {
             boardId,
             boardConfig
         };
+    }
+
+    async addOrUpdateTemplate(boardId: string, template: TemplateClassification[]) {
+        this.data.templates[boardId] = template;
+        this.saveData();
+    }
+
+    async removeTemplate(boardId: string) {
+        delete this.data.templates[boardId];
+        this.saveData();
+    }
+
+    async getTemplates(): Promise<BoardTemplateClient[]> {
+        return Object.keys(this.data.templates).map(boardId => {
+            return {
+                projectId: this.data.projectId,
+                boardId,
+                projectName: properties.project_name,
+                boardName: this.data.boards.find(board => board.boardId === boardId)!.boardName,
+                classifications: this.data.templates[boardId],
+            };
+        });
     }
 }

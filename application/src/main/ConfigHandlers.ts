@@ -12,6 +12,7 @@ import { BasicBoardData, BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME } from "..
 
 export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('config:getProjectData',      () => getProjectData());
+    ipcMain.handle('config:getTemplates',        () => getTemplates());
     ipcMain.handle('config:getPathForNewBoard',  () => getPathForNewBoard());
     ipcMain.handle('config:createNewBoard',      (event, req) => createNewBoard(req));
     ipcMain.handle('config:deleteBoard',         (event, req) => deleteBoard(req));
@@ -35,6 +36,18 @@ async function getProjectData(): Promise<T.GetProjectDataResponse> {
     };
 }
 
+async function getTemplates(): Promise<T.GetBoardTemplatesResponse> {
+    return Object.keys(ConfigDataPersistence.config.boardTemplates).map(boardId => {
+        return {
+            projectId: LOCAL_PROJECT,
+            projectName: LOCAL_PROJECT_NAME,
+            boardId,
+            boardName: path.basename(boardId, '.mw'),
+            classifications: ConfigDataPersistence.config.boardTemplates[boardId],
+        };
+    });
+}
+
 async function getPathForNewBoard(): Promise<string | undefined> {
     let { filePath } = await dialog.showSaveDialog({
         title: "Create Board",
@@ -54,6 +67,7 @@ async function createNewBoard({ boardOrFileName, template }: T.CreateNewBoardReq
         // Create new file with initial data
         fs.writeFileSync(boardOrFileName, JSON.stringify(BoardDataPersistence.getInitData(template)));
         ConfigDataPersistence.addLocalBoard(boardOrFileName);
+        ConfigDataPersistence.addOrUpdateTemplate(boardOrFileName, template);
         // Return board data, where ID is filepath and name is filename
         return {
             boardId: boardOrFileName,
@@ -66,6 +80,7 @@ async function createNewBoard({ boardOrFileName, template }: T.CreateNewBoardReq
 
 async function deleteBoard({ boardId, deleteFile }: T.DeleteBoardRequest): Promise<T.DeleteBoardResponse> {
     ConfigDataPersistence.removeLocalBoard(boardId);
+    ConfigDataPersistence.deleteTemplate(boardId);
 
     // TODO-const : Also delete this board's backups
 
@@ -109,6 +124,12 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
     if (!canceled && filePaths.length > 0) {
         const chosenFile = filePaths[0];
         ConfigDataPersistence.addLocalBoard(chosenFile);
+
+        // Save the imported board's template
+        let boardData = JSON.parse(fs.readFileSync(chosenFile, 'utf8')) as BoardData;
+        let template = BoardDataPersistence.getBoardTemplate(boardData);
+        ConfigDataPersistence.addOrUpdateTemplate(chosenFile, template);
+
         // Return board data, where ID is filepath and name is filename
         return {
             boardId: chosenFile,

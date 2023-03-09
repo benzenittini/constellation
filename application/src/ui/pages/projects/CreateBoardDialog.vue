@@ -60,9 +60,10 @@ import { computed, defineComponent, onMounted, reactive, Ref, ref, watch } from 
 import { v4 as uuidv4 } from 'uuid';
 
 import { useStore } from "../../store/store";
-import { BoardTemplateClient, BUILT_IN_TEMPLATES, TemplateClassification } from "../../store/Types/FieldStoreTypes";
+import { BUILT_IN_TEMPLATES } from "../../store/Types/FieldStoreTypes";
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
+import { BoardTemplateClient, LOCAL_PROJECT, TemplateClassification } from "../../../../../common/DataTypes/BoardDataTypes";
+import { GetBoardTemplatesAction } from '../../actions/project-actions/GetBoardTemplates';
 
 export default defineComponent({
     props: {
@@ -88,75 +89,6 @@ export default defineComponent({
             if (props.projectId !== LOCAL_PROJECT) {
                 (boardNameTextbox.value as any).$el.getElementsByTagName('input')[0].focus();
             }
-        });
-
-
-        // ======================================
-        // Get a list of all the user's templates
-        // --------------------------------------
-
-        // TODO-const : Populate board templates
-        // // Build up a list of all the board IDs that we're a member of.
-        // let boardIdMemberships = computed(() => {
-        //     let boardIds: string[] = [];
-        //     generalStore.projectsAndBoards().value
-        //         .filter(p => p.isMember)
-        //         .forEach(p => Object.values(p.boards)
-        //             .filter(b => b.isMember)
-        //             .forEach(b => boardIds.push(b.boardId)));
-        //     return boardIds;
-        // });
-        let userTemplates: Ref<BoardTemplateClient[]> = ref([]);
-        // new GetBoardTemplatesForUserRequest(userData.value.userId!)
-        //     .send(({data}: any) => {
-        //         if (data.statusCode === 0) {
-        //             userTemplates.value = GetBoardTemplatesForUserRequest.parseResponse(data)
-        //                 // Only consider templates that we're a member of.
-        //                 .filter(temp => boardIdMemberships.value.includes(temp.boardId))
-        //                 // And that have at least 1 classification defined.
-        //                 .filter(temp => temp.classifications.length > 0);
-        //         } else {
-        //             // Error receiving your board templates from the server
-        //             ErrorLogger.showError('1.3.27', [data.errorMessage]);
-        //         }
-        //     });
-
-
-        // ===================================
-        // Populate the template dropdown menu
-        // -----------------------------------
-
-        let showTemplateConfig = ref(false);
-
-        const SCRATCH = "Scratch";
-        const CUSTOM = "Custom";
-        let templateOptions = computed(() => {
-            // Built-In Templates
-            let templates: {display: string, value?: string, disabled?: boolean, group?: string}[] = BUILT_IN_TEMPLATES.map(template => ({
-                display: template.boardName,
-                value: template.boardId,
-                group: "Built-In"
-            }));
-
-            // User-Defined Templates
-            const YOUR_BOARDS = "Your Boards";
-            if (userTemplates.value.length === 0) {
-                templates.push({ display: "(none)", disabled: true, group: YOUR_BOARDS});
-            } else {
-                userTemplates.value.forEach(temp => {
-                    templates.push({
-                        display: `${temp.projectName} / ${temp.boardName}`,
-                        value: temp.boardId,
-                        group: YOUR_BOARDS
-                    });
-                });
-            }
-
-            // Miscellaneous Options
-            templates.push({ display: "Start from Scratch", value: SCRATCH, group: "Other" });
-            templates.push({ display: "Custom",             value: CUSTOM,  group: "Other" });
-
-            return templates;
         });
 
 
@@ -207,11 +139,64 @@ export default defineComponent({
         let classificationLookup: TypedMap<TemplateClassification> = reactive({});
         let classificationTree: ClassificationTree = [];
         BUILT_IN_TEMPLATES.forEach(temp => processTemplate(temp, classificationLookup, classificationTree));
-        watch(userTemplates, (newVal, oldVal) => {
-            // Only process this the first time userTemplates gets populated
-            if (oldVal.length === 0 && newVal.length > 0) {
-                userTemplates.value.forEach(temp => processTemplate(temp, classificationLookup, classificationTree));
+
+
+        // ======================================
+        // Get a list of all the user's templates
+        // --------------------------------------
+
+        let userTemplates: Ref<BoardTemplateClient[]> = ref([]);
+
+        // Add local templates
+        new GetBoardTemplatesAction().submit((templates) => {
+            userTemplates.value.push(...templates);
+            templates.forEach(temp => processTemplate(temp, classificationLookup, classificationTree));
+        });
+
+        // Add remote templates
+        Object.values(store.state.generalData.remoteProjectLookup).forEach(remote => {
+            new GetBoardTemplatesAction(remote.remoteProject).submit((templates) => {
+                userTemplates.value.push(...templates);
+                templates.forEach(temp => processTemplate(temp, classificationLookup, classificationTree));
+            });
+        });
+
+
+        // ===================================
+        // Populate the template dropdown menu
+        // -----------------------------------
+
+        let showTemplateConfig = ref(false);
+
+        const SCRATCH = "Scratch";
+        const CUSTOM = "Custom";
+        let templateOptions = computed(() => {
+            // Built-In Templates
+            let templates: {display: string, value?: string, disabled?: boolean, group?: string}[] = BUILT_IN_TEMPLATES.map(template => ({
+                display: template.boardName,
+                value: template.boardId,
+                group: "Built-In"
+            }));
+
+            // User-Defined Templates
+            const YOUR_BOARDS = "Your Boards";
+            if (userTemplates.value.length === 0) {
+                templates.push({ display: "(none)", disabled: true, group: YOUR_BOARDS});
+            } else {
+                userTemplates.value.forEach(temp => {
+                    templates.push({
+                        display: `${temp.projectName} / ${temp.boardName}`,
+                        value: temp.boardId,
+                        group: YOUR_BOARDS
+                    });
+                });
             }
+
+            // Miscellaneous Options
+            templates.push({ display: "Start from Scratch", value: SCRATCH, group: "Other" });
+            templates.push({ display: "Custom",             value: CUSTOM,  group: "Other" });
+
+            return templates;
         });
 
 

@@ -34,7 +34,7 @@
                     <input v-else type="text"
                         :ref="el => { if (el) editNameRefs[board.boardId] = el }"
                         v-bind:value="board.boardName"
-                        v-on:blur="endEditBoard($event.target.value)"
+                        v-on:blur="endEditBoard(board.boardName, $event.target.value)"
                         v-on:keydown="blurIfEnter($event)"/>
                     <eic-svg-pencil width="20px"
                         v-on:click.stop="beginEditBoard(project.projectId, board.boardId)"></eic-svg-pencil>
@@ -163,12 +163,14 @@ export default defineComponent({
                     (editNameRefs.value as any)[boardBeingEdited.value.boardId].blur();
                 }
             },
-            endEditBoard: (newName: string) => {
-                new UpdateBoardConfigAction(
-                    boardBeingEdited.value.projectId!,
-                    boardBeingEdited.value.boardId!,
-                    { name: newName, },
-                ).submit();
+            endEditBoard: (currentName: string, newName: string) => {
+                if (currentName !== newName) {
+                    new UpdateBoardConfigAction(
+                        boardBeingEdited.value.projectId!,
+                        boardBeingEdited.value.boardId!,
+                        { name: newName, },
+                    ).submit();
+                }
 
                 boardBeingEdited.value = {};
             },
@@ -380,6 +382,7 @@ export default defineComponent({
 
         .mw-board-blocks {
             display: flex;
+            flex-wrap: wrap;
             margin: 24px;
             gap: 20px;
             .mw-board-block {

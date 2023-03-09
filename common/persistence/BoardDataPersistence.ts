@@ -11,13 +11,13 @@ import * as ArrayUtils from '../utilities/ArrayUtils';
 
 export class BoardDataPersistence {
 
-    private sourceFile: string | undefined;
+    public sourceFile: string | undefined;
 
     private data: BoardData;
 
     private saveTimer: ReturnType<typeof setTimeout> | undefined = undefined;
 
-    private reportSaveStatus;
+    private reportSaveStatus: (status: boolean) => void;
 
     constructor(sourceFile: string | undefined = undefined, initialData: BoardData = BoardDataPersistence.getInitData(), reportSaveStatus: (status: boolean) => void = (s) => {}) {
         this.sourceFile = sourceFile;
@@ -110,6 +110,21 @@ export class BoardDataPersistence {
             fields,
             possibleValues,
         };
+    }
+
+    static getBoardTemplate(boardData: BoardData): TemplateClassification[] {
+        return boardData.classificationIds.map(cid => ({
+            name: boardData.classifications[cid].name,
+            fields: boardData.classifications[cid].fieldIds.map(fid => ({
+                name: boardData.fields[fid].name,
+                type: boardData.fields[fid].type,
+                sourceType: 'classification',
+                possibleValues: boardData.fields[fid].possibleValueIds.map(pvid => ({
+                    name: boardData.possibleValues[pvid].name,
+                    style: boardData.possibleValues[pvid].style,
+                })),
+            })),
+        }));
     }
 
 
@@ -335,21 +350,6 @@ export class BoardDataPersistence {
 
         let changedFieldValues = await this.updatePossibleValueNames(changedPVs);
 
-        // Lastly, build up the persisted template classifications, flattening out the objects and removing the IDs
-        let template: TemplateClassification[] = classificationIds.map(cid => ({
-            name: classifications[cid].name,
-            fields: classifications[cid].fieldIds.map(fid => ({
-                name: fields[fid].name,
-                type: fields[fid].type,
-                sourceType: 'classification',
-                possibleValues: fields[fid].possibleValueIds.map(pvid => ({
-                    name: possibleValues[pvid].name,
-                    style: possibleValues[pvid].style,
-                })),
-            })),
-        }));
-        // TODO-const : persist the template somewhere/somehow..? Should these be just client-side, or server-side too?
-
         this.scheduleSave();
 
         return {
@@ -359,6 +359,10 @@ export class BoardDataPersistence {
             possibleValues,
             changedFieldValues,
         };
+    }
+
+    getBoardTemplate(): TemplateClassification[] {
+        return BoardDataPersistence.getBoardTemplate(this.data);
     }
 
     async updatePossibleValueDefinitions(possibleValues: TypedMap<PossibleValueDefinition>): Promise<ChangedPVName[]> {
