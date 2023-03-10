@@ -14,8 +14,8 @@
     "watch-main": "webpack --watch --config webpack.main-dev.js",
     "build-main-prod": "webpack --config webpack.main-prod.js",
     "start": "electron-forge start --app-path ./build",
-    "package": "electron-forge package --app-path ./build",
-    "make": "electron-forge make --app-path ./build"
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.5",
