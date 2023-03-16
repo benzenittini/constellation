@@ -45,7 +45,11 @@ export class JoinProjectAction extends Action {
         window.config.addRemoteProject(project);
 
         // Fetch the project data
-        new GetProjectDataAction(project).submit();
+        new GetProjectDataAction(project)
+            .onError(error => {
+                // TODO-const : show error to user
+                console.error(error);
+            }).submit();
     }
 
 }

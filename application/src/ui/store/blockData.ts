@@ -123,7 +123,8 @@ const blockDataMutations: MutationTree<BlockDataState> & BlockDataMutations = {
                 state.blockPriorities.splice(index, 0, ...blockId);
             } else {
                 // The "before" block wasn't found ... this shouldn't ever happen.
-                ErrorLogger.showError('3.2.1');
+                // TODO-const : Replace with correct error code.
+                // ErrorLogger.showError('3.2.1');
             }
         } else {
             // If undefined, then insert at the end of the priority list.

@@ -1,5 +1,6 @@
 
 import { GetRemoteProjectsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, showError } from "../../../common/ErrorLogger";
 import { useStore } from "../../store/store";
 import { Action } from "../Action";
 import { GetProjectDataAction } from "./GetProjectData";
@@ -20,7 +21,10 @@ export class GetRemoteProjectsAction extends Action {
         const store = useStore();
         resp.forEach(remote => {
             store.dispatch('registerRemoteProject', {remoteProject: remote});
-            new GetProjectDataAction(remote).submit();
+            new GetProjectDataAction(remote)
+                .onError(error => {
+                    showError('C:2', [error.message || GENERIC_RESTART]);
+                }).submit();
         });
     }
 

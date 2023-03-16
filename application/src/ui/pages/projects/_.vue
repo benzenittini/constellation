@@ -69,6 +69,7 @@ import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../../store/store';
 import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification } from '../../../../../common/DataTypes/BoardDataTypes';
+import { GENERIC_RESTART, showError } from '../../../common/ErrorLogger';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
@@ -145,9 +146,12 @@ export default defineComponent({
                                             projectId,
                                             JSON.parse(JSON.stringify(classifications)),
                                             boardOrFileName,
-                                        ).submit();
-                                        // TODO-const : Close modal if successful, or show error if it's not!
-                                        mwVueModals.closeModal(CREATE_BOARD_DIALOG_ID);
+                                        ).onSuccess(() => {
+                                            mwVueModals.closeModal(CREATE_BOARD_DIALOG_ID);
+                                        }).onError((error) => {
+                                            // TODO-const : display this to the user
+                                            console.log("Error when creating new board: " + error);
+                                        }).submit();
                                     },
                                 }
                             },
@@ -292,7 +296,11 @@ export default defineComponent({
                 }
             },
             retryRemoteProject: (remote: RemoteProject) => {
-                new GetProjectDataAction(JSON.parse(JSON.stringify(remote))).submit();
+                new GetProjectDataAction(
+                    JSON.parse(JSON.stringify(remote))
+                ).onError((err) => {
+                    showError('C:1', [err.message || GENERIC_RESTART]);
+                }).submit();
             },
             addRemoteProject: () => {
                 let modalData: {

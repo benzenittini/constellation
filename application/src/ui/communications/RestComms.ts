@@ -1,6 +1,6 @@
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import * as ErrorLogger from '../../common/ErrorLogger';
+import { ErrorResponse } from '../../../../common/DataTypes/ActionDataTypes';
 
 export const HTTP_GET    = 'get';
 export const HTTP_POST   = 'post';
@@ -35,7 +35,7 @@ export function send<T>({httpMethod, baseUrl, endpoint, data, creds, callback}: 
         .then((response) => {
             callback(response);
         }).catch((error) => {
-            // Unknown error.
-            ErrorLogger.showError('4.2.1', [error]);
+            let response: ErrorResponse = { errorCode: 2, message: error, };
+            callback({ data: response } as AxiosResponse<T, any>);
         });
 }

@@ -57,14 +57,16 @@ export type ViewDataGetters<S = ViewDataState> = {
 export function isValidConfig(viewConfig: ViewConfig): boolean {
     // Must have a non-blank name
     if (viewConfig.name.trim().length === 0) {
-        ErrorLogger.showError('3.3.1');
+        // TODO-const : Replace with correct error code.
+        // ErrorLogger.showError('3.3.1');
         return false;
     }
 
     if (viewConfig.type === ViewType.KANBAN) {
         // Kanbans must have a groupingFieldId
         if (!('groupingFieldId' in viewConfig)) {
-            ErrorLogger.showError('3.3.2');
+            // TODO-const : Replace with correct error code.
+            // ErrorLogger.showError('3.3.2');
             return false;
         }
     }

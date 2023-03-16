@@ -132,7 +132,8 @@ const fieldDataGetters: GetterTree<FieldDataState, RootState> & FieldDataGetters
                 }
             } else {
                 // The possible value didn't have an associated field ... this shouldn't ever happen.
-                ErrorLogger.showError('3.1.1');
+                // TODO-const : Replace with correct error code.
+                // ErrorLogger.showError('3.1.1');
             }
         }
 

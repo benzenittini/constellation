@@ -23,7 +23,8 @@ function requireAuthorization(req: Request, res: Response, callback: () => void)
     if (UserDataPersistence.verifyCreds(creds)) {
         callback();
     } else {
-        res.status(401).json({});
+        const err: T.ErrorResponse = { errorCode: 1, message: "You are not authorized to perform this action." };
+        res.json(err);
     }
 }
 
@@ -74,7 +75,8 @@ export async function getProject(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        res.status(500).json({});
+        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        res.json(response);
     }
 }
 

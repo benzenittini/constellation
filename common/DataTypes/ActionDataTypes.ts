@@ -6,12 +6,19 @@ import { BoundingBox, TypedMap } from "./GenericDataTypes";
 import { BaseViewConfig, ViewConfig } from "./ViewDataTypes";
 import { RemoteProject } from "./FileDataTypes";
 
+// ErrorCode 1 = auth error
+// ErrorCode 2 = unknown error
+// ErrorCode n = specific to the request
+export type ErrorResponse = { errorCode: number, message?: string };
+
 // ================
 // Project Requests
 // ----------------
 
 export type GetProjectDataRequest = void;
-export type GetProjectDataResponse = BasicProjectData;
+export type GetProjectDataResponse = ErrorResponse | BasicProjectData;
+
+// TODO-const : I AM HERE FOR RESPONSE ERRORS
 
 export type GetBoardTemplatesRequest = void;
 export type GetBoardTemplatesResponse = BoardTemplateClient[];

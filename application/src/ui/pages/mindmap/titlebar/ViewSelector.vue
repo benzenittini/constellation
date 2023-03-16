@@ -67,7 +67,8 @@ export default defineComponent({
             },
             loadView: (viewId: string) => {
                 if (!store.getters.currentProjectBoard?.boardId) {
-                    ErrorLogger.showError('2.2.1');
+                    // TODO-const : replace with actual code.
+                    // ErrorLogger.showError('2.2.1');
                 } else {
                     new LoadViewAction(viewId).submit();
                 }

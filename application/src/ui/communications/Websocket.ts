@@ -41,7 +41,8 @@ class Websocket {
     emit(event: string, data: any) {
         if (!this.isConnected()) {
             // Attempted to emit a websocket event before connecting.
-            ErrorLogger.showError('5.1.1');
+            // TODO-const : Replace with correct error code.
+            // ErrorLogger.showError('5.1.1');
         } else {
             this.socket!.emit(event, data);
         }
