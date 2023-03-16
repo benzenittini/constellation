@@ -1,5 +1,4 @@
 
-import { useStore } from "../../store/store";
 import { Action } from "../Action";
 
 import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
@@ -17,7 +16,7 @@ export class GetBoardTemplatesAction extends Action {
         this.remoteProject = remoteProject;
     }
 
-    submit(callback: (resp: GetBoardTemplatesResponse) => void): void {
+    submit(): void {
         if (this.remoteProject) {
             // If remote project, send message over REST.
             send<GetBoardTemplatesResponse>({
@@ -25,17 +24,24 @@ export class GetBoardTemplatesAction extends Action {
                 baseUrl: this.remoteProject.serverUrl,
                 endpoint: '/project/templates',
                 creds: this.remoteProject.credentials,
-                callback: (resp) => callback(resp.data)
+                callback: (resp) => this.processResponse(resp.data)
             });
         } else {
             // If local project, make the IPC request
             window.config.getTemplates()
-                .then((resp) => callback(resp));
+                .then((resp) => this.processResponse(resp));
         }
     }
 
     processResponse(resp: GetBoardTemplatesResponse): void {
-        // No-op - handled through a callback given to submit()
+        if ('errorCode' in resp) {
+            this.errorCallback(resp);
+
+        } else {
+            // No-op - all processing is done inside the callback.
+            if (this.successCallback)
+                this.successCallback(resp);
+        }
     }
 
 }

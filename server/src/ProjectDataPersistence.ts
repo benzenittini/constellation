@@ -85,9 +85,8 @@ export class ProjectDataPersistence {
 
         if (index === -1) {
             return {
-                wasSuccessful: false,
-                boardId,
-                projectId: this.data.projectId,
+                errorCode: 3,
+                message: "Requested board was not found."
             };
         }
         this.data.boards.splice(index, 1);
@@ -95,7 +94,6 @@ export class ProjectDataPersistence {
         this.saveData();
 
         return {
-            wasSuccessful: true,
             boardId,
             projectId: this.data.projectId,
         }
@@ -103,14 +101,16 @@ export class ProjectDataPersistence {
 
     async updateBoardConfig(boardId: string, { boardConfig }: T.UpdateBoardConfigRequest): Promise<T.UpdateBoardConfigResponse> {
         let board = this.data.boards.find(b => b.boardId === boardId);
-        if (!board) return { wasSuccessful: false };
+        if (!board) return {
+            errorCode: 3,
+            message: "Board was not found.",
+        };
 
         board.boardName = boardConfig.name;
 
         this.saveData();
 
         return {
-            wasSuccessful: true,
             projectId: this.data.projectId,
             boardId,
             boardConfig

@@ -46,12 +46,18 @@ export class CreateNewBoardAction extends Action {
         }
     }
 
-    processResponse(boardData: CreateNewBoardResponse): void {
-        if (boardData) {
+    processResponse(resp: CreateNewBoardResponse): void {
+        if ('errorCode' in resp) {
+            this.errorCallback(resp);
+
+        } else {
             useStore().dispatch('addBoardToProject', {
                 projectId: this.projectId,
-                boardData,
+                boardData: resp,
             });
+
+            if (this.successCallback)
+                this.successCallback(resp);
         }
     }
 

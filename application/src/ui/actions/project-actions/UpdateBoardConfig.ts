@@ -42,12 +42,18 @@ export class UpdateBoardConfigAction extends Action {
     }
 
     processResponse(resp: UpdateBoardConfigResponse): void {
-        if (resp.wasSuccessful) {
+        if ('errorCode' in resp) {
+            this.errorCallback(resp);
+
+        } else {
             useStore().dispatch('updateBoardConfig', {
                 projectId: resp.projectId!,
                 boardId: resp.boardId!,
                 boardConfig: resp.boardConfig!,
             });
+
+            if (this.successCallback)
+                this.successCallback(resp);
         }
     }
 

@@ -87,7 +87,8 @@ export async function getProjectTemplates(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        res.status(500).json({});
+        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        res.json(response);
     }
 }
 
@@ -103,7 +104,11 @@ export async function postBoard(req: Request, res: Response) {
 
             // Create the board in our project persistence
             let result = await projectDataPersistence!.createNewBoard(data);
-            if (!result) throw new Error('Board creation failed.');
+            if ('errorCode' in result) {
+                logger.error(`Board creation failed: ${result.message}`);
+                res.json(result);
+                return;
+            }
 
             // Create the board in our board persistence
             addBoardPersistence(result.boardId, data.template);
@@ -115,7 +120,8 @@ export async function postBoard(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        res.status(500).json({});
+        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        res.json(response);
     }
 }
 
@@ -126,7 +132,11 @@ export async function putBoard(req: Request, res: Response) {
 
             // Create the board in our project persistence
             let result = await projectDataPersistence!.createNewBoard({ boardOrFileName: boardName, template: [] });
-            if (!result) throw new Error('Board creation failed.');
+            if ('errorCode' in result) {
+                logger.error(`Board creation failed: ${result.message}`);
+                res.json(result);
+                return;
+            }
 
             // Create the board in our board persistence
             importBoardPersistence(result.boardId, initialData);
@@ -154,7 +164,8 @@ export async function deleteBoard(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        res.status(500).json({});
+        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        res.json(response);
     }
 }
 
@@ -166,6 +177,7 @@ export async function putBoardById(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        res.status(500).json({});
+        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        res.json(response);
     }
 }

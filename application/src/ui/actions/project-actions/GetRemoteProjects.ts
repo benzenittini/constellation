@@ -1,6 +1,6 @@
 
 import { GetRemoteProjectsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
-import { GENERIC_RESTART, showError } from "../../../common/ErrorLogger";
+import { E2, GENERIC_RESTART, showError } from "../../../common/ErrorLogger";
 import { useStore } from "../../store/store";
 import { Action } from "../Action";
 import { GetProjectDataAction } from "./GetProjectData";
@@ -18,14 +18,26 @@ export class GetRemoteProjectsAction extends Action {
     }
 
     processResponse(resp: GetRemoteProjectsResponse): void {
-        const store = useStore();
-        resp.forEach(remote => {
-            store.dispatch('registerRemoteProject', {remoteProject: remote});
-            new GetProjectDataAction(remote)
-                .onError(error => {
-                    showError('C:2', [error.message || GENERIC_RESTART]);
-                }).submit();
-        });
+        if ('errorCode' in resp) {
+            this.errorCallback(resp);
+
+        } else {
+            const store = useStore();
+            resp.forEach(remote => {
+                store.dispatch('registerRemoteProject', {remoteProject: remote});
+                new GetProjectDataAction(remote)
+                    .onError(error => {
+                        if (typeof error.message === 'string') {
+                            showError(E2, [error.message || GENERIC_RESTART]);
+                        } else {
+                            // Swallowing axios errors since the project is already highlighted in red.
+                        }
+                    }).submit();
+            });
+
+            if (this.successCallback)
+                this.successCallback(resp);
+        }
     }
 
 }

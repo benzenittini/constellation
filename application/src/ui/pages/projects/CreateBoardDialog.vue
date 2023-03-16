@@ -64,6 +64,7 @@ import { BUILT_IN_TEMPLATES } from "../../store/Types/FieldStoreTypes";
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { BoardTemplateClient, LOCAL_PROJECT, TemplateClassification } from "../../../../../common/DataTypes/BoardDataTypes";
 import { GetBoardTemplatesAction } from '../../actions/project-actions/GetBoardTemplates';
+import { E3, GENERIC_RESTART, showError } from "../../../common/ErrorLogger";
 
 export default defineComponent({
     props: {
@@ -148,17 +149,25 @@ export default defineComponent({
         let userTemplates: Ref<BoardTemplateClient[]> = ref([]);
 
         // Add local templates
-        new GetBoardTemplatesAction().submit((templates) => {
-            userTemplates.value.push(...templates);
-            templates.forEach(temp => processTemplate(temp, classificationLookup, classificationTree));
-        });
+        new GetBoardTemplatesAction()
+            .onSuccess<BoardTemplateClient[]>(templates => {
+                userTemplates.value.push(...templates);
+                templates.forEach(temp => processTemplate(temp, classificationLookup, classificationTree));
+            }).submit();
 
         // Add remote templates
         Object.values(store.state.generalData.remoteProjectLookup).forEach(remote => {
-            new GetBoardTemplatesAction(remote.remoteProject).submit((templates) => {
-                userTemplates.value.push(...templates);
-                templates.forEach(temp => processTemplate(temp, classificationLookup, classificationTree));
-            });
+            new GetBoardTemplatesAction(remote.remoteProject)
+                .onSuccess<BoardTemplateClient[]>(templates => {
+                    userTemplates.value.push(...templates);
+                    templates.forEach(temp => processTemplate(temp, classificationLookup, classificationTree));
+                }).onError((error) => {
+                    if (typeof error.message === 'string') {
+                        showError(E3, [error.message || GENERIC_RESTART]);
+                    } else {
+                        // Intentionally swallowing axios errors.
+                    }
+                }).submit();
         });
 
 

@@ -18,24 +18,23 @@ export type ErrorResponse = { errorCode: number, message?: string };
 export type GetProjectDataRequest = void;
 export type GetProjectDataResponse = ErrorResponse | BasicProjectData;
 
-// TODO-const : I AM HERE FOR RESPONSE ERRORS
-
 export type GetBoardTemplatesRequest = void;
-export type GetBoardTemplatesResponse = BoardTemplateClient[];
+export type GetBoardTemplatesResponse = ErrorResponse | BoardTemplateClient[];
 
 export type CreateNewBoardRequest = { boardOrFileName: string, template: TemplateClassification[] };
-export type CreateNewBoardResponse = BasicBoardData | undefined;
+export type CreateNewBoardResponse = ErrorResponse | BasicBoardData;
 
 export type DeleteBoardRequest = { boardId: string, deleteFile?: boolean };
-export type DeleteBoardResponse = { wasSuccessful: boolean, boardId: string, projectId: string };
+export type DeleteBoardResponse = ErrorResponse | { boardId: string, projectId: string };
 
 export type BoardConfig = { name: string };
 export type UpdateBoardConfigRequest = { boardConfig: BoardConfig };
-export type UpdateBoardConfigResponse = { wasSuccessful: boolean, projectId?: string, boardId?: string, boardConfig?: BoardConfig };
+export type UpdateBoardConfigResponse = ErrorResponse | { projectId: string, boardId: string, boardConfig: BoardConfig };
 
 export type GetRemoteProjectsRequest = void;
-export type GetRemoteProjectsResponse = RemoteProject[];
+export type GetRemoteProjectsResponse = ErrorResponse | RemoteProject[];
 
+// TODO-const : I AM HERE FOR RESPONSE ERRORS
 export type ImportBoardRequest = undefined | { boardName: string, initialData: BoardData };
 export type ImportBoardResponse = BasicBoardData | undefined;
 export type ReadFileAsBoardResponse = { filepath?: string, filename?: string, boardData?: BoardData };

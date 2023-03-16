@@ -69,7 +69,7 @@ import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../../store/store';
 import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification } from '../../../../../common/DataTypes/BoardDataTypes';
-import { GENERIC_RESTART, showError } from '../../../common/ErrorLogger';
+import { E1, E4, E5, E6, E7, GENERIC_RESTART, showError } from '../../../common/ErrorLogger';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
@@ -142,16 +142,19 @@ export default defineComponent({
                                     'mw-save':  (event: any) => {
                                         let { boardName, fileName, classifications } = modalData.saveData;
                                         let boardOrFileName = (boardName !== '') ? boardName : fileName;
-                                        new CreateNewBoardAction(
-                                            projectId,
-                                            JSON.parse(JSON.stringify(classifications)),
-                                            boardOrFileName,
-                                        ).onSuccess(() => {
-                                            mwVueModals.closeModal(CREATE_BOARD_DIALOG_ID);
-                                        }).onError((error) => {
-                                            // TODO-const : display this to the user
-                                            console.log("Error when creating new board: " + error);
-                                        }).submit();
+                                        if (boardOrFileName && boardOrFileName.trim() !== '') {
+                                            new CreateNewBoardAction(
+                                                projectId,
+                                                JSON.parse(JSON.stringify(classifications)),
+                                                boardOrFileName,
+                                            ).onSuccess(() => {
+                                                mwVueModals.closeModal(CREATE_BOARD_DIALOG_ID);
+                                            }).onError((error) => {
+                                                showError(E4, [error.message || GENERIC_RESTART]);
+                                            }).submit();
+                                        } else {
+                                            showError(E5, [projectId === LOCAL_PROJECT ? 'Filename' : 'Board name']);
+                                        }
                                     },
                                 }
                             },
@@ -183,10 +186,13 @@ export default defineComponent({
                         boardBeingEdited.value.projectId!,
                         boardBeingEdited.value.boardId!,
                         { name: newName, },
-                    ).submit();
+                    ).onSuccess(() => {
+                        boardBeingEdited.value = {};
+                    }).onError(error => {
+                        showError(E7, [error.message || GENERIC_RESTART]);
+                    }).submit();
                 }
 
-                boardBeingEdited.value = {};
             },
             deleteBoard: (projectId: string, boardId: string) => {
                 type DeleteBoardModalData = {
@@ -212,9 +218,10 @@ export default defineComponent({
                                     'mw-cancel':  (event: any) => { mwVueModals.closeModal(DELETE_BOARD_DIALOG_ID); },
                                     'mw-save':  (event: any) => {
                                         let { projectId, boardId, deleteFile } = modalData.saveData;
-                                        new DeleteBoardAction(projectId, boardId, deleteFile).submit();
-                                        // // TODO-const : Close modal if successful, or show error if it's not!
-                                        mwVueModals.closeModal(DELETE_BOARD_DIALOG_ID);
+                                        new DeleteBoardAction(projectId, boardId, deleteFile)
+                                            .onSuccess(   () => mwVueModals.closeModal(DELETE_BOARD_DIALOG_ID))
+                                            .onError((error) => showError(E6, [error.message || GENERIC_RESTART]))
+                                            .submit();
                                     },
                                 }
                             },
@@ -299,7 +306,7 @@ export default defineComponent({
                 new GetProjectDataAction(
                     JSON.parse(JSON.stringify(remote))
                 ).onError((err) => {
-                    showError('C:1', [err.message || GENERIC_RESTART]);
+                    showError(E1, [err.message || GENERIC_RESTART]);
                 }).submit();
             },
             addRemoteProject: () => {

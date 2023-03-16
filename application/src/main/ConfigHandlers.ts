@@ -75,21 +75,21 @@ async function createNewBoard({ boardOrFileName, template }: T.CreateNewBoardReq
         };
     }
 
-    return undefined;
+    return {
+        errorCode: 3,
+        message: "Empty field was provided."
+    };
 }
 
 async function deleteBoard({ boardId, deleteFile }: T.DeleteBoardRequest): Promise<T.DeleteBoardResponse> {
     ConfigDataPersistence.removeLocalBoard(boardId);
     ConfigDataPersistence.deleteTemplate(boardId);
 
-    // TODO-const : Also delete this board's backups
-
     if (deleteFile && fs.existsSync(boardId)) {
         fs.rmSync(boardId);
     }
 
     return {
-        wasSuccessful: true,
         boardId,
         projectId: LOCAL_PROJECT,
     };

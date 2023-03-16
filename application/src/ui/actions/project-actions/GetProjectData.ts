@@ -36,8 +36,7 @@ export class GetProjectDataAction extends Action {
 
     processResponse(resp: GetProjectDataResponse): void {
         if ('errorCode' in resp) {
-            if (this.errorCallback)
-                this.errorCallback(resp);
+            this.errorCallback(resp);
 
         } else {
             const store = useStore();

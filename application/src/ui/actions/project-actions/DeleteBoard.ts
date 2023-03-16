@@ -43,9 +43,18 @@ export class DeleteBoardAction extends Action {
         }
     }
 
-    processResponse({ wasSuccessful, projectId, boardId }: DeleteBoardResponse): void {
-        if (wasSuccessful) {
-            useStore().dispatch('removeBoardFromProject', { projectId, boardId });
+    processResponse(resp: DeleteBoardResponse): void {
+        if ('errorCode' in resp) {
+            this.errorCallback(resp);
+
+        } else {
+            useStore().dispatch('removeBoardFromProject', {
+                projectId: resp.projectId,
+                boardId: resp.boardId,
+            });
+
+            if (this.successCallback)
+                this.successCallback(resp);
         }
     }
 

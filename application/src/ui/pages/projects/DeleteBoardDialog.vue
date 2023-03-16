@@ -1,6 +1,6 @@
 <template>
     <div class="mw-delete-board">
-        <p>Are you sure you want to delete this board? This will also delete the backups we've created.</p>
+        <p>Are you sure you want to delete this board?</p>
         <eic-checkbox v-if="isLocalBoard" v-model="saveData.deleteFile" eic-label="Also delete file on filesystem?"></eic-checkbox>
     </div>
 </template>
