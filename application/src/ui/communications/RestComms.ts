@@ -9,8 +9,9 @@ export const HTTP_DELETE = 'delete';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
-export function send<T>({httpMethod, endpoint, data, creds, callback}: {
+export function send<T>({httpMethod, baseUrl, endpoint, data, creds, callback}: {
     httpMethod: HttpMethod,
+    baseUrl: string,
     endpoint: string,
     data?: any,
     creds?: string,
@@ -18,6 +19,7 @@ export function send<T>({httpMethod, endpoint, data, creds, callback}: {
 }): void {
     let request: AxiosRequestConfig = {
         method: httpMethod,
+        baseURL: baseUrl,
         url: endpoint,
     }
 

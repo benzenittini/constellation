@@ -25,7 +25,8 @@ export class UpdateBoardConfigAction extends Action {
             if (remoteProject) {
                 send<UpdateBoardConfigResponse>({
                     httpMethod: 'put',
-                    endpoint: `${remoteProject.serverUrl}/board/${this.boardId}`,
+                    baseUrl: remoteProject.serverUrl,
+                    endpoint: `/board/${this.boardId}`,
                     creds: remoteProject.credentials,
                     data: {
                         boardConfig: this.boardConfig,

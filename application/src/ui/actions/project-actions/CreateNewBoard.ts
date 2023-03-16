@@ -25,7 +25,8 @@ export class CreateNewBoardAction extends Action {
             if (remoteProject) {
                 send<CreateNewBoardResponse>({
                     httpMethod: 'post',
-                    endpoint: `${remoteProject.serverUrl}/board`,
+                    baseUrl: remoteProject.serverUrl,
+                    endpoint: '/board',
                     creds: remoteProject.credentials,
                     data: {
                         boardOrFileName: this.boardOrFileName,

@@ -22,7 +22,8 @@ export class GetBoardTemplatesAction extends Action {
             // If remote project, send message over REST.
             send<GetBoardTemplatesResponse>({
                 httpMethod: 'get',
-                endpoint: `${this.remoteProject.serverUrl}/project/templates`,
+                baseUrl: this.remoteProject.serverUrl,
+                endpoint: '/project/templates',
                 creds: this.remoteProject.credentials,
                 callback: (resp) => callback(resp.data)
             });

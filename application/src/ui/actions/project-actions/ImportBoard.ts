@@ -25,7 +25,8 @@ export class ImportBoardAction extends Action {
             if (remoteProject) {
                 send<ImportBoardResponse>({
                     httpMethod: 'put',
-                    endpoint: `${remoteProject.serverUrl}/board`,
+                    baseUrl: remoteProject.serverUrl,
+                    endpoint: '/board',
                     creds: remoteProject.credentials,
                     data: {
                         boardName: this.boardName,

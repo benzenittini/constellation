@@ -22,7 +22,8 @@ export class GetProjectDataAction extends Action {
             // If remote project, send message over REST.
             send<GetProjectDataResponse>({
                 httpMethod: 'get',
-                endpoint: `${this.remoteProject.serverUrl}/project`,
+                baseUrl: this.remoteProject.serverUrl,
+                endpoint: '/project',
                 creds: this.remoteProject.credentials,
                 callback: (resp) => this.processResponse(resp.data)
             });

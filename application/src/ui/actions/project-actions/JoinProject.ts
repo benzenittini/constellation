@@ -25,7 +25,8 @@ export class JoinProjectAction extends Action {
         // This is a "remote server only" action
         send<JoinProjectResponse>({
             httpMethod: 'post',
-            endpoint: `${this.projectUrl}/user`,
+            baseUrl: this.projectUrl,
+            endpoint: '/user',
             data: {
                 registrationKey: this.registrationKey,
                 clientName: this.clientName,

@@ -22,7 +22,8 @@ export class LeaveProjectAction extends Action {
         // Send the remote request to de-auth this user.
         send<LeaveProjectResponse>({
             httpMethod: 'delete',
-            endpoint: `${this.remoteProject.serverUrl}/user`,
+            baseUrl: this.remoteProject.serverUrl,
+            endpoint: '/user',
             creds: this.remoteProject.credentials,
             callback: (resp) => {}
         });

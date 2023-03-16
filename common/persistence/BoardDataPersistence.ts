@@ -47,7 +47,7 @@ export class BoardDataPersistence {
 
     private saveData() {
         if (this.sourceFile) {
-            fs.writeFileSync(this.sourceFile, JSON.stringify(this.data));
+            fs.writeFileSync(this.sourceFile, JSON.stringify(this.data, null, 2));
             this.reportSaveStatus(true);
         }
     }

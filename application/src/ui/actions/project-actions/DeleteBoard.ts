@@ -26,7 +26,8 @@ export class DeleteBoardAction extends Action {
             if (remoteProject) {
                 send<DeleteBoardResponse>({
                     httpMethod: 'delete',
-                    endpoint: `${remoteProject.serverUrl}/board/${this.boardId}`,
+                    baseUrl: remoteProject.serverUrl,
+                    endpoint: `/board/${this.boardId}`,
                     creds: remoteProject.credentials,
                     callback: (resp) => this.processResponse(resp.data)
                 });
