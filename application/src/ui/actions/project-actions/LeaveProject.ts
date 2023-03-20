@@ -35,10 +35,18 @@ export class LeaveProjectAction extends Action {
     }
 
     processResponse(resp: RemoveRemoteProjectResponse): void {
-        const store = useStore();
-        store.dispatch('deregisterRemoteProject', { remoteProject: this.remoteProject });
-        if (this.projectId) {
-            store.dispatch('removeProject', this.projectId);
+        if ('errorCode' in resp) {
+            this.errorCallback(resp);
+
+        } else {
+            const store = useStore();
+            store.dispatch('deregisterRemoteProject', { remoteProject: this.remoteProject });
+            if (this.projectId) {
+                store.dispatch('removeProject', this.projectId);
+            }
+
+            if (this.successCallback)
+                this.successCallback(resp);
         }
     }
 

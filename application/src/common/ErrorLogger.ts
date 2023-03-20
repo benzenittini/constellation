@@ -32,11 +32,16 @@ type ClientError = {
 export const GENERIC_RESTART = "Try restarting your app, and if that doesn't resolve the issue, reach out to ben@zenittini.dev for support.";
 
 // Commented-out errors have been obsoleted
-export const E0: ClientError = { code: 'C:0', dismissAfterMillis: 0, clientTemplate: "An unexpected error occurred. %s" };
-export const E1: ClientError = { code: 'C:1', dismissAfterMillis: 0, clientTemplate: "An error occurred receiving project data. %s" };
-export const E2: ClientError = { code: 'C:2', dismissAfterMillis: 0, clientTemplate: "An error occurred receiving project data. %s" };
-export const E3: ClientError = { code: 'C:3', dismissAfterMillis: 0, clientTemplate: "An error occurred receiving board templates from server. %s" };
-export const E4: ClientError = { code: 'C:4', dismissAfterMillis: 0, clientTemplate: "An error occurred creating a new board. %s" };
-export const E5: ClientError = { code: 'C:5', dismissAfterMillis: 0, clientTemplate: "%s cannot be blank." };
-export const E6: ClientError = { code: 'C:6', dismissAfterMillis: 0, clientTemplate: "An error occurred deleting the board. %s" };
-export const E7: ClientError = { code: 'C:7', dismissAfterMillis: 0, clientTemplate: "An error occurred editing the board configuration. %s" };
+export const E0:  ClientError = { code: 'C:0',  dismissAfterMillis: 0, clientTemplate: "An unexpected error occurred. %s" };
+export const E1:  ClientError = { code: 'C:1',  dismissAfterMillis: 0, clientTemplate: "An error occurred receiving project data. %s" };
+export const E2:  ClientError = { code: 'C:2',  dismissAfterMillis: 0, clientTemplate: "An error occurred receiving project data. %s" };
+export const E3:  ClientError = { code: 'C:3',  dismissAfterMillis: 0, clientTemplate: "An error occurred receiving board templates from server. %s" };
+export const E4:  ClientError = { code: 'C:4',  dismissAfterMillis: 0, clientTemplate: "An error occurred creating a new board. %s" };
+export const E5:  ClientError = { code: 'C:5',  dismissAfterMillis: 0, clientTemplate: "%s cannot be blank." };
+export const E6:  ClientError = { code: 'C:6',  dismissAfterMillis: 0, clientTemplate: "An error occurred deleting the board. %s" };
+export const E7:  ClientError = { code: 'C:7',  dismissAfterMillis: 0, clientTemplate: "An error occurred editing the board configuration. %s" };
+export const E8:  ClientError = { code: 'C:8',  dismissAfterMillis: 0, clientTemplate: "An error occurred importing your board. %s" };
+export const E9:  ClientError = { code: 'C:9',  dismissAfterMillis: 0, clientTemplate: "An error occurred joining the project. %s" };
+export const E10: ClientError = { code: 'C:10', dismissAfterMillis: 0, clientTemplate: "An error occurred importing your board. %s" };
+export const E11: ClientError = { code: 'C:11', dismissAfterMillis: 0, clientTemplate: "An error occurred leaving the project. %s" };
+export const E12: ClientError = { code: 'C:12', dismissAfterMillis: 0, clientTemplate: "An error occurred receiving project data. %s" };

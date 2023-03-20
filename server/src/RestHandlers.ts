@@ -45,7 +45,8 @@ export async function postUser(req: Request, res: Response) {
         res.json({ token: clientAuthToken });
     } catch(err) {
         logger.error(err);
-        res.status(500).json({});
+        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        res.json(response);
     }
 }
 
@@ -55,11 +56,12 @@ export async function deleteUser(req: Request, res: Response) {
 
         UserDataPersistence.removeUserFromProject(jwt);
 
-        // Return the projectId to the client
         res.json({});
     } catch(err) {
         logger.error(err);
-        res.status(500).json({});
+        // We pretend everything is ok to the user for this request. User is leaving, so they
+        // don't need to know that the server is on fire.
+        res.json({});
     }
 }
 
@@ -149,7 +151,8 @@ export async function putBoard(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        res.status(500).json({});
+        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        res.json(response);
     }
 }
 

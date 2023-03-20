@@ -22,6 +22,7 @@ export type GetBoardTemplatesRequest = void;
 export type GetBoardTemplatesResponse = ErrorResponse | BoardTemplateClient[];
 
 export type CreateNewBoardRequest = { boardOrFileName: string, template: TemplateClassification[] };
+// Error 3 indicates a required parameter was missing/empty.
 export type CreateNewBoardResponse = ErrorResponse | BasicBoardData;
 
 export type DeleteBoardRequest = { boardId: string, deleteFile?: boolean };
@@ -34,22 +35,24 @@ export type UpdateBoardConfigResponse = ErrorResponse | { projectId: string, boa
 export type GetRemoteProjectsRequest = void;
 export type GetRemoteProjectsResponse = ErrorResponse | RemoteProject[];
 
-// TODO-const : I AM HERE FOR RESPONSE ERRORS
 export type ImportBoardRequest = undefined | { boardName: string, initialData: BoardData };
-export type ImportBoardResponse = BasicBoardData | undefined;
+// Error 3 indicates file selection was cancelled.
+export type ImportBoardResponse = ErrorResponse | BasicBoardData;
 export type ReadFileAsBoardResponse = { filepath?: string, filename?: string, boardData?: BoardData };
 
+// JoinProjectAction (Server)
 export type JoinProjectRequest = { registrationKey: string, clientName: string };
-export type JoinProjectResponse = { token: string };
-
-export type LeaveProjectRequest = void;
-export type LeaveProjectResponse = {};
-
+export type JoinProjectResponse = ErrorResponse | { token: string };
+// JoinProjectAction (Client)
 export type AddRemoteProjectRequest = { serverUrl: string, credentials: string };
-export type AddRemoteProjectResponse = void;
+export type AddRemoteProjectResponse = ErrorResponse | {};
 
+// LeaveProjectAction (Server)
+export type LeaveProjectRequest = void;
+export type LeaveProjectResponse = {}; // If user fails to "leave" server-side, we ignore the error on the client and proceed happily.
+// LeaveProjectAction (Client)
 export type RemoveRemoteProjectRequest = { remoteProject: RemoteProject};
-export type RemoveRemoteProjectResponse = void;
+export type RemoveRemoteProjectResponse = ErrorResponse | {};
 
 
 // ==============

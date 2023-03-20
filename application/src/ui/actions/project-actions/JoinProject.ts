@@ -6,6 +6,7 @@ import { send } from '../../communications/RestComms';
 import { JoinProjectResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { GetProjectDataAction } from "./GetProjectData";
 import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
+import { E12, E9, GENERIC_RESTART, showError } from "../../../common/ErrorLogger";
 
 export class JoinProjectAction extends Action {
 
@@ -36,20 +37,33 @@ export class JoinProjectAction extends Action {
     }
 
     processResponse(resp: JoinProjectResponse): void {
-        const project: RemoteProject = {
-            serverUrl: this.projectUrl,
-            credentials: resp.token,
-        };
+        if ('errorCode' in resp) {
+            this.errorCallback(resp);
 
-        // Persist the serverUrl and credentials to our local config file.
-        window.config.addRemoteProject(project);
+        } else {
+            const project: RemoteProject = {
+                serverUrl: this.projectUrl,
+                credentials: resp.token,
+            };
 
-        // Fetch the project data
-        new GetProjectDataAction(project)
-            .onError(error => {
-                // TODO-const : show error to user
-                console.error(error);
-            }).submit();
+            // Persist the serverUrl and credentials to our local config file.
+            window.config.addRemoteProject(project)
+                .then(resp => {
+                    if ('errorCode' in resp) {
+                        this.errorCallback(resp);
+
+                    }
+                });
+
+            // Fetch the project data
+            new GetProjectDataAction(project)
+                .onError(error => {
+                    showError(E12, [error.message || GENERIC_RESTART]);
+                }).submit();
+
+            if (this.successCallback)
+                this.successCallback(resp);
+        }
     }
 
 }

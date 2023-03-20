@@ -69,7 +69,8 @@ import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../../store/store';
 import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification } from '../../../../../common/DataTypes/BoardDataTypes';
-import { E1, E4, E5, E6, E7, GENERIC_RESTART, showError } from '../../../common/ErrorLogger';
+import { RemoteProject } from '../../../../../common/DataTypes/FileDataTypes';
+import { E1, E10, E11, E4, E5, E6, E7, E8, E9, GENERIC_RESTART, showError } from '../../../common/ErrorLogger';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
@@ -79,7 +80,6 @@ import { LeaveProjectAction } from '../../actions/project-actions/LeaveProject';
 import { JoinProjectAction } from '../../actions/project-actions/JoinProject';
 import { DeleteBoardAction } from '../../actions/project-actions/DeleteBoard';
 import { UpdateBoardConfigAction } from '../../actions/project-actions/UpdateBoardConfig';
-import { RemoteProject } from '../../../../../common/DataTypes/FileDataTypes';
 
 export default defineComponent({
     setup() {
@@ -240,7 +240,15 @@ export default defineComponent({
             },
             importBoard: (projectId: string) => {
                 if (projectId === LOCAL_PROJECT) {
-                    new ImportBoardAction(projectId).submit();
+                    new ImportBoardAction(projectId)
+                        .onError(error => {
+                            if (error.errorCode === 3) {
+                                // Error code 3 indicates user closed window without choosing file.
+                                // No need to display any problems.
+                            } else {
+                                showError(E8, [error.message || GENERIC_RESTART]);
+                            }
+                        }).submit();
                 } else {
                     // For remote projects, we need both the file data and a board name ... so launching a dialog.
                     type ImportBoardModalData = {
@@ -270,9 +278,11 @@ export default defineComponent({
                                                 projectId,
                                                 boardName,
                                                 JSON.parse(JSON.stringify(initialData)),
-                                            ).submit();
-                                            // TODO-const : Close modal if successful, or show error if it's not!
-                                            mwVueModals.closeModal(IMPORT_BOARD_DIALOG_ID);
+                                            ).onSuccess(resp => {
+                                                mwVueModals.closeModal(IMPORT_BOARD_DIALOG_ID);
+                                            }).onError(error => {
+                                                showError(E10, [error.message || GENERIC_RESTART]);
+                                            }).submit();
                                         },
                                     }
                                 },
@@ -296,7 +306,9 @@ export default defineComponent({
             leaveRemoteProject: (projectId: string) => {
                 let remoteProject = store.getters.getRemoteProjectById(projectId);
                 if (remoteProject) {
-                    new LeaveProjectAction(JSON.parse(JSON.stringify(remoteProject)), projectId).submit();
+                    new LeaveProjectAction(JSON.parse(JSON.stringify(remoteProject)), projectId)
+                        .onError(error => showError(E11, [error.message || GENERIC_RESTART]))
+                        .submit();
                 } else {
                     // TODO-const : shouldn't ever come up ... throw an error if it does..? or ignore?
                     console.error("Unexpected error when leaving a remote project.");
@@ -343,9 +355,10 @@ export default defineComponent({
                                     'mw-save':  (event: any) => {
                                         let { projectUrl, registrationKey, clientName } = modalData.saveData;
                                         // Submit request to server.
-                                        new JoinProjectAction(projectUrl, registrationKey, clientName).submit();
-                                        // TODO-const : On success, close dialog. On error, show error.
-                                        useVueModals().closeModal(ADD_PROJECT_DIALOG_ID);
+                                        new JoinProjectAction(projectUrl, registrationKey, clientName)
+                                            .onSuccess(resp => useVueModals().closeModal(ADD_PROJECT_DIALOG_ID))
+                                            .onError(error => showError(E9, [error.message || GENERIC_RESTART]))
+                                            .submit();
                                     },
                                 }
                             },

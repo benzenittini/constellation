@@ -101,10 +101,12 @@ async function getRemoteProjects(): Promise<T.GetRemoteProjectsResponse> {
 
 async function addRemoteProject(req: T.AddRemoteProjectRequest): Promise<T.AddRemoteProjectResponse> {
     ConfigDataPersistence.addRemoteServer(req);
+    return {};
 }
 
 async function removeRemoteProject(req: T.RemoveRemoteProjectRequest): Promise<T.RemoveRemoteProjectResponse> {
     ConfigDataPersistence.removeRemoteServer(req);
+    return {};
 }
 
 async function importBoard(): Promise<T.ImportBoardResponse> {
@@ -137,7 +139,11 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
         };
     }
 
-    return undefined;
+    // Error 3 indicates file selection was cancelled.
+    return {
+        errorCode: 3,
+        message: undefined
+    };
 }
 
 async function readFileAsBoard(): Promise<T.ReadFileAsBoardResponse> {
