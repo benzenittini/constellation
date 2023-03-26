@@ -70,7 +70,7 @@ import { useVueModals } from 'mw-vue-modals';
 import { useStore } from '../../store/store';
 import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification } from '../../../../../common/DataTypes/BoardDataTypes';
 import { RemoteProject } from '../../../../../common/DataTypes/FileDataTypes';
-import { E1, E10, E11, E4, E5, E6, E7, E8, E9, GENERIC_RESTART, showError } from '../../../common/ErrorLogger';
+import { E1, E10, E11, E4, E5, E6, E7, E8, E9, showError } from '../../../common/ErrorLogger';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
@@ -80,6 +80,7 @@ import { LeaveProjectAction } from '../../actions/project-actions/LeaveProject';
 import { JoinProjectAction } from '../../actions/project-actions/JoinProject';
 import { DeleteBoardAction } from '../../actions/project-actions/DeleteBoard';
 import { UpdateBoardConfigAction } from '../../actions/project-actions/UpdateBoardConfig';
+import { GENERIC_RESTART } from '../../../../../common/DataTypes/ActionDataTypes';
 
 export default defineComponent({
     setup() {

@@ -144,20 +144,18 @@ export class BoardDataPersistence {
     async createBlock(blockId: string, location: BoundingBox, parentBlockId: string | undefined): Promise<Block> {
         // If specified, make sure the parent block exists
         if (parentBlockId && this.data.blocks[parentBlockId] === undefined) {
-            // TODO-const : error handling
-            // throw new TopError('3.3.13', Severity.MEDIUM,
-            //     `When creating a new block, the specified parentBlockId does not exist. boardId: ${boardId}, blockId: ${blockId}, parentBlockId: ${parentBlockId}`,
-            //     UserErrors.INTERNAL_ERROR);
-            throw new Error('error in createBlock: parent block does not exist');
+            throw new T.ConstError(3,
+                `Parent block does not exist. ${T.GENERIC_RESTART}`,
+                T.ConstError.getLineId('BoardDataPersistence', 'createBlock', 1),
+                'Error in createBlock: Parent block does not exist.');
         }
 
         // Make sure there isn't a duplicate blockId
         if (this.data.blocks[blockId]) {
-            // TODO-const : error handling
-            // throw new TopError('3.3.14', Severity.MEDIUM,
-            //     `When creating a new block, the specified block ID already exists. boardId: ${boardId}, blockId: ${blockId}, parentBlockId: ${parentBlockId}`,
-            //     UserErrors.INTERNAL_ERROR);
-            throw new Error('error in createBlock: block id already exists');
+            throw new T.ConstError(4,
+                `Block already exists. ${T.GENERIC_RESTART}`,
+                T.ConstError.getLineId('BoardDataPersistence', 'createBlock', 2),
+                'Error in createBlock: Block ID already exists.');
         }
 
         // All good! Add and persist the block.

@@ -1,6 +1,6 @@
 
-import { ErrorResponse } from "../../../../common/DataTypes/ActionDataTypes";
-import { E0, GENERIC_RESTART, showError } from "../../common/ErrorLogger";
+import { ErrorResponse, GENERIC_RESTART } from "../../../../common/DataTypes/ActionDataTypes";
+import { E0, showError } from "../../common/ErrorLogger";
 
 
 export abstract class Action {

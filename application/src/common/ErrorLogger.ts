@@ -29,8 +29,6 @@ type ClientError = {
     clientTemplate: string,
 }
 
-export const GENERIC_RESTART = "Try restarting your app, and if that doesn't resolve the issue, reach out to ben@zenittini.dev for support.";
-
 // Commented-out errors have been obsoleted
 export const E0:  ClientError = { code: 'C:0',  dismissAfterMillis: 0, clientTemplate: "An unexpected error occurred. %s" };
 export const E1:  ClientError = { code: 'C:1',  dismissAfterMillis: 0, clientTemplate: "An error occurred receiving project data. %s" };
@@ -45,3 +43,5 @@ export const E9:  ClientError = { code: 'C:9',  dismissAfterMillis: 0, clientTem
 export const E10: ClientError = { code: 'C:10', dismissAfterMillis: 0, clientTemplate: "An error occurred importing your board. %s" };
 export const E11: ClientError = { code: 'C:11', dismissAfterMillis: 0, clientTemplate: "An error occurred leaving the project. %s" };
 export const E12: ClientError = { code: 'C:12', dismissAfterMillis: 0, clientTemplate: "An error occurred receiving project data. %s" };
+export const E13: ClientError = { code: 'C:13', dismissAfterMillis: 0, clientTemplate: "An error occurred receiving board data. %s" };
+export const E14: ClientError = { code: 'C:14', dismissAfterMillis: 0, clientTemplate: "An error occurred creating a new block. %s" };

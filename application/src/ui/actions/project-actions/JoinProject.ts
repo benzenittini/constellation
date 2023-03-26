@@ -3,10 +3,10 @@ import { Action } from "../Action";
 
 import { send } from '../../communications/RestComms';
 
-import { JoinProjectResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, JoinProjectResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { GetProjectDataAction } from "./GetProjectData";
 import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
-import { E12, E9, GENERIC_RESTART, showError } from "../../../common/ErrorLogger";
+import { E12, showError } from "../../../common/ErrorLogger";
 
 export class JoinProjectAction extends Action {
 

@@ -6,10 +6,61 @@ import { BoundingBox, TypedMap } from "./GenericDataTypes";
 import { BaseViewConfig, ViewConfig } from "./ViewDataTypes";
 import { RemoteProject } from "./FileDataTypes";
 
+
+// ==============
+// Error Handling
+// --------------
+
+export const GENERIC_RESTART = "Try restarting your app, and if that doesn't resolve the issue, reach out to ben@zenittini.dev for support.";
+
 // ErrorCode 1 = auth error
 // ErrorCode 2 = unknown error
 // ErrorCode n = specific to the request
 export type ErrorResponse = { errorCode: number, message?: string };
+export type BackendError  = { serverMessage: string, clientResponse: { errorCode: number, message?: string } };
+
+export class ConstError extends Error {
+
+    public readonly clientCode: number;
+    public readonly clientMessage: string | undefined;
+    public readonly serverMessage: string;
+
+    constructor(clientCode: number, clientMessage: string | undefined, lineId: string, serverMessage: string, wrappedError: any | undefined = undefined) {
+        let wrappedServerMessage = serverMessage;
+        if (wrappedError) {
+            wrappedServerMessage += (wrappedError instanceof Error)
+                ? `\nWrapped Error:\n${wrappedError.stack}\n--\n`
+                : `\nWrapped Error:\n${wrappedError}\n--\n`;
+        }
+
+        super(`${wrappedServerMessage} (${lineId})`);
+
+        this.clientCode = clientCode;
+        this.clientMessage = clientMessage;
+        this.serverMessage = wrappedServerMessage;
+    }
+
+    getErrorResponse(): ErrorResponse {
+        return {
+            errorCode: this.clientCode,
+            message: this.clientMessage,
+        };
+    }
+
+    static safeConstructor(error: Error | ConstError): ConstError {
+        return (error instanceof ConstError)
+            ? error
+            : new ConstError(2, undefined,
+                ConstError.getLineId('ActionDataTypes', 'safeConstructor', 1),
+                'An unhandled error has occurred.',
+                error);
+    }
+
+    static getLineId(file: string, func: string, occurrence: number) {
+        return `${file}.${func}:${occurrence}`;
+    }
+}
+
 
 // ================
 // Project Requests
@@ -60,11 +111,16 @@ export type RemoveRemoteProjectResponse = ErrorResponse | {};
 // --------------
 
 export type GetBoardDataRequest  = { boardId: string };
-export type GetBoardDataResponse = BoardData | undefined;
+// Error 3 indicates file not found.
+// Error 4 indicates error loading/parsing the file.
+export type GetBoardDataResponse = ErrorResponse | BoardData;
 
 export type CreateBlockRequest  = { location: BoundingBox, parentBlockId: string | undefined };
-export type CreateBlockResponse = Block | undefined;
+// Error 3 indicates parent block not found.
+// Error 4 indicates block ID already exists.
+export type CreateBlockResponse = ErrorResponse | Block;
 
+// TODO-const : I AM HERE for improving error handling.
 export type SetBlockPositionsRequest  = { blocksAndPositions: BlockIdAndPosition[] };
 export type SetBlockPositionsResponse = BlockIdAndPosition[];
 

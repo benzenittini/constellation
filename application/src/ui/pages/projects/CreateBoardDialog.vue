@@ -64,7 +64,8 @@ import { BUILT_IN_TEMPLATES } from "../../store/Types/FieldStoreTypes";
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { BoardTemplateClient, LOCAL_PROJECT, TemplateClassification } from "../../../../../common/DataTypes/BoardDataTypes";
 import { GetBoardTemplatesAction } from '../../actions/project-actions/GetBoardTemplates';
-import { E3, GENERIC_RESTART, showError } from "../../../common/ErrorLogger";
+import { E3, showError } from "../../../common/ErrorLogger";
+import { GENERIC_RESTART } from "../../../../../common/DataTypes/ActionDataTypes";
 
 export default defineComponent({
     props: {

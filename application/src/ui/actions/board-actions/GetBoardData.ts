@@ -1,8 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { GetBoardDataResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, GetBoardDataResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E13, showError } from "../../../common/ErrorLogger";
 
 export class GetBoardDataAction extends Action {
 
@@ -27,35 +28,35 @@ export class GetBoardDataAction extends Action {
         }
     }
 
-    static processResponse(data: GetBoardDataResponse): void {
+    static processResponse(resp: GetBoardDataResponse): void {
         const store = useStore();
 
-        if (data === undefined) {
-            // TODO-const : post error to user
-            console.error("Error fetching board data.");
+        if ('errorCode' in resp) {
             store.dispatch('setCurrentProjectBoard', undefined);
-            return;
+            showError(E13, [resp.message || GENERIC_RESTART]);
+
+        } else {
+            // Field Definitions
+            store.dispatch('setPossibleValueDefinitions',  resp.possibleValues);
+            store.dispatch('setFieldDefinitions',          resp.fields);
+            store.dispatch('setClassificationDefinitions', {
+                classificationDefinitions: resp.classifications,
+                classificationIds: resp.classificationIds
+            });
+
+            // Blocks
+            store.dispatch('setBlocks', resp.blocks);
+            store.dispatch('setBlockPriorities', resp.blockPriorities);
+
+            // Hierarchy
+            store.dispatch('clearHierarchy');
+            for (let block of Object.values(resp.blocks)) {
+                store.dispatch('createNode', { blockId: block.id, parentId: block.parentBlockId });
+            }
+
+            store.dispatch('setAvailableViews', resp.views);
         }
 
-        // Field Definitions
-        store.dispatch('setPossibleValueDefinitions',  data.possibleValues);
-        store.dispatch('setFieldDefinitions',          data.fields);
-        store.dispatch('setClassificationDefinitions', {
-            classificationDefinitions: data.classifications,
-            classificationIds: data.classificationIds
-        });
-
-        // Blocks
-        store.dispatch('setBlocks', data.blocks);
-        store.dispatch('setBlockPriorities', data.blockPriorities);
-
-        // Hierarchy
-        store.dispatch('clearHierarchy');
-        for (let block of Object.values(data.blocks)) {
-            store.dispatch('createNode', { blockId: block.id, parentId: block.parentBlockId });
-        }
-
-        store.dispatch('setAvailableViews', data.views);
     }
 
 }

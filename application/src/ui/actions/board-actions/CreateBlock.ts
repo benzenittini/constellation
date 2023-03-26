@@ -3,8 +3,9 @@ import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
 import { useEmitter } from "../../composables/Emitter";
-import { CreateBlockResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { CreateBlockResponse, GENERIC_RESTART } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E14, showError } from "../../../common/ErrorLogger";
 
 export class CreateBlockAction extends Action {
 
@@ -37,23 +38,21 @@ export class CreateBlockAction extends Action {
 
     static processResponse(resp: CreateBlockResponse): void {
         const store = useStore();
-        const emitter = useEmitter();
 
-        if (resp === undefined) {
-            // TODO-const : post error to user
-            console.error("Error creating a new block");
-            return;
+        if ('errorCode' in resp) {
+                showError(E14, [resp.message || GENERIC_RESTART]);
+
+        } else {
+            const emitter = useEmitter();
+
+            store.dispatch('addBlocks', [resp]);
+            store.dispatch('createNode', { blockId: resp.id, parentId: resp.parentBlockId });
+
+            // Begin editing the block (assumes we were the user that submitted this request)
+            store.dispatch("selectBlock", {blockId: resp.id, clearCurrentSelection: true});
+            store.dispatch("startEditingBlock", resp.id);
+            emitter.emit('blockCreated', resp.id);
         }
-
-        // Since we verified it's a block.
-        const newBlock = resp;
-
-        store.dispatch('addBlocks', [newBlock]);
-        store.dispatch('createNode', { blockId: newBlock.id, parentId: newBlock.parentBlockId });
-        // Begin editing the block (assumes we were the user that submitted this request)
-        store.dispatch("selectBlock", {blockId: newBlock.id, clearCurrentSelection: true});
-        store.dispatch("startEditingBlock", newBlock.id);
-        emitter.emit('blockCreated', newBlock.id);
     }
 
 }

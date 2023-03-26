@@ -1,6 +1,6 @@
 
-import { GetRemoteProjectsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
-import { E2, GENERIC_RESTART, showError } from "../../../common/ErrorLogger";
+import { GENERIC_RESTART, GetRemoteProjectsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { E2, showError } from "../../../common/ErrorLogger";
 import { useStore } from "../../store/store";
 import { Action } from "../Action";
 import { GetProjectDataAction } from "./GetProjectData";

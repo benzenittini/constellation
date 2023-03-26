@@ -37,19 +37,28 @@ async function getBoardData({ boardId: filepath }: T.GetBoardDataRequest): Promi
             persistence = new BoardDataPersistence(filepath, undefined, (status) => BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', status));
             return persistence.getBoardData();
         } catch(err) {
-            // TODO-const : Log an error
             ConfigDataPersistence.removeLocalBoard(filepath)
-            return undefined;
+            return {
+                errorCode: 3,
+                message: 'Failed to load and parse board data.',
+            };
         }
     }
 
-    // TODO-const : Log an error
     ConfigDataPersistence.removeLocalBoard(filepath)
-    return undefined;
+    return {
+        errorCode: 4,
+        message: 'File was not found.',
+    };
 }
 
 async function createBlock({ location, parentBlockId }: T.CreateBlockRequest): Promise<T.CreateBlockResponse> {
-    return await persistence!.createBlock(uuidv4(), location, parentBlockId);
+    try {
+        return await persistence!.createBlock(uuidv4(), location, parentBlockId);
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function setBlockPositions({ blocksAndPositions }: T.SetBlockPositionsRequest): Promise<T.SetBlockPositionsResponse> {

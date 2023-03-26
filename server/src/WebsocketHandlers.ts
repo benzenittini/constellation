@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { boardDataPersistence, projectDataPersistence } from './Persistence';
 import { logger } from './Logger';
+import { ConstError, ErrorResponse } from '../../common/DataTypes/ActionDataTypes';
 
 export function getBoardData(io: Server, socket: Socket) {
     return async (message: string) => {
@@ -12,9 +13,9 @@ export function getBoardData(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].getBoardData();
             socket.emit('getBoardData', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when getting board data: ${err}`);
-            // TODO-const : socket.emit('boardData', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when getting board data: ${error.message}`);
+            socket.emit('getBoardData', error.getErrorResponse());
         }
     }
 }
@@ -31,9 +32,9 @@ export function createBlock(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].createBlock(uuidv4(), location, parentBlockId);
             io.in(boardId).emit('createBlock', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when creating a block: ${err}`);
-            // TODO-const : socket.emit('createBlock', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when creating a block: ${error.message}`);
+            socket.emit('createBlock', error.getErrorResponse());
         }
     };
 }
