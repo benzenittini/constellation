@@ -4,13 +4,14 @@ import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 import { RootState } from "./StoreTypes";
 import { BlockDataState, BlockDataGetters, BlockDataMutations, BlockDataActions } from "./Types/BlockStoreTypes";
 
-import * as ErrorLogger from "../../common/ErrorLogger";
 import * as RectangleUtils from '../../../../common/utilities/RectangleUtils';
 import * as ObjectUtils from '../../../../common/utilities/ObjectUtils';
 import { GRAY8 } from '../styles/styleVariables';
 import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
 import { MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, SearchResult } from "../../../../common/DataTypes/BlockDataTypes";
 import { getFieldValue } from "../../../../common/DataTypes/FieldDataTypes";
+import { E38, showError } from "../../common/ErrorLogger";
+import { GENERIC_RESTART } from "../../../../common/DataTypes/ActionDataTypes";
 
 
 // =====
@@ -123,8 +124,7 @@ const blockDataMutations: MutationTree<BlockDataState> & BlockDataMutations = {
                 state.blockPriorities.splice(index, 0, ...blockId);
             } else {
                 // The "before" block wasn't found ... this shouldn't ever happen.
-                // TODO-const : Replace with correct error code.
-                // ErrorLogger.showError('3.2.1');
+                showError(E38, [GENERIC_RESTART]);
             }
         } else {
             // If undefined, then insert at the end of the priority list.

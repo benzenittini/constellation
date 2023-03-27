@@ -2,11 +2,11 @@
 import { AugmentedActionContext, GetterProperties, RootState } from "../StoreTypes";
 import * as StringUtils from '../../../../../common/utilities/StringUtils';
 import * as DateUtils from '../../../../../common/utilities/DateUtils';
-import * as ErrorLogger from '../../../common/ErrorLogger';
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
 import { BaseViewConfig, Comparator, Conjunction, Filter, FilterChain, FilterType, Inclusion, MultiSelectComparator, SingleSelectComparator, StringComparator, TemporalBeforeAfterFilter, TemporalComparator, TemporalFilterValue, TemporalUnit, TemporalWithinFilter, ViewConfig, ViewType } from "../../../../../common/DataTypes/ViewDataTypes";
 import { Block } from "../../../../../common/DataTypes/BlockDataTypes";
 import { DateTime, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
+import { E36, E37, showError } from "../../../common/ErrorLogger";
 
 
 // -- State --
@@ -57,16 +57,14 @@ export type ViewDataGetters<S = ViewDataState> = {
 export function isValidConfig(viewConfig: ViewConfig): boolean {
     // Must have a non-blank name
     if (viewConfig.name.trim().length === 0) {
-        // TODO-const : Replace with correct error code.
-        // ErrorLogger.showError('3.3.1');
+        showError(E36);
         return false;
     }
 
     if (viewConfig.type === ViewType.KANBAN) {
         // Kanbans must have a groupingFieldId
         if (!('groupingFieldId' in viewConfig)) {
-            // TODO-const : Replace with correct error code.
-            // ErrorLogger.showError('3.3.2');
+            showError(E37);
             return false;
         }
     }

@@ -25,9 +25,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { useStore } from "../../../store/store";
 import { useEmitter } from "../../../composables/Emitter";
 
-import * as ErrorLogger from '../../../../common/ErrorLogger';
 import { Conjunction, ViewConfig, ViewType } from "../../../../../../common/DataTypes/ViewDataTypes";
 import { LoadViewAction } from "../../../actions/board-actions/LoadView";
+import { E32, showError } from "../../../../common/ErrorLogger";
+import { GENERIC_RESTART } from "../../../../../../common/DataTypes/ActionDataTypes";
 
 export default defineComponent({
     props: {
@@ -67,8 +68,7 @@ export default defineComponent({
             },
             loadView: (viewId: string) => {
                 if (!store.getters.currentProjectBoard?.boardId) {
-                    // TODO-const : replace with actual code.
-                    // ErrorLogger.showError('2.2.1');
+                    showError(E32, [GENERIC_RESTART]);
                 } else {
                     new LoadViewAction(viewId).submit();
                 }

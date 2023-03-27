@@ -2,8 +2,9 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
-import { BoardConfig, UpdateBoardConfigResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { BoardConfig, GENERIC_RESTART, UpdateBoardConfigResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { send } from "../../communications/RestComms";
+import { E30, showError } from "../../../common/ErrorLogger";
 
 export class UpdateBoardConfigAction extends Action {
 
@@ -34,7 +35,7 @@ export class UpdateBoardConfigAction extends Action {
                     callback: (resp) => this.processResponse(resp.data)
                 });
             } else {
-                // TODO-const : show an error, recommend a reload.
+                showError(E30, [GENERIC_RESTART]);
             }
         } else {
             // Local projects cannot be renamed, and there's not currently any other config.

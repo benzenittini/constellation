@@ -1,9 +1,10 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { DeleteBoardResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { DeleteBoardResponse, GENERIC_RESTART } from "../../../../../common/DataTypes/ActionDataTypes";
 import { send } from "../../communications/RestComms";
 import { LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
+import { E28, showError } from "../../../common/ErrorLogger";
 
 export class DeleteBoardAction extends Action {
 
@@ -32,7 +33,7 @@ export class DeleteBoardAction extends Action {
                     callback: (resp) => this.processResponse(resp.data)
                 });
             } else {
-                // TODO-const : show an error, recommend a reload.
+                showError(E28, [GENERIC_RESTART]);
             }
         } else {
             // If local project, make the IPC request

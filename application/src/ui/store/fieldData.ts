@@ -2,9 +2,10 @@
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 import { FieldDataState, FieldDataGetters, FieldDataMutations, FieldDataActions } from "./Types/FieldStoreTypes";
 import { RootState } from "./StoreTypes";
-import * as ErrorLogger from "../../common/ErrorLogger";
 import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
 import { getFieldDataType } from "../../../../common/DataTypes/FieldDataTypes";
+import { E39, showError } from "../../common/ErrorLogger";
+import { GENERIC_RESTART } from "../../../../common/DataTypes/ActionDataTypes";
 
 
 // =====
@@ -132,8 +133,7 @@ const fieldDataGetters: GetterTree<FieldDataState, RootState> & FieldDataGetters
                 }
             } else {
                 // The possible value didn't have an associated field ... this shouldn't ever happen.
-                // TODO-const : Replace with correct error code.
-                // ErrorLogger.showError('3.1.1');
+                showError(E39, [GENERIC_RESTART]);
             }
         }
 

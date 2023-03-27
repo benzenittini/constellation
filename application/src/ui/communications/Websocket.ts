@@ -5,7 +5,6 @@ import io, { Socket } from 'socket.io-client';
 import { useVueModals } from 'mw-vue-modals';
 import { useVueNotify } from 'mw-vue-notify';
 
-import * as ErrorLogger from '../../common/ErrorLogger';
 import { RemoteProject } from '../../../../common/DataTypes/FileDataTypes';
 
 // -- Actions --
@@ -23,6 +22,8 @@ import { SaveViewAction } from '../actions/board-actions/SaveView';
 import { DeleteViewAction } from '../actions/board-actions/DeleteView';
 import { SetBlockPriorityAction } from '../actions/board-actions/SetBlockPriority';
 import { LoadViewAction } from '../actions/board-actions/LoadView';
+import { E31, showError } from '../../common/ErrorLogger';
+import { GENERIC_RESTART } from '../../../../common/DataTypes/ActionDataTypes';
 
 
 const WS_DIALOG_ID = 'ws-connecting-dialog';
@@ -41,8 +42,7 @@ class Websocket {
     emit(event: string, data: any) {
         if (!this.isConnected()) {
             // Attempted to emit a websocket event before connecting.
-            // TODO-const : Replace with correct error code.
-            // ErrorLogger.showError('5.1.1');
+            showError(E31, [GENERIC_RESTART]);
         } else {
             this.socket!.emit(event, data);
         }

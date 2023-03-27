@@ -2,8 +2,9 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { BoardData, LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
-import { ImportBoardResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, ImportBoardResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { send } from "../../communications/RestComms";
+import { E29, showError } from "../../../common/ErrorLogger";
 
 export class ImportBoardAction extends Action {
 
@@ -35,7 +36,7 @@ export class ImportBoardAction extends Action {
                     callback: (resp) => this.processResponse(resp.data)
                 });
             } else {
-                // TODO-const : show an error, recommend a reload.
+                showError(E29, [GENERIC_RESTART]);
             }
         } else {
             // If local project, make the IPC request.

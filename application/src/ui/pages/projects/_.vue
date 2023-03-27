@@ -70,7 +70,7 @@ import { useVueModals } from 'mw-vue-modals';
 import { useStore } from '../../store/store';
 import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification } from '../../../../../common/DataTypes/BoardDataTypes';
 import { RemoteProject } from '../../../../../common/DataTypes/FileDataTypes';
-import { E1, E10, E11, E4, E5, E6, E7, E8, E9, showError } from '../../../common/ErrorLogger';
+import { E1, E10, E11, E35, E4, E5, E6, E7, E8, E9, showError } from '../../../common/ErrorLogger';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
@@ -311,8 +311,7 @@ export default defineComponent({
                         .onError(error => showError(E11, [error.message || GENERIC_RESTART]))
                         .submit();
                 } else {
-                    // TODO-const : shouldn't ever come up ... throw an error if it does..? or ignore?
-                    console.error("Unexpected error when leaving a remote project.");
+                    showError(E35, [GENERIC_RESTART]);
                 }
             },
             retryRemoteProject: (remote: RemoteProject) => {

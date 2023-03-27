@@ -34,6 +34,8 @@ import { useEmitter } from '../../composables/Emitter';
 import { useWindowEvents } from '../../composables/WindowEvents';
 import { useStore } from '../../store/store';
 import { ws } from '../../communications/Websocket';
+import { E33, E34, showError } from '../../../common/ErrorLogger';
+import { GENERIC_RESTART } from '../../../../../common/DataTypes/ActionDataTypes';
 
 export default defineComponent({
     setup() {
@@ -80,14 +82,13 @@ export default defineComponent({
                     // If it's a remote project, set up the websocket connection
                     let remoteProject = store.getters.getRemoteProjectById(projectBoard.projectId);
                     if (!remoteProject) {
-                        // TODO-const : drop a generic error to try again..?
-                        console.error("Could not find remote project.");
+                        showError(E33, [GENERIC_RESTART]);
                     } else {
                         ws.connectWebsocket(remoteProject, projectBoard.boardId);
                     }
                 }
             } else {
-                // TODO-const : drop a generic error to try again..?
+                showError(E34, [GENERIC_RESTART]);
             }
         });
 
