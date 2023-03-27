@@ -11,6 +11,7 @@ import http from 'http';
 import { logger } from "./Logger";
 import * as WebsocketHandlers from './WebsocketHandlers';
 import { verifyCreds } from "./UserDataPersistence";
+import { ConstError } from "../../common/DataTypes/ActionDataTypes";
 
 // -- Singleton Management --
 export let singleton: WebsocketManager;
@@ -68,8 +69,10 @@ export class WebsocketManager {
         try {
             socket.join(data.boardId);
         } catch (err) {
-            // TODO-const : Error handling
-            throw new Error("An unknown error occurred when user subscribed to a board.");
+            throw new ConstError(3,
+                undefined,
+                ConstError.getLineId('WebsocketManager', 'onSocketSubscribeToBoard', 1),
+                "An unknown error occurred when user subscribed to a board.");
         }
     }
 
@@ -77,8 +80,10 @@ export class WebsocketManager {
         try {
             socket.leave(data.boardId);
         } catch (err) {
-            // TODO-const : Error handling
-            throw new Error("An unknown error occurred when user unsubscribed to a board.");
+            throw new ConstError(3,
+                undefined,
+                ConstError.getLineId('WebsocketManager', 'onSocketUnsubscribeFromBoard', 1),
+                "An unknown error occurred when user unsubscribed to a board.");
         }
     }
 

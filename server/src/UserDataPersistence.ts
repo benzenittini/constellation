@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AuthorizedUser, UserFile } from '../../common/DataTypes/FileDataTypes';
 import { logger } from './Logger';
 import { properties } from './PropertyLoader';
+import { ConstError } from '../../common/DataTypes/ActionDataTypes';
 
 let lastLoadedData: UserFile | undefined = undefined;
 
@@ -14,8 +15,10 @@ function saveConfig() {
 
 function loadConfigFile() {
     if (!fs.existsSync(properties.user_data)) {
-        // TODO-const : error handling
-        throw new Error("User config file was not properly initialized on startup.");
+        throw new ConstError(3,
+            "User config file was not properly initialized on startup.",
+            ConstError.getLineId('UserDataPersistence', 'loadConfigFile', 1),
+            `User config file was not found at ${properties.user_data}. This is configured via the 'user_data' property.`);
     }
 
     let userConfig: UserFile = JSON.parse(fs.readFileSync(properties.user_data, 'utf-8'));
@@ -28,7 +31,10 @@ export function consumeRegistrationKey(key: string, clientName: string, token: s
 
     let keyIndex = lastLoadedData!.registrationKeys.indexOf(key);
     if (keyIndex === -1) {
-        throw new Error("Registration key not found.");
+        throw new ConstError(3,
+            "Failed to register.",
+            ConstError.getLineId('UserDataPersistence', 'consumeRegistrationKey', 1),
+            "Provided registration key was not found.");
     }
 
     lastLoadedData!.registrationKeys.splice(keyIndex, 1);

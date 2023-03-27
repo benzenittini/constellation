@@ -28,7 +28,6 @@ function requireAuthorization(req: Request, res: Response, callback: () => void)
     }
 }
 
-// TODO-const : Move all the "try/catch" blocks in these handlers into a single helper function..?
 
 // ==============
 // User Endpoints

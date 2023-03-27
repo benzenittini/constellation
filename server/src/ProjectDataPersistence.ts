@@ -8,6 +8,7 @@ import { mapify } from '../../common/utilities/ArrayUtils';
 
 import * as T from '../../common/DataTypes/ActionDataTypes';
 import { TypedMap } from '../../common/DataTypes/GenericDataTypes';
+import { logger } from './Logger';
 
 export class ProjectDataPersistence {
 
@@ -40,10 +41,9 @@ export class ProjectDataPersistence {
 
     private saveData() {
         if (this.sourceFile) {
-            // logger.debug('Saving web data...'); // TODO-const : Logger setup
+            logger.debug('Saving project data...');
             fs.writeFileSync(this.sourceFile, JSON.stringify(this.data));
-            console.log("Project data saved!");
-            // logger.debug('...done!'); // TODO-const : Logger setup
+            logger.debug('...done!');
         }
     }
 
