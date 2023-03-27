@@ -43,9 +43,14 @@ export async function postUser(req: Request, res: Response) {
         // Return the token to the client
         res.json({ token: clientAuthToken });
     } catch(err) {
-        logger.error(err);
-        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
-        res.json(response);
+        if (err instanceof T.ConstError) {
+            logger.error(err.message);
+            res.json(err.getErrorResponse());
+        } else {
+            logger.error(err);
+            const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+            res.json(response);
+        }
     }
 }
 

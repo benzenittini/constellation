@@ -5,7 +5,7 @@
         <div class="mw-sot-tab-stack" v-on:mouseleave="highlightedTabId = undefined">
             <div class="mw-sot-tab" v-on:click="clickTab('controls')" v-bind:class="{ active: openedTabId === 'controls' }">
                 <eic-svg-question-mark width="25" height="24" v-bind:class="{ active: openedTabId === 'controls' }"></eic-svg-question-mark>
-                <span class="mw-sot-tab-preview">Controls</span>
+                <span class="mw-sot-tab-preview">Help</span>
             </div>
         </div>
 

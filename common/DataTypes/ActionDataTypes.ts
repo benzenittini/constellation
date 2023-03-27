@@ -5,13 +5,14 @@ import { ChangedFieldValue, ClassificationDefinition, FieldDefinition, PossibleV
 import { BoundingBox, TypedMap } from "./GenericDataTypes";
 import { BaseViewConfig, ViewConfig } from "./ViewDataTypes";
 import { RemoteProject } from "./FileDataTypes";
+import { SUPPORT_EMAIL } from "../Constants";
 
 
 // ==============
 // Error Handling
 // --------------
 
-export const GENERIC_RESTART = "Try restarting your app, and if that doesn't resolve the issue, reach out to ben@zenittini.dev for support.";
+export const GENERIC_RESTART = `Try restarting your app, and if that doesn't resolve the issue, reach out to ${SUPPORT_EMAIL} for support.`;
 
 // ErrorCode 1 = auth error
 // ErrorCode 2 = unknown error
@@ -93,6 +94,7 @@ export type ReadFileAsBoardResponse = { filepath?: string, filename?: string, bo
 
 // JoinProjectAction (Server)
 export type JoinProjectRequest = { registrationKey: string, clientName: string };
+// Error 3 indicates a REST error (probably bad URL)
 export type JoinProjectResponse = ErrorResponse | { token: string };
 // JoinProjectAction (Client)
 export type AddRemoteProjectRequest = { serverUrl: string, credentials: string };

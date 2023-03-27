@@ -7,6 +7,7 @@ import { TypedMap } from "../../common/DataTypes/GenericDataTypes";
 import { BoardDataPersistence } from "../../common/persistence/BoardDataPersistence";
 import { ProjectDataPersistence } from "./ProjectDataPersistence";
 import { properties } from "./PropertyLoader";
+import { DOT_FILE_SUFFIX } from "../../common/Constants";
 
 
 export let projectDataPersistence: ProjectDataPersistence | undefined = undefined;
@@ -25,19 +26,19 @@ export async function initializePersistence(filepath: string) {
 
 export function addBoardPersistence(boardId: string, template?: TemplateClassification[]) {
     boardDataPersistence[boardId] = new BoardDataPersistence(
-        path.resolve(properties.board_dir, boardId + ".mw"),
+        path.resolve(properties.board_dir, boardId + DOT_FILE_SUFFIX),
         BoardDataPersistence.getInitData(template));
 }
 
 export function importBoardPersistence(boardId: string, initialData: BoardData) {
     boardDataPersistence[boardId] = new BoardDataPersistence(
-        path.resolve(properties.board_dir, boardId + ".mw"),
+        path.resolve(properties.board_dir, boardId + DOT_FILE_SUFFIX),
         initialData);
 }
 
 export function deleteBoardPersistence(boardId: string) {
     delete boardDataPersistence[boardId];
-    const file = path.resolve(properties.board_dir, boardId + ".mw");
+    const file = path.resolve(properties.board_dir, boardId + DOT_FILE_SUFFIX);
     if (fs.existsSync(file)) {
         fs.rmSync(file);
     }

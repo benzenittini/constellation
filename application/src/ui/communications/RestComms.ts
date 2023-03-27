@@ -9,13 +9,14 @@ export const HTTP_DELETE = 'delete';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'delete';
 
-export function send<T>({httpMethod, baseUrl, endpoint, data, creds, callback}: {
+export function send<T>({httpMethod, baseUrl, endpoint, data, creds, callback, errorHandler}: {
     httpMethod: HttpMethod,
     baseUrl: string,
     endpoint: string,
     data?: any,
     creds?: string,
-    callback: (response: AxiosResponse<T, any>) => void
+    callback: (response: AxiosResponse<T, any>) => void,
+    errorHandler?: (error: any) => void,
 }): void {
     let request: AxiosRequestConfig = {
         method: httpMethod,
@@ -35,7 +36,11 @@ export function send<T>({httpMethod, baseUrl, endpoint, data, creds, callback}: 
         .then((response) => {
             callback(response);
         }).catch((error) => {
-            let response: ErrorResponse = { errorCode: 2, message: error, };
-            callback({ data: response } as AxiosResponse<T, any>);
+            if (errorHandler) {
+                errorHandler(error);
+            } else {
+                let response: ErrorResponse = { errorCode: 2, message: error, };
+                callback({ data: response } as AxiosResponse<T, any>);
+            }
         });
 }

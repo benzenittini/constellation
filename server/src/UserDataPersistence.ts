@@ -32,7 +32,7 @@ export function consumeRegistrationKey(key: string, clientName: string, token: s
     let keyIndex = lastLoadedData!.registrationKeys.indexOf(key);
     if (keyIndex === -1) {
         throw new ConstError(3,
-            "Failed to register.",
+            "Invalid registration key.",
             ConstError.getLineId('UserDataPersistence', 'consumeRegistrationKey', 1),
             "Provided registration key was not found.");
     }

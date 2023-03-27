@@ -7,6 +7,9 @@ import { GENERIC_RESTART, JoinProjectResponse } from "../../../../../common/Data
 import { GetProjectDataAction } from "./GetProjectData";
 import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
 import { E12, showError } from "../../../common/ErrorLogger";
+import { useStore } from "../../store/store";
+import { useVueNotify } from "mw-vue-notify";
+import { anyAreBlank } from "../../../../../common/utilities/StringUtils";
 
 export class JoinProjectAction extends Action {
 
@@ -23,6 +26,23 @@ export class JoinProjectAction extends Action {
     }
 
     submit(): void {
+        // Fail to join if user is already a member
+        if (anyAreBlank([this.projectUrl, this.registrationKey, this.clientName])) {
+            useVueNotify().showNotification({
+                cssClasses: ['mw-notification-warning'],
+                dismissAfterMillis: 4000,
+                data: { message: `Please provide values for all fields.` },
+            });
+            return;
+        } else if (useStore().state.generalData.remoteProjectLookup.some(p => p.remoteProject.serverUrl === this.projectUrl)) {
+            useVueNotify().showNotification({
+                cssClasses: ['mw-notification-warning'],
+                dismissAfterMillis: 4000,
+                data: { message: `You are already a member of this project. First remove the project if you want to re-join.` },
+            });
+            return;
+        }
+
         // This is a "remote server only" action
         send<JoinProjectResponse>({
             httpMethod: 'post',
@@ -32,7 +52,13 @@ export class JoinProjectAction extends Action {
                 registrationKey: this.registrationKey,
                 clientName: this.clientName,
             },
-            callback: (resp) => this.processResponse(resp.data)
+            callback: (resp) => this.processResponse(resp.data),
+            errorHandler: (error) => {
+                this.processResponse({
+                    errorCode: 3,
+                    message: "Could not connect to the server. Please verify your Server URL is correct.",
+                });
+            }
         });
     }
 

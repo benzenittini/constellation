@@ -8,6 +8,7 @@ import * as ConfigDataPersistence from "../../../common/persistence/ConfigDataPe
 import * as T from "../../../common/DataTypes/ActionDataTypes";
 import { mapify } from "../../../common/utilities/ArrayUtils";
 import { BasicBoardData, BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME } from "../../../common/DataTypes/BoardDataTypes";
+import { DOT_FILE_SUFFIX, FILE_SUFFIX } from "../../../common/Constants";
 
 
 export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
@@ -26,7 +27,7 @@ export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
 async function getProjectData(): Promise<T.GetProjectDataResponse> {
     let boards = ConfigDataPersistence.config.localBoards.map(filepath => ({
         boardId: filepath,
-        boardName: path.basename(filepath, '.mw'),
+        boardName: path.basename(filepath, DOT_FILE_SUFFIX),
     }));
 
     return {
@@ -42,7 +43,7 @@ async function getTemplates(): Promise<T.GetBoardTemplatesResponse> {
             projectId: LOCAL_PROJECT,
             projectName: LOCAL_PROJECT_NAME,
             boardId,
-            boardName: path.basename(boardId, '.mw'),
+            boardName: path.basename(boardId, DOT_FILE_SUFFIX),
             classifications: ConfigDataPersistence.config.boardTemplates[boardId],
         };
     });
@@ -51,7 +52,7 @@ async function getTemplates(): Promise<T.GetBoardTemplatesResponse> {
 async function getPathForNewBoard(): Promise<string | undefined> {
     let { filePath } = await dialog.showSaveDialog({
         title: "Create Board",
-        defaultPath: 'board.mw',
+        defaultPath: `board.${FILE_SUFFIX}`,
         buttonLabel: "Create",
         properties: [
             'createDirectory',
@@ -71,7 +72,7 @@ async function createNewBoard({ boardOrFileName, template }: T.CreateNewBoardReq
         // Return board data, where ID is filepath and name is filename
         return {
             boardId: boardOrFileName,
-            boardName: path.basename(boardOrFileName, '.mw'),
+            boardName: path.basename(boardOrFileName, DOT_FILE_SUFFIX),
         };
     }
 
@@ -115,7 +116,10 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
         buttonLabel: "Import",
         filters: [{
             name: 'Constellation Board',
-            extensions: ['mw'],
+            extensions: [FILE_SUFFIX],
+        },{
+            name: 'All Files',
+            extensions: ["*"],
         }],
         properties: [
             'openFile',
@@ -135,7 +139,7 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
         // Return board data, where ID is filepath and name is filename
         return {
             boardId: chosenFile,
-            boardName: path.basename(chosenFile, '.mw'),
+            boardName: path.basename(chosenFile, DOT_FILE_SUFFIX),
         };
     }
 
@@ -152,7 +156,10 @@ async function readFileAsBoard(): Promise<T.ReadFileAsBoardResponse> {
         buttonLabel: "Select",
         filters: [{
             name: 'Constellation Board',
-            extensions: ['mw'],
+            extensions: [FILE_SUFFIX],
+        },{
+            name: 'All Files',
+            extensions: ["*"],
         }],
         properties: [
             'openFile',
@@ -167,7 +174,7 @@ async function readFileAsBoard(): Promise<T.ReadFileAsBoardResponse> {
         // Return board data, where ID is filepath and name is filename
         return {
             filepath: chosenFile,
-            filename: path.basename(chosenFile, '.mw'),
+            filename: path.basename(chosenFile, DOT_FILE_SUFFIX),
             boardData,
         };
     }

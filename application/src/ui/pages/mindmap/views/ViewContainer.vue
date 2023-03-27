@@ -171,6 +171,7 @@ export default defineComponent({
             if (boardId && currentView.value) {
                 showView.value = false;
                 showConfiguration.value = false;
+                context.emit('viewClosed');
                 setTimeout(() => {
                     if (boardId && currentView.value) {
                         new DeleteViewAction(currentView.value.id).submit();
