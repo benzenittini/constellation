@@ -1,8 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { DeleteBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { DeleteBlocksResponse, GENERIC_RESTART } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E16, showError } from "../../../common/ErrorLogger";
 
 export class DeleteBlocksAction extends Action {
 
@@ -29,7 +30,11 @@ export class DeleteBlocksAction extends Action {
     }
 
     static processResponse(resp: DeleteBlocksResponse): void {
-        useStore().dispatch('deleteBlocks', resp.blockIds);
+        if ('errorCode' in resp) {
+            showError(E16, [resp.message || GENERIC_RESTART]);
+        } else {
+            useStore().dispatch('deleteBlocks', resp.blockIds);
+        }
     }
 
 }

@@ -216,14 +216,20 @@ export class BoardDataPersistence {
     async setBlockParent(blockId: string, parentBlockId: string | undefined): Promise<void> {
         // Validation
         if (blockId === undefined) {
-            // TODO-const : Error handling
-            throw new Error("Error in setBlockParent: requested blockId cannot be undefined.");
+            throw new T.ConstError(3,
+                `Requested block wasn't defined. ${T.GENERIC_RESTART}`,
+                T.ConstError.getLineId('BoardDataPersistence', 'setBlockParent', 1),
+                "Error in setBlockParent: requested blockId cannot be undefined.");
         } else if (blockId !== undefined && !this.data.blocks[blockId]) {
-            // TODO-const : Error handling
-            throw new Error("Error in setBlockParent: requested blockId doesn't exist.");
+            throw new T.ConstError(4,
+                `Requested block wasn't found. ${T.GENERIC_RESTART}`,
+                T.ConstError.getLineId('BoardDataPersistence', 'setBlockParent', 2),
+                "Error in setBlockParent: requested blockId doesn't exist.");
         } else if (parentBlockId !== undefined && !this.data.blocks[parentBlockId]) {
-            // TODO-const : Error handling
-            throw new Error("Error in setBlockParent: requested parentBlockId doesn't exist.");
+            throw new T.ConstError(5,
+                `Requested parent block wasn't found. ${T.GENERIC_RESTART}`,
+                T.ConstError.getLineId('BoardDataPersistence', 'setBlockParent', 3),
+                "Error in setBlockParent: requested parentBlockId doesn't exist.");
         }
 
         // Get all the decendants (and depths) of the given blockId
@@ -236,8 +242,10 @@ export class BoardDataPersistence {
             currentBlockId = this.data.blocks[currentBlockId].parentBlockId;
             // If we ever return to the original block, then we're caught in a loop. Abandon ship!
             if (currentBlockId === blockId) {
-                // TODO-const : Error handling
-                throw new Error("Error in setBlockParent: circular dependency detected!");
+                throw new T.ConstError(6,
+                    `A circular dependency was detected.`,
+                    T.ConstError.getLineId('BoardDataPersistence', 'setBlockParent', 4),
+                    "Error in setBlockParent: circular dependency detected!");
             }
         }
         this.data.blocks[blockId].parentBlockId = parentBlockId;
@@ -325,8 +333,10 @@ export class BoardDataPersistence {
 
         // Make sure the block exists
         if (this.data.blocks[blockId] === undefined) {
-            // TODO-const : Error handling
-            throw new Error("Error in setBlockContent: Requested block doesn't exist");
+            throw new T.ConstError(3,
+                `Requested block wasn't found. ${T.GENERIC_RESTART}`,
+                T.ConstError.getLineId('BoardDataPersistence', 'setBlockContent', 1),
+                "Error in setBlockContent: Requested block doesn't exist");
         }
 
         // Perform the update
@@ -425,11 +435,10 @@ export class BoardDataPersistence {
                     }
                 }
             } else {
-                // TODO-const : error handling
-                throw new Error("Error in updatePossibleValueNames: the PV didn't have an associated field.");
-                // throw new TopError('3.6.15', Severity.HIGH,
-                //     `When updating possible value names, the possible value didn't have an associated field. boardId: ${boardId}, changedPV: ${JSON.stringify(changedPV)}, changedPVNames: ${JSON.stringify(changedPVNames)}`,
-                //     UserErrors.INTERNAL_ERROR);
+                throw new T.ConstError(4,
+                    undefined,
+                    T.ConstError.getLineId('BoardDataPersistence', 'updatePossibleValueNames', 1),
+                    "Error in updatePossibleValueNames: the PV didn't have an associated field.");
             }
         }
 
@@ -446,8 +455,10 @@ export class BoardDataPersistence {
         for (let newField of Object.values(newFields)) {
             let originalField = this.data.fields[newField.id];
             if (originalField && !getCompatibleFieldTypes(originalField.type).includes(newField.type)) {
-                // TODO-const : error handling
-                throw new Error('Error in verifyValidFieldTypeTransitions: attempted to change between incompatible field types.');
+                throw new T.ConstError(3,
+                    `Cannot change between ${originalField.type} and ${newField.type}.`,
+                    T.ConstError.getLineId('BoardDataPersistence', 'verifyValidFieldTypeTransitions', 1),
+                    "Error in verifyValidFieldTypeTransitions: attempted to change between incompatible field types.");
             }
         }
     }
@@ -456,15 +467,19 @@ export class BoardDataPersistence {
         // Make sure the blocks exist
         for (let blockId of blockIds) {
             if (this.data.blocks[blockId] === undefined) {
-                // TODO-const : error handling
-                throw new Error("Error in setClassificationOnBlocks: requested block does not exist.");
+                throw new T.ConstError(3,
+                    `Requested block wasn't found. ${T.GENERIC_RESTART}`,
+                    T.ConstError.getLineId('BoardDataPersistence', 'setClassificationOnBlocks', 1),
+                    "Error in setClassificationOnBlocks: requested block does not exist.");
             }
         }
 
         // Make sure the classification exists
         if (this.data.classifications[classificationId] === undefined) {
-            // TODO-const : error handling
-            throw new Error("Error in setClassificationOnBlocks: requested classification does not exist.");
+            throw new T.ConstError(4,
+                `Requested classification wasn't found. ${T.GENERIC_RESTART}`,
+                T.ConstError.getLineId('BoardDataPersistence', 'setClassificationOnBlocks', 2),
+                "Error in setClassificationOnBlocks: requested classification does not exist.");
         }
 
         // Make the data updates
@@ -523,8 +538,10 @@ export class BoardDataPersistence {
         // Make sure the block exists
         for (let blockId of blockIds) {
             if (this.data.blocks[blockId] === undefined) {
-                // TODO-const : error handling
-                throw new Error("Error in addFieldIdsToBlocks: requested block does not exist.");
+                throw new T.ConstError(6,
+                    `Requested block wasn't found. ${T.GENERIC_RESTART}`,
+                    T.ConstError.getLineId('BoardDataPersistence', 'setBlockContent', 1),
+                    "Error in addFieldIdsToBlocks: requested block does not exist.");
             }
         }
 
@@ -553,8 +570,10 @@ export class BoardDataPersistence {
         // Make sure the block exists
         for (let blockId of Object.keys(blockIdToFieldValue)) {
             if (this.data.blocks[blockId] === undefined) {
-                // TODO-const : error handling
-                throw new Error("Error in setFieldOnBlocks: specified block does not exist.");
+                throw new T.ConstError(5,
+                    `Requested block wasn't found. ${T.GENERIC_RESTART}`,
+                    T.ConstError.getLineId('BoardDataPersistence', 'setFieldOnBlocks', 1),
+                    "Error in setFieldOnBlocks: specified block does not exist.");
             }
         }
 
@@ -606,8 +625,10 @@ export class BoardDataPersistence {
         if (beforeId !== undefined) {
             beforeIndex = this.data.blockPriorities.indexOf(beforeId);
             if (beforeIndex === -1) {
-                // TODO-const : error handling
-                throw new Error("Error in setBlockPriority: the 'beforeId' block was not found in the priority list.");
+                throw new T.ConstError(3,
+                    `Requested "before block" wasn't found in the priority list. ${T.GENERIC_RESTART}`,
+                    T.ConstError.getLineId('BoardDataPersistence', 'setBlockPriority', 1),
+                    "Error in setBlockPriority: the 'beforeId' block was not found in the priority list.");
             }
         }
 

@@ -2,8 +2,9 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 
-import { SetBlockParentRequest, SetBlockParentResponse } from '../../../../../common/DataTypes/ActionDataTypes';
+import { GENERIC_RESTART, SetBlockParentRequest, SetBlockParentResponse } from '../../../../../common/DataTypes/ActionDataTypes';
 import { ws } from "../../communications/Websocket";
+import { E17, showError } from "../../../common/ErrorLogger";
 
 export class SetBlockParentAction extends Action {
 
@@ -34,10 +35,14 @@ export class SetBlockParentAction extends Action {
     }
 
     static processResponse(resp: SetBlockParentResponse): void {
-        useStore().dispatch("setParent", {
-            blockId: resp.blockId,
-            newParent: resp.parentBlockId, // FYI, data.parentBlockId may be undefined
-        });
+        if ('errorCode' in resp) {
+            showError(E17, [resp.message || GENERIC_RESTART]);
+        } else {
+            useStore().dispatch("setParent", {
+                blockId: resp.blockId,
+                newParent: resp.parentBlockId, // FYI, data.parentBlockId may be undefined
+            });
+        }
     }
 
 }

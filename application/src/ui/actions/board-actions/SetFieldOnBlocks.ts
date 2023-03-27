@@ -2,8 +2,9 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { SetFieldOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, SetFieldOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E22, showError } from "../../../common/ErrorLogger";
 
 export class SetFieldOnBlocksAction extends Action {
 
@@ -35,14 +36,18 @@ export class SetFieldOnBlocksAction extends Action {
     }
 
     static processResponse(resp: SetFieldOnBlocksResponse): void {
-        const store = useStore();
+        if ('errorCode' in resp) {
+            showError(E22, [resp.message || GENERIC_RESTART]);
+        } else {
+            const store = useStore();
 
-        for (let blockId in resp.blockIdToFieldValue) {
-            store.dispatch('setBlockFieldValue', {
-                blockId,
-                fieldId: resp.fieldId,
-                value: resp.blockIdToFieldValue[blockId],
-            });
+            for (let blockId in resp.blockIdToFieldValue) {
+                store.dispatch('setBlockFieldValue', {
+                    blockId,
+                    fieldId: resp.fieldId,
+                    value: resp.blockIdToFieldValue[blockId],
+                });
+            }
         }
     }
 

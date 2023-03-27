@@ -2,9 +2,10 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { SetClassificationDefinitionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, SetClassificationDefinitionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E19, showError } from "../../../common/ErrorLogger";
 
 export class SetClassificationDefinitionsAction extends Action {
 
@@ -44,23 +45,27 @@ export class SetClassificationDefinitionsAction extends Action {
     }
 
     static processResponse(resp: SetClassificationDefinitionsResponse): void {
-        const store = useStore();
+        if ('errorCode' in resp) {
+            showError(E19, [resp.message || GENERIC_RESTART]);
+        } else {
+            const store = useStore();
 
-        // Update the Field definitions
-        store.dispatch('setPossibleValueDefinitions',  resp.possibleValues);
-        store.dispatch('setFieldDefinitions',          resp.fields);
-        store.dispatch('setClassificationDefinitions', {
-            classificationDefinitions: resp.classifications,
-            classificationIds: resp.classificationIds
-        });
-
-        // Update any fields that had their value set to a PV that changed names
-        for (let changedFieldValue of resp.changedFieldValues) {
-            store.dispatch('setBlockFieldValue', {
-                blockId: changedFieldValue.blockId,
-                fieldId: changedFieldValue.fieldId,
-                value: changedFieldValue.newValue,
+            // Update the Field definitions
+            store.dispatch('setPossibleValueDefinitions',  resp.possibleValues);
+            store.dispatch('setFieldDefinitions',          resp.fields);
+            store.dispatch('setClassificationDefinitions', {
+                classificationDefinitions: resp.classifications,
+                classificationIds: resp.classificationIds
             });
+
+            // Update any fields that had their value set to a PV that changed names
+            for (let changedFieldValue of resp.changedFieldValues) {
+                store.dispatch('setBlockFieldValue', {
+                    blockId: changedFieldValue.blockId,
+                    fieldId: changedFieldValue.fieldId,
+                    value: changedFieldValue.newValue,
+                });
+            }
         }
     }
 

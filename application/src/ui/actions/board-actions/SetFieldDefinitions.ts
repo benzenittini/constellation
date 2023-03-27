@@ -2,9 +2,10 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { SetFieldDefinitionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, SetFieldDefinitionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { FieldDefinition, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E21, showError } from "../../../common/ErrorLogger";
 
 export class SetFieldDefinitionsAction extends Action {
 
@@ -48,24 +49,28 @@ export class SetFieldDefinitionsAction extends Action {
     }
 
     static processResponse(resp: SetFieldDefinitionsResponse): void {
-        const store = useStore();
+        if ('errorCode' in resp) {
+            showError(E21, [resp.message || GENERIC_RESTART]);
+        } else {
+            const store = useStore();
 
-        // Update the Field definitions
-        store.dispatch('setPossibleValueDefinitions', resp.possibleValueDefinitions);
-        store.dispatch('setFieldDefinitions',         resp.fieldDefinitions);
+            // Update the Field definitions
+            store.dispatch('setPossibleValueDefinitions', resp.possibleValueDefinitions);
+            store.dispatch('setFieldDefinitions',         resp.fieldDefinitions);
 
-        // Update the Field IDs on the blocks
-        for (let blockId in resp.blockFieldIds) {
-            store.dispatch('setBlockFieldIds', { blockId: blockId, fieldIds: resp.blockFieldIds[blockId] });
-        }
+            // Update the Field IDs on the blocks
+            for (let blockId in resp.blockFieldIds) {
+                store.dispatch('setBlockFieldIds', { blockId: blockId, fieldIds: resp.blockFieldIds[blockId] });
+            }
 
-        // Update any fields that had their value set to a PV that changed names
-        for (let changedFieldValue of resp.changedFieldValues) {
-            store.dispatch('setBlockFieldValue', {
-                blockId: changedFieldValue.blockId,
-                fieldId: changedFieldValue.fieldId,
-                value: changedFieldValue.newValue,
-            });
+            // Update any fields that had their value set to a PV that changed names
+            for (let changedFieldValue of resp.changedFieldValues) {
+                store.dispatch('setBlockFieldValue', {
+                    blockId: changedFieldValue.blockId,
+                    fieldId: changedFieldValue.fieldId,
+                    value: changedFieldValue.newValue,
+                });
+            }
         }
     }
 

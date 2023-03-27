@@ -120,27 +120,39 @@ export type CreateBlockRequest  = { location: BoundingBox, parentBlockId: string
 // Error 4 indicates block ID already exists.
 export type CreateBlockResponse = ErrorResponse | Block;
 
-// TODO-const : I AM HERE for improving error handling.
 export type SetBlockPositionsRequest  = { blocksAndPositions: BlockIdAndPosition[] };
-export type SetBlockPositionsResponse = BlockIdAndPosition[];
+export type SetBlockPositionsResponse = ErrorResponse | BlockIdAndPosition[];
 
 export type DeleteBlocksRequest  = { blockIds: string[] };
-export type DeleteBlocksResponse = { blockIds: string[] };
+export type DeleteBlocksResponse = ErrorResponse | { blockIds: string[] };
 
 export type SetBlockParentRequest  = { blockId: string, parentBlockId: string | undefined };
-export type SetBlockParentResponse = { blockId: string, parentBlockId: string | undefined };
+// Error 3 indicates blockId was undefined
+// Error 4 indicates block wasn't found
+// Error 5 indicates parentBlockId doesn't exist
+// Error 6 indicates a circular dependency was detected
+export type SetBlockParentResponse = ErrorResponse | { blockId: string, parentBlockId: string | undefined };
 
 export type SetBlockContentRequest  = { blockId: string, content: BlockContent };
-export type SetBlockContentResponse = { blockId: string, content: BlockContent };
+// Error 3 indicates block wasn't found
+export type SetBlockContentResponse = ErrorResponse | { blockId: string, content: BlockContent };
 
 export type SetClassificationDefinitionsRequest  = { classificationIds: string[], classifications: TypedMap<ClassificationDefinition>, fields: TypedMap<FieldDefinition>, possibleValues: TypedMap<PossibleValueDefinition> };
-export type SetClassificationDefinitionsResponse = { classificationIds: string[], classifications: TypedMap<ClassificationDefinition>, fields: TypedMap<FieldDefinition>, possibleValues: TypedMap<PossibleValueDefinition>, changedFieldValues: ChangedFieldValue[]};
+// Error 3 indicates changing between incompatible field types
+// Error 4 indicates possible value wasn't associated with a field.
+export type SetClassificationDefinitionsResponse = ErrorResponse | { classificationIds: string[], classifications: TypedMap<ClassificationDefinition>, fields: TypedMap<FieldDefinition>, possibleValues: TypedMap<PossibleValueDefinition>, changedFieldValues: ChangedFieldValue[]};
 
 export type SetClassificationOnBlocksRequest  = { blockIds: string[], classificationId: string, isActive: boolean };
-export type SetClassificationOnBlocksResponse = { blockIds: string[], classificationId: string, isActive: boolean };
+// Error 3 indicates block wasn't found
+// Error 4 indicates classification wasn't found
+export type SetClassificationOnBlocksResponse = ErrorResponse | { blockIds: string[], classificationId: string, isActive: boolean };
 
 export type SetFieldDefinitionsRequest  = { blockIds: string[], fieldDefinitions: TypedMap<FieldDefinition>, fieldIds: string[], possibleValueDefinitions: TypedMap<PossibleValueDefinition>, deletedFieldIds: string[] };
-export type SetFieldDefinitionsResponse = {
+// Error 3 indicates changing between incompatible field types
+// Error 4 indicates possible value wasn't associated with a field.
+// Error 5 indicates block wasn't found when deleting fields
+// Error 6 indicates block wasn't found when adding fields
+export type SetFieldDefinitionsResponse = ErrorResponse | {
     fieldDefinitions: TypedMap<FieldDefinition>;
     possibleValueDefinitions: TypedMap<PossibleValueDefinition>;
     blockFieldIds: TypedMap<string[]>; // Block ID --> fieldIds[] on that block
@@ -150,16 +162,18 @@ export type SetFieldDefinitionsResponse = {
 };
 
 export type SetFieldOnBlocksRequest  = { fieldId: string, blockIdToFieldValue: TypedMap<any> };
-export type SetFieldOnBlocksResponse = { fieldId: string, blockIdToFieldValue: TypedMap<any> };
+// Error 5 indicates block wasn't found
+export type SetFieldOnBlocksResponse = ErrorResponse | { fieldId: string, blockIdToFieldValue: TypedMap<any> };
 
 export type SaveViewRequest  = { viewConfig: ViewConfig };
-export type SaveViewResponse = { baseViewConfig: BaseViewConfig };
+export type SaveViewResponse = ErrorResponse | { baseViewConfig: BaseViewConfig };
 
 export type DeleteViewRequest  = { viewId: string };
-export type DeleteViewResponse = { viewId: string };
+export type DeleteViewResponse = ErrorResponse | { viewId: string };
 
 export type SetBlockPriorityRequest  = { blockId: string[], beforeId: string | undefined };
-export type SetBlockPriorityResponse = { blockId: string[], beforeId: string | undefined };
+// Error 3 indicates the "beforeId" block wasn't found in the priority list
+export type SetBlockPriorityResponse = ErrorResponse | { blockId: string[], beforeId: string | undefined };
 
 export type LoadViewRequest  = { viewId: string };
-export type LoadViewResponse = { viewConfig: ViewConfig };
+export type LoadViewResponse = ErrorResponse | { viewConfig: ViewConfig };

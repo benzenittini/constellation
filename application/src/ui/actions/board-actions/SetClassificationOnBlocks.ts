@@ -2,8 +2,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { SetClassificationOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, SetClassificationOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E20, showError } from "../../../common/ErrorLogger";
 
 export class SetClassificationOnBlocksAction extends Action {
 
@@ -39,14 +40,18 @@ export class SetClassificationOnBlocksAction extends Action {
     }
 
     static processResponse(resp: SetClassificationOnBlocksResponse): void {
-        const store = useStore();
+        if ('errorCode' in resp) {
+            showError(E20, [resp.message || GENERIC_RESTART]);
+        } else {
+            const store = useStore();
 
-        for (let blockId of resp.blockIds) {
-            store.dispatch('setBlockClassificationId', {
-                blockId: blockId,
-                classificationId: resp.classificationId,
-                isActive: resp.isActive
-            });
+            for (let blockId of resp.blockIds) {
+                store.dispatch('setBlockClassificationId', {
+                    blockId: blockId,
+                    classificationId: resp.classificationId,
+                    isActive: resp.isActive
+                });
+            }
         }
     }
 

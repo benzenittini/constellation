@@ -46,9 +46,9 @@ export function setBlockPositions(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].setBlockPositions(blocksAndPositions);
             socket.broadcast.in(boardId).emit('setBlockPositions', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when setting block positions: ${err}`);
-            // TODO-const : socket.emit('setBlockPositions', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when setting block positions: ${error.message}`);
+            socket.emit('setBlockPositions', error.getErrorResponse());
         }
     };
 }
@@ -60,9 +60,9 @@ export function deleteBlocks(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].deleteBlocks(blockIds);
             io.in(boardId).emit('deleteBlocks', { blockIds: result });
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when deleting blocks: ${err}`);
-            // TODO-const : socket.emit('deleteBlocks', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when deleting blocks: ${error.message}`);
+            socket.emit('deleteBlocks', error.getErrorResponse());
         }
     };
 }
@@ -74,9 +74,9 @@ export function setBlockParent(io: Server, socket: Socket) {
              await boardDataPersistence[boardId].setBlockParent(blockId, parentBlockId);
             io.in(boardId).emit('setBlockParent', { blockId, parentBlockId });
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when setting a block's parent: ${err}`);
-            // TODO-const : socket.emit('setBlockParent', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when setting a block's parent: ${error.message}`);
+            socket.emit('setBlockParent', error.getErrorResponse());
         }
     };
 }
@@ -88,9 +88,9 @@ export function setBlockContent(io: Server, socket: Socket) {
             await boardDataPersistence[boardId].setBlockContent(blockId, content);
             io.in(boardId).emit('setBlockContent', { blockId, content });
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when setting a block's content: ${err}`);
-            // TODO-const : socket.emit('setBlockContent', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when setting a block's content: ${error.message}`);
+            socket.emit('setBlockContent', error.getErrorResponse());
         }
     };
 }
@@ -109,9 +109,9 @@ export function setClassificationDefinitions(io: Server, socket: Socket) {
             projectDataPersistence?.addOrUpdateTemplate(boardId, template);
             io.in(boardId).emit('setClassificationDefinitions', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when setting the classification definitions: ${err}`);
-            // TODO-const : socket.emit('setClassificationDefinitions', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when setting the classification definitions: ${error.message}`);
+            socket.emit('setClassificationDefinitions', error.getErrorResponse());
         }
     };
 }
@@ -123,9 +123,9 @@ export function setClassificationOnBlocks(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].setClassificationOnBlocks(req);
             io.in(boardId).emit('setClassificationOnBlocks', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when setting a classification on blocks: ${err}`);
-            // TODO-const : socket.emit('setClassificationOnBlocks', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when setting a classification on blocks: ${error.message}`);
+            socket.emit('setClassificationOnBlocks', error.getErrorResponse());
         }
     };
 }
@@ -137,9 +137,9 @@ export function setFieldDefinitions(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].setFieldDefinitions(req);
             io.in(boardId).emit('setFieldDefinitions', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when setting field definitions on a block: ${err}`);
-            // TODO-const : socket.emit('setFieldDefinitions', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when setting field definitions on a block: ${error.message}`);
+            socket.emit('setFieldDefinitions', error.getErrorResponse());
         }
     };
 }
@@ -151,9 +151,9 @@ export function setFieldOnBlocks(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].setFieldOnBlocks(req);
             io.in(boardId).emit('setFieldOnBlocks', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when setting a field value on a block: ${err}`);
-            // TODO-const : socket.emit('setFieldOnBlocks', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when setting a field value on a block: ${error.message}`);
+            socket.emit('setFieldOnBlocks', error.getErrorResponse());
         }
     };
 }
@@ -170,9 +170,9 @@ export function saveView(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].saveView(req);
             io.in(boardId).emit('saveView', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when saving a view: ${err}`);
-            // TODO-const : socket.emit('saveView', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when saving a view: ${error.message}`);
+            socket.emit('saveView', error.getErrorResponse());
         }
     };
 }
@@ -184,9 +184,9 @@ export function deleteView(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].deleteView(req);
             io.in(boardId).emit('deleteView', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when deleting a view: ${err}`);
-            // TODO-const : socket.emit('deleteView', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when deleting a view: ${error.message}`);
+            socket.emit('deleteView', error.getErrorResponse());
         }
     };
 }
@@ -198,9 +198,9 @@ export function setBlockPriority(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].setBlockPriority(req);
             io.in(boardId).emit('setBlockPriority', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when setting a block's priority: ${err}`);
-            // TODO-const : socket.emit('setBlockPriority', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when setting a block's priority: ${error.message}`);
+            socket.emit('setBlockPriority', error.getErrorResponse());
         }
     };
 }
@@ -212,9 +212,9 @@ export function loadView(io: Server, socket: Socket) {
             let result = await boardDataPersistence[boardId].loadView(req);
             io.in(boardId).emit('loadView', result);
         } catch(err) {
-            // TODO-const : error handling
-            logger.error(`Error encountered when loading a view: ${err}`);
-            // TODO-const : socket.emit('loadView', error?);
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when loading a view: ${error.message}`);
+            socket.emit('loadView', error.getErrorResponse());
         }
     };
 }

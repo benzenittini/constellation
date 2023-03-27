@@ -62,56 +62,116 @@ async function createBlock({ location, parentBlockId }: T.CreateBlockRequest): P
 }
 
 async function setBlockPositions({ blocksAndPositions }: T.SetBlockPositionsRequest): Promise<T.SetBlockPositionsResponse> {
-    return await persistence!.setBlockPositions(blocksAndPositions);
+    try {
+        return await persistence!.setBlockPositions(blocksAndPositions);
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function deleteBlocks({ blockIds }: T.DeleteBlocksRequest): Promise<T.DeleteBlocksResponse> {
-    return {
-        blockIds: await persistence!.deleteBlocks(blockIds),
-    };
+    try {
+        return {
+            blockIds: await persistence!.deleteBlocks(blockIds),
+        };
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function setBlockParent({ blockId, parentBlockId }: T.SetBlockParentRequest): Promise<T.SetBlockParentResponse> {
-    await persistence!.setBlockParent(blockId, parentBlockId);
-    return { blockId, parentBlockId };
+    try {
+        await persistence!.setBlockParent(blockId, parentBlockId);
+        return { blockId, parentBlockId };
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function setBlockContent({ blockId, content }: T.SetBlockContentRequest): Promise<T.SetBlockContentResponse> {
-    await persistence!.setBlockContent(blockId, content);
-    return { blockId, content };
+    try {
+        await persistence!.setBlockContent(blockId, content);
+        return { blockId, content };
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function setClassificationDefinitions(req: T.SetClassificationDefinitionsRequest): Promise<T.SetClassificationDefinitionsResponse> {
-    let result = await persistence!.setClassificationDefinitions(req);
-    let template = persistence!.getBoardTemplate();
-    ConfigDataPersistence.addOrUpdateTemplate(persistence!.sourceFile!, template)
-    return result;
+    try {
+        let result = await persistence!.setClassificationDefinitions(req);
+        let template = persistence!.getBoardTemplate();
+        ConfigDataPersistence.addOrUpdateTemplate(persistence!.sourceFile!, template)
+        return result;
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function setClassificationOnBlocks(req: T.SetClassificationOnBlocksRequest): Promise<T.SetClassificationOnBlocksResponse> {
-    return await persistence!.setClassificationOnBlocks(req);
+    try {
+        return await persistence!.setClassificationOnBlocks(req);
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function setFieldDefinitions(req: T.SetFieldDefinitionsRequest): Promise<T.SetFieldDefinitionsResponse> {
-    return await persistence!.setFieldDefinitions(req);
+    try {
+        return await persistence!.setFieldDefinitions(req);
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function setFieldOnBlocks(req: T.SetFieldOnBlocksRequest): Promise<T.SetFieldOnBlocksResponse> {
-    return await persistence!.setFieldOnBlocks(req);
+    try {
+        return await persistence!.setFieldOnBlocks(req);
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function saveView(req: T.SaveViewRequest): Promise<T.SaveViewResponse> {
-    return await persistence!.saveView(req);
+    try {
+        return await persistence!.saveView(req);
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function deleteView(req: T.DeleteViewRequest): Promise<T.DeleteViewResponse> {
-    return await persistence!.deleteView(req);
+    try {
+        return await persistence!.deleteView(req);
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function setBlockPriority(req: T.SetBlockPriorityRequest): Promise<T.SetBlockPriorityResponse> {
-    return await persistence!.setBlockPriority(req);
+    try {
+        return await persistence!.setBlockPriority(req);
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function loadView(req: T.LoadViewRequest): Promise<T.LoadViewResponse> {
-    return await persistence!.loadView(req);
+    try {
+        return await persistence!.loadView(req);
+    } catch(err) {
+        const error = T.ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }

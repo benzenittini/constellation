@@ -1,8 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { SetBlockPriorityResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, SetBlockPriorityResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E25, showError } from "../../../common/ErrorLogger";
 
 export class SetBlockPriorityAction extends Action {
 
@@ -34,9 +35,12 @@ export class SetBlockPriorityAction extends Action {
     }
 
     static processResponse(resp: SetBlockPriorityResponse): void {
-        const store = useStore();
-
-        store.dispatch("setBlockPriority", {blockId: resp.blockId, higherThan: resp.beforeId});
+        if ('errorCode' in resp) {
+            showError(E25, [resp.message || GENERIC_RESTART]);
+        } else {
+            const store = useStore();
+            store.dispatch("setBlockPriority", {blockId: resp.blockId, higherThan: resp.beforeId});
+        }
     }
 
 }

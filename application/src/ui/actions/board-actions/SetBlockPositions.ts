@@ -3,8 +3,9 @@ import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { BlockIdAndPosition } from "../../../../../common/DataTypes/BlockDataTypes";
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
-import { SetBlockPositionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, SetBlockPositionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E15, showError } from "../../../common/ErrorLogger";
 
 export class SetBlockPositionsAction extends Action {
 
@@ -38,7 +39,11 @@ export class SetBlockPositionsAction extends Action {
     }
 
     static processResponse(resp: SetBlockPositionsResponse): void {
-        useStore().dispatch('setBlockPositions', resp);
+        if ('errorCode' in resp) {
+            showError(E15, [resp.message || GENERIC_RESTART]);
+        } else {
+            useStore().dispatch('setBlockPositions', resp);
+        }
     }
 
 }

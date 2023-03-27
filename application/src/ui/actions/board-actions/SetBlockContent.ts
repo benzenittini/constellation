@@ -2,9 +2,10 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 
-import { SetBlockContentResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, SetBlockContentResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { BlockContent } from "../../../../../common/DataTypes/BlockDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E18, showError } from "../../../common/ErrorLogger";
 
 export class SetBlockContentAction extends Action {
 
@@ -35,10 +36,14 @@ export class SetBlockContentAction extends Action {
     }
 
     static processResponse(resp: SetBlockContentResponse): void {
-        useStore().dispatch("setBlockContent", {
-            blockId: resp.blockId,
-            newContent: resp.content,
-        });
+        if ('errorCode' in resp) {
+            showError(E18, [resp.message || GENERIC_RESTART]);
+        } else {
+            useStore().dispatch("setBlockContent", {
+                blockId: resp.blockId,
+                newContent: resp.content,
+            });
+        }
     }
 
 }

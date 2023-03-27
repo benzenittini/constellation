@@ -1,8 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { LoadViewResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, LoadViewResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 import { ws } from "../../communications/Websocket";
+import { E26, showError } from "../../../common/ErrorLogger";
 
 export class LoadViewAction extends Action {
 
@@ -30,9 +31,12 @@ export class LoadViewAction extends Action {
     }
 
     static processResponse(resp: LoadViewResponse): void {
-        const store = useStore();
-
-        store.dispatch('openView', resp.viewConfig);
+        if ('errorCode' in resp) {
+            showError(E26, [resp.message || GENERIC_RESTART]);
+        } else {
+            const store = useStore();
+            store.dispatch('openView', resp.viewConfig);
+        }
     }
 
 }
