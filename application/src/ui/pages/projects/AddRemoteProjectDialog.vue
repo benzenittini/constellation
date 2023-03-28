@@ -1,7 +1,7 @@
 <template>
     <div class="mw-add-remote-project">
         <h3>Server URL:</h3>
-        <eic-textbox v-model="saveData.projectUrl" eic-placeholder="ex: https://localhost:3000"></eic-textbox>
+        <eic-textbox ref="urlRef" v-model="saveData.projectUrl" eic-placeholder="ex: https://localhost:3000"></eic-textbox>
         <h3>Registration Key:</h3>
         <eic-textbox v-model="saveData.registrationKey" eic-placeholder="ex: 51b51563-ebaf-433c-8864-37a63a15668d"></eic-textbox>
         <h3>Client Label:</h3>
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, onMounted, PropType, ref } from 'vue';
 
 export default defineComponent({
     props: {
@@ -21,7 +21,14 @@ export default defineComponent({
         }>,
     },
     setup() {
+
+        const urlRef = ref(null);
+        onMounted(() => {
+            (urlRef as any).value.$el.getElementsByTagName('input')[0].focus();
+        });
+
         return {
+            urlRef,
         };
     },
 });

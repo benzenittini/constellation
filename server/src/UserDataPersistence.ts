@@ -13,12 +13,26 @@ function saveConfig() {
     fs.writeFileSync(properties.user_data, JSON.stringify(lastLoadedData));
 }
 
+function watchConfigFile() {
+    fs.watch(properties.user_data, {
+        persistent: false,
+    }, (eventType, filename) => {
+        if (eventType === 'change') {
+            loadConfigFile();
+        }
+    });
+}
+
 function loadConfigFile() {
     if (!fs.existsSync(properties.user_data)) {
         throw new ConstError(3,
             "User config file was not properly initialized on startup.",
             ConstError.getLineId('UserDataPersistence', 'loadConfigFile', 1),
             `User config file was not found at ${properties.user_data}. This is configured via the 'user_data' property.`);
+    }
+
+    if (!lastLoadedData) {
+        watchConfigFile();
     }
 
     let userConfig: UserFile = JSON.parse(fs.readFileSync(properties.user_data, 'utf-8'));

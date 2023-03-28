@@ -86,10 +86,11 @@ export default defineComponent({
     setup() {
         const store = useStore();
 
-        const ADD_PROJECT_DIALOG_ID  = 'add-remote-project';
-        const CREATE_BOARD_DIALOG_ID = 'create-board-dialog';
-        const IMPORT_BOARD_DIALOG_ID = 'import-board-dialog';
-        const DELETE_BOARD_DIALOG_ID = 'delete-board-dialog';
+        const ADD_PROJECT_DIALOG_ID   = 'add-remote-project';
+        const CREATE_BOARD_DIALOG_ID  = 'create-board-dialog';
+        const IMPORT_BOARD_DIALOG_ID  = 'import-board-dialog';
+        const DELETE_BOARD_DIALOG_ID  = 'delete-board-dialog';
+        const LEAVE_PROJECT_DIALOG_ID = 'leave-project-dialog';
 
         onMounted(() => {
             document.title = "Constellation";
@@ -307,9 +308,34 @@ export default defineComponent({
             leaveRemoteProject: (projectId: string) => {
                 let remoteProject = store.getters.getRemoteProjectById(projectId);
                 if (remoteProject) {
-                    new LeaveProjectAction(JSON.parse(JSON.stringify(remoteProject)), projectId)
-                        .onError(error => showError(E11, [error.message || GENERIC_RESTART]))
-                        .submit();
+                    const mwVueModals = useVueModals();
+                    mwVueModals.createOrUpdateModal({
+                        id: LEAVE_PROJECT_DIALOG_ID,
+                        styleOverrides: {},
+                        layout: {
+                            componentName: 'mw-vm-fixed-bottom',
+                            panes: {
+                                'bottom': {
+                                    name: 'eic-savecancel',
+                                    componentData: { mwSaveText: 'Yes' },
+                                    eventHandlers: {
+                                        'mw-cancel':  (event: any) => { mwVueModals.closeModal(LEAVE_PROJECT_DIALOG_ID); },
+                                        'mw-save':  (event: any) => {
+                                            new LeaveProjectAction(JSON.parse(JSON.stringify(remoteProject)), projectId)
+                                                .onError(error => showError(E11, [error.message || GENERIC_RESTART]))
+                                                .submit();
+                                            mwVueModals.closeModal(LEAVE_PROJECT_DIALOG_ID);
+                                        },
+                                    }
+                                },
+                                'main': {
+                                    componentName: 'eic-leave-project-dialog',
+                                    styleOverrides: {},
+                                    eventHandlers: {}
+                                }
+                            }
+                        }
+                    });
                 } else {
                     showError(E35, [GENERIC_RESTART]);
                 }

@@ -64,6 +64,7 @@ import AddRemoteProjectDialog from './pages/projects/AddRemoteProjectDialog.vue'
 import CreateBoardDialog      from './pages/projects/CreateBoardDialog.vue';
 import ImportBoardDialog      from './pages/projects/ImportBoardDialog.vue';
 import DeleteBoardDialog      from './pages/projects/DeleteBoardDialog.vue';
+import LeaveProjectDialog     from './pages/projects/LeaveProjectDialog.vue';
 
 // Mind Map
 import Mindmap       from './pages/mindmap/_.vue';
@@ -160,6 +161,7 @@ export let components: any = {
     'eic-create-board-dialog': CreateBoardDialog,
     'eic-import-board-dialog': ImportBoardDialog,
     'eic-delete-board-dialog': DeleteBoardDialog,
+    'eic-leave-project-dialog': LeaveProjectDialog,
     // Mind Map
     'eic-page-mindmap': Mindmap,
     'eic-canvas': Canvas,
