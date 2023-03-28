@@ -27,6 +27,11 @@ export interface CalendarViewConfig extends BaseViewConfig {
 }
 export type ViewConfig = FilterViewConfig | KanbanViewConfig | CalendarViewConfig;
 
+export function verifyViewConfig(data: any): data is ViewConfig {
+    // TODO-const
+    return true;
+}
+
 
 // ============
 // Filter Types

@@ -16,9 +16,10 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, PropType, ref } from "vue";
-import { ReadFileAsBoardResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, ReadFileAsBoardResponse } from "../../../../../common/DataTypes/ActionDataTypes";
 
 import { BoardData } from "../../../../../common/DataTypes/BoardDataTypes";
+import { E40, showError } from "../../../common/ErrorLogger";
 
 export default defineComponent({
     props: {
@@ -32,13 +33,21 @@ export default defineComponent({
         let filepath = ref('');
 
         function chooseFileLocation() {
-            (window as any).config.readFileAsBoard().then((data: ReadFileAsBoardResponse) => {
-                if (data.filepath && data.filename && data.boardData) {
-                    filepath.value = data.filepath;
-                    if (props.saveData!.boardName === '') {
-                        props.saveData!.boardName = data.filename;
+            (window as any).config.readFileAsBoard().then((resp: ReadFileAsBoardResponse) => {
+                if ('errorCode' in resp) {
+                    if (resp.errorCode === 3) {
+                        // Error code 3 indicates user closed window without choosing file.
+                        // No need to display any problems.
+                    } else {
+                        showError(E40, [resp.message || GENERIC_RESTART]);
                     }
-                    props.saveData!.initialData = data.boardData;
+
+                } else {
+                    filepath.value = resp.filepath;
+                    if (props.saveData!.boardName === '') {
+                        props.saveData!.boardName = resp.filename;
+                    }
+                    props.saveData!.initialData = resp.boardData;
                 }
             });
         }

@@ -89,8 +89,10 @@ export type GetRemoteProjectsResponse = ErrorResponse | RemoteProject[];
 
 export type ImportBoardRequest = undefined | { boardName: string, initialData: BoardData };
 // Error 3 indicates file selection was cancelled.
+// Error 4 indicates failed to parse file
+// Error 5 indicates file wasn't of type BoardData
 export type ImportBoardResponse = ErrorResponse | BasicBoardData;
-export type ReadFileAsBoardResponse = { filepath?: string, filename?: string, boardData?: BoardData };
+export type ReadFileAsBoardResponse = ErrorResponse | { filepath: string, filename: string, boardData: BoardData };
 
 // JoinProjectAction (Server)
 export type JoinProjectRequest = { registrationKey: string, clientName: string };

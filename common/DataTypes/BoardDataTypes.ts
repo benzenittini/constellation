@@ -1,9 +1,11 @@
 
 import { TypedMap } from "./GenericDataTypes"
 
-import { Block } from './BlockDataTypes';
-import { ViewConfig } from './ViewDataTypes';
-import { ClassificationDefinition, FieldDefinition, FieldType, PossibleValueDefinition } from './FieldDataTypes';
+import { Block, verifyBlock } from './BlockDataTypes';
+import { ViewConfig, verifyViewConfig } from './ViewDataTypes';
+import { ClassificationDefinition, FieldDefinition, FieldType, PossibleValueDefinition, verifyClassificationDefinition, verifyFieldDefinition, verifyPossibleValueDefinition } from './FieldDataTypes';
+import { isObject, isObjectWithKeys } from "../utilities/ObjectUtils";
+import { isString } from "../utilities/StringUtils";
 
 
 // ===========
@@ -39,6 +41,67 @@ export type BoardData = {
     // Used to determine ordering
     blockPriorities:   string[],
     classificationIds: string[],
+}
+
+export function verifyBoardData(data: any): data is BoardData {
+    // Make sure the required top-level keys all exist.
+    if (!(
+        'blocks' in data &&
+        'views' in data &&
+        'fields' in data &&
+        'classifications' in data &&
+        'possibleValues' in data &&
+        'blockPriorities' in data &&
+        'classificationIds' in data
+    )) {
+        return false;
+    }
+
+    // Make sure each block is actually a block
+    if (!isObject(data.blocks)) return false;
+    for (let blockId in data.blocks) {
+        if (!verifyBlock(data.blocks[blockId])) return false;
+    }
+
+    // Make sure each view is actually a view
+    if (!isObject(data.views)) return false;
+    for (let viewId in data.views) {
+        if (!verifyViewConfig(data.views[viewId])) return false;
+    }
+
+    // Make sure each field is actually a field
+    if (!isObject(data.fields)) return false;
+    for (let fieldId in data.fields) {
+        if (!verifyFieldDefinition(data.fields[fieldId])) return false;
+    }
+
+    // Make sure each classification is actually a classification
+    if (!isObject(data.classifications)) return false;
+    for (let cid in data.classifications) {
+        if (!verifyClassificationDefinition(data.classifications[cid])) return false;
+    }
+
+    // Make sure each PV is actually a PV
+    if (!isObject(data.possibleValues)) return false;
+    for (let pvid in data.possibleValues) {
+        if (!verifyPossibleValueDefinition(data.possibleValues[pvid])) return false;
+    }
+
+    // Verify the block priorities are all valid
+    if (!Array.isArray(data.blockPriorities)) return false;
+    for (let priority of data.blockPriorities) {
+        if (!isString(priority))    return false;
+        if (!data.blocks[priority]) return false;
+    }
+
+    // Verify the classificationIds are all valid
+    if (!Array.isArray(data.classificationIds)) return false;
+    for (let cid of data.classificationIds) {
+        if (!isString(cid)) return false;
+        if (!data.classifications[cid]) return false;
+    }
+
+    return true;
 }
 
 

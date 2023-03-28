@@ -7,7 +7,7 @@ import { BoardDataPersistence } from "../../../common/persistence/BoardDataPersi
 import * as ConfigDataPersistence from "../../../common/persistence/ConfigDataPersistence";
 import * as T from "../../../common/DataTypes/ActionDataTypes";
 import { mapify } from "../../../common/utilities/ArrayUtils";
-import { BasicBoardData, BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME } from "../../../common/DataTypes/BoardDataTypes";
+import { BasicBoardData, BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, verifyBoardData } from "../../../common/DataTypes/BoardDataTypes";
 import { DOT_FILE_SUFFIX, FILE_SUFFIX } from "../../../common/Constants";
 
 
@@ -128,19 +128,34 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
     });
 
     if (!canceled && filePaths.length > 0) {
-        const chosenFile = filePaths[0];
-        ConfigDataPersistence.addLocalBoard(chosenFile);
+        try {
+            const chosenFile = filePaths[0];
+            ConfigDataPersistence.addLocalBoard(chosenFile);
 
-        // Save the imported board's template
-        let boardData = JSON.parse(fs.readFileSync(chosenFile, 'utf8')) as BoardData;
-        let template = BoardDataPersistence.getBoardTemplate(boardData);
-        ConfigDataPersistence.addOrUpdateTemplate(chosenFile, template);
+            // Save the imported board's template
+            let boardData = JSON.parse(fs.readFileSync(chosenFile, 'utf8'));
+            if (!verifyBoardData(boardData)) {
+                // Error 5 indicates the file isn't the correct format for BoardData
+                return {
+                    errorCode: 5,
+                    message: 'File is not the correct format.',
+                };
+            }
+            let template = BoardDataPersistence.getBoardTemplate(boardData);
+            ConfigDataPersistence.addOrUpdateTemplate(chosenFile, template);
 
-        // Return board data, where ID is filepath and name is filename
-        return {
-            boardId: chosenFile,
-            boardName: path.basename(chosenFile, DOT_FILE_SUFFIX),
-        };
+            // Return board data, where ID is filepath and name is filename
+            return {
+                boardId: chosenFile,
+                boardName: path.basename(chosenFile, DOT_FILE_SUFFIX),
+            };
+        } catch(err) {
+            // Error 4 indicates we failed to parse the file
+            return {
+                errorCode: 4,
+                message: 'Failed to read the provided file.',
+            }
+        }
     }
 
     // Error 3 indicates file selection was cancelled.
@@ -168,16 +183,36 @@ async function readFileAsBoard(): Promise<T.ReadFileAsBoardResponse> {
     });
 
     if (!canceled && filePaths.length > 0) {
-        const chosenFile = filePaths[0];
-        let boardData = JSON.parse(fs.readFileSync(chosenFile, 'utf8')) as BoardData;
+        try {
+            const chosenFile = filePaths[0];
+            let boardData = JSON.parse(fs.readFileSync(chosenFile, 'utf8'));
 
-        // Return board data, where ID is filepath and name is filename
-        return {
-            filepath: chosenFile,
-            filename: path.basename(chosenFile, DOT_FILE_SUFFIX),
-            boardData,
-        };
+            if (!verifyBoardData(boardData)) {
+                // Error 5 indicates the file isn't the correct format for BoardData
+                return {
+                    errorCode: 5,
+                    message: 'File is not the correct format.',
+                };
+            }
+
+            // Return board data, where ID is filepath and name is filename
+            return {
+                filepath: chosenFile,
+                filename: path.basename(chosenFile, DOT_FILE_SUFFIX),
+                boardData,
+            };
+        } catch(err) {
+            // Error 4 indicates we failed to parse the file
+            return {
+                errorCode: 4,
+                message: 'Failed to read the provided file.',
+            }
+        }
     }
 
-    return {};
+    // Error 3 indicates file selection was cancelled.
+    return {
+        errorCode: 3,
+        message: undefined
+    };
 }

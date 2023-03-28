@@ -80,6 +80,11 @@ export interface PossibleValueDefinition {
     };
 }
 
+export function verifyPossibleValueDefinition(data: any): data is PossibleValueDefinition {
+    // TODO-const
+    return true;
+}
+
 export interface FieldDefinition {
     id: string;
     name: string;
@@ -88,10 +93,20 @@ export interface FieldDefinition {
     sourceType: 'block' | 'classification';
 }
 
+export function verifyFieldDefinition(data: any): data is FieldDefinition {
+    // TODO-const
+    return true;
+}
+
 export interface ClassificationDefinition {
     id: string;
     name: string;
     fieldIds: string[];
+}
+
+export function verifyClassificationDefinition(data: any): data is ClassificationDefinition {
+    // TODO-const
+    return true;
 }
 
 export interface ChangedPVName {

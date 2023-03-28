@@ -34,6 +34,11 @@ export class Block {
     }
 }
 
+export function verifyBlock(data: any): data is Block {
+    // TODO-const
+    return true;
+}
+
 export interface BlockIdAndPosition {
     blockId: string;
     location: BoundingBox;
