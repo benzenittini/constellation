@@ -12,12 +12,15 @@ import { logger } from "./Logger";
 import * as WebsocketHandlers from './WebsocketHandlers';
 import { verifyCreds } from "./UserDataPersistence";
 import { ConstError } from "../../common/DataTypes/ActionDataTypes";
+import { Version } from "../../common/utilities/VersionUtils";
 
 // -- Singleton Management --
 export let singleton: WebsocketManager;
 export let initializeSingleton = (server: http.Server) => {
     singleton = new WebsocketManager(server);
 }
+
+const CURRENT_VERSION = new Version(WEBPACK.APP_VERSION);
 
 // -- The actual class implementation --
 export class WebsocketManager {
@@ -37,7 +40,7 @@ export class WebsocketManager {
     onIoConnection(socket: Socket): void {
         // First, check their client version. If it's old, then disconnect them and prompt them to refresh their page.
         let clientVersion = (socket.request as any)?._query?.clientVersion;
-        if (WEBPACK.APP_VERSION !== clientVersion) {
+        if (CURRENT_VERSION.hasDifferentMajorVersionThan(clientVersion)) {
             socket.emit('oldClient', WEBPACK.APP_VERSION);
             socket.disconnect();
         } else {

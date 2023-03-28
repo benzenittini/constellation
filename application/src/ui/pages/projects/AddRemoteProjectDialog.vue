@@ -51,12 +51,6 @@ export default defineComponent({
     &>* {
         align-self: center;
     }
-    // .mwe-config-section {
-    //     &>* {
-    //         display: inline-block;
-    //         margin: 10px;
-    //     }
-    // }
 }
 
 </style>
