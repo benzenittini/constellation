@@ -7,7 +7,7 @@ import { BoardDataPersistence } from "../../../common/persistence/BoardDataPersi
 import * as ConfigDataPersistence from "../../../common/persistence/ConfigDataPersistence";
 import * as T from "../../../common/DataTypes/ActionDataTypes";
 import { mapify } from "../../../common/utilities/ArrayUtils";
-import { BasicBoardData, BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, verifyBoardData } from "../../../common/DataTypes/BoardDataTypes";
+import { BasicBoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, verifyBoardData } from "../../../common/DataTypes/BoardDataTypes";
 import { DOT_FILE_SUFFIX, FILE_SUFFIX } from "../../../common/Constants";
 
 
@@ -25,10 +25,18 @@ export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
 }
 
 async function getProjectData(): Promise<T.GetProjectDataResponse> {
-    let boards = ConfigDataPersistence.config.localBoards.map(filepath => ({
-        boardId: filepath,
-        boardName: path.basename(filepath, DOT_FILE_SUFFIX),
-    }));
+    let boards = ConfigDataPersistence.config.localBoards.map(filepath => {
+        let boardId = filepath;
+        let boardName = path.basename(filepath);
+
+        // Trim the extension if able
+        let dotIndex = boardName.lastIndexOf('.');
+        if (dotIndex !== -1) {
+            boardName = boardName.substring(0, boardName.lastIndexOf('.'));
+        }
+
+        return { boardId, boardName };
+    });
 
     return {
         projectId: LOCAL_PROJECT,
@@ -130,6 +138,14 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
     if (!canceled && filePaths.length > 0) {
         try {
             const chosenFile = filePaths[0];
+            let alreadyExists = -1 !== ConfigDataPersistence.config.localBoards.indexOf(chosenFile);
+            if (alreadyExists) {
+                return {
+                    errorCode: 6,
+                    message: "Board already exists.",
+                };
+            }
+
             ConfigDataPersistence.addLocalBoard(chosenFile);
 
             // Save the imported board's template

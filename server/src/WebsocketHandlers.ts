@@ -10,6 +10,16 @@ export function getBoardData(io: Server, socket: Socket) {
     return async (message: string) => {
         try {
             let { boardId } = JSON.parse(message);
+
+            // Make sure the board still exists.
+            if (!boardDataPersistence[boardId]) {
+                throw new ConstError(4,
+                    "Board no longer exists.",
+                    ConstError.getLineId('WebsocketHandlers', 'getBoardData', 1),
+                    `User tried to load a board that no longer exists.`);
+            }
+
+            // If all is good, return the board data.
             let result = await boardDataPersistence[boardId].getBoardData();
             socket.emit('getBoardData', result);
         } catch(err) {

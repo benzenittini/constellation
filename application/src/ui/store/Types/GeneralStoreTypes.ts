@@ -54,6 +54,7 @@ export interface GeneralDataActions {
     addBoardToProject      ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardData: BasicBoardData }): void;
     removeBoardFromProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string }): void;
     updateBoardConfig      ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string, boardConfig: BoardConfig }): void;
+    // markBoardAsMissing     ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string }): void;
 
     registerRemoteProject   ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject, projectId?: string }): void;
     deregisterRemoteProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject }): void;

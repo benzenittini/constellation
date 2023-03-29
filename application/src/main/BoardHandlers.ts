@@ -37,7 +37,6 @@ async function getBoardData({ boardId: filepath }: T.GetBoardDataRequest): Promi
             persistence = new BoardDataPersistence(filepath, undefined, (status) => BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', status));
             return persistence.getBoardData();
         } catch(err) {
-            ConfigDataPersistence.removeLocalBoard(filepath)
             return {
                 errorCode: 3,
                 message: 'Failed to load and parse board data.',
@@ -45,7 +44,6 @@ async function getBoardData({ boardId: filepath }: T.GetBoardDataRequest): Promi
         }
     }
 
-    ConfigDataPersistence.removeLocalBoard(filepath)
     return {
         errorCode: 4,
         message: 'File was not found.',

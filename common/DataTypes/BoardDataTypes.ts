@@ -4,7 +4,7 @@ import { TypedMap } from "./GenericDataTypes"
 import { Block, verifyBlock } from './BlockDataTypes';
 import { ViewConfig, verifyViewConfig } from './ViewDataTypes';
 import { ClassificationDefinition, FieldDefinition, FieldType, PossibleValueDefinition, verifyClassificationDefinition, verifyFieldDefinition, verifyPossibleValueDefinition } from './FieldDataTypes';
-import { isObject, isObjectWithKeys } from "../utilities/ObjectUtils";
+import { isObject } from "../utilities/ObjectUtils";
 import { isString } from "../utilities/StringUtils";
 
 

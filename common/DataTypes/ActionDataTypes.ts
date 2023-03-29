@@ -91,6 +91,7 @@ export type ImportBoardRequest = undefined | { boardName: string, initialData: B
 // Error 3 indicates file selection was cancelled.
 // Error 4 indicates failed to parse file
 // Error 5 indicates file wasn't of type BoardData
+// Error 6 indicates file already exists
 export type ImportBoardResponse = ErrorResponse | BasicBoardData;
 export type ReadFileAsBoardResponse = ErrorResponse | { filepath: string, filename: string, boardData: BoardData };
 
@@ -115,8 +116,8 @@ export type RemoveRemoteProjectResponse = ErrorResponse | {};
 // --------------
 
 export type GetBoardDataRequest  = { boardId: string };
-// Error 3 indicates file not found.
-// Error 4 indicates error loading/parsing the file.
+// Error 3 indicates error loading/parsing the file.
+// Error 4 indicates file not found.
 export type GetBoardDataResponse = ErrorResponse | BoardData;
 
 export type CreateBlockRequest  = { location: BoundingBox, parentBlockId: string | undefined };

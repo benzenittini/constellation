@@ -7,11 +7,7 @@ import { registerBoardHandlers } from './BoardHandlers';
 import { loadConfigFile } from '../../../common/persistence/ConfigDataPersistence';
 
 const createWindow = () => {
-    // TODO-const : Remove all "leftMonitor" lines!
-    const leftMonitor = screen.getAllDisplays().find((d) => d.bounds.x === 0);
     const win = new BrowserWindow({
-        x: leftMonitor?.bounds.x || 0,
-        y: leftMonitor?.bounds.y || 0,
         width: 1280,
         height: 1024,
         webPreferences: {
@@ -23,7 +19,9 @@ const createWindow = () => {
     registerConfigHandlers(ipcMain);
     registerBoardHandlers(ipcMain);
 
-    win.webContents.openDevTools();
+    if (process.env.NODE_ENV !== 'production') {
+        win.webContents.openDevTools();
+    }
     win.loadFile('index.html');
 };
 
