@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "watch": "webpack watch --config webpack.dev.js",
-    "serve": "nodemon ./dist/server.js ./src/dev.properties"
+    "serve": "nodemon --watch dist -e js,properties ./dist/constellation-server.js ./dist/server.properties"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -20,6 +20,7 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.14.2",
     "@types/uuid": "^9.0.1",
+    "copy-webpack-plugin": "^11.0.0",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",
     "webpack": "^5.75.0",

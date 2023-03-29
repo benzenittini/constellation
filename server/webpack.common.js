@@ -1,5 +1,6 @@
 
 const nodeExternals = require('webpack-node-externals');
+const CopyPlugin = require("copy-webpack-plugin");
 
 const path = require('path');
 
@@ -10,7 +11,7 @@ module.exports = {
     externals: [nodeExternals()],
 
     entry: {
-        'server': './src/server.ts',
+        'constellation-server': './src/index.ts',
         'user-management': './src/user-management.ts',
     },
 
@@ -30,6 +31,11 @@ module.exports = {
             WEBPACK: {
                 APP_VERSION: JSON.stringify(process.env.npm_package_version)
             }
+        }),
+        new CopyPlugin({
+            patterns: [
+                "./src/server.properties",
+            ],
         }),
     ],
 

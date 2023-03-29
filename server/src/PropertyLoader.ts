@@ -4,16 +4,29 @@ import fs from 'fs';
 import { UserFile } from '../../common/DataTypes/FileDataTypes';
 
 // Keep these in sync!
-const VALID_PROPS: (keyof Properties)[] = [ 'log_level', 'log_dir', 'board_dir', 'backup_dir', 'user_data', 'project_data', 'server_host', 'server_port', 'token_private_key', 'project_name' ];
+const VALID_PROPS: (keyof Properties)[] = [
+    'log_level',
+    'log_dir',
+    'board_dir',
+    'user_data',
+    'project_data',
+    'server_host',
+    'server_port',
+    'server_key',
+    'server_cert',
+    'token_private_key',
+    'project_name',
+];
 type Properties = {
     log_level: string,
     log_dir: string,
     board_dir: string,
-    backup_dir: string,
     user_data: string,
     project_data: string,
     server_host: string,
     server_port: string,
+    server_key: string | undefined, // Optional
+    server_cert: string | undefined, // Optional
     token_private_key: string,
     project_name: string,
 };
@@ -22,11 +35,12 @@ export const properties: Properties = {
     log_level:    '',
     log_dir:      '',
     board_dir:    '',
-    backup_dir:   '',
     user_data:    '',
     project_data: '',
     server_host:  '',
     server_port:  '',
+    server_key:   undefined, // Optional
+    server_cert:  undefined, // Optional
     token_private_key: '',
     project_name: '',
 };
@@ -63,7 +77,8 @@ export function populateProperties(configFile: string) {
 
         // Validate our properties
         for (let prop of VALID_PROPS) {
-            if (properties[prop as keyof Properties].trim() === '') {
+            let propVal = properties[prop as keyof Properties];
+            if (propVal !== undefined && propVal.trim() === '') {
                 console.error(`Required property was not properly set: ${prop}`);
                 throw new Error();
             }
@@ -72,7 +87,6 @@ export function populateProperties(configFile: string) {
         // Create any directories/files that don't exist.
         createDirIfNeeded(properties.log_dir);
         createDirIfNeeded(properties.board_dir);
-        createDirIfNeeded(properties.backup_dir);
         if (!fs.existsSync(properties.user_data)) {
             const contents: UserFile = {
                 registrationKeys: [],

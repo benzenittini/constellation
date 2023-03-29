@@ -1,12 +1,14 @@
 
 // -- Third-Party Libraries --
 import express from 'express';
+import fs from 'fs';
+import * as http from 'http';
+import * as https from 'https';
 
 // -- Internal --
 import * as Rest from './RestHandlers';
 import { properties, populateProperties } from './PropertyLoader';
 import { initializeLogger, logger } from './Logger';
-import { createServer } from 'http';
 import { initializeSingleton } from './WebsocketManager';
 import { initializePersistence } from './Persistence';
 
@@ -26,12 +28,19 @@ import { initializePersistence } from './Persistence';
         // Server Setup
         // ------------
 
+        const useTLS = (properties.server_cert !== undefined && properties.server_key !== undefined)
+
         // HTTP server setup
         const app = express();
         app.use(express.json());
 
         // Websocket setup
-        const httpServer = createServer(app);
+        const httpServer = useTLS
+            ? https.createServer({
+                key: fs.readFileSync(properties.server_key!, 'utf-8'),
+                cert: fs.readFileSync(properties.server_cert!, 'utf-8'),
+            }, app)
+            : http.createServer(app);
         initializeSingleton(httpServer);
 
 
@@ -57,7 +66,7 @@ import { initializePersistence } from './Persistence';
         // --------------------
 
         httpServer.listen(properties.server_port, () => {
-            logger.info(`Web server listening at http://${properties.server_host}:${properties.server_port}`);
+            logger.info(`Web server listening at ${useTLS ? 'https' : 'http'}://${properties.server_host}:${properties.server_port}`);
         });
 
     } catch(err) {
