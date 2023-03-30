@@ -1,5 +1,5 @@
 
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, ipcMain, screen, shell } from 'electron';
 import path from 'path';
 
 import { registerConfigHandlers } from './ConfigHandlers';
@@ -10,6 +10,7 @@ const createWindow = () => {
     const win = new BrowserWindow({
         width: 1280,
         height: 1024,
+        icon: '/path/to/icon.png', // Only needed for linux packaging.
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
@@ -23,6 +24,12 @@ const createWindow = () => {
         win.webContents.openDevTools();
     }
     win.loadFile('index.html');
+
+    // Open anchor tags in the user's default browser. (Used by MarkdownEditor links.)
+    win.webContents.setWindowOpenHandler(({ url }) => {
+        shell.openExternal(url);
+        return { action: 'deny' };
+    });
 };
 
 app.whenReady().then(() => {

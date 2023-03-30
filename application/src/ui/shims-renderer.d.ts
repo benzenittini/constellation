@@ -1,7 +1,5 @@
 
 import * as T from "../../../common/DataTypes/ActionDataTypes";
-import { BoardData } from "../../../common/DataTypes/BoardDataTypes";
-
 
 /** Tells typescript what properties are available on the global "window" object. Useful for preloads. */
 declare global {
@@ -20,8 +18,6 @@ declare global {
         },
         board: {
             getBoardData:       (req: T.GetBoardDataRequest) => Promise<T.GetBoardDataResponse>,
-            updateSaveStatus:   any,
-            clearSaveListeners: any,
             // -- Blocks --
             createBlock:       (req: T.CreateBlockRequest)       => Promise<T.CreateBlockResponse>,
             setBlockPositions: (req: T.SetBlockPositionsRequest) => Promise<T.SetBlockPositionsResponse>,
@@ -38,6 +34,10 @@ declare global {
             deleteView:       (req: T.DeleteViewRequest)       => Promise<T.DeleteViewResponse>,
             setBlockPriority: (req: T.SetBlockPriorityRequest) => Promise<T.SetBlockPriorityResponse>,
             loadView:         (req: T.LoadViewRequest)         => Promise<T.LoadViewResponse>,
+
+            // -- Miscelaneous Things --
+            updateSaveStatus:   any,
+            clearSaveListeners: any,
         },
     }
 }

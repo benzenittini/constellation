@@ -85,7 +85,7 @@ export default defineComponent({
                     }
                 }, 0);
                 context.emit('mw-enter-edit-mode');
-            }
+            },
         }
     }
 })

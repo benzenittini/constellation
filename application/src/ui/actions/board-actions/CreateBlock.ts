@@ -49,6 +49,7 @@ export class CreateBlockAction extends Action {
             store.dispatch('createNode', { blockId: resp.id, parentId: resp.parentBlockId });
 
             // Begin editing the block (assumes we were the user that submitted this request)
+            // TODO-const : We might not be! Only enter edit mode if we done it.
             store.dispatch("selectBlock", {blockId: resp.id, clearCurrentSelection: true});
             store.dispatch("startEditingBlock", resp.id);
             emitter.emit('blockCreated', resp.id);

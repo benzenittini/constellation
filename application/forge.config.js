@@ -30,6 +30,7 @@ module.exports = {
     }
   },
   packagerConfig: {
+    icon: './src/ui/graphics/icon',
     ignore: (path) => {
       if (IGNORED_PATHS.some(p => path.startsWith(p))) {
         return true;
@@ -39,21 +40,38 @@ module.exports = {
   },
   rebuildConfig: {},
   makers: [
+    // -- Windows --
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        setupIcon: './src/ui/graphics/icon.ico',
+      },
     },
+
+    // -- Mac --
     {
-      name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
+      name: '@electron-forge/maker-dmg',
+      config: {
+        icon: './src/ui/graphics/icon.icns'
+      }
     },
+
+    // -- Linux --
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        options: {
+          icon: './src/ui/graphics/icon.png',
+        }
+      },
     },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {},
-    },
+    // {
+    //   name: '@electron-forge/maker-rpm',
+    //   config: {
+    //     options: {
+    //       icon: './src/ui/graphics/icon.png'
+    //     },
+    //   },
+    // },
   ],
 };
