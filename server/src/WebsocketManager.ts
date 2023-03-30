@@ -115,8 +115,8 @@ export class WebsocketManager {
         socket.leave("all-users");
     }
 
-    sendToAllClients(messageType: string, data: any): void {
-        this.io.in('all-users').emit(messageType, data);
+    sendToAllClients(messageType: string, data: any, boardId: string = 'all-users'): void {
+        this.io.in(boardId).emit(messageType, data);
     }
 
 }

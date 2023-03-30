@@ -1,3 +1,5 @@
+import { isString } from "../utilities/StringUtils";
+import { isBoolean } from "../utilities/BooleanUtils";
 import { BoundingBox, TypedMap } from "./GenericDataTypes";
 
 export const DEFAULT_BLOCK_WIDTH = 200;
@@ -35,7 +37,61 @@ export class Block {
 }
 
 export function verifyBlock(data: any): data is Block {
-    // TODO-const
+    // Make sure the required top-level keys all exist.
+    if (!(
+        'id' in data &&
+        'location' in data &&
+        'content' in data &&
+        'fieldValues' in data &&
+        'fieldIds' in data &&
+        'classificationIds' in data
+    )) {
+        return false;
+    }
+
+    // Verify location is a BoundingBox
+    if (isNaN(data.location?.x) ||
+        isNaN(data.location?.y) ||
+        isNaN(data.location?.width) ||
+        isNaN(data.location?.height)
+    ) {
+        return false;
+    }
+
+    // Verify content extends BlockContent
+    if (data.content?.type === 'text') {
+        if (!isString(data.content.data?.text)) return false;
+    } else {
+        return false; // Unrecognized type
+    }
+
+    // Verify fieldIds is an array of strings
+    if (!Array.isArray(data.fieldIds)) return false;
+    for (let fid of data.fieldIds) {
+        if (!isString(fid)) return false;
+    }
+
+    // Verify classificationIds is an array of strings
+    if (!Array.isArray(data.classificationIds)) return false;
+    for (let cid of data.classificationIds) {
+        if (!isString(cid)) return false;
+    }
+
+    // If set, verify parentBlockId is a string
+    if (data.parentBlockId && !isString(data.parentBlockId)) {
+        return false;
+    }
+
+    // If set, verify isSelected is a boolean
+    if (data.isSelected && !isBoolean(data.isSelected)) {
+        return false;
+    }
+
+    // If set, verify isLockedOpen is a boolean
+    if (data.isLockedOpen && !isBoolean(data.isLockedOpen)) {
+        return false;
+    }
+
     return true;
 }
 

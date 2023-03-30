@@ -24,6 +24,7 @@ import { SetBlockPriorityAction } from '../actions/board-actions/SetBlockPriorit
 import { LoadViewAction } from '../actions/board-actions/LoadView';
 import { E31, showError } from '../../common/ErrorLogger';
 import { GENERIC_RESTART } from '../../../../common/DataTypes/ActionDataTypes';
+import { useStore } from '../store/store';
 
 
 const WS_DIALOG_ID = 'ws-connecting-dialog';
@@ -144,20 +145,33 @@ export let ws = new Websocket();
 
 function registerListeners(socket: Socket) {
     socket.on('getBoardData', (data: any) => { ws.closeConnectionDialog(); GetBoardDataAction.processResponse(data); });
-    // // -- Block Data --
+    // -- Block Data --
     socket.on('createBlock',       (data: any) => { CreateBlockAction.processResponse(data); });
     socket.on('setBlockPositions', (data: any) => { SetBlockPositionsAction.processResponse(data); });
     socket.on('deleteBlocks',      (data: any) => { DeleteBlocksAction.processResponse(data); });
     socket.on('setBlockParent',    (data: any) => { SetBlockParentAction.processResponse(data); });
     socket.on('setBlockContent',   (data: any) => { SetBlockContentAction.processResponse(data); });
-    // // -- Fields and Classifications --
+    // -- Fields and Classifications --
     socket.on('setClassificationDefinitions', (data: any) => { SetClassificationDefinitionsAction.processResponse(data); });
     socket.on('setClassificationOnBlocks',    (data: any) => { SetClassificationOnBlocksAction.processResponse(data); });
     socket.on('setFieldDefinitions',          (data: any) => { SetFieldDefinitionsAction.processResponse(data); });
     socket.on('setFieldOnBlocks',             (data: any) => { SetFieldOnBlocksAction.processResponse(data); });
-    // // -- View Data --
+    // -- View Data --
     socket.on('saveView',         (data: any) => { SaveViewAction.processResponse(data); });
     socket.on('deleteView',       (data: any) => { DeleteViewAction.processResponse(data); });
     socket.on('setBlockPriority', (data: any) => { SetBlockPriorityAction.processResponse(data); });
     socket.on('loadView',         (data: any) => { LoadViewAction.processResponse(data); });
+
+    // -- Miscellaneous --
+    socket.on('boardDeleted', (data: any) => {
+        // Go back to "projects" page
+        useStore().dispatch('clearBoardState');
+
+        // Show notification
+        useVueNotify().showNotification({
+            cssClasses: ['mw-notification-failure'],
+            dismissAfterMillis: 0,
+            data: { message: "Board has been deleted by another user.", },
+        });
+    });
 }

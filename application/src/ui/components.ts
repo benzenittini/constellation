@@ -19,8 +19,6 @@ import SaveCancel            from './components/SaveCancel.vue';
 import SaveDontSaveCancel    from './components/SaveDontSaveCancel.vue';
 import NextPrevious          from './components/NextPrevious.vue';
 import Close                 from './components/Close.vue';
-import ReleaseNoteDisplay    from './components/ReleaseNoteDisplay.vue';
-import ReleaseNotesFormatted from './components/ReleaseNotesFormatted.vue';
 import DynamicField          from './components/DynamicField.vue';
 import WSConnectionDialog    from './components/WSConnectionDialog.vue';
 // Slide-Open Tray
@@ -115,8 +113,6 @@ export let components: any = {
     'eic-expandable-tree': ExpandableTree,
     'eic-keyboard-key': KeyboardKey,
     'eic-close': Close,
-    'eic-release-note-display': ReleaseNoteDisplay,
-    'eic-release-notes-formatted': ReleaseNotesFormatted,
     'eic-dynamic-field': DynamicField,
     'eic-ws-connection-dialog': WSConnectionDialog,
     'eic-savecancel': SaveCancel,

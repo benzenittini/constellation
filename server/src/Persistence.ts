@@ -8,6 +8,7 @@ import { BoardDataPersistence } from "../../common/persistence/BoardDataPersiste
 import { ProjectDataPersistence } from "./ProjectDataPersistence";
 import { properties } from "./PropertyLoader";
 import { DOT_FILE_SUFFIX } from "../../common/Constants";
+import { singleton as WebsocketSingleton } from "./WebsocketManager";
 
 
 export let projectDataPersistence: ProjectDataPersistence | undefined = undefined;
@@ -37,6 +38,7 @@ export function importBoardPersistence(boardId: string, initialData: BoardData) 
 }
 
 export function deleteBoardPersistence(boardId: string) {
+    WebsocketSingleton.sendToAllClients('boardDeleted', {}, boardId);
     delete boardDataPersistence[boardId];
     const file = path.resolve(properties.board_dir, boardId + DOT_FILE_SUFFIX);
     if (fs.existsSync(file)) {
