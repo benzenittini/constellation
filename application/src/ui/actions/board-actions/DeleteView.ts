@@ -18,15 +18,20 @@ export class DeleteViewAction extends Action {
     }
 
     submit(): void {
-        if (useStore().getters.isCurrentBoardRemote) {
+        const store = useStore();
+        const clientId = store.state.generalData.clientId;
+
+        if (store.getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
             ws.emit('deleteView', JSON.stringify({
-                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                clientId,
+                boardId: store.state.generalData.currentProjectBoard!.boardId,
                 viewId: this.viewId,
             }));
         } else {
             // If local project, make the IPC request
             window.board.deleteView({
+                clientId,
                 viewId: this.viewId,
             }).then((resp) => DeleteViewAction.processResponse(resp));
         }
@@ -38,7 +43,8 @@ export class DeleteViewAction extends Action {
         } else {
             const store = useStore();
 
-            if (store.state.viewData.activeViewConfig?.id === resp.viewId) {
+            // Only show "success" notification if this was the user who created it.
+            if (store.state.generalData.clientId === resp.clientId) {
                 useVueNotify().showNotification({
                     cssClasses: ['mw-notification-success'],
                     dismissAfterMillis: 2500,

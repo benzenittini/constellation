@@ -595,13 +595,14 @@ export class BoardDataPersistence {
         return { fieldId, blockIdToFieldValue, };
     }
 
-    async saveView({ viewConfig }: T.SaveViewRequest): Promise<T.SaveViewResponse> {
+    async saveView({ clientId, viewConfig }: T.SaveViewRequest): Promise<T.SaveViewResponse> {
         // TODO-later : Do some validation on viewConfig
         this.data.views[viewConfig.id] = viewConfig;
 
         this.scheduleSave();
 
         return {
+            clientId,
             baseViewConfig: {
                 id: viewConfig.id,
                 name: viewConfig.name,
@@ -611,12 +612,15 @@ export class BoardDataPersistence {
         };
     }
 
-    async deleteView({ viewId }: T.DeleteViewRequest): Promise<T.DeleteViewResponse> {
+    async deleteView({ clientId, viewId }: T.DeleteViewRequest): Promise<T.DeleteViewResponse> {
         delete this.data.views[viewId];
 
         this.scheduleSave();
 
-        return { viewId };
+        return {
+            clientId,
+            viewId,
+        };
     }
 
     async setBlockPriority({ blockId, beforeId }: T.SetBlockPriorityRequest): Promise<T.SetBlockPriorityResponse> {

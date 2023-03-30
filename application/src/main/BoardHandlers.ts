@@ -50,9 +50,12 @@ async function getBoardData({ boardId: filepath }: T.GetBoardDataRequest): Promi
     };
 }
 
-async function createBlock({ location, parentBlockId }: T.CreateBlockRequest): Promise<T.CreateBlockResponse> {
+async function createBlock({ clientId, location, parentBlockId }: T.CreateBlockRequest): Promise<T.CreateBlockResponse> {
     try {
-        return await persistence!.createBlock(uuidv4(), location, parentBlockId);
+        return {
+            clientId,
+            block: await persistence!.createBlock(uuidv4(), location, parentBlockId),
+        };
     } catch(err) {
         const error = T.ConstError.safeConstructor(err as any);
         return error.getErrorResponse();

@@ -16,6 +16,7 @@ export interface GeneralDataState {
     remoteProjectLookup: { remoteProject: RemoteProject, projectId?: string }[];
     currentProjectBoard: CurrentProjectBoard | undefined;
     uiFlags: { disablePointerEvents: boolean };
+    clientId: string;
 }
 
 // -- Mutations --

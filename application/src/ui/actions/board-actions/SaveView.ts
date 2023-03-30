@@ -20,15 +20,20 @@ export class SaveViewAction extends Action {
     }
 
     submit(): void {
-        if (useStore().getters.isCurrentBoardRemote) {
+        const store = useStore();
+        const clientId = store.state.generalData.clientId;
+
+        if (store.getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
             ws.emit('saveView', JSON.stringify({
-                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                clientId,
+                boardId: store.state.generalData.currentProjectBoard!.boardId,
                 viewConfig: this.viewConfig,
             }));
         } else {
             // If local project, make the IPC request
             window.board.saveView({
+                clientId,
                 viewConfig: this.viewConfig,
             }).then((resp) => SaveViewAction.processResponse(resp));
         }
@@ -42,16 +47,17 @@ export class SaveViewAction extends Action {
 
             store.dispatch('addView', resp.baseViewConfig);
 
-            if (store.state.viewData.activeViewConfig?.id === resp.baseViewConfig.id) {
+            if (store.state.generalData.clientId === resp.clientId && store.state.viewData.activeViewConfig?.id === resp.baseViewConfig.id) {
                 new LoadViewAction(resp.baseViewConfig.id).submit();
 
-                // Only show "success" notification if this was the user who created it.
-                useVueNotify().showNotification({
-                    cssClasses: ['mw-notification-success'],
-                    dismissAfterMillis: 2500,
-                    data: { message: 'View saved successfully!' },
-                    position: 'top-center',
-                });
+                if (store.state.generalData.clientId === resp.clientId) {
+                    useVueNotify().showNotification({
+                        cssClasses: ['mw-notification-success'],
+                        dismissAfterMillis: 2500,
+                        data: { message: 'View saved successfully!' },
+                        position: 'top-center',
+                    });
+                }
             }
         }
     }

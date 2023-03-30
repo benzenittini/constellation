@@ -1,5 +1,6 @@
 
 import { MutationTree, ActionTree, GetterTree } from "vuex";
+import { v4 as uuidv4 } from 'uuid';
 
 import { GeneralDataState, GeneralDataMutations, GeneralDataActions, GeneralDataGetters } from "./Types/GeneralStoreTypes";
 import { RootState } from "./StoreTypes";
@@ -18,7 +19,8 @@ const generalDataState: GeneralDataState = {
         // (like the title bar, config pane, etc), which prevents an annoying effect when the
         // user drags a thing over top of one of these things.
         disablePointerEvents: false
-    }
+    },
+    clientId: uuidv4(),
 }
 
 

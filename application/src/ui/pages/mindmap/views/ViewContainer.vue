@@ -78,9 +78,18 @@ export default defineComponent({
         let showConfiguration = ref(false);
         let showView = ref(false);
 
+        function tidyAfterClose() {
+            showView.value = false;
+            showConfiguration.value = false;
+            context.emit('viewClosed');
+        }
+
         watch(currentView, (newVal) => {
             if (newVal) {
                 context.emit('viewOpened');
+            } else {
+                // If this view was deleted by another user, then make sure we properly tidy up this component.
+                tidyAfterClose();
             }
         });
 
@@ -107,9 +116,7 @@ export default defineComponent({
 
         function closeView() {
             saveCheck();
-            showView.value = false;
-            showConfiguration.value = false;
-            context.emit('viewClosed');
+            tidyAfterClose();
             setTimeout(() => store.dispatch('closeView'), 500); // Long enough for the "close" transition to complete.
         }
 
@@ -169,9 +176,7 @@ export default defineComponent({
         function deleteView() {
             let boardId = store.getters.currentProjectBoard?.boardId;
             if (boardId && currentView.value) {
-                showView.value = false;
-                showConfiguration.value = false;
-                context.emit('viewClosed');
+                tidyAfterClose();
                 setTimeout(() => {
                     if (boardId && currentView.value) {
                         new DeleteViewAction(currentView.value.id).submit();

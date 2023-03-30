@@ -120,10 +120,10 @@ export type GetBoardDataRequest  = { boardId: string };
 // Error 4 indicates file not found.
 export type GetBoardDataResponse = ErrorResponse | BoardData;
 
-export type CreateBlockRequest  = { location: BoundingBox, parentBlockId: string | undefined };
+export type CreateBlockRequest  = { clientId: string, location: BoundingBox, parentBlockId: string | undefined };
 // Error 3 indicates parent block not found.
 // Error 4 indicates block ID already exists.
-export type CreateBlockResponse = ErrorResponse | Block;
+export type CreateBlockResponse = ErrorResponse | { clientId: string, block: Block };
 
 export type SetBlockPositionsRequest  = { blocksAndPositions: BlockIdAndPosition[] };
 export type SetBlockPositionsResponse = ErrorResponse | BlockIdAndPosition[];
@@ -170,11 +170,11 @@ export type SetFieldOnBlocksRequest  = { fieldId: string, blockIdToFieldValue: T
 // Error 5 indicates block wasn't found
 export type SetFieldOnBlocksResponse = ErrorResponse | { fieldId: string, blockIdToFieldValue: TypedMap<any> };
 
-export type SaveViewRequest  = { viewConfig: ViewConfig };
-export type SaveViewResponse = ErrorResponse | { baseViewConfig: BaseViewConfig };
+export type SaveViewRequest  = { clientId: string, viewConfig: ViewConfig };
+export type SaveViewResponse = ErrorResponse | { clientId: string, baseViewConfig: BaseViewConfig };
 
-export type DeleteViewRequest  = { viewId: string };
-export type DeleteViewResponse = ErrorResponse | { viewId: string };
+export type DeleteViewRequest  = { clientId: string, viewId: string };
+export type DeleteViewResponse = ErrorResponse | { clientId: string, viewId: string };
 
 export type SetBlockPriorityRequest  = { blockId: string[], beforeId: string | undefined };
 // Error 3 indicates the "beforeId" block wasn't found in the priority list

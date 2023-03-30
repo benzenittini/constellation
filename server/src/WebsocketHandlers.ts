@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { boardDataPersistence, projectDataPersistence } from './Persistence';
 import { logger } from './Logger';
-import { ConstError, ErrorResponse } from '../../common/DataTypes/ActionDataTypes';
+import { ConstError } from '../../common/DataTypes/ActionDataTypes';
 
 export function getBoardData(io: Server, socket: Socket) {
     return async (message: string) => {
@@ -38,8 +38,11 @@ export function getBoardData(io: Server, socket: Socket) {
 export function createBlock(io: Server, socket: Socket) {
     return async (message: string) => {
         try {
-            let { boardId, location, parentBlockId } = JSON.parse(message);
-            let result = await boardDataPersistence[boardId].createBlock(uuidv4(), location, parentBlockId);
+            let { clientId, boardId, location, parentBlockId } = JSON.parse(message);
+            let result = {
+                clientId: clientId,
+                block: await boardDataPersistence[boardId].createBlock(uuidv4(), location, parentBlockId),
+            };
             io.in(boardId).emit('createBlock', result);
         } catch(err) {
             const error = ConstError.safeConstructor(err as any);
@@ -220,7 +223,7 @@ export function loadView(io: Server, socket: Socket) {
         try {
             let { boardId, ...req } = JSON.parse(message);
             let result = await boardDataPersistence[boardId].loadView(req);
-            io.in(boardId).emit('loadView', result);
+            socket.emit('loadView', result);
         } catch(err) {
             const error = ConstError.safeConstructor(err as any);
             logger.error(`Error encountered when loading a view: ${error.message}`);

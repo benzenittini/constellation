@@ -20,16 +20,20 @@ export class CreateBlockAction extends Action {
     }
 
     submit(): void {
-        if (useStore().getters.isCurrentBoardRemote) {
+        const store = useStore();
+        const clientId = store.state.generalData.clientId;
+        if (store.getters.isCurrentBoardRemote) {
             // If remote project, send message over websocket.
             ws.emit('createBlock', JSON.stringify({
-                boardId: useStore().state.generalData.currentProjectBoard!.boardId,
+                clientId: clientId,
+                boardId: store.state.generalData.currentProjectBoard!.boardId,
                 location: this.location,
                 parentBlockId: this.parentBlockId
             }));
         } else {
             // If local project, make the IPC request
             window.board.createBlock({
+                clientId: clientId,
                 location: this.location,
                 parentBlockId: this.parentBlockId
             }).then((resp) => CreateBlockAction.processResponse(resp));
@@ -45,14 +49,15 @@ export class CreateBlockAction extends Action {
         } else {
             const emitter = useEmitter();
 
-            store.dispatch('addBlocks', [resp]);
-            store.dispatch('createNode', { blockId: resp.id, parentId: resp.parentBlockId });
+            store.dispatch('addBlocks', [resp.block]);
+            store.dispatch('createNode', { blockId: resp.block.id, parentId: resp.block.parentBlockId });
 
-            // Begin editing the block (assumes we were the user that submitted this request)
-            // TODO-const : We might not be! Only enter edit mode if we done it.
-            store.dispatch("selectBlock", {blockId: resp.id, clearCurrentSelection: true});
-            store.dispatch("startEditingBlock", resp.id);
-            emitter.emit('blockCreated', resp.id);
+            // Begin editing the block if we're the client that submitted it.
+            if (store.state.generalData.clientId === resp.clientId) {
+                store.dispatch("selectBlock", {blockId: resp.block.id, clearCurrentSelection: true});
+                store.dispatch("startEditingBlock", resp.block.id);
+                emitter.emit('blockCreated', resp.block.id);
+            }
         }
     }
 
