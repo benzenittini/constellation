@@ -16,8 +16,12 @@ const IGNORED_PATHS = [
 module.exports = {
   hooks: {
     postPackage: async (forgeConfig, options) => {
+      // Figure out where we are based on the OS
+      const appDir = (options.platform === 'darwin')
+        ? path.resolve(options.outputPaths[0], 'constellation.app', 'Contents', 'Resources', 'app')
+        : path.resolve(options.outputPaths[0], 'resources', 'app');
+
       // Flatten "./build" into its parent
-      const appDir = path.resolve(options.outputPaths[0], 'resources', 'app');
       const buildDir = path.resolve(appDir, 'build');
       fs.cpSync(buildDir, appDir, { recursive: true });
       fs.rmSync(buildDir, { recursive: true });
