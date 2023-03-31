@@ -42,10 +42,26 @@ module.exports = {
   makers: [
     // -- Windows --
     {
-      name: '@electron-forge/maker-squirrel',
+      name: '@electron-forge/maker-wix',
       config: {
-        setupIcon: './src/ui/graphics/icon.ico',
-      },
+        name: 'Constellation',
+        appUserModelId: 'dev.zenittini.constellation.exe',
+        icon: './src/ui/graphics/icon.ico',
+        manufacturer: 'Constellation',
+        ui: {
+          chooseDirectory: true,
+        },
+        beforeCreate: (msiCreator) => {
+          msiCreator.wixTemplate = msiCreator.wixTemplate.replace(
+            'Name = "{{ApplicationName}} (Machine - MSI)"',
+            'Name = "{{ApplicationName}}"'
+          );
+          msiCreator.wixTemplate = msiCreator.wixTemplate.replace(
+            '{{ApplicationName}} (Machine)',
+            '{{ApplicationName}}',
+          );
+        },
+      }
     },
 
     // -- Mac --

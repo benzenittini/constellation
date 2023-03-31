@@ -1,4 +1,49 @@
 
+# First-Time Setup
+
+## Prerequisites
+
+* Install git
+* Install NodeJS / NPM
+* Install Yarn (using `npm install --global yarn` to get version 1)
+
+# Cloning and setting it up
+
+```bash
+# =============
+# mw-vue-modals
+# -------------
+git clone ____
+cd ./mw-vue-modals
+yarn install
+yarn build-prod
+yarn link
+
+# =============
+# mw-vue-notify
+# -------------
+git clone ____
+cd ./mw-vue-notify
+yarn install
+yarn build-prod
+yarn link
+
+# =============
+# constellation
+# -------------
+git clone ____
+# common project
+cd ./constellation/common
+yarn install
+# application project
+cd ../application
+yarn install
+yarn link mw-vue-modals
+yarn link mw-vue-notify
+# server project
+cd ../server
+yarn install
+```
 
 # Development Builds
 
@@ -32,8 +77,12 @@ cd ./application
 yarn build-main-prod
 yarn build-ui-prod
 
-# Creating the Electron installers
+# Creating the Electron installers, run on the desired OS.
 yarn make
+# FOR WINDOWS:
+# First install .NET 3.5.1 if not already.
+# Then, install Wix 3.1.1: https://wixtoolset.org/docs/wix3/
+# Then run "yarn make" command.
 ```
 
 ## Server
