@@ -60,11 +60,24 @@
         <div class="mw-board-list">
             <button class="primary pink" v-on:click="addRemoteProject()">Add Remote Project</button>
         </div>
+
+        <!-- User Settings -->
+        <div class="mw-board-list">
+            <h2>User Settings</h2>
+            <div class="mw-settings-grid">
+                <label for="pan-speed">Pan Speed</label>
+                <input id="pan-speed" type="range" min="0.1" max="3" step="0.1" v-model="panSpeed">
+                <span>({{ panSpeed }}x)</span>
+                <label for="zoom-speed">Zoom Speed</label>
+                <input id="zoom-speed" type="range" min="0.1" max="3" step="0.1" v-model="zoomSpeed">
+                <span>({{ zoomSpeed }}x)</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, reactive, ref, Ref, onBeforeUpdate } from 'vue';
+import { defineComponent, computed, onMounted, reactive, ref, Ref, onBeforeUpdate, watch } from 'vue';
 import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../../store/store';
@@ -74,6 +87,7 @@ import { E1, E10, E11, E35, E4, E5, E6, E7, E8, E9, showError } from '../../../c
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
+import { SetUserSettingsAction } from '../../actions/project-actions/SetUserSettings';
 import { CreateNewBoardAction } from '../../actions/project-actions/CreateNewBoard';
 import { ImportBoardAction } from '../../actions/project-actions/ImportBoard';
 import { LeaveProjectAction } from '../../actions/project-actions/LeaveProject';
@@ -107,11 +121,47 @@ export default defineComponent({
         let editNameRefs: Ref<any[]> = ref([]); // classificationElements[]
         onBeforeUpdate(() => editNameRefs.value = []);
 
+
+        // =============
+        // User Settings
+        // -------------
+
+        let panPersistenceTimeout: null | number = null;
+        let panSpeed = computed({
+            get() { return store.state.generalData.uiFlags.panSpeed; },
+            set(newVal) {
+                store.dispatch('setPanSpeed', newVal);
+                if (panPersistenceTimeout) {
+                    window.clearTimeout(panPersistenceTimeout);
+                }
+                panPersistenceTimeout = window.setTimeout(() => {
+                    new SetUserSettingsAction({ panSpeed: newVal }).submit();
+                }, 5000);
+            }
+        });
+
+        let zoomPersistenceTimeout: null | number = null;
+        let zoomSpeed = computed({
+            get() { return store.state.generalData.uiFlags.zoomSpeed; },
+            set(newVal) {
+                store.dispatch('setZoomSpeed', newVal);
+                if (zoomPersistenceTimeout) {
+                    window.clearTimeout(zoomPersistenceTimeout);
+                }
+                zoomPersistenceTimeout = window.setTimeout(() => {
+                    new SetUserSettingsAction({ zoomSpeed: newVal }).submit();
+                }, 5000);
+            }
+        });
+
+
         return {
             LOCAL_PROJECT, LOCAL_PROJECT_NAME,
 
             boardBeingEdited,
             editNameRefs,
+
+            panSpeed, zoomSpeed,
 
             localBoards: computed(() => Object.values(store.state.generalData.projectData[LOCAL_PROJECT]?.boards || [])),
             remoteProjects: computed(() => store.state.generalData.remoteProjectLookup),
@@ -405,6 +455,7 @@ export default defineComponent({
 #mw-projects {
     width: 100%;
     padding: 32px;
+
     .mw-board-list {
         background: vars.$gray1;
         margin: 32px;
@@ -495,6 +546,13 @@ export default defineComponent({
                     &:focus { outline: 1px solid vars.$gray3; }
                 }
             }
+        }
+    
+        .mw-settings-grid {
+            margin: 24px;
+            display: grid;
+            grid-template-columns: 100px 200px 1fr;
+            gap: 10px;
         }
     }
 }

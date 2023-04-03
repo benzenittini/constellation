@@ -1,7 +1,11 @@
 
 import { computed, ref, reactive } from 'vue';
 import TWEEN, { Group, Tween } from '@tweenjs/tween.js';
+import { useStore } from '../store/store';
 
+const store = useStore();
+
+const ZOOM_SPEED = computed(() => store.state.generalData.uiFlags.zoomSpeed);
 const MULTIPLIER = 0.08;
 
 const IS_MAC = navigator.userAgent.includes('Mac');
@@ -58,10 +62,10 @@ export function useZoomable(pannable: any) {
             if (IS_MAC && wheelEvent.ctrlKey) {
                 // Why ctrl? Well, browsers set the ctrl key to true if the user is doing a pinch-to-zoom action:
                 // https://kenneth.io/post/detecting-multi-touch-trackpad-gestures-in-javascript
-                zoom(-10/4*MULTIPLIER, wheelEvent);
+                zoom(-10/4 * MULTIPLIER * ZOOM_SPEED.value, wheelEvent);
             }
             if (wheelEvent.shiftKey) {
-                zoom(MULTIPLIER, wheelEvent);
+                zoom(MULTIPLIER * ZOOM_SPEED.value, wheelEvent);
             }
         },
     };

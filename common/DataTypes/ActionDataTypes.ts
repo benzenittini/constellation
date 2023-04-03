@@ -4,7 +4,7 @@ import { BasicBoardData, BasicProjectData, BoardData, BoardTemplateClient, Templ
 import { ChangedFieldValue, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "./FieldDataTypes";
 import { BoundingBox, TypedMap } from "./GenericDataTypes";
 import { BaseViewConfig, ViewConfig } from "./ViewDataTypes";
-import { RemoteProject } from "./FileDataTypes";
+import { RemoteProject, UserSettings } from "./FileDataTypes";
 import { SUPPORT_EMAIL } from "../Constants";
 
 
@@ -109,6 +109,12 @@ export type LeaveProjectResponse = {}; // If user fails to "leave" server-side, 
 // LeaveProjectAction (Client)
 export type RemoveRemoteProjectRequest = { remoteProject: RemoteProject};
 export type RemoveRemoteProjectResponse = ErrorResponse | {};
+
+export type GetUserSettingsRequest = void;
+export type GetUserSettingsResponse = ErrorResponse | UserSettings;
+
+export type SetUserSettingsRequest = Partial<UserSettings>;
+export type SetUserSettingsResponse = ErrorResponse | {};
 
 
 // ==============

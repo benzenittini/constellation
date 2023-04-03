@@ -15,6 +15,8 @@ declare global {
             removeRemoteProject: (req: T.RemoveRemoteProjectRequest) => Promise<T.RemoveRemoteProjectResponse>,
             importBoard:         (req: T.ImportBoardRequest)         => Promise<T.ImportBoardResponse>,
             readFileAsBoard:     () => Promise<T.ReadFileAsBoardResponse>,
+            getUserSettings:     () => Promise<T.GetUserSettingsResponse>,
+            setUserSettings:     (req: T.SetUserSettingsRequest) => Promise<T.SetUserSettingsResponse>,
         },
         board: {
             getBoardData:       (req: T.GetBoardDataRequest) => Promise<T.GetBoardDataResponse>,

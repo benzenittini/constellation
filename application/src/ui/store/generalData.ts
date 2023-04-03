@@ -18,7 +18,9 @@ const generalDataState: GeneralDataState = {
         // When dragging on the canvas, we disable all pointer events on other UI components
         // (like the title bar, config pane, etc), which prevents an annoying effect when the
         // user drags a thing over top of one of these things.
-        disablePointerEvents: false
+        disablePointerEvents: false,
+        panSpeed: 1,
+        zoomSpeed: 1,
     },
     clientId: uuidv4(),
 }
@@ -33,13 +35,17 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
         state.projectData         = {};
         state.remoteProjectLookup = [];
         state.currentProjectBoard = undefined;
-        state.uiFlags             = { disablePointerEvents: false }
+        state.uiFlags             = {
+            disablePointerEvents: false,
+            panSpeed: 1,
+            zoomSpeed: 1,
+        };
     },
     clearBoardState (state) {
         state.projectData         = {};
         state.remoteProjectLookup = [];
         state.currentProjectBoard = undefined;
-        state.uiFlags             = { disablePointerEvents: false }
+        state.uiFlags.disablePointerEvents = false;
     },
 
     setCurrentProjectBoard (state, currentProjectBoard) { state.currentProjectBoard = currentProjectBoard;   },
@@ -81,6 +87,8 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
     // UI Flags
     disablePointerEvents (state) { state.uiFlags.disablePointerEvents = true;  },
     enablePointerEvents  (state) { state.uiFlags.disablePointerEvents = false; },
+    setPanSpeed  (state, data) { state.uiFlags.panSpeed = data;  },
+    setZoomSpeed (state, data) { state.uiFlags.zoomSpeed = data; },
 }
 
 
@@ -109,6 +117,8 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
     setDisablePointerEvents ({ commit }, disablePointerEvents) {
         commit(disablePointerEvents ? 'disablePointerEvents' : 'enablePointerEvents');
     },
+    setPanSpeed  ({ commit }, panSpeed)  { commit('setPanSpeed', panSpeed); },
+    setZoomSpeed ({ commit }, zoomSpeed) { commit('setZoomSpeed', zoomSpeed); },
 }
 
 

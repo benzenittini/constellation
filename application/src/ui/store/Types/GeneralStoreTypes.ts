@@ -15,7 +15,11 @@ export interface GeneralDataState {
     projectData: TypedMap<BasicProjectData>;
     remoteProjectLookup: { remoteProject: RemoteProject, projectId?: string }[];
     currentProjectBoard: CurrentProjectBoard | undefined;
-    uiFlags: { disablePointerEvents: boolean };
+    uiFlags: {
+        disablePointerEvents: boolean,
+        panSpeed: number,
+        zoomSpeed: number,
+    };
     clientId: string;
 }
 
@@ -39,6 +43,8 @@ export type GeneralDataMutations<S = GeneralDataState> = {
     // UI Flags
     disablePointerEvents (state: S): void;
     enablePointerEvents  (state: S): void;
+    setPanSpeed  (state: S, data: number): void;
+    setZoomSpeed (state: S, data: number): void;
 }
 
 // -- Actions --
@@ -62,6 +68,8 @@ export interface GeneralDataActions {
 
     // UI Flags
     setDisablePointerEvents ({ commit }: AugmentedActionContext<GeneralDataState>, disablePointerEvents: boolean): void;
+    setPanSpeed  ({ commit }: AugmentedActionContext<GeneralDataState>, panSpeed: number): void;
+    setZoomSpeed ({ commit }: AugmentedActionContext<GeneralDataState>, zoomSpeed: number): void;
 }
 
 // -- Getters --

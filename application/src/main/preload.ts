@@ -15,6 +15,8 @@ contextBridge.exposeInMainWorld('config', {
     removeRemoteProject: (req: T.RemoveRemoteProjectRequest) => ipcRenderer.invoke('config:removeRemoteProject', req),
     importBoard:         () => ipcRenderer.invoke('config:importBoard'),
     readFileAsBoard:     () => ipcRenderer.invoke('config:readFileAsBoard'),
+    getUserSettings:     () => ipcRenderer.invoke('config:getUserSettings'),
+    setUserSettings:     (req: T.SetUserSettingsRequest) => ipcRenderer.invoke('config:setUserSettings', req),
 });
 
 contextBridge.exposeInMainWorld('board', {

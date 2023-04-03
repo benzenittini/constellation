@@ -89,8 +89,8 @@ yarn make
 
 ```bash
 # Building the server
-# TODO
+yarn build-prod
 
 # Create the zip file for upload
-zip -r -j ./constellation-server.zip ./dist/*
+zip -r -j ./constellation-server-<VERSION>.zip ./dist/*
 ```

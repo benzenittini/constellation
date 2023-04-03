@@ -1,9 +1,11 @@
 
 import { computed, reactive } from 'vue';
 import TWEEN, { Group, Tween } from '@tweenjs/tween.js';
+import { useStore } from '../store/store';
 
-const X_MULTIPLIER = 1;
-const Y_MULTIPLIER = 1;
+const store = useStore();
+
+const PAN_SPEED = computed(() => store.state.generalData.uiFlags.panSpeed);
 
 function hasAnyModifierKeys(mouseEvent: MouseEvent): boolean {
     return mouseEvent.altKey || mouseEvent.ctrlKey || mouseEvent.shiftKey || mouseEvent.metaKey;
@@ -53,7 +55,7 @@ export function usePannable() {
                     deltaY *= 10;
                 }
 
-                panBy((deltaX * X_MULTIPLIER), (deltaY * Y_MULTIPLIER));
+                panBy((deltaX * PAN_SPEED.value), (deltaY * PAN_SPEED.value));
             }
         },
     };

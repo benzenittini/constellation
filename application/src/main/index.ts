@@ -17,12 +17,12 @@ const createWindow = () => {
     });
     win.setMenu(null);
 
-    registerConfigHandlers(ipcMain);
-    registerBoardHandlers(ipcMain);
-
     if (process.env.NODE_ENV !== 'production') {
         win.webContents.openDevTools();
+    } else {
+        win.maximize();
     }
+
     win.loadFile('index.html');
 
     // Open anchor tags in the user's default browser. (Used by MarkdownEditor links.)
@@ -35,6 +35,9 @@ const createWindow = () => {
 app.whenReady().then(() => {
     loadConfigFile();
     createWindow();
+
+    registerConfigHandlers(ipcMain);
+    registerBoardHandlers(ipcMain);
 
     // Opens a new browser window if app is already running (ex: on Mac)
     app.on('activate', () => {

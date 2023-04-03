@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { app } from 'electron';
 
-import { ConfigFile } from '../../common/DataTypes/FileDataTypes';
+import { ConfigFile, UserSettings } from '../../common/DataTypes/FileDataTypes';
 import { AddRemoteProjectRequest, RemoveRemoteProjectRequest } from '../DataTypes/ActionDataTypes';
 import { TemplateClassification } from '../DataTypes/BoardDataTypes';
 
@@ -19,6 +19,10 @@ export const config: ConfigFile = {
     remoteProjects: [],
     boardTemplates: {},
     backups: {},
+    userSettings: {
+        panSpeed: 1,
+        zoomSpeed: 1,
+    },
     // NOTE: When adding things to this list, remember to update "loadConfigFile()" below.
 };
 
@@ -35,6 +39,8 @@ export function loadConfigFile() {
     config.remoteProjects = appConfig.remoteProjects;
     config.boardTemplates = appConfig.boardTemplates;
     config.backups = appConfig.backups;
+    if (appConfig.userSettings?.panSpeed)  config.userSettings.panSpeed  = appConfig.userSettings?.panSpeed;
+    if (appConfig.userSettings?.zoomSpeed) config.userSettings.zoomSpeed = appConfig.userSettings?.zoomSpeed;
 }
 
 
@@ -79,5 +85,15 @@ export function addOrUpdateTemplate(boardId: string, template: TemplateClassific
 
 export function deleteTemplate(boardId: string) {
     delete config.boardTemplates[boardId];
+    saveConfig();
+}
+
+export function getUserSettings() {
+    return config.userSettings;
+}
+
+export function setUserSettings(settings: Partial<UserSettings>) {
+    if (settings.panSpeed)  config.userSettings.panSpeed  = settings.panSpeed;
+    if (settings.zoomSpeed) config.userSettings.zoomSpeed = settings.zoomSpeed;
     saveConfig();
 }

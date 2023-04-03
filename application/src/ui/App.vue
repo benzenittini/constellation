@@ -14,10 +14,15 @@
 import { defineComponent, computed, onMounted } from 'vue';
 
 import { useStore } from './store/store';
+import { GetUserSettingsAction } from './actions/project-actions/GetUserSettings';
 
 export default defineComponent({
     setup() {
         const store = useStore();
+
+        onMounted(() => {
+            new GetUserSettingsAction().submit();
+        });
 
         return {
             pointerEventsDisabled: computed(() => store.getters.pointerEventsDisabled),

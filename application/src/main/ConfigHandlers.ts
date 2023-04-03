@@ -22,6 +22,8 @@ export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('config:removeRemoteProject', (event, req) => removeRemoteProject(req));
     ipcMain.handle('config:importBoard',         () => importBoard());
     ipcMain.handle('config:readFileAsBoard',     () => readFileAsBoard());
+    ipcMain.handle('config:getUserSettings',     () => getUserSettings());
+    ipcMain.handle('config:setUserSettings',     (event, req) => setUserSettings(req));
 }
 
 async function getProjectData(): Promise<T.GetProjectDataResponse> {
@@ -231,4 +233,13 @@ async function readFileAsBoard(): Promise<T.ReadFileAsBoardResponse> {
         errorCode: 3,
         message: undefined
     };
+}
+
+async function getUserSettings(): Promise<T.GetUserSettingsResponse> {
+    return ConfigDataPersistence.getUserSettings();
+}
+
+async function setUserSettings(req: T.SetUserSettingsRequest): Promise<T.SetUserSettingsResponse> {
+    ConfigDataPersistence.setUserSettings(req);
+    return {};
 }

@@ -22,9 +22,15 @@ export type ConfigFile = {
         file: string,
         dateSaved: Date,
     }[]>;
+    userSettings: UserSettings;
+};
+
+export type UserSettings = {
+    panSpeed: number;
+    zoomSpeed: number;
 };
 
 export type RemoteProject = {
     serverUrl: string; // Includes port.
     credentials: string;
-}
+};
