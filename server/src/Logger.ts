@@ -10,8 +10,21 @@ export const logger = winston.createLogger({
 
 export function initializeLogger(level: string, directory: string) {
     if (level !== 'none') {
+        logger.silent = false;
+
+        // Always do a console logger
+        logger.add(new winston.transports.Console({
+            level: level,
+            silent: false,
+            format: winston.format.combine(
+                winston.format.timestamp(),
+                winston.format.colorize(),
+                winston.format.simple(),
+            )
+        }));
+
+        // ...but only do a file logger in prod
         if (process.env.NODE_ENV === 'production') {
-            logger.silent = false;
             logger.add(new winston.transports.DailyRotateFile({
                 level: level,
                 filename: path.join(directory, '%DATE%.log'),
@@ -21,17 +34,6 @@ export function initializeLogger(level: string, directory: string) {
                 format: winston.format.combine(
                     winston.format.timestamp(),
                     winston.format.json(),
-                )
-            }));
-        } else if (process.env.NODE_ENV !== 'production') {
-            logger.silent = false;
-            logger.add(new winston.transports.Console({
-                level: level,
-                silent: false,
-                format: winston.format.combine(
-                    winston.format.timestamp(),
-                    winston.format.colorize(),
-                    winston.format.simple(),
                 )
             }));
         }

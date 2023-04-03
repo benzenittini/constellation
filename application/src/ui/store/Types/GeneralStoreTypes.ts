@@ -21,6 +21,7 @@ export interface GeneralDataState {
         zoomSpeed: number,
     };
     clientId: string;
+    appVersion: string;
 }
 
 // -- Mutations --

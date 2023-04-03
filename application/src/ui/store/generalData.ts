@@ -23,6 +23,7 @@ const generalDataState: GeneralDataState = {
         zoomSpeed: 1,
     },
     clientId: uuidv4(),
+    appVersion: WEBPACK.APP_VERSION,
 }
 
 

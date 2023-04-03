@@ -23,6 +23,8 @@ import { initializePersistence } from './Persistence';
         initializeLogger(properties.log_level, properties.log_dir);
         await initializePersistence(properties.project_data);
 
+        logger.info("Starting server v" + WEBPACK.APP_VERSION);
+
 
         // ============
         // Server Setup

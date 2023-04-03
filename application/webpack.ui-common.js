@@ -27,6 +27,7 @@ module.exports = {
 
     module: {
         rules: [
+            // TODO-cleanup : file-loader is deprecated for v5. Migrate to "asset modules": https://v4.webpack.js.org/loaders/file-loader/
             {
                 test: /\.(png|jpe?g|gif)$/i,
                 loader: 'file-loader',

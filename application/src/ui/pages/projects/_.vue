@@ -73,6 +73,9 @@
                 <span>({{ zoomSpeed }}x)</span>
             </div>
         </div>
+
+        <!-- Version String -->
+        <div class="mw-version-string">v{{ appVersion }}</div>
     </div>
 </template>
 
@@ -162,6 +165,8 @@ export default defineComponent({
             editNameRefs,
 
             panSpeed, zoomSpeed,
+
+            appVersion: store.state.generalData.appVersion,
 
             localBoards: computed(() => Object.values(store.state.generalData.projectData[LOCAL_PROJECT]?.boards || [])),
             remoteProjects: computed(() => store.state.generalData.remoteProjectLookup),
@@ -554,6 +559,13 @@ export default defineComponent({
             grid-template-columns: 100px 200px 1fr;
             gap: 10px;
         }
+    }
+
+    .mw-version-string {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        color: vars.$gray-medium;
     }
 }
 
