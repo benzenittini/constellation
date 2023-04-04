@@ -8,8 +8,7 @@ const DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = {
     target: 'node',
-    // TODO-const : Figure out what to do here...
-    // externals: [nodeExternals([])],
+    externals: [nodeExternals([])],
 
     entry: {
         'constellation-server': './src/index.ts',
@@ -36,6 +35,8 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 "./src/server.properties",
+                "./package.json",
+                "./package-lock.json",
             ],
         }),
     ],

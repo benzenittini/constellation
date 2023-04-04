@@ -5,7 +5,6 @@
 
 * Install git
 * Install NodeJS / NPM
-* Install Yarn (using `npm install --global yarn` to get version 1)
 
 # Cloning and setting it up
 
@@ -15,18 +14,18 @@
 # -------------
 git clone ____
 cd ./mw-vue-modals
-yarn install
-yarn build-prod
-yarn link
+npm install
+npm run build-prod
+npm link
 
 # =============
 # mw-vue-notify
 # -------------
 git clone ____
 cd ./mw-vue-notify
-yarn install
-yarn build-prod
-yarn link
+npm install
+npm run build-prod
+npm link
 
 # =============
 # constellation
@@ -34,15 +33,14 @@ yarn link
 git clone ____
 # common project
 cd ./constellation/common
-yarn install
+npm install
 # application project
 cd ../application
-yarn install
-yarn link mw-vue-modals
-yarn link mw-vue-notify
+npm install
+npm link mw-vue-modals mw-vue-notify
 # server project
 cd ../server
-yarn install
+npm install
 ```
 
 # Development Builds
@@ -52,9 +50,9 @@ yarn install
 ```bash
 cd ./application
 
-yarn watch-main
-yarn watch-ui
-yarn start
+npm run watch-main
+npm run watch-ui
+npm run start
 ```
 
 ## Server
@@ -62,8 +60,8 @@ yarn start
 ```bash
 cd ./server
 
-yarn watch
-yarn serve
+npm run watch
+npm run serve
 ```
 
 # Production Builds
@@ -74,22 +72,22 @@ yarn serve
 cd ./application
 
 # Building the code
-yarn build-main-prod
-yarn build-ui-prod
+npm run build-main-prod
+npm run build-ui-prod
 
 # Creating the Electron installers, run on the desired OS.
-yarn make
+npm run make
 # FOR WINDOWS:
 # First install .NET 3.5.1 if not already.
 # Then, install Wix 3.1.1: https://wixtoolset.org/docs/wix3/
-# Then run "yarn make" command.
+# Then run "npm run make" command.
 ```
 
 ## Server
 
 ```bash
 # Building the server
-yarn build-prod
+npm run build-prod
 
 # Create the zip file for upload
 zip -r -j ./constellation-server-<VERSION>.zip ./dist/*
