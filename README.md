@@ -75,12 +75,13 @@ cd ./application
 npm run build-main-prod
 npm run build-ui-prod
 
-# Creating the Electron installers, run on the desired OS.
-npm run make
 # FOR WINDOWS:
 # First install .NET 3.5.1 if not already.
 # Then, install Wix 3.1.1: https://wixtoolset.org/docs/wix3/
 # Then run "npm run make" command.
+
+# Creating the Electron installers, run on the desired OS.
+npm run make
 ```
 
 ## Server
