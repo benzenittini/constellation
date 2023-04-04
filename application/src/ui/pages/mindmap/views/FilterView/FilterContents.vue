@@ -62,6 +62,8 @@ export default defineComponent({
 
         let filterConfig = computed(() => store.state.viewData.activeViewConfig as FilterViewConfig);
 
+        const toggleSelectionKey = computed(() => store.state.generalData.uiFlags.switchCtrlShiftForSelection ? 'shiftKey' : 'ctrlKey');
+
         let blocks = computed(() => store.getters.displayedBlocks);
         let view = useView(blocks, context);
 
@@ -69,9 +71,12 @@ export default defineComponent({
             blocks,
             ...view,
             mouseClick: (event: MouseEvent) => {
-                // If the user is holding down shift, we don't want to clear their selection because
+                // If the user is holding down shift/ctrl, we don't want to clear their selection because
                 // they're probably trying to add new blocks to the list and just mis-clicked.
-                if (!event.shiftKey) {
+                const shouldKeepSelection = toggleSelectionKey.value === 'ctrlKey'
+                    ? event.ctrlKey || event.metaKey // "metaKey" is "cmd" for Mac
+                    : event.shiftKey;
+                if (!shouldKeepSelection) {
                     view.selectNone();
                 }
             },

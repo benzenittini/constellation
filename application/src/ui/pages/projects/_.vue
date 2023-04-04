@@ -64,13 +64,18 @@
         <!-- User Settings -->
         <div class="mw-board-list">
             <h2>User Settings</h2>
-            <div class="mw-settings-grid">
+            <div class="mw-pan-zoom-settings">
                 <label for="pan-speed">Pan Speed</label>
                 <input id="pan-speed" type="range" min="0.1" max="3" step="0.1" v-model="panSpeed">
                 <span>({{ panSpeed }}x)</span>
                 <label for="zoom-speed">Zoom Speed</label>
                 <input id="zoom-speed" type="range" min="0.1" max="3" step="0.1" v-model="zoomSpeed">
                 <span>({{ zoomSpeed }}x)</span>
+            </div>
+
+            <div class="mw-shift-ctrl-settings">
+                <eic-checkbox v-model="ctrlShiftForSelection" eic-label="Switch CTRL and SHIFT for block selection"></eic-checkbox>
+                <eic-checkbox v-model="shiftToZoom" eic-label="Use SHIFT to zoom instead of CTRL"></eic-checkbox>
             </div>
         </div>
 
@@ -87,6 +92,8 @@ import { useStore } from '../../store/store';
 import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification } from '../../../../../common/DataTypes/BoardDataTypes';
 import { RemoteProject } from '../../../../../common/DataTypes/FileDataTypes';
 import { E1, E10, E11, E35, E4, E5, E6, E7, E8, E9, showError } from '../../../common/ErrorLogger';
+import { GENERIC_RESTART } from '../../../../../common/DataTypes/ActionDataTypes';
+import { UserSettings } from '../../../../../common/DataTypes/FileDataTypes';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';
@@ -97,7 +104,7 @@ import { LeaveProjectAction } from '../../actions/project-actions/LeaveProject';
 import { JoinProjectAction } from '../../actions/project-actions/JoinProject';
 import { DeleteBoardAction } from '../../actions/project-actions/DeleteBoard';
 import { UpdateBoardConfigAction } from '../../actions/project-actions/UpdateBoardConfig';
-import { GENERIC_RESTART } from '../../../../../common/DataTypes/ActionDataTypes';
+import { GeneralDataActions } from '../../store/Types/GeneralStoreTypes';
 
 export default defineComponent({
     setup() {
@@ -129,33 +136,26 @@ export default defineComponent({
         // User Settings
         // -------------
 
-        let panPersistenceTimeout: null | number = null;
-        let panSpeed = computed({
-            get() { return store.state.generalData.uiFlags.panSpeed; },
-            set(newVal) {
-                store.dispatch('setPanSpeed', newVal);
-                if (panPersistenceTimeout) {
-                    window.clearTimeout(panPersistenceTimeout);
+        function createMutableComputed(propName: keyof UserSettings, actionName: keyof GeneralDataActions) {
+            let timeout: null | number = null;
+            return computed({
+                get() { return store.state.generalData.uiFlags[propName]; },
+                set(newVal) {
+                    store.dispatch(actionName, newVal);
+                    if (timeout) {
+                        window.clearTimeout(timeout);
+                    }
+                    timeout = window.setTimeout(() => {
+                        new SetUserSettingsAction({ [propName]: newVal }).submit();
+                    }, 5000);
                 }
-                panPersistenceTimeout = window.setTimeout(() => {
-                    new SetUserSettingsAction({ panSpeed: newVal }).submit();
-                }, 5000);
-            }
-        });
+            });
+        }
 
-        let zoomPersistenceTimeout: null | number = null;
-        let zoomSpeed = computed({
-            get() { return store.state.generalData.uiFlags.zoomSpeed; },
-            set(newVal) {
-                store.dispatch('setZoomSpeed', newVal);
-                if (zoomPersistenceTimeout) {
-                    window.clearTimeout(zoomPersistenceTimeout);
-                }
-                zoomPersistenceTimeout = window.setTimeout(() => {
-                    new SetUserSettingsAction({ zoomSpeed: newVal }).submit();
-                }, 5000);
-            }
-        });
+        let panSpeed              = createMutableComputed('panSpeed',                    'setPanSpeed');
+        let zoomSpeed             = createMutableComputed('zoomSpeed',                   'setZoomSpeed');
+        let shiftToZoom           = createMutableComputed('useShiftToZoom',              'useShiftToZoom');
+        let ctrlShiftForSelection = createMutableComputed('switchCtrlShiftForSelection', 'switchCtrlShiftForSelection');
 
 
         return {
@@ -165,6 +165,7 @@ export default defineComponent({
             editNameRefs,
 
             panSpeed, zoomSpeed,
+            ctrlShiftForSelection, shiftToZoom,
 
             appVersion: store.state.generalData.appVersion,
 
@@ -553,11 +554,15 @@ export default defineComponent({
             }
         }
     
-        .mw-settings-grid {
+        .mw-pan-zoom-settings {
             margin: 24px;
             display: grid;
             grid-template-columns: 100px 200px 1fr;
             gap: 10px;
+        }
+
+        .mw-shift-ctrl-settings {
+            margin: 24px;
         }
     }
 

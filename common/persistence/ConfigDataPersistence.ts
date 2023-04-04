@@ -22,6 +22,8 @@ export const config: ConfigFile = {
     userSettings: {
         panSpeed: 1,
         zoomSpeed: 1,
+        switchCtrlShiftForSelection: false,
+        useShiftToZoom: false,
     },
     // NOTE: When adding things to this list, remember to update "loadConfigFile()" below.
 };
@@ -41,6 +43,8 @@ export function loadConfigFile() {
     config.backups = appConfig.backups;
     if (appConfig.userSettings?.panSpeed)  config.userSettings.panSpeed  = appConfig.userSettings?.panSpeed;
     if (appConfig.userSettings?.zoomSpeed) config.userSettings.zoomSpeed = appConfig.userSettings?.zoomSpeed;
+    if (appConfig.userSettings?.switchCtrlShiftForSelection) config.userSettings.switchCtrlShiftForSelection = appConfig.userSettings?.switchCtrlShiftForSelection;
+    if (appConfig.userSettings?.useShiftToZoom)              config.userSettings.useShiftToZoom              = appConfig.userSettings?.useShiftToZoom;
 }
 
 
@@ -95,5 +99,7 @@ export function getUserSettings() {
 export function setUserSettings(settings: Partial<UserSettings>) {
     if (settings.panSpeed)  config.userSettings.panSpeed  = settings.panSpeed;
     if (settings.zoomSpeed) config.userSettings.zoomSpeed = settings.zoomSpeed;
+    if (settings.switchCtrlShiftForSelection)  config.userSettings.switchCtrlShiftForSelection = settings.switchCtrlShiftForSelection;
+    if (settings.useShiftToZoom)               config.userSettings.useShiftToZoom              = settings.useShiftToZoom;
     saveConfig();
 }

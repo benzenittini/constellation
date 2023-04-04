@@ -152,6 +152,10 @@ export default defineComponent({
 
         let emitter = useEmitter();
 
+        const switchCtrlShiftForSelection = computed(() => store.state.generalData.uiFlags.switchCtrlShiftForSelection);
+        const treeSelectKey = computed(() => switchCtrlShiftForSelection.value ? 'ctrlKey' : 'shiftKey');
+        const addSelectKey = computed(() => switchCtrlShiftForSelection.value ? 'shiftKey' : 'ctrlKey');
+
         let inEditMode = computed(() => store.state.blockData.blockIdBeingEdited === props.eicBlock!.id)
         let isBlockHovered = ref(props.initialHoverState);
 
@@ -307,17 +311,23 @@ export default defineComponent({
             // selected blocks.
             selectIfNotSelected: (mouseEvent: MouseEvent) => {
                 if (mouseEvent.button === 0 && !props.eicBlock!.isSelected) {
-                    // Ctrl modifier selects all children too.
-                    if (mouseEvent.ctrlKey || mouseEvent.metaKey) { // "metaKey" is "cmd" for Mac
+                    const shouldSelectTree = treeSelectKey.value === 'ctrlKey'
+                        ? mouseEvent.ctrlKey || mouseEvent.metaKey // "metaKey" is "cmd" for Mac
+                        : mouseEvent.shiftKey;
+                    const shouldKeepSelection = addSelectKey.value === 'ctrlKey'
+                        ? mouseEvent.ctrlKey || mouseEvent.metaKey // "metaKey" is "cmd" for Mac
+                        : mouseEvent.shiftKey;
+
+                    if (shouldSelectTree) {
                         let blockIds = store.getters.getTransitiveDescendants(props.eicBlock!.id);
                         store.dispatch("selectBlocks", {
                             blockIds,
-                            clearCurrentSelection: !mouseEvent.shiftKey,
+                            clearCurrentSelection: !shouldKeepSelection,
                         });
                     } else {
                         store.dispatch("selectBlock", {
                             blockId: props.eicBlock!.id,
-                            clearCurrentSelection: !mouseEvent.shiftKey
+                            clearCurrentSelection: !shouldKeepSelection
                         });
                     }
                 }

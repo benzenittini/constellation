@@ -21,6 +21,8 @@ const generalDataState: GeneralDataState = {
         disablePointerEvents: false,
         panSpeed: 1,
         zoomSpeed: 1,
+        switchCtrlShiftForSelection: false,
+        useShiftToZoom: false,
     },
     clientId: uuidv4(),
     appVersion: WEBPACK.APP_VERSION,
@@ -40,6 +42,8 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
             disablePointerEvents: false,
             panSpeed: 1,
             zoomSpeed: 1,
+            switchCtrlShiftForSelection: false,
+            useShiftToZoom: false,
         };
     },
     clearBoardState (state) {
@@ -90,6 +94,8 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
     enablePointerEvents  (state) { state.uiFlags.disablePointerEvents = false; },
     setPanSpeed  (state, data) { state.uiFlags.panSpeed = data;  },
     setZoomSpeed (state, data) { state.uiFlags.zoomSpeed = data; },
+    switchCtrlShiftForSelection (state, data) { state.uiFlags.switchCtrlShiftForSelection = data;  },
+    useShiftToZoom              (state, data) { state.uiFlags.useShiftToZoom = data; },
 }
 
 
@@ -120,6 +126,8 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
     },
     setPanSpeed  ({ commit }, panSpeed)  { commit('setPanSpeed', panSpeed); },
     setZoomSpeed ({ commit }, zoomSpeed) { commit('setZoomSpeed', zoomSpeed); },
+    switchCtrlShiftForSelection ({ commit }, value) { commit('switchCtrlShiftForSelection', value); },
+    useShiftToZoom              ({ commit }, value) { commit('useShiftToZoom', value); },
 }
 
 

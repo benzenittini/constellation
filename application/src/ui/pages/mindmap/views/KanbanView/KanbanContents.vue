@@ -89,6 +89,8 @@ export default defineComponent({
 
         let kanbanConfig = computed(() => store.state.viewData.activeViewConfig as KanbanViewConfig);
 
+        const toggleSelectionKey = computed(() => store.state.generalData.uiFlags.switchCtrlShiftForSelection ? 'shiftKey' : 'ctrlKey');
+
         let columns = computed(() => {
             if (kanbanConfig.value?.groupingFieldId) {
                 return store.getters.getPossibleValueOptsForField(kanbanConfig.value.groupingFieldId);
@@ -278,9 +280,12 @@ export default defineComponent({
                 }
             },
             mouseClick: (event: MouseEvent) => {
-                // If the user is holding down shift, we don't want to clear their selection because
+                // If the user is holding down shift/ctrl, we don't want to clear their selection because
                 // they're probably trying to add new blocks to the list and just mis-clicked.
-                if (!event.shiftKey) {
+                const shouldKeepSelection = toggleSelectionKey.value === 'ctrlKey'
+                    ? event.ctrlKey || event.metaKey // "metaKey" is "cmd" for Mac
+                    : event.shiftKey;
+                if (!shouldKeepSelection) {
                     view.selectNone();
                 }
             },

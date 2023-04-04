@@ -13,10 +13,10 @@
                         </figure>
                         <figure>
                             <div class="fig-icon">
-                                <span><eic-keyboard-key mwKeyText="Shift"></eic-keyboard-key></span>
+                                <span><eic-keyboard-key v-bind:mwKeyText="toggleSelectionKey"></eic-keyboard-key></span>
                                 <img src="../../graphics/mouse-left-click.png">
                             </div>
-                            <figcaption>Hold shift and left-click to toggle a selection</figcaption>
+                            <figcaption>Hold {{ toggleSelectionKey.toLowerCase() }} and left-click to toggle a selection</figcaption>
                         </figure>
                     </div>
                 </div>
@@ -52,12 +52,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
+import { useStore } from "../../store/store";
 
 export default defineComponent({
     props: {},
     setup() {
-        return {};
+        const store = useStore();
+
+        return {
+            toggleSelectionKey: computed(() => store.state.generalData.uiFlags.switchCtrlShiftForSelection ? 'Shift' : 'Ctrl'),
+        };
     }
 })
 </script>

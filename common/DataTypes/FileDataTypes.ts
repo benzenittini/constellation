@@ -28,6 +28,8 @@ export type ConfigFile = {
 export type UserSettings = {
     panSpeed: number;
     zoomSpeed: number;
+    switchCtrlShiftForSelection: boolean;
+    useShiftToZoom: boolean;
 };
 
 export type RemoteProject = {

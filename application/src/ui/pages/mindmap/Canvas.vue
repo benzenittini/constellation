@@ -138,6 +138,8 @@ export default defineComponent({
         let blockDraggable = useDraggable();    // Moving selected blocks
         let blockResizable = useResizable();    // Resizing selected blocks
 
+        const addSelectKey = computed(() => store.state.generalData.uiFlags.switchCtrlShiftForSelection ? 'shiftKey' : 'ctrlKey');
+
         let eventEmitter = useEmitter(); // Emits/receives events from other components
 
         let windowEvents = useWindowEvents(); // Handles window-level keypresses, etc.
@@ -512,6 +514,9 @@ export default defineComponent({
 
                 // -- Select blocks by bounding box --
                 if (selectionDraggable.isDragging.value) {
+                    const shouldKeepSelection = addSelectKey.value === 'ctrlKey'
+                        ? mouseEvent.ctrlKey || mouseEvent.metaKey // "metaKey" is "cmd" for Mac
+                        : mouseEvent.shiftKey;
                     store.dispatch('selectBlocksByBoundingBox', {
                         boundingBox: {
                             x: (selectionDraggable.boundingBox.value.x - pannable.deltaDrag.value.x) / zoomable.scale.value,
@@ -519,7 +524,7 @@ export default defineComponent({
                             width: selectionDraggable.boundingBox.value.width / zoomable.scale.value,
                             height: selectionDraggable.boundingBox.value.height / zoomable.scale.value
                         },
-                        clearCurrentSelection: !mouseEvent.shiftKey
+                        clearCurrentSelection: !shouldKeepSelection,
                     });
 
                     selectionDraggable.mouseUp();

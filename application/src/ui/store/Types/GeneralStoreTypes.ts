@@ -19,6 +19,8 @@ export interface GeneralDataState {
         disablePointerEvents: boolean,
         panSpeed: number,
         zoomSpeed: number,
+        switchCtrlShiftForSelection: boolean,
+        useShiftToZoom: boolean,
     };
     clientId: string;
     appVersion: string;
@@ -46,6 +48,8 @@ export type GeneralDataMutations<S = GeneralDataState> = {
     enablePointerEvents  (state: S): void;
     setPanSpeed  (state: S, data: number): void;
     setZoomSpeed (state: S, data: number): void;
+    switchCtrlShiftForSelection (state: S, value: boolean): void;
+    useShiftToZoom              (state: S, value: boolean): void;
 }
 
 // -- Actions --
@@ -62,7 +66,6 @@ export interface GeneralDataActions {
     addBoardToProject      ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardData: BasicBoardData }): void;
     removeBoardFromProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string }): void;
     updateBoardConfig      ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string, boardConfig: BoardConfig }): void;
-    // markBoardAsMissing     ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string }): void;
 
     registerRemoteProject   ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject, projectId?: string }): void;
     deregisterRemoteProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject }): void;
@@ -71,6 +74,8 @@ export interface GeneralDataActions {
     setDisablePointerEvents ({ commit }: AugmentedActionContext<GeneralDataState>, disablePointerEvents: boolean): void;
     setPanSpeed  ({ commit }: AugmentedActionContext<GeneralDataState>, panSpeed: number): void;
     setZoomSpeed ({ commit }: AugmentedActionContext<GeneralDataState>, zoomSpeed: number): void;
+    switchCtrlShiftForSelection  ({ commit }: AugmentedActionContext<GeneralDataState>, value: boolean): void;
+    useShiftToZoom               ({ commit }: AugmentedActionContext<GeneralDataState>, value: boolean): void;
 }
 
 // -- Getters --

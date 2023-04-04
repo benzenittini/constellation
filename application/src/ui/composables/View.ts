@@ -13,6 +13,8 @@ export function useView(visibleBlocks: ComputedRef<Block[]>, context: SetupConte
 
     const eventEmitter = useEmitter();
 
+    const toggleSelectionKey = computed(() => store.state.generalData.uiFlags.switchCtrlShiftForSelection ? 'shiftKey' : 'ctrlKey');
+
     let selectedBlocks: Ref<Block[]> = ref([]);
     let selectedBlockIds = computed(() => selectedBlocks.value.map(block => block.id));
 
@@ -48,8 +50,8 @@ export function useView(visibleBlocks: ComputedRef<Block[]>, context: SetupConte
         selectedBlockIds,
         selectedButFilteredBlocks,
         toggleSelection: (event: MouseEvent, block: Block) => {
-            if (event.shiftKey) {
-                // If shift is being held, toggle the block's selection
+            if (event[toggleSelectionKey.value]) {
+                // If shift/ctrl is being held, toggle the block's selection
                 let index = selectedBlocks.value.findIndex((b) => b.id === block.id);
                 if (index >= 0) {
                     selectedBlocks.value.splice(index, 1);

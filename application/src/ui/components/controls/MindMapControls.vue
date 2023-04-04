@@ -6,10 +6,10 @@
                     <h2>Zooming</h2>
                     <figure>
                         <div class="fig-icon">
-                            <span><eic-keyboard-key mwKeyText="Shift"></eic-keyboard-key></span>
+                            <span><eic-keyboard-key v-bind:mwKeyText="zoomKey"></eic-keyboard-key></span>
                             <img src="../../graphics/mouse-scroll.png">
                         </div>
-                        <figcaption class="long-caption">Hold shift and scroll to zoom</figcaption>
+                        <figcaption class="long-caption">Hold {{ zoomKey.toLowerCase() }} and scroll to zoom</figcaption>
                     </figure>
                 </div>
                 <div>
@@ -42,17 +42,17 @@
                 </figure>
                 <figure>
                     <div class="fig-icon">
-                        <span><eic-keyboard-key mwKeyText="Shift"></eic-keyboard-key></span>
+                        <span><eic-keyboard-key v-bind:mwKeyText="addSelectKey"></eic-keyboard-key></span>
                         <img src="../../graphics/mouse-left-click.png">
                     </div>
-                    <figcaption>Hold shift and left-click to add to selection</figcaption>
+                    <figcaption>Hold {{ addSelectKey.toLowerCase() }} and left-click to add to selection</figcaption>
                 </figure>
                 <figure>
                     <div class="fig-icon">
-                        <span><eic-keyboard-key mwKeyText="Ctrl"></eic-keyboard-key></span>
+                        <span><eic-keyboard-key v-bind:mwKeyText="treeSelectKey"></eic-keyboard-key></span>
                         <img src="../../graphics/mouse-left-click.png">
                     </div>
-                    <figcaption>Hold ctrl and left-click to select an entire tree</figcaption>
+                    <figcaption>Hold {{ treeSelectKey.toLowerCase() }} and left-click to select an entire tree</figcaption>
                 </figure>
             </div>
         </div>
@@ -95,12 +95,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
+
+import { useStore } from "../../store/store";
 
 export default defineComponent({
     props: {},
     setup() {
-        return {};
+        const store = useStore();
+
+        const switchCtrlShiftForSelection = computed(() => store.state.generalData.uiFlags.switchCtrlShiftForSelection);
+        const useShiftToZoom = computed(() => store.state.generalData.uiFlags.useShiftToZoom);
+
+        return {
+            zoomKey: computed(() => useShiftToZoom.value ? 'Shift' : 'Ctrl'),
+            treeSelectKey: computed(() => switchCtrlShiftForSelection.value ? 'Ctrl' : 'Shift'),
+            addSelectKey: computed(() => switchCtrlShiftForSelection.value ? 'Shift' : 'Ctrl'),
+        };
     }
 })
 </script>

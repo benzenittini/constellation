@@ -24,6 +24,8 @@ export class GetUserSettingsAction extends Action {
 
             store.dispatch('setPanSpeed', resp.panSpeed);
             store.dispatch('setZoomSpeed', resp.zoomSpeed);
+            store.dispatch('switchCtrlShiftForSelection', resp.switchCtrlShiftForSelection);
+            store.dispatch('useShiftToZoom', resp.useShiftToZoom);
 
             if (this.successCallback)
                 this.successCallback(resp);
