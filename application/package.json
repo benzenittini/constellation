@@ -32,7 +32,6 @@
     "@types/uuid": "^9.0.0",
     "@types/webpack-env": "^1.18.0",
     "@vue/compiler-sfc": "^3.2.47",
-    "appdmg": "^0.6.6",
     "css-loader": "^6.7.3",
     "electron": "^23.0.0",
     "electron-wix-msi": "^5.0.0",
@@ -64,5 +63,8 @@
     "uuid": "^9.0.0",
     "vue": "3.2.33",
     "vuex": "^4.1.0"
+  },
+  "optionalDependencies": {
+    "appdmg": "^0.6.6"
   }
 }
