@@ -91,5 +91,5 @@ npm run make
 npm run build-prod
 
 # Create the zip file for upload
-zip -r -j ./constellation-server-<VERSION>.zip ./dist/*
+npm run package-server
 ```

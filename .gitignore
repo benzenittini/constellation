@@ -12,6 +12,7 @@ coverage
 workdir
 build
 testboards
+packaging
 
 # Third-party Generated
 node_modules
