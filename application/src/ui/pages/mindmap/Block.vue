@@ -352,10 +352,8 @@ export default defineComponent({
                 if (JSON.stringify(props.eicBlock!.content) !== JSON.stringify(editEvent)) {
                     new SetBlockContentAction(props.eicBlock!.id, editEvent).submit();
                 }
-
                 store.dispatch('stopEditingBlock');
-
-                emitter.emit('blockEditComplete', cancelled);
+                emitter.emit('blockEditComplete', {newContents: editEvent, cancelled});
             },
             mouseEnter: (mouseEvent: MouseEvent) => {
                 isBlockHovered.value = true;

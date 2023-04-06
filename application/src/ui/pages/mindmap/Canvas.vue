@@ -114,7 +114,7 @@ import { useWindowEvents } from "../../composables/WindowEvents";
 import { useMouseSampler } from "../../composables/MouseSampler";
 import { useTweenGroup } from "../../composables/TweenGroup";
 
-import { Block, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH } from "../../../../../common/DataTypes/BlockDataTypes";
+import { Block, BlockContent, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH } from "../../../../../common/DataTypes/BlockDataTypes";
 import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
 import { removeEntries } from "../../../../../common/utilities/ArrayUtils";
 import * as RectangleUtils from "../../../../../common/utilities/RectangleUtils";
@@ -385,7 +385,7 @@ export default defineComponent({
                     clearCurrentSelection: true
                 }), 100);
             }
-            eventEmitter.register('canvasBlockEditComplete', 'blockEditComplete', (cancelled: boolean) => {
+            eventEmitter.register('canvasBlockEditComplete', 'blockEditComplete', ({newContents, cancelled}: {newContents: BlockContent, cancelled: boolean}) => {
                 if (inBulkCreationMode.value) {
                     if (cancelled) {
                         exitBulkCreateMode();
@@ -393,7 +393,7 @@ export default defineComponent({
                         let lastCreatedId = blocksBulkCreated.value[0];
                         if (lastCreatedId) {
                             let block = blocks.value[lastCreatedId];
-                            if (block.content.data.text.trim().length === 0) {
+                            if (newContents.data.text.trim().length === 0) {
                                 exitBulkCreateMode();
                             } else {
                                 const heightDifference = block.location.height + (10/blockScales.value[block.id]);

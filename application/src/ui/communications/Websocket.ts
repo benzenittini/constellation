@@ -74,7 +74,7 @@ class Websocket {
                         cssClasses: ['mw-notification-failure'],
                         componentName: 'mw-vn-message-with-list',
                         data: {
-                            message: `Version mismatch between client and server. Please synchronize the versions to connect to this server.`,
+                            message: `Version mismatch between client and server. Please synchronize the major versions to connect to this server.`,
                             items: [
                                 `Client: ${WEBPACK.APP_VERSION}`,
                                 `Server: ${serverVersion}`,

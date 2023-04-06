@@ -4,7 +4,7 @@
         <eic-textbox ref="urlRef" v-model="saveData.projectUrl" eic-placeholder="ex: https://localhost:3000"></eic-textbox>
         <h3>Registration Key:</h3>
         <eic-textbox v-model="saveData.registrationKey" eic-placeholder="ex: 51b51563-ebaf-433c-8864-37a63a15668d"></eic-textbox>
-        <h3>Client Label:</h3>
+        <h3>Computer Name:</h3>
         <eic-textbox v-model="saveData.clientName" eic-placeholder="ex: Ben's 2019 Sys76"></eic-textbox>
     </div>
 </template>
@@ -46,7 +46,7 @@ export default defineComponent({
     h3 { color: vars.$gray4; padding: 0; }
 
     display: grid;
-    grid-template-columns: 140px 1fr;
+    grid-template-columns: 150px 1fr;
     column-gap: 10px;
     &>* {
         align-self: center;
