@@ -473,7 +473,6 @@ export default defineComponent({
                 new CreateBlockAction({
                         x: dropLocation.x - (DEFAULT_BLOCK_WIDTH / 2),
                         y: dropLocation.y - (DEFAULT_BLOCK_HEIGHT / 2),
-                        // TODO (later) : scale width/height based on the block's "depth" (wait ... isn't it already? Can we delete this?)
                         width: DEFAULT_BLOCK_WIDTH,
                         height: DEFAULT_BLOCK_HEIGHT,
                     },
@@ -607,8 +606,6 @@ export default defineComponent({
                             }
                             new CreateBlockAction({...ghostBlock.block.location}, sourceBlockId).submit();
                         }
-                    } else if (blockTrayLinking.metadata.data.type === 'setCreateLink') {
-                        // TODO-EL : block linking..?
                     }
 
                     blockTrayLinking.mouseUp();

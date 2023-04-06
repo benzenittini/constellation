@@ -99,7 +99,7 @@ const hierarchyDataActions: ActionTree<HierarchyDataState, RootState> & Hierarch
         // Clean up the store
         commit('deleteNode', blockId);
     },
-    setParent({ commit, state, getters, rootState }, { blockId, newParent }) { // TODO-later : newParent --> parentId
+    setParent({ commit, state, getters, rootState }, { blockId, newParent }) {
         // Verify we don't have a circular reference by traversing up the hierarchy
         let isCircular = false;
         let currentBlockId: string | undefined = newParent;

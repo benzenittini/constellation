@@ -59,11 +59,7 @@ export function verifyBlock(data: any): data is Block {
     }
 
     // Verify content extends BlockContent
-    if (data.content?.type === 'text') {
-        if (!isString(data.content.data?.text)) return false;
-    } else {
-        return false; // Unrecognized type
-    }
+    if (!verifyBlockContent(data.content)) return false;
 
     // Verify fieldIds is an array of strings
     if (!Array.isArray(data.fieldIds)) return false;
@@ -104,6 +100,23 @@ export type BlockContent = TextContentType; // | AnotherType | AnotherOne
 export interface TextContentType {
     type: 'text';
     data: { text: string; }
+}
+
+export function verifyBlockContent(data: any): data is BlockContent {
+    if (!(
+        'type' in data &&
+        'data' in data
+    )) {
+        return false;
+    }
+
+    if (data.type === 'text') {
+        if (!isString(data.data.text)) return false;
+    } else {
+        return false; // Unrecognized type
+    }
+
+    return true;
 }
 
 // Searching is UI-specific as of writing.

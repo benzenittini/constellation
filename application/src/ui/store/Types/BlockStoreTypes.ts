@@ -101,5 +101,5 @@ export type BlockDataGetters<S = BlockDataState> = {
     activeFieldValueCounts       (state: S, getters: GetterProperties): (blockIds: string[]) => TypedMap<{pvCounts: TypedMap<number>, outOf: number}>;
 
     getStyles    (state: S, getters: GetterProperties): (block: Block, depth: number) => any;
-    getCssStyles (state: S, getters: GetterProperties): (block: Block, depth: number) => any;
+    getCssStyles (state: S, getters: GetterProperties): (block: Block, depth: number, strokeWidthOverride?: number) => any;
 }

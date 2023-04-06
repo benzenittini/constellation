@@ -282,13 +282,7 @@ export default defineComponent({
             }
         });
         let expandedSummaryStyle = computed(() => {
-            // TODO-const : can we replace with the getCssStyles getter? Border is the only difference.
-            let style = store.getters.getStyles(props.eicBlock as Block, adjustedScale.value!);
-            let retVal: any = {};
-            if (style.fill)   retVal.background = style.fill;
-            if (style.stroke) retVal.border = '3px solid ' + style.stroke;
-            if (style.color)  retVal.color = style.color;
-            return retVal;
+            return store.getters.getCssStyles(props.eicBlock as Block, adjustedScale.value!, 3);
         });
 
         return {

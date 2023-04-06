@@ -4,12 +4,12 @@
 // View Types
 // ----------
 
+import { isString } from "../utilities/StringUtils";
 import { DateTime } from "./FieldDataTypes";
 
 export enum ViewType {
     FILTER = 'FILTER',
     KANBAN = 'KANBAN',
-    CALENDAR = 'CALENDAR',
 };
 export interface BaseViewConfig {
     id: string;
@@ -22,13 +22,37 @@ export interface FilterViewConfig extends BaseViewConfig {
 export interface KanbanViewConfig extends BaseViewConfig {
     groupingFieldId: string,
 }
-export interface CalendarViewConfig extends BaseViewConfig {
-    // TODO-calendar
-}
-export type ViewConfig = FilterViewConfig | KanbanViewConfig | CalendarViewConfig;
+export type ViewConfig = FilterViewConfig | KanbanViewConfig;
 
 export function verifyViewConfig(data: any): data is ViewConfig {
-    // TODO-const
+    // ===========================
+    // BaseViewConfig Verification
+    // ---------------------------
+    // Make sure the required top-level keys all exist.
+    if (!(
+        'id' in data &&
+        'name' in data &&
+        'type' in data &&
+        'filter' in data
+    )) {
+        return false;
+    }
+
+    // Verify id and name are both strings
+    if (!isString(data.id) || !isString(data.name)) return false;
+
+    // Verify it's a valid ViewType
+    if (!['FILTER', 'KANBAN'].includes(data.type)) return false;
+
+
+    // =======================
+    // KanbanView Verification
+    // -----------------------
+    if (data.type === 'KANBAN') {
+        if (!('groupingFieldId' in data)) return false;
+        if (!isString(data.groupingFieldId)) return false;
+    }
+
     return true;
 }
 

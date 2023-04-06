@@ -146,6 +146,7 @@ export type SetBlockParentResponse = ErrorResponse | { blockId: string, parentBl
 
 export type SetBlockContentRequest  = { blockId: string, content: BlockContent };
 // Error 3 indicates block wasn't found
+// Error 4 indicates block content was invalid
 export type SetBlockContentResponse = ErrorResponse | { blockId: string, content: BlockContent };
 
 export type SetClassificationDefinitionsRequest  = { classificationIds: string[], classifications: TypedMap<ClassificationDefinition>, fields: TypedMap<FieldDefinition>, possibleValues: TypedMap<PossibleValueDefinition> };
@@ -177,6 +178,7 @@ export type SetFieldOnBlocksRequest  = { fieldId: string, blockIdToFieldValue: T
 export type SetFieldOnBlocksResponse = ErrorResponse | { fieldId: string, blockIdToFieldValue: TypedMap<any> };
 
 export type SaveViewRequest  = { clientId: string, viewConfig: ViewConfig };
+// Error 3 indicates an invalid view configuration
 export type SaveViewResponse = ErrorResponse | { clientId: string, baseViewConfig: BaseViewConfig };
 
 export type DeleteViewRequest  = { clientId: string, viewId: string };

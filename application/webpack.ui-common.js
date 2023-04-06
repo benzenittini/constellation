@@ -7,6 +7,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 const DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = {
+    // TODO-cleanup : Anything we want to do here..?
     // The "electron-renderer" target is more correct, but it doesn't export "global", which is required by Dragula.
     // Using the "web" target includes it, and works for all our other needs too.
     target: 'web',
@@ -19,7 +20,8 @@ module.exports = {
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.vue', '.scss'],
         alias: {
-            // This is needed because we yarn-linked modal-vue-composer, which brings
+            // TODO-cleanup : Is this still needed once we remove nodeexternals from our mw-vue-* repos?
+            // This is needed because we npm-linked mw-vue-modals/notify, which brings
             // along it's own node_modules and vue installation that we don't want.
             vue: path.resolve(__dirname, `./node_modules/vue`)
         },
@@ -27,13 +29,9 @@ module.exports = {
 
     module: {
         rules: [
-            // TODO-cleanup : file-loader is deprecated for v5. Migrate to "asset modules": https://v4.webpack.js.org/loaders/file-loader/
             {
                 test: /\.(png|jpe?g|gif)$/i,
-                loader: 'file-loader',
-                options: {
-                    outputPath: 'graphics',
-                }
+                type: 'asset/resource',
             },
             {
                 test: /\.tsx?$/,
@@ -68,6 +66,8 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, './build'),
-        publicPath: './'
+        publicPath: './',
+        // For our graphics, configured in the 'asset/resource' module above.
+        assetModuleFilename: 'graphics/[hash][ext][query]',
     }
 };

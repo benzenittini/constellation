@@ -4,10 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { BoardData, TemplateClassification } from '../DataTypes/BoardDataTypes';
 import { BoundingBox, TypedMap } from '../DataTypes/GenericDataTypes';
-import { Block, BlockContent, BlockIdAndPosition } from '../DataTypes/BlockDataTypes';
+import { Block, BlockContent, BlockIdAndPosition, verifyBlockContent } from '../DataTypes/BlockDataTypes';
 import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes } from '../DataTypes/FieldDataTypes';
 import * as T from '../DataTypes/ActionDataTypes';
 import * as ArrayUtils from '../utilities/ArrayUtils';
+import { verifyViewConfig } from '../DataTypes/ViewDataTypes';
 
 export class BoardDataPersistence {
 
@@ -329,7 +330,12 @@ export class BoardDataPersistence {
     }
 
     async setBlockContent(blockId: string, content: BlockContent): Promise<void> {
-        // TODO-later : we should add dynamic, run-time checking of content to make sure it's of type BlockContent.
+        if (!verifyBlockContent(content)) {
+            throw new T.ConstError(4,
+                `Block content was invalid. ${T.GENERIC_RESTART}`,
+                T.ConstError.getLineId('BoardDataPersistence', 'setBlockContent', 2),
+                "Error in setBlockContent: Invalid block content was provided.");
+        }
 
         // Make sure the block exists
         if (this.data.blocks[blockId] === undefined) {
@@ -596,7 +602,13 @@ export class BoardDataPersistence {
     }
 
     async saveView({ clientId, viewConfig }: T.SaveViewRequest): Promise<T.SaveViewResponse> {
-        // TODO-later : Do some validation on viewConfig
+        if (!verifyViewConfig(viewConfig)) {
+            throw new T.ConstError(3,
+                `Invalid view config was provided. ${T.GENERIC_RESTART}`,
+                T.ConstError.getLineId('BoardDataPersistence', 'saveView', 1),
+                `Error in saveView: provided view config was invalid.`);
+        }
+
         this.data.views[viewConfig.id] = viewConfig;
 
         this.scheduleSave();

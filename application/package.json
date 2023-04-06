@@ -1,6 +1,6 @@
 {
   "name": "constellation",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "Apache-2.0",
   "description": "A visual organization tool",
   "homepage": "https://getconstellation.dev",
@@ -35,7 +35,6 @@
     "css-loader": "^6.7.3",
     "electron": "^23.0.0",
     "electron-wix-msi": "^5.0.0",
-    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "sass": "^1.58.0",
     "sass-loader": "^13.2.0",

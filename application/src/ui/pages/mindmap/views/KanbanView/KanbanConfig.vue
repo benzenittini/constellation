@@ -9,8 +9,6 @@
             v-bind:eic-options="classificationFieldPairOptions"
             v-model="mwView.groupingFieldId"
             ></eic-dropdown>
-
-        <!-- TODO-later : Add "additional fields to display" -->
     </div>
 </template>
 
@@ -29,7 +27,6 @@ export default defineComponent({
 
         const classificationFieldPairOptions = store.getters.classificationFieldPairOptions((field) => {
             return getFieldDataType(field.type) === DataType.SINGLE_SELECT;
-            // TODO-later : Also allow grouping by dates (with additional configs)!
         });
 
         return {

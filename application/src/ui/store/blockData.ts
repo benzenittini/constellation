@@ -148,8 +148,6 @@ const blockDataActions: ActionTree<BlockDataState, RootState> & BlockDataActions
     resetStore      ({ commit }) { commit('resetStore'); },
     clearBoardState ({ commit }) { commit('clearBoardState'); },
 
-    // TODO (later) - should "logout" also reset the store..? (Hint: yes) Other store types need this too. It does reset already in generalStore
-
     addBlocks   ({ commit }, blocks) {
         commit('addBlocks', blocks);
         commit('insertBefore', { blockId: blocks.map(e => e.id), before: undefined });
@@ -456,11 +454,11 @@ const blockDataGetters: GetterTree<BlockDataState, RootState> & BlockDataGetters
 
         return style;
     },
-    getCssStyles: (state, getters) => (block, depth) => {
+    getCssStyles: (state, getters) => (block, depth, strokeWidthOverride?: number) => {
         let svgStyle = getters.getStyles(block, depth);
         let retVal: any = {};
         if (svgStyle.fill)   retVal.background = svgStyle.fill;
-        if (svgStyle.stroke) retVal.border = svgStyle.strokeWidth + 'px solid ' + svgStyle.stroke;
+        if (svgStyle.stroke) retVal.border = (strokeWidthOverride ?? svgStyle.strokeWidth) + 'px solid ' + svgStyle.stroke;
         if (svgStyle.color)  retVal.color = svgStyle.color;
         return retVal;
     },

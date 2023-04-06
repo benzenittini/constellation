@@ -1,3 +1,4 @@
+import { anyAreBlank, isString } from "../utilities/StringUtils";
 
 export enum DataType {
     TEXT = "Text",
@@ -81,7 +82,21 @@ export interface PossibleValueDefinition {
 }
 
 export function verifyPossibleValueDefinition(data: any): data is PossibleValueDefinition {
-    // TODO-const
+    // Make sure the required top-level keys all exist.
+    if (!('id' in data && 'name' in data)) {
+        return false;
+    }
+
+    // Verify id and name are both strings
+    if (!isString(data.id) || !isString(data.name)) return false;
+
+    // If it's set, make sure style's values are strings
+    if (data.style) {
+        if (data.style.border     && !isString(data.style.border))     return false;
+        if (data.style.background && !isString(data.style.background)) return false;
+        if (data.style.text       && !isString(data.style.text))       return false;
+    }
+
     return true;
 }
 
@@ -94,7 +109,32 @@ export interface FieldDefinition {
 }
 
 export function verifyFieldDefinition(data: any): data is FieldDefinition {
-    // TODO-const
+    // Make sure the required top-level keys all exist.
+    if (!(
+        'id' in data &&
+        'name' in data &&
+        'type' in data &&
+        'possibleValueIds' in data &&
+        'sourceType' in data
+    )) {
+        return false;
+    }
+
+    // Verify id and name are both strings
+    if (!isString(data.id) || !isString(data.name)) return false;
+
+    // Verify it's a valid fieldType
+    if (!getAllFieldTypes().includes(data.type)) return false;
+
+    // Verify our pvIds are all strings
+    if (!Array.isArray(data.possibleValueIds)) return false;
+    for (let pvid of data.possibleValueIds) {
+        if (!isString(pvid)) return false;
+    }
+
+    // Verify our sourceType is valid
+    if (data.sourceType !== 'block' && data.sourceType !== 'classification') return false;
+
     return true;
 }
 
@@ -105,7 +145,20 @@ export interface ClassificationDefinition {
 }
 
 export function verifyClassificationDefinition(data: any): data is ClassificationDefinition {
-    // TODO-const
+    // Make sure the required top-level keys all exist.
+    if (!('id' in data && 'name' in data && 'fieldIds' in data)) {
+        return false;
+    }
+
+    // Verify id and name are both strings
+    if (!isString(data.id) || !isString(data.name)) return false;
+
+    // Verify our fieldIds are all strings
+    if (!Array.isArray(data.fieldIds)) return false;
+    for (let fid of data.fieldIds) {
+        if (!isString(fid)) return false;
+    }
+
     return true;
 }
 

@@ -54,7 +54,6 @@ class Websocket {
         this.setConnectionDialogMessage('connecting...');
 
         return new Promise((resolve, reject) => {
-            // TODO-later handle reject
             if (!this.isConnected()) {
                 this.socket = io(remote.serverUrl, {
                     path: `/ws`,

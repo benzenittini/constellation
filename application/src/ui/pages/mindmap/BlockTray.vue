@@ -3,11 +3,6 @@
         <!-- Each icon should be 20px by 20px with 10px between them. -->
         <rect class="block-tray-background" rx="5" x="5" y="5" v-bind:width="numberOfIcons * 30" height="30" />
 
-        <!-- Create/Link Block -->
-        <!-- TODO-later : Enable block linking -->
-        <!-- v-on:mousedown="$emit('blockTrayDragStart', { mouseEvent: $event, metadata: {type: 'setCreateLink', sourceBlockId: blockId, sourceBoudingBox: blockBoundingBox} })" -->
-        <!-- <eic-svg-chainlink class="mw-icon" data-test="block-tray-set-create-link" style="cursor: not-allowed;"></eic-svg-chainlink> -->
-
         <!-- Show Preview / Expand Block -->
         <g class="mw-magnifying-wrapper">
             <eic-svg-magnifying-glass width="20" height="20" class="mw-icon"

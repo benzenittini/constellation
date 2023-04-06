@@ -109,7 +109,7 @@ export default defineComponent({
             if (!currentView.value) return;
 
             if (!areEqual(originalViewConfig, removeConfigsForComparison(JSON.parse(JSON.stringify(currentView.value))))) {
-                // TODO-kanban : check if config changed since last save, and warn user.
+                // TODO-later : check if config changed since last save, and warn user.
                 // This check doesn't work (passing too often), but even if it did ... there's no way to pull the e-brake and cancel unloading the new view.
             }
         }
