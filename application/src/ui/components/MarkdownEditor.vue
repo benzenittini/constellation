@@ -59,7 +59,7 @@ export default defineComponent({
             return DOMPurify.sanitize(marked(inputVal.value!, {
                 highlight: (code, lang) => {
                     const validLanguage = hljs.getLanguage(lang) ? lang : 'plaintext';
-                    return hljs.highlight(validLanguage, code).value;
+                    return hljs.highlight(code, { language: validLanguage }).value;
                 }
             }));
         });

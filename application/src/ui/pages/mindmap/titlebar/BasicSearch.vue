@@ -46,6 +46,14 @@ export default defineComponent({
             setTimeout(() => searchTextbox.value.focus(), 0);
         }
 
+        function cancelSearch() {
+            if (searchTimeoutRef) {
+                clearTimeout(searchTimeoutRef);
+            }
+            searchTerm.value = '';
+            searchTextbox.value.blur()
+        }
+
         const SEARCH_DELAY_MS = 500;
         let searchTimeoutRef: number | null = null;
         function submitSearch() {
@@ -66,6 +74,10 @@ export default defineComponent({
                         clearTimeout(searchTimeoutRef);
                         submitSearch();
                     }
+                    break;
+                case "Escape":
+                    event.preventDefault();
+                    cancelSearch();
                     break;
                 case "Down": // IE/Edge
                 case "ArrowDown":

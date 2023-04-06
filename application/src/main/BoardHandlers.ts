@@ -31,10 +31,14 @@ export function registerBoardHandlers(ipcMain: Electron.IpcMain) {
 
 let persistence: BoardDataPersistence | undefined = undefined;
 
+function getMainWindow() {
+    return BrowserWindow.getAllWindows()[0];
+}
+
 async function getBoardData({ boardId: filepath }: T.GetBoardDataRequest): Promise<T.GetBoardDataResponse> {
     if (fs.existsSync(filepath)) {
         try {
-            persistence = new BoardDataPersistence(filepath, undefined, (status) => BrowserWindow.getFocusedWindow()?.webContents.send('board:updateSaveStatus', status));
+            persistence = new BoardDataPersistence(filepath, undefined, (status) => getMainWindow()?.webContents.send('board:updateSaveStatus', status));
             return persistence.getBoardData();
         } catch(err) {
             return {
