@@ -35,7 +35,7 @@ function openEditClassificationsDialog(classificationIds: string[], classificati
             componentName: 'mw-vm-fixed-bottom',
             panes: {
                 'bottom': {
-                    name: 'eic-savecancel',
+                    componentName: 'eic-savecancel',
                     eventHandlers: {
                         'mw-cancel': (event: any) => {
                             mwVueModals.closeModal(dialogId);

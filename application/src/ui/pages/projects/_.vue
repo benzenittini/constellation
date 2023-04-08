@@ -193,7 +193,7 @@ export default defineComponent({
                         componentName: 'mw-vm-fixed-bottom',
                         panes: {
                             'bottom': {
-                                name: 'eic-savecancel',
+                                componentName: 'eic-savecancel',
                                 componentData: { mwSaveText: 'Create Board' },
                                 eventHandlers: {
                                     'mw-cancel':  (event: any) => { mwVueModals.closeModal(CREATE_BOARD_DIALOG_ID); },
@@ -270,7 +270,7 @@ export default defineComponent({
                         componentName: 'mw-vm-fixed-bottom',
                         panes: {
                             'bottom': {
-                                name: 'eic-savecancel',
+                                componentName: 'eic-savecancel',
                                 componentData: { mwSaveText: 'Yes' },
                                 eventHandlers: {
                                     'mw-cancel':  (event: any) => { mwVueModals.closeModal(DELETE_BOARD_DIALOG_ID); },
@@ -326,7 +326,7 @@ export default defineComponent({
                             componentName: 'mw-vm-fixed-bottom',
                             panes: {
                                 'bottom': {
-                                    name: 'eic-savecancel',
+                                    componentName: 'eic-savecancel',
                                     componentData: { mwSaveText: 'Import Board' },
                                     eventHandlers: {
                                         'mw-cancel': (event: any) => { mwVueModals.closeModal(IMPORT_BOARD_DIALOG_ID); },
@@ -372,7 +372,7 @@ export default defineComponent({
                             componentName: 'mw-vm-fixed-bottom',
                             panes: {
                                 'bottom': {
-                                    name: 'eic-savecancel',
+                                    componentName: 'eic-savecancel',
                                     componentData: { mwSaveText: 'Yes' },
                                     eventHandlers: {
                                         'mw-cancel':  (event: any) => { mwVueModals.closeModal(LEAVE_PROJECT_DIALOG_ID); },
