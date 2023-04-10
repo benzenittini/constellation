@@ -73,7 +73,7 @@ import { defineComponent, onBeforeUpdate, onMounted, onUnmounted, reactive, Ref,
 import { v4 as uuidv4 } from 'uuid';
 import dragula from 'dragula';
 
-import { FieldDefinition, FieldType, fieldTypeHasPVs } from "constellation-common";
+import { FieldDefinition, FieldType, fieldTypeHasPVs } from 'constellation-common/datatypes';
 
 import { useDragula } from './DragulaComposition';
 

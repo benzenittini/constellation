@@ -1,7 +1,7 @@
 
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import { ErrorResponse } from 'constellation-common';
+import { ErrorResponse } from 'constellation-common/datatypes';
 
 export const HTTP_GET    = 'get';
 export const HTTP_POST   = 'post';

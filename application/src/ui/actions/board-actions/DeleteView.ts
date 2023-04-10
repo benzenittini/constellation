@@ -3,7 +3,7 @@ import { useVueNotify } from "mw-vue-notify";
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { DeleteViewResponse, GENERIC_RESTART } from 'constellation-common';
+import { DeleteViewResponse, GENERIC_RESTART } from 'constellation-common/datatypes';
 import { ws } from "../../communications/Websocket";
 import { E24, showError } from "../../ErrorLogger";
 

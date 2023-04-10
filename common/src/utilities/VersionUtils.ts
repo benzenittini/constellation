@@ -1,4 +1,4 @@
-import { ConstError } from "../DataTypes/ActionDataTypes";
+import { ConstError } from "../datatypes/ActionDataTypes";
 
 export const VALID_REGEX = /^\d+(\.\d+)*$/;
 

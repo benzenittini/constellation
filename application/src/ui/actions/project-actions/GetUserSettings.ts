@@ -1,5 +1,5 @@
 
-import { GetUserSettingsResponse } from 'constellation-common';
+import { GetUserSettingsResponse } from 'constellation-common/datatypes';
 import { useStore } from "../../store/store";
 import { Action } from "../Action";
 

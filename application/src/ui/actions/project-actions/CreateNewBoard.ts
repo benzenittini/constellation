@@ -1,7 +1,7 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { LOCAL_PROJECT, TemplateClassification, CreateNewBoardResponse, GENERIC_RESTART } from 'constellation-common';
+import { LOCAL_PROJECT, TemplateClassification, CreateNewBoardResponse, GENERIC_RESTART } from 'constellation-common/datatypes';
 import { send } from "../../communications/RestComms";
 import { E27, showError } from "../../ErrorLogger";
 

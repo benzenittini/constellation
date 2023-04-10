@@ -1,7 +1,7 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { GENERIC_RESTART, LoadViewResponse } from 'constellation-common';
+import { GENERIC_RESTART, LoadViewResponse } from 'constellation-common/datatypes';
 import { ws } from "../../communications/Websocket";
 import { E26, showError } from "../../ErrorLogger";
 

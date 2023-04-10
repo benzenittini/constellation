@@ -2,7 +2,7 @@
 import { useStore } from "../../store/store";
 import { Action } from "../Action";
 
-import { RemoteProject, GetProjectDataResponse } from 'constellation-common';
+import { RemoteProject, GetProjectDataResponse } from 'constellation-common/datatypes';
 import { send } from "../../communications/RestComms";
 
 export class GetProjectDataAction extends Action {

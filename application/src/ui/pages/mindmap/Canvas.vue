@@ -114,7 +114,8 @@ import { useWindowEvents } from "../../composables/WindowEvents";
 import { useMouseSampler } from "../../composables/MouseSampler";
 import { useTweenGroup } from "../../composables/TweenGroup";
 
-import { Block, BlockContent, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, BoundingBox, ArrayUtils, RectangleUtils } from "constellation-common";
+import { Block, BlockContent, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, BoundingBox } from 'constellation-common/datatypes';
+import { ArrayUtils, RectangleUtils } from 'constellation-common/utilities';
 
 import { CreateBlockAction } from '../../actions/board-actions/CreateBlock';
 import { SetBlockPositionsAction } from '../../actions/board-actions/SetBlockPositions';

@@ -59,7 +59,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useStore } from "../../../store/store";
 import { useEmitter } from "../../../composables/Emitter";
-import { ViewConfig, ObjectUtils } from "constellation-common";
+import { ViewConfig } from 'constellation-common/datatypes';
+import { ObjectUtils } from 'constellation-common/utilities';
 import { isValidConfig } from "../../../store/Types/ViewStoreTypes";
 
 import { SaveViewAction } from '../../../actions/board-actions/SaveView';

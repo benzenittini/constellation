@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { GeneralDataState, GeneralDataMutations, GeneralDataActions, GeneralDataGetters } from "./Types/GeneralStoreTypes";
 import { RootState } from "./StoreTypes";
-import { LOCAL_PROJECT } from 'constellation-common';
+import { LOCAL_PROJECT } from 'constellation-common/datatypes';
 
 // =====
 // State

@@ -2,7 +2,7 @@
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 import { useVueNotify } from 'mw-vue-notify';
 
-import { TypedMap } from "constellation-common";
+import { TypedMap } from 'constellation-common/datatypes';
 import { BlockLinkPair, RootState } from "./StoreTypes";
 import { HierarchyDataState, HierarchyDataGetters, HierarchyDataMutations, HierarchyDataActions } from "./Types/HierarchyStoreTypes";
 

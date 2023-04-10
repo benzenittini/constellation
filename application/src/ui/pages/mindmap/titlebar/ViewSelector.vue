@@ -25,7 +25,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useStore } from "../../../store/store";
 import { useEmitter } from "../../../composables/Emitter";
 
-import { GENERIC_RESTART, Conjunction, ViewConfig, ViewType } from "constellation-common";
+import { GENERIC_RESTART, Conjunction, ViewConfig, ViewType } from 'constellation-common/datatypes';
 import { LoadViewAction } from "../../../actions/board-actions/LoadView";
 import { E32, showError } from "../../../ErrorLogger";
 

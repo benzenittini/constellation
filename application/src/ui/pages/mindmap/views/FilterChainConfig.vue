@@ -125,7 +125,7 @@ import {
     FieldValueFilter,
     // Other
     DataType, FieldType
-} from "constellation-common";
+} from 'constellation-common/datatypes';
 
 export default defineComponent({
     props: {

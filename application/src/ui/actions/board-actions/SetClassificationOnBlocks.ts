@@ -2,7 +2,7 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { GENERIC_RESTART, SetClassificationOnBlocksResponse } from 'constellation-common';
+import { GENERIC_RESTART, SetClassificationOnBlocksResponse } from 'constellation-common/datatypes';
 import { ws } from "../../communications/Websocket";
 import { E20, showError } from "../../ErrorLogger";
 

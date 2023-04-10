@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { logger } from "./Logger";
 import { properties } from "./PropertyLoader";
 import * as UserDataPersistence from './UserDataPersistence';
-import { ConstError, CreateNewBoardRequest, ErrorResponse, ImportBoardRequest } from "constellation-common";
+import { ConstError, CreateNewBoardRequest, ErrorResponse, ImportBoardRequest } from 'constellation-common/datatypes';
 
 import { projectDataPersistence, boardDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "./Persistence";
 

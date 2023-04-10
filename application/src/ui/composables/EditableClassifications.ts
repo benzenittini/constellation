@@ -2,7 +2,7 @@
 import { reactive } from 'vue';
 import { useVueModals } from 'mw-vue-modals';
 
-import { TypedMap, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from 'constellation-common';
+import { TypedMap, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from 'constellation-common/datatypes';
 import { SetClassificationDefinitionsAction } from '../actions/board-actions/SetClassificationDefinitions';
 import { SetClassificationOnBlocksAction } from '../actions/board-actions/SetClassificationOnBlocks';
 

@@ -4,7 +4,8 @@ import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 import { RootState } from "./StoreTypes";
 import { BlockDataState, BlockDataGetters, BlockDataMutations, BlockDataActions } from "./Types/BlockStoreTypes";
 
-import { RectangleUtils, ObjectUtils, TypedMap, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, SearchResult, getFieldValue, GENERIC_RESTART } from 'constellation-common';
+import { TypedMap, SearchResult, getFieldValue, GENERIC_RESTART } from 'constellation-common/datatypes';
+import { RectangleUtils, ObjectUtils } from 'constellation-common/utilities';
 import { GRAY8 } from '../styles/styleVariables';
 import { E38, showError } from "../ErrorLogger";
 

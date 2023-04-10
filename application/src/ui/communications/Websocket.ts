@@ -10,7 +10,7 @@ import io, { Socket } from 'socket.io-client';
 import { useVueModals } from 'mw-vue-modals';
 import { useVueNotify } from 'mw-vue-notify';
 
-import { RemoteProject, GENERIC_RESTART } from 'constellation-common';
+import { RemoteProject, GENERIC_RESTART } from 'constellation-common/datatypes';
 
 // -- Actions --
 import { GetBoardDataAction } from '../actions/board-actions/GetBoardData';

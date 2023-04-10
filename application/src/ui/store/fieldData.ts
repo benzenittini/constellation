@@ -2,7 +2,7 @@
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 import { FieldDataState, FieldDataGetters, FieldDataMutations, FieldDataActions } from "./Types/FieldStoreTypes";
 import { RootState } from "./StoreTypes";
-import { TypedMap, getFieldDataType, GENERIC_RESTART } from 'constellation-common';
+import { TypedMap, getFieldDataType, GENERIC_RESTART } from 'constellation-common/datatypes';
 import { E39, showError } from "../ErrorLogger";
 
 

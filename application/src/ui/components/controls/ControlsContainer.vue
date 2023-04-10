@@ -11,7 +11,8 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 
-import { ViewType, Constants } from 'constellation-common';
+import { ViewType } from 'constellation-common/datatypes';
+import { Constants } from 'constellation-common/utilities';
 
 import { useStore } from "../../store/store";
 

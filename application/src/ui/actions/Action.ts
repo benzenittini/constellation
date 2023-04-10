@@ -1,5 +1,5 @@
 
-import { ErrorResponse, GENERIC_RESTART } from 'constellation-common';
+import { ErrorResponse, GENERIC_RESTART } from 'constellation-common/datatypes';
 import { E0, showError } from "../ErrorLogger";
 
 

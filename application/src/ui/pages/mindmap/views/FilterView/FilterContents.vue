@@ -50,7 +50,7 @@
 import { computed, defineComponent, Ref } from "vue";
 
 import { useStore } from "../../../../store/store";
-import { FilterViewConfig } from "constellation-common";
+import { FilterViewConfig } from 'constellation-common/datatypes';
 import { useView } from "../../../../composables/View";
 
 export default defineComponent({

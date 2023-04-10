@@ -1,5 +1,5 @@
 
-import { GENERIC_RESTART, GetRemoteProjectsResponse } from 'constellation-common';
+import { GENERIC_RESTART, GetRemoteProjectsResponse } from 'constellation-common/datatypes';
 import { E2, showError } from "../../ErrorLogger";
 import { useStore } from "../../store/store";
 import { Action } from "../Action";

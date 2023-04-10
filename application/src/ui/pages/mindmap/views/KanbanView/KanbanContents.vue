@@ -72,7 +72,7 @@ import dragula from 'dragula';
 import { useStore } from "../../../../store/store";
 import { useView } from '../../../../composables/View';
 
-import { TypedMap, Block, KanbanViewConfig, ClassificationDefinition } from "constellation-common";
+import { TypedMap, Block, KanbanViewConfig, ClassificationDefinition } from 'constellation-common/datatypes';
 import { SetFieldOnBlocksAction } from "../../../../actions/board-actions/SetFieldOnBlocks";
 import { SetBlockPriorityAction } from "../../../../actions/board-actions/SetBlockPriority";
 

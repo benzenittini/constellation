@@ -2,7 +2,8 @@
 import path from "path";
 import fs from 'fs';
 
-import { TypedMap, BoardData, TemplateClassification, Constants } from "constellation-common";
+import { TypedMap, BoardData, TemplateClassification } from 'constellation-common/datatypes';
+import { Constants } from 'constellation-common/utilities';
 import { BoardDataPersistence } from "constellation-common/persistence";
 import { ProjectDataPersistence } from "./ProjectDataPersistence";
 import { properties } from "./PropertyLoader";

@@ -1,7 +1,7 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { DeleteBlocksResponse, GENERIC_RESTART } from 'constellation-common';
+import { DeleteBlocksResponse, GENERIC_RESTART } from 'constellation-common/datatypes';
 import { ws } from "../../communications/Websocket";
 import { E16, showError } from "../../ErrorLogger";
 

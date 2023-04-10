@@ -98,7 +98,7 @@ import { useStore } from "../../store/store";
 import { useEditableFields } from '../../composables/EditableFields';
 import { useEditableClassifications } from '../../composables/EditableClassifications';
 
-import { Block } from "constellation-common";
+import { Block } from 'constellation-common/datatypes';
 
 
 export default defineComponent({

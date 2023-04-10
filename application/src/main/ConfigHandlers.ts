@@ -3,7 +3,8 @@ import { dialog } from "electron";
 import fs from 'fs';
 import path from 'path';
 
-import { ArrayUtils, Constants, LOCAL_PROJECT, LOCAL_PROJECT_NAME, BasicBoardData, GetProjectDataResponse, CreateNewBoardRequest, CreateNewBoardResponse, GetBoardTemplatesResponse, DeleteBoardRequest, DeleteBoardResponse, GetRemoteProjectsResponse, AddRemoteProjectRequest, AddRemoteProjectResponse, RemoveRemoteProjectResponse, RemoveRemoteProjectRequest, ImportBoardResponse, verifyBoardData, ReadFileAsBoardResponse, GetUserSettingsResponse, SetUserSettingsRequest, SetUserSettingsResponse } from "constellation-common";
+import { ArrayUtils, Constants } from 'constellation-common/utilities';
+import { LOCAL_PROJECT, LOCAL_PROJECT_NAME, BasicBoardData, GetProjectDataResponse, CreateNewBoardRequest, CreateNewBoardResponse, GetBoardTemplatesResponse, DeleteBoardRequest, DeleteBoardResponse, GetRemoteProjectsResponse, AddRemoteProjectRequest, AddRemoteProjectResponse, RemoveRemoteProjectResponse, RemoveRemoteProjectRequest, ImportBoardResponse, verifyBoardData, ReadFileAsBoardResponse, GetUserSettingsResponse, SetUserSettingsRequest, SetUserSettingsResponse } from 'constellation-common/datatypes';
 import { BoardDataPersistence } from 'constellation-common/persistence';
 import * as ConfigDataPersistence from "./ConfigDataPersistence";
 

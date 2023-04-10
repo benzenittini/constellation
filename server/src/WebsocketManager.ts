@@ -8,8 +8,8 @@ import { Server, Socket } from "socket.io";
 import http from 'http';
 
 // -- Internal --
-import { ConstError } from "constellation-common";
-import { VersionUtils } from "constellation-common";
+import { ConstError } from "constellation-common/datatypes";
+import { VersionUtils } from "constellation-common/utilities";
 import { logger } from "./Logger";
 import * as WebsocketHandlers from './WebsocketHandlers';
 import { verifyCreds } from "./UserDataPersistence";

@@ -2,13 +2,13 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { BoardData, TemplateClassification } from '../DataTypes/BoardDataTypes';
-import { BoundingBox, TypedMap } from '../DataTypes/GenericDataTypes';
-import { Block, BlockContent, BlockIdAndPosition, verifyBlockContent } from '../DataTypes/BlockDataTypes';
-import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes } from '../DataTypes/FieldDataTypes';
-import * as T from '../DataTypes/ActionDataTypes';
+import { BoardData, TemplateClassification } from '../datatypes/BoardDataTypes';
+import { BoundingBox, TypedMap } from '../datatypes/GenericDataTypes';
+import { Block, BlockContent, BlockIdAndPosition, verifyBlockContent } from '../datatypes/BlockDataTypes';
+import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes } from '../datatypes/FieldDataTypes';
+import * as T from '../datatypes/ActionDataTypes';
 import * as ArrayUtils from '../utilities/ArrayUtils';
-import { verifyViewConfig } from '../DataTypes/ViewDataTypes';
+import { verifyViewConfig } from '../datatypes/ViewDataTypes';
 
 export class BoardDataPersistence {
 

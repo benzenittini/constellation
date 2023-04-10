@@ -1,7 +1,7 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { TypedMap, GENERIC_RESTART, SetClassificationDefinitionsResponse, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from 'constellation-common';
+import { TypedMap, GENERIC_RESTART, SetClassificationDefinitionsResponse, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from 'constellation-common/datatypes';
 import { ws } from "../../communications/Websocket";
 import { E19, showError } from "../../ErrorLogger";
 

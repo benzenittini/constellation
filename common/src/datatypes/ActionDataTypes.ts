@@ -5,7 +5,7 @@ import { ChangedFieldValue, ClassificationDefinition, FieldDefinition, PossibleV
 import { BoundingBox, TypedMap } from "./GenericDataTypes";
 import { BaseViewConfig, ViewConfig } from "./ViewDataTypes";
 import { RemoteProject, UserSettings } from "./FileDataTypes";
-import { SUPPORT_EMAIL } from "../Constants";
+import { SUPPORT_EMAIL } from "../utilities/Constants";
 
 
 // ==============

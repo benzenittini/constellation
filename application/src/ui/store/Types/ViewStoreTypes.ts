@@ -1,6 +1,7 @@
 
 import { AugmentedActionContext, GetterProperties, RootState } from "../StoreTypes";
-import { TypedMap, StringUtils, DateUtils, Block, DateTime, PossibleValueDefinition, BaseViewConfig, Comparator, Conjunction, Filter, FilterChain, FilterType, Inclusion, MultiSelectComparator, SingleSelectComparator, StringComparator, TemporalBeforeAfterFilter, TemporalComparator, TemporalFilterValue, TemporalUnit, TemporalWithinFilter, ViewConfig, ViewType } from 'constellation-common';
+import { TypedMap, Block, DateTime, PossibleValueDefinition, BaseViewConfig, Comparator, Conjunction, Filter, FilterChain, FilterType, Inclusion, MultiSelectComparator, SingleSelectComparator, StringComparator, TemporalBeforeAfterFilter, TemporalComparator, TemporalFilterValue, TemporalUnit, TemporalWithinFilter, ViewConfig, ViewType } from 'constellation-common/datatypes';
+import { StringUtils, DateUtils } from 'constellation-common/utilities';
 import { E36, E37, showError } from "../../ErrorLogger";
 
 

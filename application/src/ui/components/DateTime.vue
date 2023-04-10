@@ -22,7 +22,7 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from "vue";
 
-import { DateTime, FieldType } from 'constellation-common';
+import { DateTime, FieldType } from 'constellation-common/datatypes';
 
 export default defineComponent({
     props: {

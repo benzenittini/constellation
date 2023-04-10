@@ -1,5 +1,5 @@
 
-import { BasicBoardData, BasicProjectData, CurrentProjectBoard, BoardConfig, RemoteProject, TypedMap } from 'constellation-common';
+import { BasicBoardData, BasicProjectData, CurrentProjectBoard, BoardConfig, RemoteProject, TypedMap } from 'constellation-common/datatypes';
 import { AugmentedActionContext, GetterProperties } from "../StoreTypes"
 
 

@@ -2,7 +2,7 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 import { useEmitter } from "../../composables/Emitter";
-import { BoundingBox, CreateBlockResponse, GENERIC_RESTART } from 'constellation-common';
+import { BoundingBox, CreateBlockResponse, GENERIC_RESTART } from 'constellation-common/datatypes';
 import { ws } from "../../communications/Websocket";
 import { E14, showError } from "../../ErrorLogger";
 

@@ -1,7 +1,7 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { BoardConfig, GENERIC_RESTART, UpdateBoardConfigResponse, LOCAL_PROJECT } from 'constellation-common';
+import { BoardConfig, GENERIC_RESTART, UpdateBoardConfigResponse, LOCAL_PROJECT } from 'constellation-common/datatypes';
 import { send } from "../../communications/RestComms";
 import { E30, showError } from "../../ErrorLogger";
 

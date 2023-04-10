@@ -1,6 +1,6 @@
 import { Ref } from "vue";
 
-import { TypedMap, ClassificationDefinition, FieldDefinition } from 'constellation-common';
+import { TypedMap, ClassificationDefinition, FieldDefinition } from 'constellation-common/datatypes';
 
 // =====================================================================================
 // !!! >>> ATTENTION FUTURE READER <<< !!!

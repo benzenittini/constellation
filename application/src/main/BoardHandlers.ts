@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { BrowserWindow } from 'electron';
 
 import * as ConfigDataPersistence from "./ConfigDataPersistence";
-import { ConstError, CreateBlockRequest, CreateBlockResponse, DeleteBlocksRequest, DeleteBlocksResponse, DeleteViewRequest, DeleteViewResponse, GetBoardDataRequest, GetBoardDataResponse, LoadViewRequest, LoadViewResponse, SaveViewRequest, SaveViewResponse, SetBlockContentRequest, SetBlockContentResponse, SetBlockParentRequest, SetBlockParentResponse, SetBlockPositionsRequest, SetBlockPositionsResponse, SetBlockPriorityRequest, SetBlockPriorityResponse, SetClassificationDefinitionsRequest, SetClassificationDefinitionsResponse, SetClassificationOnBlocksRequest, SetClassificationOnBlocksResponse, SetFieldDefinitionsRequest, SetFieldDefinitionsResponse, SetFieldOnBlocksRequest, SetFieldOnBlocksResponse } from 'constellation-common';
+import { ConstError, CreateBlockRequest, CreateBlockResponse, DeleteBlocksRequest, DeleteBlocksResponse, DeleteViewRequest, DeleteViewResponse, GetBoardDataRequest, GetBoardDataResponse, LoadViewRequest, LoadViewResponse, SaveViewRequest, SaveViewResponse, SetBlockContentRequest, SetBlockContentResponse, SetBlockParentRequest, SetBlockParentResponse, SetBlockPositionsRequest, SetBlockPositionsResponse, SetBlockPriorityRequest, SetBlockPriorityResponse, SetClassificationDefinitionsRequest, SetClassificationDefinitionsResponse, SetClassificationOnBlocksRequest, SetClassificationOnBlocksResponse, SetFieldDefinitionsRequest, SetFieldDefinitionsResponse, SetFieldOnBlocksRequest, SetFieldOnBlocksResponse } from 'constellation-common/datatypes';
 import { BoardDataPersistence } from 'constellation-common/persistence';
 
 

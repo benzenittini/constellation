@@ -4,7 +4,7 @@ import { computed, ref, Ref, ComputedRef, SetupContext, onMounted, onUnmounted }
 import { useStore } from '../store/store';
 import { useWindowEvents } from './WindowEvents';
 import { useEmitter } from './Emitter';
-import { Block } from 'constellation-common';
+import { Block } from 'constellation-common/datatypes';
 import { DeleteBlocksAction } from '../actions/board-actions/DeleteBlocks';
 
 export function useView(visibleBlocks: ComputedRef<Block[]>, context: SetupContext<Record<string, any>>) {

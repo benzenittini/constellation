@@ -2,8 +2,7 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { AuthorizedUser, UserFile } from 'constellation-common';
-import { ConstError } from 'constellation-common';
+import { AuthorizedUser, UserFile, ConstError } from 'constellation-common/datatypes';
 
 import { logger } from './Logger';
 import { properties } from './PropertyLoader';

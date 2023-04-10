@@ -12,7 +12,7 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 
-import { PossibleValueDefinition } from 'constellation-common';
+import { PossibleValueDefinition } from 'constellation-common/datatypes';
 
 export default defineComponent({
     props: {

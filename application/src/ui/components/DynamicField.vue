@@ -14,7 +14,8 @@
 import { defineComponent, computed, ComputedRef } from "vue";
 
 import { useStore } from "../store/store";
-import { DataType, DateTime, FieldDefinition, FieldType, getFieldDataType, TypedMap, StringUtils } from 'constellation-common';
+import { DataType, DateTime, FieldDefinition, FieldType, getFieldDataType, TypedMap } from 'constellation-common/datatypes';
+import { StringUtils } from 'constellation-common/utilities';
 import { DropdownOption } from "../store/Types/FieldStoreTypes";
 
 type ElementType = {

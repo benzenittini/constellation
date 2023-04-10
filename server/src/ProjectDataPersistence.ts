@@ -2,7 +2,8 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { TypedMap, ArrayUtils, BasicBoardData, BasicProjectData, BoardTemplateClient, CreateNewBoardResponse, DeleteBoardResponse, TemplateClassification, UpdateBoardConfigResponse, DeleteBoardRequest, CreateNewBoardRequest, UpdateBoardConfigRequest } from 'constellation-common';
+import { TypedMap, BasicBoardData, BasicProjectData, BoardTemplateClient, CreateNewBoardResponse, DeleteBoardResponse, TemplateClassification, UpdateBoardConfigResponse, DeleteBoardRequest, CreateNewBoardRequest, UpdateBoardConfigRequest } from 'constellation-common/datatypes';
+import { ArrayUtils } from 'constellation-common/utilities';
 import { properties } from './PropertyLoader';
 
 import { logger } from './Logger';

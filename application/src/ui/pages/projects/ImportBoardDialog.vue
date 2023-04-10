@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, PropType, ref } from "vue";
-import { GENERIC_RESTART, ReadFileAsBoardResponse, BoardData } from 'constellation-common';
+import { GENERIC_RESTART, ReadFileAsBoardResponse, BoardData } from 'constellation-common/datatypes';
 
 import { E40, showError } from "../../ErrorLogger";
 

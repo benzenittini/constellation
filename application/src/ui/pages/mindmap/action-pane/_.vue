@@ -88,7 +88,7 @@ import { defineComponent, computed, PropType } from "vue";
 import { useStore } from "../../../store/store";
 import { useEditableFields } from "../../../composables/EditableFields";
 import { useEditableClassifications } from "../../../composables/EditableClassifications";
-import { ClassificationDefinition, Block } from "constellation-common";
+import { ClassificationDefinition, Block } from 'constellation-common/datatypes';
 
 export default defineComponent({
     props: {

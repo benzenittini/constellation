@@ -1,7 +1,7 @@
 
 import fs from 'fs';
 
-import { UserFile } from 'constellation-common';
+import { UserFile } from 'constellation-common/datatypes';
 
 // Keep these in sync!
 const VALID_PROPS: (keyof Properties)[] = [

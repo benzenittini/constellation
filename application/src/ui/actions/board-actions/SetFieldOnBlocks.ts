@@ -1,7 +1,7 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { TypedMap, GENERIC_RESTART, SetFieldOnBlocksResponse } from 'constellation-common';
+import { TypedMap, GENERIC_RESTART, SetFieldOnBlocksResponse } from 'constellation-common/datatypes';
 import { ws } from "../../communications/Websocket";
 import { E22, showError } from "../../ErrorLogger";
 

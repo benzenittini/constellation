@@ -36,7 +36,7 @@
 
 import { computed, defineComponent } from "vue";
 
-import { ArrayUtils } from "constellation-common";
+import { ArrayUtils } from 'constellation-common/utilities';
 import { useStore } from "../../../store/store";
 
 import { SetBlockPositionsAction } from '../../../actions/board-actions/SetBlockPositions';

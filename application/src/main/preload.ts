@@ -1,6 +1,6 @@
 
 import { contextBridge, ipcRenderer, shell } from 'electron';
-import { AddRemoteProjectRequest, CreateBlockRequest, CreateNewBoardRequest, DeleteBlocksRequest, DeleteBoardRequest, DeleteViewRequest, GetBoardDataRequest, LoadViewRequest, RemoveRemoteProjectRequest, SaveViewRequest, SetBlockContentRequest, SetBlockParentRequest, SetBlockPositionsRequest, SetBlockPriorityRequest, SetClassificationDefinitionsRequest, SetClassificationOnBlocksRequest, SetFieldDefinitionsRequest, SetFieldOnBlocksRequest, SetUserSettingsRequest } from 'constellation-common';
+import { AddRemoteProjectRequest, CreateBlockRequest, CreateNewBoardRequest, DeleteBlocksRequest, DeleteBoardRequest, DeleteViewRequest, GetBoardDataRequest, LoadViewRequest, RemoveRemoteProjectRequest, SaveViewRequest, SetBlockContentRequest, SetBlockParentRequest, SetBlockPositionsRequest, SetBlockPriorityRequest, SetClassificationDefinitionsRequest, SetClassificationOnBlocksRequest, SetFieldDefinitionsRequest, SetFieldOnBlocksRequest, SetUserSettingsRequest } from 'constellation-common/datatypes';
 
 // NOTE: When adding new bridged items, make sure to update shims-renderer.d.ts with the new properties
 

@@ -2,7 +2,7 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 
-import { GENERIC_RESTART, SetBlockParentRequest, SetBlockParentResponse } from 'constellation-common';
+import { GENERIC_RESTART, SetBlockParentRequest, SetBlockParentResponse } from 'constellation-common/datatypes';
 import { ws } from "../../communications/Websocket";
 import { E17, showError } from "../../ErrorLogger";
 

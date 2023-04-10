@@ -1,5 +1,5 @@
 
-import { TypedMap } from "../DataTypes/GenericDataTypes";
+import { TypedMap } from "../datatypes/GenericDataTypes";
 
 // TODO-test : Needs tests
 export function arraysAreEqual(array1: any[] | undefined, array2: any[] | undefined, equalityCheck: (a: any, b: any) => boolean) {

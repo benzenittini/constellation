@@ -28,7 +28,7 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted, onUnmounted, ref } from 'vue';
 
-import { LOCAL_PROJECT, GENERIC_RESTART } from 'constellation-common';
+import { LOCAL_PROJECT, GENERIC_RESTART } from 'constellation-common/datatypes';
 
 import { GetBoardDataAction } from '../../actions/board-actions/GetBoardData';
 import { useEmitter } from '../../composables/Emitter';

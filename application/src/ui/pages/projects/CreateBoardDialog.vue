@@ -61,7 +61,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useStore } from "../../store/store";
 import { BUILT_IN_TEMPLATES } from "../../store/Types/FieldStoreTypes";
-import { TypedMap, GENERIC_RESTART, BoardTemplateClient, LOCAL_PROJECT, TemplateClassification } from 'constellation-common';
+import { TypedMap, GENERIC_RESTART, BoardTemplateClient, LOCAL_PROJECT, TemplateClassification } from 'constellation-common/datatypes';
 import { GetBoardTemplatesAction } from '../../actions/project-actions/GetBoardTemplates';
 import { E3, showError } from "../../ErrorLogger";
 

@@ -3,7 +3,8 @@ import { Action } from "../Action";
 
 import { send } from '../../communications/RestComms';
 
-import { GENERIC_RESTART, JoinProjectResponse, RemoteProject, StringUtils } from 'constellation-common';
+import { GENERIC_RESTART, JoinProjectResponse, RemoteProject } from 'constellation-common/datatypes';
+import { StringUtils } from 'constellation-common/utilities';
 import { GetProjectDataAction } from "./GetProjectData";
 import { E12, showError } from "../../ErrorLogger";
 import { useStore } from "../../store/store";

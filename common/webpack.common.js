@@ -9,10 +9,10 @@ module.exports = {
 
     externals: [nodeExternals([])],
 
-    entry: './src/index.ts',
     entry: {
-        'index': './src/index.ts',
         'persistence': './src/persistence.ts',
+        'datatypes': './src/datatypes.ts',
+        'utilities': './src/utilities.ts',
     },
 
     resolve: {

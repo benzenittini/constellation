@@ -75,7 +75,7 @@ import { v4 as uuidv4 } from 'uuid';
 import dragula from 'dragula';
 
 import { useStore } from "../../../store/store";
-import { FieldDefinition, PossibleValueDefinition, TypedMap } from "constellation-common";
+import { FieldDefinition, PossibleValueDefinition, TypedMap } from 'constellation-common/datatypes';
 
 import { useDragula } from './DragulaComposition';
 
