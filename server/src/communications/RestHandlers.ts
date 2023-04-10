@@ -2,12 +2,12 @@
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
 
-import { logger } from "./Logger";
-import { properties } from "./PropertyLoader";
-import * as UserDataPersistence from './UserDataPersistence';
+import { logger } from "../utilities/Logger";
+import { properties } from "../utilities/PropertyLoader";
+import * as UserDataPersistence from '../persistence/UserDataPersistence';
 import { ConstError, CreateNewBoardRequest, ErrorResponse, ImportBoardRequest } from 'constellation-common/datatypes';
 
-import { projectDataPersistence, boardDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "./Persistence";
+import { projectDataPersistence, boardDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "../persistence/Persistence";
 
 
 function getJwt(req: Request) {

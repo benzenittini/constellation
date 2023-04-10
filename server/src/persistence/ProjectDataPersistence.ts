@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { TypedMap, BasicBoardData, BasicProjectData, BoardTemplateClient, CreateNewBoardResponse, DeleteBoardResponse, TemplateClassification, UpdateBoardConfigResponse, DeleteBoardRequest, CreateNewBoardRequest, UpdateBoardConfigRequest } from 'constellation-common/datatypes';
 import { ArrayUtils } from 'constellation-common/utilities';
-import { properties } from './PropertyLoader';
+import { properties } from '../utilities/PropertyLoader';
 
-import { logger } from './Logger';
+import { logger } from '../utilities/Logger';
 
 export class ProjectDataPersistence {
 

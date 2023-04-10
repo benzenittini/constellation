@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { AuthorizedUser, UserFile, ConstError } from 'constellation-common/datatypes';
 
-import { logger } from './Logger';
-import { properties } from './PropertyLoader';
+import { logger } from '../utilities/Logger';
+import { properties } from '../utilities/PropertyLoader';
 
 let lastLoadedData: UserFile | undefined = undefined;
 

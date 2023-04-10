@@ -10,6 +10,8 @@
         </template>
 
         <template v-else>
+            <p class="mw-block-count">({{ mwSelectedBlockIds.length }} block<span v-if="mwSelectedBlockIds.length > 1">s</span> selected)</p>
+
             <!--====================-->
             <!-- Alignment Controls -->
             <!--====================-->
@@ -243,6 +245,12 @@ export default defineComponent({
     padding: 25px;
     overflow-y: auto;
     @include mixins.scrollbars;
+
+    .mw-block-count {
+        text-align: center;
+        margin-top: -30px;
+        margin-bottom: 30px;
+    }
 
     h1 { text-align: center; margin-bottom: 35px; font-weight: bold; color: vars.$gray3; }
     .actionpane-heading {

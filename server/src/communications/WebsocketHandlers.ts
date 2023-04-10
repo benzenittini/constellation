@@ -2,8 +2,8 @@
 import { Socket, Server } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
 
-import { boardDataPersistence, projectDataPersistence } from './Persistence';
-import { logger } from './Logger';
+import { boardDataPersistence, projectDataPersistence } from '../persistence/Persistence';
+import { logger } from '../utilities/Logger';
 import { ConstError } from 'constellation-common/datatypes';
 
 export function getBoardData(io: Server, socket: Socket) {

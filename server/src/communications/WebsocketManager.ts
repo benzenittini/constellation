@@ -10,9 +10,9 @@ import http from 'http';
 // -- Internal --
 import { ConstError } from "constellation-common/datatypes";
 import { VersionUtils } from "constellation-common/utilities";
-import { logger } from "./Logger";
-import * as WebsocketHandlers from './WebsocketHandlers';
-import { verifyCreds } from "./UserDataPersistence";
+import { logger } from "../utilities/Logger";
+import * as WebsocketHandlers from '../communications/WebsocketHandlers';
+import { verifyCreds } from "../persistence/UserDataPersistence";
 
 // -- Singleton Management --
 export let singleton: WebsocketManager;

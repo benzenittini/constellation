@@ -6,8 +6,8 @@ import { TypedMap, BoardData, TemplateClassification } from 'constellation-commo
 import { Constants } from 'constellation-common/utilities';
 import { BoardDataPersistence } from "constellation-common/persistence";
 import { ProjectDataPersistence } from "./ProjectDataPersistence";
-import { properties } from "./PropertyLoader";
-import { singleton as WebsocketSingleton } from "./WebsocketManager";
+import { properties } from "../utilities/PropertyLoader";
+import { singleton as WebsocketSingleton } from "../communications/WebsocketManager";
 
 
 export let projectDataPersistence: ProjectDataPersistence | undefined = undefined;

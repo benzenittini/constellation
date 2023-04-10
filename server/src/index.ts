@@ -6,11 +6,11 @@ import * as http from 'http';
 import * as https from 'https';
 
 // -- Internal --
-import * as Rest from './RestHandlers';
-import { properties, populateProperties } from './PropertyLoader';
-import { initializeLogger, logger } from './Logger';
-import { initializeSingleton } from './WebsocketManager';
-import { initializePersistence } from './Persistence';
+import * as Rest from './communications/RestHandlers';
+import { properties, populateProperties } from './utilities/PropertyLoader';
+import { initializeLogger, logger } from './utilities/Logger';
+import { initializeSingleton } from './communications/WebsocketManager';
+import { initializePersistence } from './persistence/Persistence';
 
 (async () => {
     try {
