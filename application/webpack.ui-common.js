@@ -35,9 +35,8 @@ module.exports = {
                 loader: 'ts-loader',
                 exclude: /node_modules/,
                 options: {
-                    appendTsSuffixTo: [/\.vue$/],
-                    configFile: "tsconfig-ui.json",
-                },
+                    appendTsSuffixTo: [/\.vue$/]
+                }
             },
             {
                 test: /\.s?[ac]ss$/i,

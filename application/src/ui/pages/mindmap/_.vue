@@ -27,15 +27,15 @@
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, onUnmounted, ref } from 'vue';
-import { LOCAL_PROJECT } from '../../../../../common/DataTypes/BoardDataTypes';
+
+import { LOCAL_PROJECT, GENERIC_RESTART } from 'constellation-common';
 
 import { GetBoardDataAction } from '../../actions/board-actions/GetBoardData';
 import { useEmitter } from '../../composables/Emitter';
 import { useWindowEvents } from '../../composables/WindowEvents';
 import { useStore } from '../../store/store';
 import { ws } from '../../communications/Websocket';
-import { E33, E34, showError } from '../../../common/ErrorLogger';
-import { GENERIC_RESTART } from '../../../../../common/DataTypes/ActionDataTypes';
+import { E33, E34, showError } from '../../ErrorLogger';
 
 export default defineComponent({
     setup() {

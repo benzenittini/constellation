@@ -1,6 +1,6 @@
 
 import { contextBridge, ipcRenderer, shell } from 'electron';
-import * as T from '../../../common/DataTypes/ActionDataTypes';
+import { AddRemoteProjectRequest, CreateBlockRequest, CreateNewBoardRequest, DeleteBlocksRequest, DeleteBoardRequest, DeleteViewRequest, GetBoardDataRequest, LoadViewRequest, RemoveRemoteProjectRequest, SaveViewRequest, SetBlockContentRequest, SetBlockParentRequest, SetBlockPositionsRequest, SetBlockPriorityRequest, SetClassificationDefinitionsRequest, SetClassificationOnBlocksRequest, SetFieldDefinitionsRequest, SetFieldOnBlocksRequest, SetUserSettingsRequest } from 'constellation-common';
 
 // NOTE: When adding new bridged items, make sure to update shims-renderer.d.ts with the new properties
 
@@ -8,36 +8,36 @@ contextBridge.exposeInMainWorld('config', {
     getProjectData:      () => ipcRenderer.invoke('config:getProjectData'),
     getTemplates:        () => ipcRenderer.invoke('config:getTemplates'),
     getPathForNewBoard:  () => ipcRenderer.invoke('config:getPathForNewBoard'),
-    createNewBoard:      (req: T.CreateNewBoardRequest) => ipcRenderer.invoke('config:createNewBoard', req),
-    deleteBoard:         (req: T.DeleteBoardRequest) => ipcRenderer.invoke('config:deleteBoard', req),
+    createNewBoard:      (req: CreateNewBoardRequest) => ipcRenderer.invoke('config:createNewBoard', req),
+    deleteBoard:         (req: DeleteBoardRequest) => ipcRenderer.invoke('config:deleteBoard', req),
     getRemoteProjects:   () => ipcRenderer.invoke('config:getRemoteProjects'),
-    addRemoteProject:    (req: T.AddRemoteProjectRequest) => ipcRenderer.invoke('config:addRemoteProject', req),
-    removeRemoteProject: (req: T.RemoveRemoteProjectRequest) => ipcRenderer.invoke('config:removeRemoteProject', req),
+    addRemoteProject:    (req: AddRemoteProjectRequest) => ipcRenderer.invoke('config:addRemoteProject', req),
+    removeRemoteProject: (req: RemoveRemoteProjectRequest) => ipcRenderer.invoke('config:removeRemoteProject', req),
     importBoard:         () => ipcRenderer.invoke('config:importBoard'),
     readFileAsBoard:     () => ipcRenderer.invoke('config:readFileAsBoard'),
     getUserSettings:     () => ipcRenderer.invoke('config:getUserSettings'),
-    setUserSettings:     (req: T.SetUserSettingsRequest) => ipcRenderer.invoke('config:setUserSettings', req),
+    setUserSettings:     (req: SetUserSettingsRequest) => ipcRenderer.invoke('config:setUserSettings', req),
 });
 
 contextBridge.exposeInMainWorld('board', {
-    getBoardData:       (req: T.GetBoardDataRequest) => ipcRenderer.invoke('board:getBoardData', req),
+    getBoardData:       (req: GetBoardDataRequest) => ipcRenderer.invoke('board:getBoardData', req),
 
     // -- Blocks --
-    createBlock:       (req: T.CreateBlockRequest)       => ipcRenderer.invoke('board:createBlock', req),
-    setBlockPositions: (req: T.SetBlockPositionsRequest) => ipcRenderer.invoke('board:setBlockPositions', req),
-    deleteBlocks:      (req: T.DeleteBlocksRequest)      => ipcRenderer.invoke('board:deleteBlocks', req),
-    setBlockParent:    (req: T.SetBlockParentRequest)    => ipcRenderer.invoke('board:setBlockParent', req),
-    setBlockContent:   (req: T.SetBlockContentRequest)   => ipcRenderer.invoke('board:setBlockContent', req),
+    createBlock:       (req: CreateBlockRequest)       => ipcRenderer.invoke('board:createBlock', req),
+    setBlockPositions: (req: SetBlockPositionsRequest) => ipcRenderer.invoke('board:setBlockPositions', req),
+    deleteBlocks:      (req: DeleteBlocksRequest)      => ipcRenderer.invoke('board:deleteBlocks', req),
+    setBlockParent:    (req: SetBlockParentRequest)    => ipcRenderer.invoke('board:setBlockParent', req),
+    setBlockContent:   (req: SetBlockContentRequest)   => ipcRenderer.invoke('board:setBlockContent', req),
     // -- Fields / Classifications --
-    setClassificationDefinitions: (req: T.SetClassificationDefinitionsRequest) => ipcRenderer.invoke('board:setClassificationDefinitions', req),
-    setClassificationOnBlocks:    (req: T.SetClassificationOnBlocksRequest)    => ipcRenderer.invoke('board:setClassificationOnBlocks', req),
-    setFieldDefinitions:          (req: T.SetFieldDefinitionsRequest)          => ipcRenderer.invoke('board:setFieldDefinitions', req),
-    setFieldOnBlocks:             (req: T.SetFieldOnBlocksRequest)             => ipcRenderer.invoke('board:setFieldOnBlocks', req),
+    setClassificationDefinitions: (req: SetClassificationDefinitionsRequest) => ipcRenderer.invoke('board:setClassificationDefinitions', req),
+    setClassificationOnBlocks:    (req: SetClassificationOnBlocksRequest)    => ipcRenderer.invoke('board:setClassificationOnBlocks', req),
+    setFieldDefinitions:          (req: SetFieldDefinitionsRequest)          => ipcRenderer.invoke('board:setFieldDefinitions', req),
+    setFieldOnBlocks:             (req: SetFieldOnBlocksRequest)             => ipcRenderer.invoke('board:setFieldOnBlocks', req),
     // -- Views --
-    saveView:         (req: T.SaveViewRequest)         => ipcRenderer.invoke('board:saveView', req),
-    deleteView:       (req: T.DeleteViewRequest)       => ipcRenderer.invoke('board:deleteView', req),
-    setBlockPriority: (req: T.SetBlockPriorityRequest) => ipcRenderer.invoke('board:setBlockPriority', req),
-    loadView:         (req: T.LoadViewRequest)         => ipcRenderer.invoke('board:loadView', req),
+    saveView:         (req: SaveViewRequest)         => ipcRenderer.invoke('board:saveView', req),
+    deleteView:       (req: DeleteViewRequest)       => ipcRenderer.invoke('board:deleteView', req),
+    setBlockPriority: (req: SetBlockPriorityRequest) => ipcRenderer.invoke('board:setBlockPriority', req),
+    loadView:         (req: LoadViewRequest)         => ipcRenderer.invoke('board:loadView', req),
 
     // -- Miscellaneous Things --
     updateSaveStatus:   (callback: any) => ipcRenderer.on('board:updateSaveStatus', callback),

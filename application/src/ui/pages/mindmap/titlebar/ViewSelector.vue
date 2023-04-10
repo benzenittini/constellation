@@ -25,10 +25,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { useStore } from "../../../store/store";
 import { useEmitter } from "../../../composables/Emitter";
 
-import { Conjunction, ViewConfig, ViewType } from "../../../../../../common/DataTypes/ViewDataTypes";
+import { GENERIC_RESTART, Conjunction, ViewConfig, ViewType } from "constellation-common";
 import { LoadViewAction } from "../../../actions/board-actions/LoadView";
-import { E32, showError } from "../../../../common/ErrorLogger";
-import { GENERIC_RESTART } from "../../../../../../common/DataTypes/ActionDataTypes";
+import { E32, showError } from "../../../ErrorLogger";
 
 export default defineComponent({
     props: {

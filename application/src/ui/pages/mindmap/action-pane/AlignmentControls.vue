@@ -36,7 +36,7 @@
 
 import { computed, defineComponent } from "vue";
 
-import { mode } from "../../../../../../common/utilities/ArrayUtils";
+import { ArrayUtils } from "constellation-common";
 import { useStore } from "../../../store/store";
 
 import { SetBlockPositionsAction } from '../../../actions/board-actions/SetBlockPositions';
@@ -83,7 +83,7 @@ export default defineComponent({
             },
             alignInRow: () => {
                 // Scale the "gap" between the blocks based on their own scale (depth). Since they can technically be at different depths, use the "mode".
-                let scale = mode(selectedBlocks.value.map(e => blockScales.value[e.id]));
+                let scale = ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id]));
                 let blockGap = 10/scale;
 
                 // Center-align the stack starting from the left-most block
@@ -120,7 +120,7 @@ export default defineComponent({
             },
             alignInColumn: () => {
                 // Scale the "gap" between the blocks based on their own scale (depth). Since they can technically be at different depths, use the "mode".
-                let scale = mode(selectedBlocks.value.map(e => blockScales.value[e.id]));
+                let scale = ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id]));
                 let blockGap = 10/scale;
 
                 // Center-align the stack starting from the top-most block

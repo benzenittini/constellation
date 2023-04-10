@@ -3,9 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { app } from 'electron';
 
-import { ConfigFile, UserSettings } from '../../common/DataTypes/FileDataTypes';
-import { AddRemoteProjectRequest, RemoveRemoteProjectRequest } from '../DataTypes/ActionDataTypes';
-import { TemplateClassification } from '../DataTypes/BoardDataTypes';
+import { AddRemoteProjectRequest, ConfigFile, RemoveRemoteProjectRequest, TemplateClassification, UserSettings } from 'constellation-common';
 
 
 // ===================

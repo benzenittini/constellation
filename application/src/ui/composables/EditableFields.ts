@@ -4,10 +4,7 @@ import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../store/store';
 
-import * as ObjectUtils from '../../../../common/utilities/ObjectUtils';
-import { TypedMap } from '../../../../common/DataTypes/GenericDataTypes';
-import { FieldDefinition, FieldType, PossibleValueDefinition, getFieldValue } from '../../../../common/DataTypes/FieldDataTypes';
-import { Block } from '../../../../common/DataTypes/BlockDataTypes';
+import { ObjectUtils, TypedMap, Block, FieldDefinition, FieldType, PossibleValueDefinition, getFieldValue } from 'constellation-common';
 import { SetFieldDefinitionsAction } from '../actions/board-actions/SetFieldDefinitions';
 import { SetFieldOnBlocksAction } from '../actions/board-actions/SetFieldOnBlocks';
 

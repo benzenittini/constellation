@@ -2,9 +2,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { GENERIC_RESTART, SetClassificationOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, SetClassificationOnBlocksResponse } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E20, showError } from "../../../common/ErrorLogger";
+import { E20, showError } from "../../ErrorLogger";
 
 export class SetClassificationOnBlocksAction extends Action {
 

@@ -114,10 +114,7 @@ import { useWindowEvents } from "../../composables/WindowEvents";
 import { useMouseSampler } from "../../composables/MouseSampler";
 import { useTweenGroup } from "../../composables/TweenGroup";
 
-import { Block, BlockContent, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH } from "../../../../../common/DataTypes/BlockDataTypes";
-import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
-import { removeEntries } from "../../../../../common/utilities/ArrayUtils";
-import * as RectangleUtils from "../../../../../common/utilities/RectangleUtils";
+import { Block, BlockContent, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, BoundingBox, ArrayUtils, RectangleUtils } from "constellation-common";
 
 import { CreateBlockAction } from '../../actions/board-actions/CreateBlock';
 import { SetBlockPositionsAction } from '../../actions/board-actions/SetBlockPositions';
@@ -488,7 +485,7 @@ export default defineComponent({
                 // Non-selected blocks only ... unless we're moving a block that wasn't selected, in which case our entire selection will be cleared by this action so it won't matter.
                 if (currentBlock.isSelected) {
                     let selectedBlockIds = store.getters.selectedBlockIds;
-                    removeEntries(snapZoneBlocks, selectedBlockIds);
+                    ArrayUtils.removeEntries(snapZoneBlocks, selectedBlockIds);
                 }
                 // Never include the block being dragged for snap points
                 let draggedIndex = snapZoneBlocks.indexOf(metadata.blockId);

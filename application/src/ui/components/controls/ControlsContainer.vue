@@ -11,8 +11,7 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 
-import { ViewType } from "../../../../../common/DataTypes/ViewDataTypes";
-import { SUPPORT_EMAIL } from '../../../../../common/Constants';
+import { ViewType, Constants } from 'constellation-common';
 
 import { useStore } from "../../store/store";
 
@@ -25,7 +24,7 @@ export default defineComponent({
         let activeViewType = computed(() => store.state.viewData.activeViewConfig?.type);
 
         return {
-            SUPPORT_EMAIL,
+            SUPPORT_EMAIL: Constants.SUPPORT_EMAIL,
             activeViewType,
             getControlsTitle: (viewType: ViewType | undefined) => {
                 if      (viewType === undefined)       return 'Mind Map Controls';

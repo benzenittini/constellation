@@ -88,8 +88,7 @@ import { defineComponent, computed, PropType } from "vue";
 import { useStore } from "../../../store/store";
 import { useEditableFields } from "../../../composables/EditableFields";
 import { useEditableClassifications } from "../../../composables/EditableClassifications";
-import { ClassificationDefinition } from "../../../../../../common/DataTypes/FieldDataTypes";
-import { Block } from "../../../../../../common/DataTypes/BlockDataTypes";
+import { ClassificationDefinition, Block } from "constellation-common";
 
 export default defineComponent({
     props: {
@@ -138,7 +137,7 @@ export default defineComponent({
 
             // Count the number of fields we're displaying
             let displayedFieldCount = activeBlockFieldIds.value.length;
-            Object.values(activeClassificationFieldIds.value).forEach(fieldIdArray => displayedFieldCount += fieldIdArray.length);
+            Object.values<string[]>(activeClassificationFieldIds.value).forEach(fieldIdArray => displayedFieldCount += fieldIdArray.length);
 
             // Return the difference
             return fieldSet.size - displayedFieldCount;

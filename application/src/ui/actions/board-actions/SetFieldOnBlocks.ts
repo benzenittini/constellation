@@ -1,10 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { GENERIC_RESTART, SetFieldOnBlocksResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { TypedMap, GENERIC_RESTART, SetFieldOnBlocksResponse } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E22, showError } from "../../../common/ErrorLogger";
+import { E22, showError } from "../../ErrorLogger";
 
 export class SetFieldOnBlocksAction extends Action {
 

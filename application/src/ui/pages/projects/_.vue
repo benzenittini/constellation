@@ -89,11 +89,8 @@ import { defineComponent, computed, onMounted, reactive, ref, Ref, onBeforeUpdat
 import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../../store/store';
-import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification } from '../../../../../common/DataTypes/BoardDataTypes';
-import { RemoteProject } from '../../../../../common/DataTypes/FileDataTypes';
-import { E1, E10, E11, E35, E4, E5, E6, E7, E8, E9, showError } from '../../../common/ErrorLogger';
-import { GENERIC_RESTART } from '../../../../../common/DataTypes/ActionDataTypes';
-import { UserSettings } from '../../../../../common/DataTypes/FileDataTypes';
+import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification, RemoteProject, GENERIC_RESTART, UserSettings } from 'constellation-common';
+import { E1, E10, E11, E35, E4, E5, E6, E7, E8, E9, showError } from '../../ErrorLogger';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { GetRemoteProjectsAction } from '../../actions/project-actions/GetRemoteProjects';

@@ -3,12 +3,9 @@ import { dialog } from "electron";
 import fs from 'fs';
 import path from 'path';
 
-import { BoardDataPersistence } from "../../../common/persistence/BoardDataPersistence";
-import * as ConfigDataPersistence from "../../../common/persistence/ConfigDataPersistence";
-import * as T from "../../../common/DataTypes/ActionDataTypes";
-import { mapify } from "../../../common/utilities/ArrayUtils";
-import { BasicBoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, verifyBoardData } from "../../../common/DataTypes/BoardDataTypes";
-import { DOT_FILE_SUFFIX, FILE_SUFFIX } from "../../../common/Constants";
+import { ArrayUtils, Constants, LOCAL_PROJECT, LOCAL_PROJECT_NAME, BasicBoardData, GetProjectDataResponse, CreateNewBoardRequest, CreateNewBoardResponse, GetBoardTemplatesResponse, DeleteBoardRequest, DeleteBoardResponse, GetRemoteProjectsResponse, AddRemoteProjectRequest, AddRemoteProjectResponse, RemoveRemoteProjectResponse, RemoveRemoteProjectRequest, ImportBoardResponse, verifyBoardData, ReadFileAsBoardResponse, GetUserSettingsResponse, SetUserSettingsRequest, SetUserSettingsResponse } from "constellation-common";
+import { BoardDataPersistence } from 'constellation-common/persistence';
+import * as ConfigDataPersistence from "./ConfigDataPersistence";
 
 
 export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
@@ -26,7 +23,7 @@ export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('config:setUserSettings',     (event, req) => setUserSettings(req));
 }
 
-async function getProjectData(): Promise<T.GetProjectDataResponse> {
+async function getProjectData(): Promise<GetProjectDataResponse> {
     let boards = ConfigDataPersistence.config.localBoards.map(filepath => {
         let boardId = filepath;
         let boardName = path.basename(filepath);
@@ -43,17 +40,17 @@ async function getProjectData(): Promise<T.GetProjectDataResponse> {
     return {
         projectId: LOCAL_PROJECT,
         projectName: LOCAL_PROJECT_NAME,
-        boards: mapify<BasicBoardData>(boards, 'boardId'),
+        boards: ArrayUtils.mapify<BasicBoardData>(boards, 'boardId'),
     };
 }
 
-async function getTemplates(): Promise<T.GetBoardTemplatesResponse> {
+async function getTemplates(): Promise<GetBoardTemplatesResponse> {
     return Object.keys(ConfigDataPersistence.config.boardTemplates).map(boardId => {
         return {
             projectId: LOCAL_PROJECT,
             projectName: LOCAL_PROJECT_NAME,
             boardId,
-            boardName: path.basename(boardId, DOT_FILE_SUFFIX),
+            boardName: path.basename(boardId, Constants.DOT_FILE_SUFFIX),
             classifications: ConfigDataPersistence.config.boardTemplates[boardId],
         };
     });
@@ -62,7 +59,7 @@ async function getTemplates(): Promise<T.GetBoardTemplatesResponse> {
 async function getPathForNewBoard(): Promise<string | undefined> {
     let { filePath } = await dialog.showSaveDialog({
         title: "Create Board",
-        defaultPath: `board.${FILE_SUFFIX}`,
+        defaultPath: `board.${Constants.FILE_SUFFIX}`,
         buttonLabel: "Create",
         properties: [
             'createDirectory',
@@ -73,7 +70,7 @@ async function getPathForNewBoard(): Promise<string | undefined> {
     return filePath;
 }
 
-async function createNewBoard({ boardOrFileName, template }: T.CreateNewBoardRequest): Promise<T.CreateNewBoardResponse> {
+async function createNewBoard({ boardOrFileName, template }: CreateNewBoardRequest): Promise<CreateNewBoardResponse> {
     if (boardOrFileName) {
         // Create new file with initial data
         fs.writeFileSync(boardOrFileName, JSON.stringify(BoardDataPersistence.getInitData(template)));
@@ -82,7 +79,7 @@ async function createNewBoard({ boardOrFileName, template }: T.CreateNewBoardReq
         // Return board data, where ID is filepath and name is filename
         return {
             boardId: boardOrFileName,
-            boardName: path.basename(boardOrFileName, DOT_FILE_SUFFIX),
+            boardName: path.basename(boardOrFileName, Constants.DOT_FILE_SUFFIX),
         };
     }
 
@@ -92,7 +89,7 @@ async function createNewBoard({ boardOrFileName, template }: T.CreateNewBoardReq
     };
 }
 
-async function deleteBoard({ boardId, deleteFile }: T.DeleteBoardRequest): Promise<T.DeleteBoardResponse> {
+async function deleteBoard({ boardId, deleteFile }: DeleteBoardRequest): Promise<DeleteBoardResponse> {
     ConfigDataPersistence.removeLocalBoard(boardId);
     ConfigDataPersistence.deleteTemplate(boardId);
 
@@ -106,27 +103,27 @@ async function deleteBoard({ boardId, deleteFile }: T.DeleteBoardRequest): Promi
     };
 }
 
-async function getRemoteProjects(): Promise<T.GetRemoteProjectsResponse> {
+async function getRemoteProjects(): Promise<GetRemoteProjectsResponse> {
     return ConfigDataPersistence.getRemoteServers();
 }
 
-async function addRemoteProject(req: T.AddRemoteProjectRequest): Promise<T.AddRemoteProjectResponse> {
+async function addRemoteProject(req: AddRemoteProjectRequest): Promise<AddRemoteProjectResponse> {
     ConfigDataPersistence.addRemoteServer(req);
     return {};
 }
 
-async function removeRemoteProject(req: T.RemoveRemoteProjectRequest): Promise<T.RemoveRemoteProjectResponse> {
+async function removeRemoteProject(req: RemoveRemoteProjectRequest): Promise<RemoveRemoteProjectResponse> {
     ConfigDataPersistence.removeRemoteServer(req);
     return {};
 }
 
-async function importBoard(): Promise<T.ImportBoardResponse> {
+async function importBoard(): Promise<ImportBoardResponse> {
     let { canceled, filePaths } = await dialog.showOpenDialog({
         title: "Open Board",
         buttonLabel: "Import",
         filters: [{
             name: 'Constellation Board',
-            extensions: [FILE_SUFFIX],
+            extensions: [Constants.FILE_SUFFIX],
         },{
             name: 'All Files',
             extensions: ["*"],
@@ -165,7 +162,7 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
             // Return board data, where ID is filepath and name is filename
             return {
                 boardId: chosenFile,
-                boardName: path.basename(chosenFile, DOT_FILE_SUFFIX),
+                boardName: path.basename(chosenFile, Constants.DOT_FILE_SUFFIX),
             };
         } catch(err) {
             // Error 4 indicates we failed to parse the file
@@ -183,13 +180,13 @@ async function importBoard(): Promise<T.ImportBoardResponse> {
     };
 }
 
-async function readFileAsBoard(): Promise<T.ReadFileAsBoardResponse> {
+async function readFileAsBoard(): Promise<ReadFileAsBoardResponse> {
     let { canceled, filePaths } = await dialog.showOpenDialog({
         title: "Import Board",
         buttonLabel: "Select",
         filters: [{
             name: 'Constellation Board',
-            extensions: [FILE_SUFFIX],
+            extensions: [Constants.FILE_SUFFIX],
         },{
             name: 'All Files',
             extensions: ["*"],
@@ -216,7 +213,7 @@ async function readFileAsBoard(): Promise<T.ReadFileAsBoardResponse> {
             // Return board data, where ID is filepath and name is filename
             return {
                 filepath: chosenFile,
-                filename: path.basename(chosenFile, DOT_FILE_SUFFIX),
+                filename: path.basename(chosenFile, Constants.DOT_FILE_SUFFIX),
                 boardData,
             };
         } catch(err) {
@@ -235,11 +232,11 @@ async function readFileAsBoard(): Promise<T.ReadFileAsBoardResponse> {
     };
 }
 
-async function getUserSettings(): Promise<T.GetUserSettingsResponse> {
+async function getUserSettings(): Promise<GetUserSettingsResponse> {
     return ConfigDataPersistence.getUserSettings();
 }
 
-async function setUserSettings(req: T.SetUserSettingsRequest): Promise<T.SetUserSettingsResponse> {
+async function setUserSettings(req: SetUserSettingsRequest): Promise<SetUserSettingsResponse> {
     ConfigDataPersistence.setUserSettings(req);
     return {};
 }

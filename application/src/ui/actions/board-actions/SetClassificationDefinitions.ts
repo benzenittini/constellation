@@ -1,11 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { GENERIC_RESTART, SetClassificationDefinitionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
-import { ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
+import { TypedMap, GENERIC_RESTART, SetClassificationDefinitionsResponse, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E19, showError } from "../../../common/ErrorLogger";
+import { E19, showError } from "../../ErrorLogger";
 
 export class SetClassificationDefinitionsAction extends Action {
 

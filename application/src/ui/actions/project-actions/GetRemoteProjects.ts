@@ -1,6 +1,6 @@
 
-import { GENERIC_RESTART, GetRemoteProjectsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
-import { E2, showError } from "../../../common/ErrorLogger";
+import { GENERIC_RESTART, GetRemoteProjectsResponse } from 'constellation-common';
+import { E2, showError } from "../../ErrorLogger";
 import { useStore } from "../../store/store";
 import { Action } from "../Action";
 import { GetProjectDataAction } from "./GetProjectData";

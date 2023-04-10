@@ -11,8 +11,8 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import { PossibleValueDefinition } from "../../../../common/DataTypes/FieldDataTypes";
 
+import { PossibleValueDefinition } from 'constellation-common';
 
 export default defineComponent({
     props: {

@@ -4,7 +4,7 @@ import path from 'path';
 
 import { registerConfigHandlers } from './ConfigHandlers';
 import { registerBoardHandlers } from './BoardHandlers';
-import { loadConfigFile } from '../../../common/persistence/ConfigDataPersistence';
+import { loadConfigFile } from './ConfigDataPersistence';
 
 const createWindow = () => {
     const win = new BrowserWindow({

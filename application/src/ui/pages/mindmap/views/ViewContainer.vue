@@ -59,9 +59,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useStore } from "../../../store/store";
 import { useEmitter } from "../../../composables/Emitter";
-import { ViewConfig } from "../../../../../../common/DataTypes/ViewDataTypes";
+import { ViewConfig, ObjectUtils } from "constellation-common";
 import { isValidConfig } from "../../../store/Types/ViewStoreTypes";
-import { areEqual } from "../../../../../../common/utilities/ObjectUtils";
 
 import { SaveViewAction } from '../../../actions/board-actions/SaveView';
 import { DeleteViewAction } from '../../../actions/board-actions/DeleteView';
@@ -108,7 +107,7 @@ export default defineComponent({
         function saveCheck() {
             if (!currentView.value) return;
 
-            if (!areEqual(originalViewConfig, removeConfigsForComparison(JSON.parse(JSON.stringify(currentView.value))))) {
+            if (!ObjectUtils.areEqual(originalViewConfig, removeConfigsForComparison(JSON.parse(JSON.stringify(currentView.value))))) {
                 // TODO-later : check if config changed since last save, and warn user.
                 // This check doesn't work (passing too often), but even if it did ... there's no way to pull the e-brake and cancel unloading the new view.
             }

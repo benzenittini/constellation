@@ -8,11 +8,11 @@ import { Server, Socket } from "socket.io";
 import http from 'http';
 
 // -- Internal --
+import { ConstError } from "constellation-common";
+import { VersionUtils } from "constellation-common";
 import { logger } from "./Logger";
 import * as WebsocketHandlers from './WebsocketHandlers';
 import { verifyCreds } from "./UserDataPersistence";
-import { ConstError } from "../../common/DataTypes/ActionDataTypes";
-import { Version } from "../../common/utilities/VersionUtils";
 
 // -- Singleton Management --
 export let singleton: WebsocketManager;
@@ -20,7 +20,7 @@ export let initializeSingleton = (server: http.Server) => {
     singleton = new WebsocketManager(server);
 }
 
-const CURRENT_VERSION = new Version(WEBPACK.APP_VERSION);
+const CURRENT_VERSION = new VersionUtils.Version(WEBPACK.APP_VERSION);
 
 // -- The actual class implementation --
 export class WebsocketManager {
@@ -31,7 +31,6 @@ export class WebsocketManager {
         this.io = new Server(server, {
             path: `/ws`,
             serveClient: false,
-            transports: ['websocket'],
         });
 
         this.io.on('connection', (socket) => { this.onIoConnection(socket); });

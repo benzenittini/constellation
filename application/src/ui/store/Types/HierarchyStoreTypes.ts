@@ -1,5 +1,5 @@
 
-import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
+import { TypedMap } from 'constellation-common';
 import { AugmentedActionContext, BlockLinkPair, GetterProperties } from "../StoreTypes"
 
 

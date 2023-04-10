@@ -1,7 +1,6 @@
 
 import { Action } from "../Action";
-import { SetUserSettingsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
-import { UserSettings } from "../../../../../common/DataTypes/FileDataTypes";
+import { SetUserSettingsResponse, UserSettings } from 'constellation-common';
 
 export class SetUserSettingsAction extends Action {
 

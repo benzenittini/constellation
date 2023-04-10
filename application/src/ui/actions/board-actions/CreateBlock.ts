@@ -1,11 +1,10 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
 import { useEmitter } from "../../composables/Emitter";
-import { CreateBlockResponse, GENERIC_RESTART } from "../../../../../common/DataTypes/ActionDataTypes";
+import { BoundingBox, CreateBlockResponse, GENERIC_RESTART } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E14, showError } from "../../../common/ErrorLogger";
+import { E14, showError } from "../../ErrorLogger";
 
 export class CreateBlockAction extends Action {
 

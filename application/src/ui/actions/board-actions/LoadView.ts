@@ -1,9 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { GENERIC_RESTART, LoadViewResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, LoadViewResponse } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E26, showError } from "../../../common/ErrorLogger";
+import { E26, showError } from "../../ErrorLogger";
 
 export class LoadViewAction extends Action {
 

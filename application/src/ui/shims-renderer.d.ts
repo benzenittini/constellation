@@ -1,41 +1,41 @@
 
-import * as T from "../../../common/DataTypes/ActionDataTypes";
+import { AddRemoteProjectRequest, AddRemoteProjectResponse, CreateBlockRequest, CreateBlockResponse, CreateNewBoardRequest, CreateNewBoardResponse, DeleteBlocksRequest, DeleteBlocksResponse, DeleteBoardRequest, DeleteBoardResponse, DeleteViewRequest, DeleteViewResponse, GetBoardDataRequest, GetBoardDataResponse, GetBoardTemplatesResponse, GetProjectDataRequest, GetProjectDataResponse, GetRemoteProjectsRequest, GetRemoteProjectsResponse, GetUserSettingsResponse, ImportBoardRequest, ImportBoardResponse, LoadViewRequest, LoadViewResponse, ReadFileAsBoardResponse, RemoveRemoteProjectRequest, RemoveRemoteProjectResponse, SaveViewRequest, SaveViewResponse, SetBlockContentRequest, SetBlockContentResponse, SetBlockParentRequest, SetBlockParentResponse, SetBlockPositionsRequest, SetBlockPositionsResponse, SetBlockPriorityRequest, SetBlockPriorityResponse, SetClassificationDefinitionsRequest, SetClassificationDefinitionsResponse, SetClassificationOnBlocksRequest, SetClassificationOnBlocksResponse, SetFieldDefinitionsRequest, SetFieldDefinitionsResponse, SetFieldOnBlocksRequest, SetFieldOnBlocksResponse, SetUserSettingsRequest, SetUserSettingsResponse } from 'constellation-common';
 
 /** Tells typescript what properties are available on the global "window" object. Useful for preloads. */
 declare global {
     interface Window {
         config: {
-            getProjectData:      (req: T.GetProjectDataRequest)      => Promise<T.GetProjectDataResponse>,
-            getTemplates:        () => Promise<T.GetBoardTemplatesResponse>,
+            getProjectData:      (req: GetProjectDataRequest)      => Promise<GetProjectDataResponse>,
+            getTemplates:        () => Promise<GetBoardTemplatesResponse>,
             getPathForNewBoard:  () => Promise<string | undefined>,
-            createNewBoard:      (req: T.CreateNewBoardRequest)      => Promise<T.CreateNewBoardResponse>,
-            deleteBoard:         (req: T.DeleteBoardRequest)         => Promise<T.DeleteBoardResponse>,
-            getRemoteProjects:   (req: T.GetRemoteProjectsRequest)   => Promise<T.GetRemoteProjectsResponse>,
-            addRemoteProject:    (req: T.AddRemoteProjectRequest)    => Promise<T.AddRemoteProjectResponse>,
-            removeRemoteProject: (req: T.RemoveRemoteProjectRequest) => Promise<T.RemoveRemoteProjectResponse>,
-            importBoard:         (req: T.ImportBoardRequest)         => Promise<T.ImportBoardResponse>,
-            readFileAsBoard:     () => Promise<T.ReadFileAsBoardResponse>,
-            getUserSettings:     () => Promise<T.GetUserSettingsResponse>,
-            setUserSettings:     (req: T.SetUserSettingsRequest) => Promise<T.SetUserSettingsResponse>,
+            createNewBoard:      (req: CreateNewBoardRequest)      => Promise<CreateNewBoardResponse>,
+            deleteBoard:         (req: DeleteBoardRequest)         => Promise<DeleteBoardResponse>,
+            getRemoteProjects:   (req: GetRemoteProjectsRequest)   => Promise<GetRemoteProjectsResponse>,
+            addRemoteProject:    (req: AddRemoteProjectRequest)    => Promise<AddRemoteProjectResponse>,
+            removeRemoteProject: (req: RemoveRemoteProjectRequest) => Promise<RemoveRemoteProjectResponse>,
+            importBoard:         (req: ImportBoardRequest)         => Promise<ImportBoardResponse>,
+            readFileAsBoard:     () => Promise<ReadFileAsBoardResponse>,
+            getUserSettings:     () => Promise<GetUserSettingsResponse>,
+            setUserSettings:     (req: SetUserSettingsRequest) => Promise<SetUserSettingsResponse>,
         },
         board: {
-            getBoardData:       (req: T.GetBoardDataRequest) => Promise<T.GetBoardDataResponse>,
+            getBoardData:       (req: GetBoardDataRequest) => Promise<GetBoardDataResponse>,
             // -- Blocks --
-            createBlock:       (req: T.CreateBlockRequest)       => Promise<T.CreateBlockResponse>,
-            setBlockPositions: (req: T.SetBlockPositionsRequest) => Promise<T.SetBlockPositionsResponse>,
-            deleteBlocks:      (req: T.DeleteBlocksRequest)      => Promise<T.DeleteBlocksResponse>,
-            setBlockParent:    (req: T.SetBlockParentRequest)    => Promise<T.SetBlockParentResponse>,
-            setBlockContent:   (req: T.SetBlockContentRequest)   => Promise<T.SetBlockContentResponse>,
+            createBlock:       (req: CreateBlockRequest)       => Promise<CreateBlockResponse>,
+            setBlockPositions: (req: SetBlockPositionsRequest) => Promise<SetBlockPositionsResponse>,
+            deleteBlocks:      (req: DeleteBlocksRequest)      => Promise<DeleteBlocksResponse>,
+            setBlockParent:    (req: SetBlockParentRequest)    => Promise<SetBlockParentResponse>,
+            setBlockContent:   (req: SetBlockContentRequest)   => Promise<SetBlockContentResponse>,
             // -- Fields and Classifications --
-            setClassificationDefinitions: (req: T.SetClassificationDefinitionsRequest) => Promise<T.SetClassificationDefinitionsResponse>,
-            setClassificationOnBlocks:    (req: T.SetClassificationOnBlocksRequest)    => Promise<T.SetClassificationOnBlocksResponse>,
-            setFieldDefinitions:          (req: T.SetFieldDefinitionsRequest)          => Promise<T.SetFieldDefinitionsResponse>,
-            setFieldOnBlocks:             (req: T.SetFieldOnBlocksRequest)             => Promise<T.SetFieldOnBlocksResponse>,
+            setClassificationDefinitions: (req: SetClassificationDefinitionsRequest) => Promise<SetClassificationDefinitionsResponse>,
+            setClassificationOnBlocks:    (req: SetClassificationOnBlocksRequest)    => Promise<SetClassificationOnBlocksResponse>,
+            setFieldDefinitions:          (req: SetFieldDefinitionsRequest)          => Promise<SetFieldDefinitionsResponse>,
+            setFieldOnBlocks:             (req: SetFieldOnBlocksRequest)             => Promise<SetFieldOnBlocksResponse>,
             // -- Views --
-            saveView:         (req: T.SaveViewRequest)         => Promise<T.SaveViewResponse>,
-            deleteView:       (req: T.DeleteViewRequest)       => Promise<T.DeleteViewResponse>,
-            setBlockPriority: (req: T.SetBlockPriorityRequest) => Promise<T.SetBlockPriorityResponse>,
-            loadView:         (req: T.LoadViewRequest)         => Promise<T.LoadViewResponse>,
+            saveView:         (req: SaveViewRequest)         => Promise<SaveViewResponse>,
+            deleteView:       (req: DeleteViewRequest)       => Promise<DeleteViewResponse>,
+            setBlockPriority: (req: SetBlockPriorityRequest) => Promise<SetBlockPriorityResponse>,
+            loadView:         (req: LoadViewRequest)         => Promise<LoadViewResponse>,
 
             // -- Miscelaneous Things --
             updateSaveStatus:   any,

@@ -16,10 +16,9 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, PropType, ref } from "vue";
-import { GENERIC_RESTART, ReadFileAsBoardResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, ReadFileAsBoardResponse, BoardData } from 'constellation-common';
 
-import { BoardData } from "../../../../../common/DataTypes/BoardDataTypes";
-import { E40, showError } from "../../../common/ErrorLogger";
+import { E40, showError } from "../../ErrorLogger";
 
 export default defineComponent({
     props: {

@@ -1,10 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { BoardData, LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
-import { GENERIC_RESTART, ImportBoardResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, ImportBoardResponse, BoardData, LOCAL_PROJECT } from 'constellation-common';
 import { send } from "../../communications/RestComms";
-import { E29, showError } from "../../../common/ErrorLogger";
+import { E29, showError } from "../../ErrorLogger";
 
 export class ImportBoardAction extends Action {
 

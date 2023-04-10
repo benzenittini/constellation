@@ -1,10 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { LOCAL_PROJECT, TemplateClassification } from "../../../../../common/DataTypes/BoardDataTypes";
-import { CreateNewBoardResponse, GENERIC_RESTART } from "../../../../../common/DataTypes/ActionDataTypes";
+import { LOCAL_PROJECT, TemplateClassification, CreateNewBoardResponse, GENERIC_RESTART } from 'constellation-common';
 import { send } from "../../communications/RestComms";
-import { E27, showError } from "../../../common/ErrorLogger";
+import { E27, showError } from "../../ErrorLogger";
 
 export class CreateNewBoardAction extends Action {
 

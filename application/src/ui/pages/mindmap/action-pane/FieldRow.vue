@@ -34,7 +34,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import { fieldTypeHasPVs, getAllFieldTypes, getCompatibleFieldTypes, getFieldDataType } from "../../../../../../common/DataTypes/FieldDataTypes";
+import { fieldTypeHasPVs, getAllFieldTypes, getCompatibleFieldTypes, getFieldDataType } from "constellation-common";
 
 
 export default defineComponent({

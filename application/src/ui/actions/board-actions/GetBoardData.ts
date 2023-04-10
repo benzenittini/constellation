@@ -1,9 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { GENERIC_RESTART, GetBoardDataResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, GetBoardDataResponse } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E13, showError } from "../../../common/ErrorLogger";
+import { E13, showError } from "../../ErrorLogger";
 
 export class GetBoardDataAction extends Action {
 

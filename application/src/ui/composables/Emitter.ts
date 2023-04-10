@@ -1,6 +1,6 @@
 
 import mitt from 'mitt';
-import { TypedMap } from '../../../../common/DataTypes/GenericDataTypes';
+import { TypedMap } from 'constellation-common';
 
 export type EventRegistration = {
     type: string,

@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { logger } from "./Logger";
 import { properties } from "./PropertyLoader";
 import * as UserDataPersistence from './UserDataPersistence';
-import * as T from "../../common/DataTypes/ActionDataTypes";
+import { ConstError, CreateNewBoardRequest, ErrorResponse, ImportBoardRequest } from "constellation-common";
 
 import { projectDataPersistence, boardDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "./Persistence";
 
@@ -23,7 +23,7 @@ function requireAuthorization(req: Request, res: Response, callback: () => void)
     if (UserDataPersistence.verifyCreds(creds)) {
         callback();
     } else {
-        const err: T.ErrorResponse = { errorCode: 1, message: "You are not authorized to perform this action." };
+        const err: ErrorResponse = { errorCode: 1, message: "You are not authorized to perform this action." };
         res.json(err);
     }
 }
@@ -43,12 +43,12 @@ export async function postUser(req: Request, res: Response) {
         // Return the token to the client
         res.json({ token: clientAuthToken });
     } catch(err) {
-        if (err instanceof T.ConstError) {
+        if (err instanceof ConstError) {
             logger.error(err.message);
             res.json(err.getErrorResponse());
         } else {
             logger.error(err);
-            const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+            const response: ErrorResponse = { errorCode: 2, message: undefined };
             res.json(response);
         }
     }
@@ -81,7 +81,7 @@ export async function getProject(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        const response: ErrorResponse = { errorCode: 2, message: undefined };
         res.json(response);
     }
 }
@@ -93,7 +93,7 @@ export async function getProjectTemplates(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        const response: ErrorResponse = { errorCode: 2, message: undefined };
         res.json(response);
     }
 }
@@ -106,7 +106,7 @@ export async function getProjectTemplates(req: Request, res: Response) {
 export async function postBoard(req: Request, res: Response) {
     try {
         requireAuthorization(req, res, async () => {
-            let data: T.CreateNewBoardRequest = req.body;
+            let data: CreateNewBoardRequest = req.body;
 
             // Create the board in our project persistence
             let result = await projectDataPersistence!.createNewBoard(data);
@@ -126,7 +126,7 @@ export async function postBoard(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        const response: ErrorResponse = { errorCode: 2, message: undefined };
         res.json(response);
     }
 }
@@ -134,7 +134,7 @@ export async function postBoard(req: Request, res: Response) {
 export async function putBoard(req: Request, res: Response) {
     try {
         requireAuthorization(req, res, async () => {
-            let { boardName, initialData } = (req.body as T.ImportBoardRequest)!;
+            let { boardName, initialData } = (req.body as ImportBoardRequest)!;
 
             // Create the board in our project persistence
             let result = await projectDataPersistence!.createNewBoard({ boardOrFileName: boardName, template: [] });
@@ -155,7 +155,7 @@ export async function putBoard(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        const response: ErrorResponse = { errorCode: 2, message: undefined };
         res.json(response);
     }
 }
@@ -171,7 +171,7 @@ export async function deleteBoard(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        const response: ErrorResponse = { errorCode: 2, message: undefined };
         res.json(response);
     }
 }
@@ -184,7 +184,7 @@ export async function putBoardById(req: Request, res: Response) {
         });
     } catch(err) {
         logger.error(err);
-        const response: T.ErrorResponse = { errorCode: 2, message: undefined };
+        const response: ErrorResponse = { errorCode: 2, message: undefined };
         res.json(response);
     }
 }

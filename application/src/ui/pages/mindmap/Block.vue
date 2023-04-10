@@ -124,8 +124,7 @@ import { computed, defineComponent, inject, onMounted, reactive, Ref, ref, watch
 import { useStore } from "../../store/store";
 import { useEmitter } from "../../composables/Emitter";
 
-import { Block, BlockContent, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH } from "../../../../../common/DataTypes/BlockDataTypes";
-import * as RectangleUtils from '../../../../../common/utilities/RectangleUtils';
+import { Block, BlockContent, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, RectangleUtils } from "constellation-common";
 import { ResizeDirection } from "../../composables/Resizable";
 
 import { SetBlockContentAction } from '../../actions/board-actions/SetBlockContent';

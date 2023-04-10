@@ -4,6 +4,7 @@
 ## Prerequisites
 
 * Install git
+* Install git-lfs
 * Install NodeJS / NPM
 
 # Cloning and setting it up
@@ -12,7 +13,7 @@
 # =============
 # mw-vue-modals
 # -------------
-git clone ____
+git clone git@github.com:moonwafer-io/mw-vue-modals.git
 cd ./mw-vue-modals
 npm install
 npm run build-prod
@@ -21,7 +22,7 @@ npm link
 # =============
 # mw-vue-notify
 # -------------
-git clone ____
+git clone git@github.com:moonwafer-io/mw-vue-notify.git
 cd ./mw-vue-notify
 npm install
 npm run build-prod
@@ -30,7 +31,7 @@ npm link
 # =============
 # constellation
 # -------------
-git clone ____
+git clone git@github.com:moonwafer-io/constellation.git
 # common project
 cd ./constellation/common
 npm install
@@ -38,6 +39,7 @@ npm install
 cd ../application
 npm install
 npm link mw-vue-modals mw-vue-notify
+node ./fixTypings.js
 # server project
 cd ../server
 npm install

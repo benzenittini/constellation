@@ -61,11 +61,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useStore } from "../../store/store";
 import { BUILT_IN_TEMPLATES } from "../../store/Types/FieldStoreTypes";
-import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { BoardTemplateClient, LOCAL_PROJECT, TemplateClassification } from "../../../../../common/DataTypes/BoardDataTypes";
+import { TypedMap, GENERIC_RESTART, BoardTemplateClient, LOCAL_PROJECT, TemplateClassification } from 'constellation-common';
 import { GetBoardTemplatesAction } from '../../actions/project-actions/GetBoardTemplates';
-import { E3, showError } from "../../../common/ErrorLogger";
-import { GENERIC_RESTART } from "../../../../../common/DataTypes/ActionDataTypes";
+import { E3, showError } from "../../ErrorLogger";
 
 export default defineComponent({
     props: {

@@ -1,10 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
-import { BoardConfig, GENERIC_RESTART, UpdateBoardConfigResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { BoardConfig, GENERIC_RESTART, UpdateBoardConfigResponse, LOCAL_PROJECT } from 'constellation-common';
 import { send } from "../../communications/RestComms";
-import { E30, showError } from "../../../common/ErrorLogger";
+import { E30, showError } from "../../ErrorLogger";
 
 export class UpdateBoardConfigAction extends Action {
 

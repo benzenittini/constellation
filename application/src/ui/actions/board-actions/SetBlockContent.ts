@@ -2,10 +2,9 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 
-import { GENERIC_RESTART, SetBlockContentResponse } from "../../../../../common/DataTypes/ActionDataTypes";
-import { BlockContent } from "../../../../../common/DataTypes/BlockDataTypes";
+import { BlockContent, GENERIC_RESTART, SetBlockContentResponse } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E18, showError } from "../../../common/ErrorLogger";
+import { E18, showError } from "../../ErrorLogger";
 
 export class SetBlockContentAction extends Action {
 

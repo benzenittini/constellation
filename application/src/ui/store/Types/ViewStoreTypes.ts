@@ -1,12 +1,7 @@
 
 import { AugmentedActionContext, GetterProperties, RootState } from "../StoreTypes";
-import * as StringUtils from '../../../../../common/utilities/StringUtils';
-import * as DateUtils from '../../../../../common/utilities/DateUtils';
-import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
-import { BaseViewConfig, Comparator, Conjunction, Filter, FilterChain, FilterType, Inclusion, MultiSelectComparator, SingleSelectComparator, StringComparator, TemporalBeforeAfterFilter, TemporalComparator, TemporalFilterValue, TemporalUnit, TemporalWithinFilter, ViewConfig, ViewType } from "../../../../../common/DataTypes/ViewDataTypes";
-import { Block } from "../../../../../common/DataTypes/BlockDataTypes";
-import { DateTime, PossibleValueDefinition } from "../../../../../common/DataTypes/FieldDataTypes";
-import { E36, E37, showError } from "../../../common/ErrorLogger";
+import { TypedMap, StringUtils, DateUtils, Block, DateTime, PossibleValueDefinition, BaseViewConfig, Comparator, Conjunction, Filter, FilterChain, FilterType, Inclusion, MultiSelectComparator, SingleSelectComparator, StringComparator, TemporalBeforeAfterFilter, TemporalComparator, TemporalFilterValue, TemporalUnit, TemporalWithinFilter, ViewConfig, ViewType } from 'constellation-common';
+import { E36, E37, showError } from "../../ErrorLogger";
 
 
 // -- State --

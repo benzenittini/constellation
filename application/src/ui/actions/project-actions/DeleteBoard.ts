@@ -1,10 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { DeleteBoardResponse, GENERIC_RESTART } from "../../../../../common/DataTypes/ActionDataTypes";
+import { DeleteBoardResponse, GENERIC_RESTART, LOCAL_PROJECT } from 'constellation-common';
 import { send } from "../../communications/RestComms";
-import { LOCAL_PROJECT } from "../../../../../common/DataTypes/BoardDataTypes";
-import { E28, showError } from "../../../common/ErrorLogger";
+import { E28, showError } from "../../ErrorLogger";
 
 export class DeleteBoardAction extends Action {
 

@@ -1,9 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { GENERIC_RESTART, SetBlockPriorityResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, SetBlockPriorityResponse } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E25, showError } from "../../../common/ErrorLogger";
+import { E25, showError } from "../../ErrorLogger";
 
 export class SetBlockPriorityAction extends Action {
 

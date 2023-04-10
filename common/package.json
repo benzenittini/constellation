@@ -1,13 +1,36 @@
 {
-  "name": "common",
+  "name": "constellation-common",
   "version": "1.0.2",
-  "main": "index.js",
+  "description": "Common utilities supporting Constellation",
+  "repository": "git@github.com:moonwafer-io/mw-vue-modals.git",
+  "homepage": "https://github.com/moonwafer-io/mw-vue-modals#readme",
+  "author": "<ben@zenittini.dev>",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./persistence": "./dist/persistence.js"
+  },
   "license": "Apache-2.0",
   "private": true,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "webpack --config webpack.dev.js",
+    "watch": "webpack --watch --config webpack.dev.js",
+    "build-prod": "webpack --config webpack.prod.js",
+    "prepublish": "webpack --config webpack.prod.js"
+  },
   "dependencies": {
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@types/uuid": "^9.0.1"
+    "@types/uuid": "^9.0.1",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
+    "webpack": "^5.78.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-merge": "^5.8.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }

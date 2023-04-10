@@ -2,6 +2,8 @@
   "name": "constellation-server",
   "version": "1.0.2",
   "license": "Apache-2.0",
+  "description": "A visual organization tool",
+  "homepage": "https://getconstellation.dev",
   "author": "<ben@zenittini.dev>",
   "private": true,
   "scripts": {
@@ -12,6 +14,7 @@
     "package-server": "mkdir -p ./packaging && zip -r -j ./packaging/constellation-server-$npm_package_version.zip ./dist/*"
   },
   "dependencies": {
+    "constellation-common": "file:../common",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "socket.io": "^4.6.1",

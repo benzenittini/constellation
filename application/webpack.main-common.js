@@ -14,6 +14,9 @@ module.exports = {
 
     resolve: {
         extensions: ['.ts', '.tsx', '.js'],
+        // This is needed because we npm-installed constellation-commons as a local directory, which adds them as symlinks,
+        // which makes it so they can't resolve our node_modules folder, which is required to resolve vue.
+        symlinks: false,
     },
 
     module: {
@@ -22,9 +25,6 @@ module.exports = {
                 test: /\.tsx?$/,
                 loader: 'ts-loader',
                 exclude: /node_modules/,
-                options: {
-                    configFile: "tsconfig-main.json",
-                },
             },
 
         ]

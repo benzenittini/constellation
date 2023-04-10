@@ -14,10 +14,8 @@
 import { defineComponent, computed, ComputedRef } from "vue";
 
 import { useStore } from "../store/store";
-import { TypedMap } from "../../../../common/DataTypes/GenericDataTypes";
-import { DataType, DateTime, FieldDefinition, FieldType, getFieldDataType } from "../../../../common/DataTypes/FieldDataTypes";
+import { DataType, DateTime, FieldDefinition, FieldType, getFieldDataType, TypedMap, StringUtils } from 'constellation-common';
 import { DropdownOption } from "../store/Types/FieldStoreTypes";
-import { isString } from "../../../../common/utilities/StringUtils";
 
 type ElementType = {
     key: string,
@@ -258,7 +256,7 @@ export default defineComponent({
                 // 1. Datetime element - easy peasy, just emit as-is
                 // 2. Dropdown element - gives us a string in the form "<date?> <time?>" that we need to convert to an object.
                 let emitValue = newVal;
-                if (getFieldDataType((props.eicFieldDef as FieldDefinition).type) === DataType.TEMPORAL && isString(newVal)) {
+                if (getFieldDataType((props.eicFieldDef as FieldDefinition).type) === DataType.TEMPORAL && StringUtils.isString(newVal)) {
                     let [date, time] = newVal.split(' ');
                     emitValue = { date, time };
                 }

@@ -2,10 +2,15 @@
 import { reactive } from 'vue';
 import io, { Socket } from 'socket.io-client';
 
+// import { io, Socket } from 'socket.io-client';
+// const { io } = import('socket.io-client');
+// import * as io from 'socket.io-client';
+// import { io } from 'socket.io-client';
+
 import { useVueModals } from 'mw-vue-modals';
 import { useVueNotify } from 'mw-vue-notify';
 
-import { RemoteProject } from '../../../../common/DataTypes/FileDataTypes';
+import { RemoteProject, GENERIC_RESTART } from 'constellation-common';
 
 // -- Actions --
 import { GetBoardDataAction } from '../actions/board-actions/GetBoardData';
@@ -22,8 +27,7 @@ import { SaveViewAction } from '../actions/board-actions/SaveView';
 import { DeleteViewAction } from '../actions/board-actions/DeleteView';
 import { SetBlockPriorityAction } from '../actions/board-actions/SetBlockPriority';
 import { LoadViewAction } from '../actions/board-actions/LoadView';
-import { E31, showError } from '../../common/ErrorLogger';
-import { GENERIC_RESTART } from '../../../../common/DataTypes/ActionDataTypes';
+import { E31, showError } from '../ErrorLogger';
 import { useStore } from '../store/store';
 
 

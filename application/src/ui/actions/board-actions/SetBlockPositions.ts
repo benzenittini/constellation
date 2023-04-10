@@ -1,11 +1,9 @@
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { BlockIdAndPosition } from "../../../../../common/DataTypes/BlockDataTypes";
-import { BoundingBox } from "../../../../../common/DataTypes/GenericDataTypes";
-import { GENERIC_RESTART, SetBlockPositionsResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { BlockIdAndPosition, BoundingBox, GENERIC_RESTART, SetBlockPositionsResponse } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E15, showError } from "../../../common/ErrorLogger";
+import { E15, showError } from "../../ErrorLogger";
 
 export class SetBlockPositionsAction extends Action {
 

@@ -3,8 +3,7 @@ import { Action } from "../Action";
 
 import { useStore } from "../../store/store";
 import { send } from '../../communications/RestComms';
-import { LeaveProjectResponse, RemoveRemoteProjectResponse } from "../../../../../common/DataTypes/ActionDataTypes";
-import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
+import { LeaveProjectResponse, RemoveRemoteProjectResponse, RemoteProject } from 'constellation-common';
 
 export class LeaveProjectAction extends Action {
 

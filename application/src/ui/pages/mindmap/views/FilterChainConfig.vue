@@ -123,8 +123,9 @@ import {
     FilterChain,
     Filter,
     FieldValueFilter,
-} from "../../../../../../common/DataTypes/ViewDataTypes";
-import { DataType, FieldType } from "../../../../../../common/DataTypes/FieldDataTypes";
+    // Other
+    DataType, FieldType
+} from "constellation-common";
 
 export default defineComponent({
     props: {

@@ -1,7 +1,5 @@
 
-import { BoardTemplateClient } from "../../../../../common/DataTypes/BoardDataTypes";
-import { ClassificationDefinition, DataType, FieldDefinition, FieldType, PossibleValueDefinition, getFieldDataType } from "../../../../../common/DataTypes/FieldDataTypes";
-import { TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
+import { TypedMap, BoardTemplateClient, ClassificationDefinition, DataType, FieldDefinition, FieldType, PossibleValueDefinition, getFieldDataType } from 'constellation-common';
 import { AugmentedActionContext, GetterProperties, RootState } from "../StoreTypes"
 
 

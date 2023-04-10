@@ -72,9 +72,7 @@ import dragula from 'dragula';
 import { useStore } from "../../../../store/store";
 import { useView } from '../../../../composables/View';
 
-import { TypedMap } from "../../../../../../../common/DataTypes/GenericDataTypes";
-import { Block } from "../../../../../../../common/DataTypes/BlockDataTypes";
-import { KanbanViewConfig } from "../../../../../../../common/DataTypes/ViewDataTypes";
+import { TypedMap, Block, KanbanViewConfig, ClassificationDefinition } from "constellation-common";
 import { SetFieldOnBlocksAction } from "../../../../actions/board-actions/SetFieldOnBlocks";
 import { SetBlockPriorityAction } from "../../../../actions/board-actions/SetBlockPriority";
 
@@ -101,7 +99,7 @@ export default defineComponent({
 
         let displayedBlocks = computed(() => {
             // Only includes blocks that have the classification for the "grouping field" set.
-            let groupingClassificationId = Object.values(store.getters.classifications)
+            let groupingClassificationId = Object.values<ClassificationDefinition>(store.getters.classifications)
                 .find((c) => c.fieldIds.includes(kanbanConfig.value.groupingFieldId))
                 ?.id;
             return store.getters.prioritizedBlocks.filter((block) => {

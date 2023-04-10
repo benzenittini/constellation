@@ -3,11 +3,10 @@ import { useVueNotify } from "mw-vue-notify";
 
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
-import { GENERIC_RESTART, SaveViewResponse } from "../../../../../common/DataTypes/ActionDataTypes";
-import { ViewConfig } from "../../../../../common/DataTypes/ViewDataTypes";
+import { GENERIC_RESTART, SaveViewResponse, ViewConfig } from 'constellation-common';
 import { LoadViewAction } from "./LoadView";
 import { ws } from "../../communications/Websocket";
-import { E23, showError } from "../../../common/ErrorLogger";
+import { E23, showError } from "../../ErrorLogger";
 
 export class SaveViewAction extends Action {
 

@@ -2,7 +2,7 @@
 import fs from 'fs';
 
 import { v4 as uuidv4 } from 'uuid';
-import { UserFile } from '../../common/DataTypes/FileDataTypes';
+import { UserFile } from 'constellation-common';
 
 const LIST_COMMAND     = "   node ./user-management.js ./users.json list";
 const REVOKE_COMMAND   = "   node ./user-management.js ./users.json revoke <client-id>";

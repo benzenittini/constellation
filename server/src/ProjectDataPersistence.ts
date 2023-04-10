@@ -2,12 +2,9 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { BasicBoardData, BasicProjectData, BoardTemplateClient, TemplateClassification } from '../../common/DataTypes/BoardDataTypes';
+import { TypedMap, ArrayUtils, BasicBoardData, BasicProjectData, BoardTemplateClient, CreateNewBoardResponse, DeleteBoardResponse, TemplateClassification, UpdateBoardConfigResponse, DeleteBoardRequest, CreateNewBoardRequest, UpdateBoardConfigRequest } from 'constellation-common';
 import { properties } from './PropertyLoader';
-import { mapify } from '../../common/utilities/ArrayUtils';
 
-import * as T from '../../common/DataTypes/ActionDataTypes';
-import { TypedMap } from '../../common/DataTypes/GenericDataTypes';
 import { logger } from './Logger';
 
 export class ProjectDataPersistence {
@@ -64,11 +61,11 @@ export class ProjectDataPersistence {
         return {
             projectId: this.data.projectId,
             projectName: properties.project_name,
-            boards: mapify<BasicBoardData>(this.data.boards, 'boardId'),
+            boards: ArrayUtils.mapify<BasicBoardData>(this.data.boards, 'boardId'),
         };
     }
 
-    async createNewBoard({ boardOrFileName }: T.CreateNewBoardRequest): Promise<T.CreateNewBoardResponse> {
+    async createNewBoard({ boardOrFileName }: CreateNewBoardRequest): Promise<CreateNewBoardResponse> {
         let board = {
             boardId: uuidv4(),
             boardName: boardOrFileName,
@@ -80,7 +77,7 @@ export class ProjectDataPersistence {
         return board;
     }
 
-    async deleteBoard({ boardId }: T.DeleteBoardRequest): Promise<T.DeleteBoardResponse> {
+    async deleteBoard({ boardId }: DeleteBoardRequest): Promise<DeleteBoardResponse> {
         let index = this.data.boards.findIndex(board => board.boardId === boardId);
 
         if (index === -1) {
@@ -99,7 +96,7 @@ export class ProjectDataPersistence {
         }
     }
 
-    async updateBoardConfig(boardId: string, { boardConfig }: T.UpdateBoardConfigRequest): Promise<T.UpdateBoardConfigResponse> {
+    async updateBoardConfig(boardId: string, { boardConfig }: UpdateBoardConfigRequest): Promise<UpdateBoardConfigResponse> {
         let board = this.data.boards.find(b => b.boardId === boardId);
         if (!board) return {
             errorCode: 3,

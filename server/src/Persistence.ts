@@ -2,12 +2,10 @@
 import path from "path";
 import fs from 'fs';
 
-import { BoardData, TemplateClassification } from "../../common/DataTypes/BoardDataTypes";
-import { TypedMap } from "../../common/DataTypes/GenericDataTypes";
-import { BoardDataPersistence } from "../../common/persistence/BoardDataPersistence";
+import { TypedMap, BoardData, TemplateClassification, Constants } from "constellation-common";
+import { BoardDataPersistence } from "constellation-common/persistence";
 import { ProjectDataPersistence } from "./ProjectDataPersistence";
 import { properties } from "./PropertyLoader";
-import { DOT_FILE_SUFFIX } from "../../common/Constants";
 import { singleton as WebsocketSingleton } from "./WebsocketManager";
 
 
@@ -27,20 +25,20 @@ export async function initializePersistence(filepath: string) {
 
 export function addBoardPersistence(boardId: string, template?: TemplateClassification[]) {
     boardDataPersistence[boardId] = new BoardDataPersistence(
-        path.resolve(properties.board_dir, boardId + DOT_FILE_SUFFIX),
+        path.resolve(properties.board_dir, boardId + Constants.DOT_FILE_SUFFIX),
         BoardDataPersistence.getInitData(template));
 }
 
 export function importBoardPersistence(boardId: string, initialData: BoardData) {
     boardDataPersistence[boardId] = new BoardDataPersistence(
-        path.resolve(properties.board_dir, boardId + DOT_FILE_SUFFIX),
+        path.resolve(properties.board_dir, boardId + Constants.DOT_FILE_SUFFIX),
         initialData);
 }
 
 export function deleteBoardPersistence(boardId: string) {
     WebsocketSingleton.sendToAllClients('boardDeleted', {}, boardId);
     delete boardDataPersistence[boardId];
-    const file = path.resolve(properties.board_dir, boardId + DOT_FILE_SUFFIX);
+    const file = path.resolve(properties.board_dir, boardId + Constants.DOT_FILE_SUFFIX);
     if (fs.existsSync(file)) {
         fs.rmSync(file);
     }

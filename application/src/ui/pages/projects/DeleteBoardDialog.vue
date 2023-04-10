@@ -8,7 +8,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import { LOCAL_PROJECT } from '../../../../../common/DataTypes/BoardDataTypes';
+import { LOCAL_PROJECT } from 'constellation-common';
 
 export default defineComponent({
     props: {

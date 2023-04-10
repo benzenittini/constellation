@@ -2,9 +2,9 @@
 import { Action } from "../Action";
 import { useStore } from '../../store/store';
 
-import { GENERIC_RESTART, SetBlockParentRequest, SetBlockParentResponse } from '../../../../../common/DataTypes/ActionDataTypes';
+import { GENERIC_RESTART, SetBlockParentRequest, SetBlockParentResponse } from 'constellation-common';
 import { ws } from "../../communications/Websocket";
-import { E17, showError } from "../../../common/ErrorLogger";
+import { E17, showError } from "../../ErrorLogger";
 
 export class SetBlockParentAction extends Action {
 

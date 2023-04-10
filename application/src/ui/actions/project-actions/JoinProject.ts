@@ -3,13 +3,11 @@ import { Action } from "../Action";
 
 import { send } from '../../communications/RestComms';
 
-import { GENERIC_RESTART, JoinProjectResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { GENERIC_RESTART, JoinProjectResponse, RemoteProject, StringUtils } from 'constellation-common';
 import { GetProjectDataAction } from "./GetProjectData";
-import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
-import { E12, showError } from "../../../common/ErrorLogger";
+import { E12, showError } from "../../ErrorLogger";
 import { useStore } from "../../store/store";
 import { useVueNotify } from "mw-vue-notify";
-import { anyAreBlank } from "../../../../../common/utilities/StringUtils";
 
 export class JoinProjectAction extends Action {
 
@@ -27,7 +25,7 @@ export class JoinProjectAction extends Action {
 
     submit(): void {
         // Fail to join if user is already a member
-        if (anyAreBlank([this.projectUrl, this.registrationKey, this.clientName])) {
+        if (StringUtils.anyAreBlank([this.projectUrl, this.registrationKey, this.clientName])) {
             useVueNotify().showNotification({
                 cssClasses: ['mw-notification-warning'],
                 dismissAfterMillis: 4000,

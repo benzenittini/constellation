@@ -7,13 +7,16 @@
         "esModuleInterop": true,
         "moduleResolution": "bundler",
 
-        "types": [
-            "webpack-env"
-        ]
+        "outDir": "./dist",
+        "declaration": true,
+        "declarationMap": true,
     },
 
     "include": [
-        "./**/*.ts",
-        "./**/*.vue",
+        "./src/**/*.ts",
+    ],
+    "exclude": [
+        "./node_modules",
+        "dist"
     ]
 }

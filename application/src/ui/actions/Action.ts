@@ -1,6 +1,6 @@
 
-import { ErrorResponse, GENERIC_RESTART } from "../../../../common/DataTypes/ActionDataTypes";
-import { E0, showError } from "../../common/ErrorLogger";
+import { ErrorResponse, GENERIC_RESTART } from 'constellation-common';
+import { E0, showError } from "../ErrorLogger";
 
 
 export abstract class Action {

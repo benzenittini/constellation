@@ -115,8 +115,7 @@ import { defineComponent, onBeforeUpdate, onMounted, onUnmounted, onUpdated, Ref
 import { v4 as uuidv4 } from 'uuid';
 import dragula from 'dragula';
 
-import { TypedMap } from "../../../../../../common/DataTypes/GenericDataTypes";
-import { ClassificationDefinition, FieldDefinition, FieldType, fieldTypeHasPVs } from "../../../../../../common/DataTypes/FieldDataTypes";
+import { TypedMap, ClassificationDefinition, FieldDefinition, FieldType, fieldTypeHasPVs  } from "constellation-common";
 
 import { useDragula } from './DragulaComposition';
 

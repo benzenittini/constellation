@@ -1,8 +1,7 @@
 
 import { Action } from "../Action";
 
-import { RemoteProject } from "../../../../../common/DataTypes/FileDataTypes";
-import { GetBoardTemplatesResponse } from "../../../../../common/DataTypes/ActionDataTypes";
+import { RemoteProject, GetBoardTemplatesResponse } from 'constellation-common';
 import { send } from "../../communications/RestComms";
 
 export class GetBoardTemplatesAction extends Action {

@@ -41,7 +41,8 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, Ref, ref } from "vue";
-import { Block, SearchCriteria, SearchResult } from "../../../../../../common/DataTypes/BlockDataTypes";
+
+import { Block, SearchCriteria, SearchResult } from "constellation-common";
 import { useEmitter } from "../../../composables/Emitter";
 import { useWindowEvents } from "../../../composables/WindowEvents";
 import { useStore } from "../../../store/store";

@@ -2,10 +2,11 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { AuthorizedUser, UserFile } from '../../common/DataTypes/FileDataTypes';
+import { AuthorizedUser, UserFile } from 'constellation-common';
+import { ConstError } from 'constellation-common';
+
 import { logger } from './Logger';
 import { properties } from './PropertyLoader';
-import { ConstError } from '../../common/DataTypes/ActionDataTypes';
 
 let lastLoadedData: UserFile | undefined = undefined;
 

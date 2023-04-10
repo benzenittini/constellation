@@ -16,7 +16,7 @@
 import { defineComponent, ref } from "vue";
 
 import { useStore } from "../../../../store/store";
-import { DataType, getFieldDataType } from "../../../../../../../common/DataTypes/FieldDataTypes";
+import { DataType, getFieldDataType } from "constellation-common";
 
 export default defineComponent({
     props: {

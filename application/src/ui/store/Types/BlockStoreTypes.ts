@@ -1,6 +1,5 @@
 
-import { Block, BlockContent, BlockIdAndPosition, SearchCriteria, SearchResult } from "../../../../../common/DataTypes/BlockDataTypes";
-import { BoundingBox, TypedMap } from "../../../../../common/DataTypes/GenericDataTypes";
+import { BoundingBox, TypedMap, Block, BlockContent, BlockIdAndPosition, SearchCriteria, SearchResult } from 'constellation-common';
 import { AugmentedActionContext, GetterProperties } from "../StoreTypes";
 
 
