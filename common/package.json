@@ -1,36 +1,36 @@
 {
   "name": "constellation-common",
   "version": "1.0.2",
+  "license": "Apache-2.0",
   "description": "Common utilities supporting Constellation",
-  "repository": "git@github.com:moonwafer-io/mw-vue-modals.git",
-  "homepage": "https://github.com/moonwafer-io/mw-vue-modals#readme",
+  "homepage": "https://getconstellation.dev",
   "author": "<ben@zenittini.dev>",
+  "private": true,
   "exports": {
     "./persistence": {
-      "module": "./dist/persistence.js",
-      "types": "./dist/persistence.d.ts"
+      "types": "./dist/persistence.d.ts",
+      "default": "./dist/persistence.js"
     },
     "./datatypes": {
-      "module": "./dist/datatypes.js",
-      "types": "./dist/datatypes.d.ts"
+      "types": "./dist/datatypes.d.ts",
+      "default": "./dist/datatypes.js"
     },
     "./utilities": {
-      "module": "./dist/utilities.js",
-      "types": "./dist/utilities.d.ts"
+      "types": "./dist/utilities.d.ts",
+      "default": "./dist/utilities.js"
     }
   },
-  "license": "Apache-2.0",
-  "private": true,
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "webpack --config webpack.dev.js",
-    "watch": "webpack --watch --config webpack.dev.js",
-    "build-prod": "webpack --config webpack.prod.js",
-    "prepublish": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.dev.cjs",
+    "watch": "webpack --watch --config webpack.dev.cjs",
+    "build-prod": "webpack --config webpack.prod.cjs",
+    "prepublish": "webpack --config webpack.prod.cjs"
   },
   "dependencies": {
+    "@types/webpack-node-externals": "^3.0.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

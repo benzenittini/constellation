@@ -94,7 +94,10 @@ import { ClassificationDefinition, Block } from 'constellation-common/datatypes'
 
 export default defineComponent({
     props: {
-        mwShowAfterNumberSelected: Number,
+        mwShowAfterNumberSelected: {
+            type: Number,
+            required: true,
+        },
         mwShowAlignmentControls: Boolean,
         mwSelectedBlocks: {
             type: Array as PropType<Block[]>,

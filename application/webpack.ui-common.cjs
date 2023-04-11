@@ -61,6 +61,7 @@ module.exports = {
     ],
 
     output: {
+        filename: '[name].js',
         path: path.resolve(__dirname, './build'),
         publicPath: './',
         // For our graphics, configured in the 'asset/resource' module above.

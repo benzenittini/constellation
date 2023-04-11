@@ -6,10 +6,11 @@
   "homepage": "https://getconstellation.dev",
   "author": "<ben@zenittini.dev>",
   "private": true,
+  "main": "dist/constellation-server.js",
   "scripts": {
-    "watch": "webpack watch --config webpack.dev.js",
-    "build": "webpack --config webpack.dev.js",
-    "build-prod": "webpack --config webpack.prod.js",
+    "watch": "webpack watch --config webpack.dev.cjs",
+    "build": "webpack --config webpack.dev.cjs",
+    "build-prod": "webpack --config webpack.prod.cjs",
     "serve": "nodemon --watch dist -e js,properties ./dist/constellation-server.js ./dist/server.properties",
     "package-server": "mkdir -p ./packaging && zip -r -j ./packaging/constellation-server-$npm_package_version.zip ./dist/*"
   },
@@ -27,6 +28,7 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.14.2",
     "@types/uuid": "^9.0.1",
+    "@types/webpack-node-externals": "^3.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.4",

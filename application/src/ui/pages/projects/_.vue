@@ -24,15 +24,15 @@
         <div class="mw-board-list"
             v-for="remote in remoteProjects"
             v-bind:key="remote.projectId"
-            v-bind:class="{ 'mw-connection-error': !projectMap[remote.projectId] }">
-            <div v-if="!projectMap[remote.projectId]">
+            v-bind:class="{ 'mw-connection-error': !remote.projectId || !projectMap[remote.projectId] }">
+            <div v-if="!remote.projectId || !projectMap[remote.projectId]">
                 <p>Could not connect to <span style="font-weight: bold">{{ remote.remoteProject.serverUrl }}</span></p>
-                <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.projectId)">Leave Project</button>
+                <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.remoteProject, remote.projectId)">Leave Project</button>
                 <button class="primary yellow" v-on:click="retryRemoteProject(remote.remoteProject)">Retry Connection</button>
             </div>
             <div v-else>
                 <h2>{{ projectMap[remote.projectId].projectName }}</h2>
-                <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.projectId)">Leave Project</button>
+                <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.remoteProject, remote.projectId)">Leave Project</button>
                 <div class="mw-board-blocks">
                     <div class="mw-board-block" v-for="board in Object.values(projectMap[remote.projectId].boards)"
                         v-bind:key="board.boardId"
@@ -358,8 +358,7 @@ export default defineComponent({
             openBoard: (projectId: string, boardId: string) => {
                 store.dispatch('setCurrentProjectBoard', { projectId, boardId });
             },
-            leaveRemoteProject: (projectId: string) => {
-                let remoteProject = store.getters.getRemoteProjectById(projectId);
+            leaveRemoteProject: (remoteProject: RemoteProject, projectId?: string) => {
                 if (remoteProject) {
                     const mwVueModals = useVueModals();
                     mwVueModals.createOrUpdateModal({

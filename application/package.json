@@ -8,12 +8,12 @@
   "private": true,
   "main": "build/index.js",
   "scripts": {
-    "build-ui": "webpack --config webpack.ui-dev.js",
-    "watch-ui": "webpack --watch --config webpack.ui-dev.js",
-    "build-ui-prod": "webpack --config webpack.ui-prod.js",
-    "build-main": "webpack --config webpack.main-dev.js",
-    "watch-main": "webpack --watch --config webpack.main-dev.js",
-    "build-main-prod": "webpack --config webpack.main-prod.js",
+    "build-ui": "webpack --config webpack.ui-dev.cjs",
+    "watch-ui": "webpack --watch --config webpack.ui-dev.cjs",
+    "build-ui-prod": "webpack --config webpack.ui-prod.cjs",
+    "build-main": "webpack --config webpack.main-dev.cjs",
+    "watch-main": "webpack --watch --config webpack.main-dev.cjs",
+    "build-main-prod": "webpack --config webpack.main-prod.cjs",
     "start": "electron-forge start --app-path ./build",
     "package": "electron-forge package",
     "make": "electron-forge make"
