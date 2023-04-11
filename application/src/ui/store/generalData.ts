@@ -23,6 +23,7 @@ const generalDataState: GeneralDataState = {
         zoomSpeed: 1,
         switchCtrlShiftForSelection: false,
         useShiftToZoom: false,
+        invertScrollDirection: false,
     },
     clientId: uuidv4(),
     appVersion: WEBPACK.APP_VERSION,
@@ -44,6 +45,7 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
             zoomSpeed: 1,
             switchCtrlShiftForSelection: false,
             useShiftToZoom: false,
+            invertScrollDirection: false,
         };
     },
     clearBoardState (state) {
@@ -96,6 +98,7 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
     setZoomSpeed (state, data) { state.uiFlags.zoomSpeed = data; },
     switchCtrlShiftForSelection (state, data) { state.uiFlags.switchCtrlShiftForSelection = data;  },
     useShiftToZoom              (state, data) { state.uiFlags.useShiftToZoom = data; },
+    invertScrollDirection       (state, data) { state.uiFlags.invertScrollDirection = data; },
 }
 
 
@@ -128,6 +131,7 @@ const generalDataActions: ActionTree<GeneralDataState, RootState> & GeneralDataA
     setZoomSpeed ({ commit }, zoomSpeed) { commit('setZoomSpeed', zoomSpeed); },
     switchCtrlShiftForSelection ({ commit }, value) { commit('switchCtrlShiftForSelection', value); },
     useShiftToZoom              ({ commit }, value) { commit('useShiftToZoom', value); },
+    invertScrollDirection       ({ commit }, value) { commit('invertScrollDirection', value); },
 }
 
 

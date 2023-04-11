@@ -22,6 +22,7 @@ export const config: ConfigFile = {
         zoomSpeed: 1,
         switchCtrlShiftForSelection: false,
         useShiftToZoom: false,
+        invertScrollDirection: false,
     },
     // NOTE: When adding things to this list, remember to update "loadConfigFile()" below.
 };
@@ -43,6 +44,7 @@ export function loadConfigFile() {
     if (appConfig.userSettings?.zoomSpeed) config.userSettings.zoomSpeed = appConfig.userSettings?.zoomSpeed;
     if (appConfig.userSettings?.switchCtrlShiftForSelection) config.userSettings.switchCtrlShiftForSelection = appConfig.userSettings?.switchCtrlShiftForSelection;
     if (appConfig.userSettings?.useShiftToZoom)              config.userSettings.useShiftToZoom              = appConfig.userSettings?.useShiftToZoom;
+    if (appConfig.userSettings?.invertScrollDirection)       config.userSettings.invertScrollDirection       = appConfig.userSettings?.invertScrollDirection;
 }
 
 
@@ -97,7 +99,8 @@ export function getUserSettings() {
 export function setUserSettings(settings: Partial<UserSettings>) {
     if (settings.panSpeed)  config.userSettings.panSpeed  = settings.panSpeed;
     if (settings.zoomSpeed) config.userSettings.zoomSpeed = settings.zoomSpeed;
-    if (settings.switchCtrlShiftForSelection)  config.userSettings.switchCtrlShiftForSelection = settings.switchCtrlShiftForSelection;
-    if (settings.useShiftToZoom)               config.userSettings.useShiftToZoom              = settings.useShiftToZoom;
+    if (settings.switchCtrlShiftForSelection !== undefined)  config.userSettings.switchCtrlShiftForSelection = settings.switchCtrlShiftForSelection;
+    if (settings.useShiftToZoom !== undefined)               config.userSettings.useShiftToZoom              = settings.useShiftToZoom;
+    if (settings.invertScrollDirection !== undefined)        config.userSettings.invertScrollDirection       = settings.invertScrollDirection;
     saveConfig();
 }

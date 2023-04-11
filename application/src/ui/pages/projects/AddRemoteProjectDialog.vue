@@ -14,11 +14,14 @@ import { defineComponent, onMounted, PropType, ref } from 'vue';
 
 export default defineComponent({
     props: {
-        saveData: Object as PropType<{
-            projectUrl: string,
-            registrationKey: string,
-            clientName: string,
-        }>,
+        saveData: {
+            type: Object as PropType<{
+                projectUrl: string,
+                registrationKey: string,
+                clientName: string,
+            }>,
+            required: true
+        }
     },
     setup() {
 

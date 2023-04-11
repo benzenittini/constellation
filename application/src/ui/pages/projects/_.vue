@@ -36,23 +36,23 @@
                 <div class="mw-board-blocks">
                     <div class="mw-board-block" v-for="board in Object.values(projectMap[remote.projectId].boards)"
                         v-bind:key="board.boardId"
-                        v-on:click="boardBeingEdited.boardId !== board.boardId && openBoard(remote.projectId, board.boardId)">
+                        v-on:click="boardBeingEdited.boardId !== board.boardId && openBoard(remote.projectId!, board.boardId)">
                         <span v-if="boardBeingEdited.boardId !== board.boardId">{{ board.boardName }}</span>
                         <input v-else type="text"
                             :ref="el => { if (el) editNameRefs[board.boardId] = el }"
                             v-bind:value="board.boardName"
-                            v-on:blur="endEditBoard(board.boardName, $event.target.value)"
+                            v-on:blur="endEditBoard(board.boardName, $event)"
                             v-on:keydown="blurIfEnter($event)"/>
                         <eic-svg-pencil width="20px"
-                            v-on:click.stop="beginEditBoard(remote.projectId, board.boardId)"></eic-svg-pencil>
+                            v-on:click.stop="beginEditBoard(remote.projectId!, board.boardId)"></eic-svg-pencil>
                         <eic-svg-deletion-x class="inversion" width="25px"
-                            v-on:click.stop="deleteBoard(remote.projectId, board.boardId)"
+                            v-on:click.stop="deleteBoard(remote.projectId!, board.boardId)"
                             ></eic-svg-deletion-x>
                     </div>
                 </div>
                 <div class="mw-button-group">
-                    <button class="tertiary green" v-on:click="importBoard(remote.projectId)">Import Board</button>
-                    <button class="primary green" v-on:click="createBoard(remote.projectId)">Create Board</button>
+                    <button class="tertiary green" v-on:click="importBoard(remote.projectId!)">Import Board</button>
+                    <button class="primary green" v-on:click="createBoard(remote.projectId!)">Create Board</button>
                 </div>
             </div>
         </div>
@@ -73,9 +73,10 @@
                 <span>({{ zoomSpeed }}x)</span>
             </div>
 
-            <div class="mw-shift-ctrl-settings">
+            <div class="mw-toggle-settings">
                 <eic-checkbox v-model="ctrlShiftForSelection" eic-label="Switch CTRL and SHIFT for block selection"></eic-checkbox>
                 <eic-checkbox v-model="shiftToZoom" eic-label="Use SHIFT to zoom instead of CTRL"></eic-checkbox>
+                <eic-checkbox v-model="invertScrollDirection" eic-label="Invert the scroll direction when zooming"></eic-checkbox>
             </div>
         </div>
 
@@ -89,7 +90,7 @@ import { defineComponent, computed, onMounted, reactive, ref, Ref, onBeforeUpdat
 import { useVueModals } from 'mw-vue-modals';
 
 import { useStore } from '../../store/store';
-import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification, RemoteProject, GENERIC_RESTART, UserSettings } from 'constellation-common/datatypes';
+import { BoardData, LOCAL_PROJECT, LOCAL_PROJECT_NAME, TemplateClassification, RemoteProject, GENERIC_RESTART, UserSettings, TypedMap } from 'constellation-common/datatypes';
 import { E1, E10, E11, E35, E4, E5, E6, E7, E8, E9, showError } from '../../ErrorLogger';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
@@ -125,8 +126,8 @@ export default defineComponent({
 
         let boardBeingEdited: Ref<{projectId?: string, boardId?: string}> = ref({projectId: undefined, boardId: undefined});
         // (see: https://v3.vuejs.org/guide/composition-api-template-refs.html#usage-inside-v-for)
-        let editNameRefs: Ref<any[]> = ref([]); // classificationElements[]
-        onBeforeUpdate(() => editNameRefs.value = []);
+        let editNameRefs: Ref<TypedMap<any>> = ref({}); // TypedMap<classificationElements>
+        onBeforeUpdate(() => editNameRefs.value = {});
 
 
         // =============
@@ -153,6 +154,7 @@ export default defineComponent({
         let zoomSpeed             = createMutableComputed('zoomSpeed',                   'setZoomSpeed');
         let shiftToZoom           = createMutableComputed('useShiftToZoom',              'useShiftToZoom');
         let ctrlShiftForSelection = createMutableComputed('switchCtrlShiftForSelection', 'switchCtrlShiftForSelection');
+        let invertScrollDirection = createMutableComputed('invertScrollDirection',       'invertScrollDirection');
 
 
         return {
@@ -163,6 +165,7 @@ export default defineComponent({
 
             panSpeed, zoomSpeed,
             ctrlShiftForSelection, shiftToZoom,
+            invertScrollDirection,
 
             appVersion: store.state.generalData.appVersion,
 
@@ -235,7 +238,8 @@ export default defineComponent({
                     (editNameRefs.value as any)[boardBeingEdited.value.boardId].blur();
                 }
             },
-            endEditBoard: (currentName: string, newName: string) => {
+            endEditBoard: (currentName: string, event: FocusEvent) => {
+                const newName = (event.target as HTMLInputElement).value;
                 if (currentName !== newName) {
                     new UpdateBoardConfigAction(
                         boardBeingEdited.value.projectId!,
@@ -426,7 +430,7 @@ export default defineComponent({
                                 componentData: modalData,
                             },
                             'bottom': {
-                                name: 'eic-savecancel',
+                                componentName: 'eic-savecancel',
                                 componentData: { mwSaveText: 'Add Project' },
                                 eventHandlers: {
                                     'mw-cancel':  (event: any) => { useVueModals().closeModal(ADD_PROJECT_DIALOG_ID); },
@@ -557,7 +561,7 @@ export default defineComponent({
             gap: 10px;
         }
 
-        .mw-shift-ctrl-settings {
+        .mw-toggle-settings {
             margin: 24px;
         }
     }

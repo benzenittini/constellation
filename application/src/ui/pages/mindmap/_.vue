@@ -72,6 +72,8 @@ export default defineComponent({
                         eventEmitter.emit('previousSearchResult');
                     } else if (!keyboardEvent.ctrlKey && !keyboardEvent.metaKey && !keyboardEvent.altKey && keyboardEvent.key === " ") {
                         store.dispatch("lockOpenClosed", { blockIds: store.getters.selectedBlockIds });
+                    } else if (keyboardEvent.key === "?") {
+                        eventEmitter.emit('toggleHelp');
                     }
                 });
 

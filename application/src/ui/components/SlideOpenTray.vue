@@ -16,9 +16,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref } from "vue";
+import { computed, defineComponent, onMounted, onUnmounted, Ref, ref } from "vue";
 
 import { useStore } from "../store/store";
+import { useEmitter } from "../composables/Emitter";
 
 export default defineComponent({
     props: {},
@@ -27,12 +28,30 @@ export default defineComponent({
         let highlightedTabId: Ref<undefined | string> = ref(undefined);
 
         const store = useStore();
+        const eventEmitter = useEmitter();
 
         const parsedReleaseNotes = ref([] as any[]);
 
         let contentDimensions = computed(() => {
-            if      (openedTabId.value === undefined)  return { width: 0   };
-            else if (openedTabId.value === 'controls') return { width: 750 };
+            if (openedTabId.value === 'controls') {
+                return { width: 750 };
+            } else {
+                return { width: 0 };
+            }
+        });
+
+        function clickTab(tabId: string) {
+            openedTabId.value = (openedTabId.value === tabId) ? undefined : tabId;
+        }
+
+        onMounted(() => {
+            eventEmitter.register('toggleHelp', 'toggleHelp', () => {
+                clickTab('controls');
+            });
+        });
+
+        onUnmounted(() => {
+            eventEmitter.deregister('toggleHelp');
         });
 
         return {
@@ -43,9 +62,7 @@ export default defineComponent({
 
             pointerEventsDisabled: computed(() => store.getters.pointerEventsDisabled),
 
-            clickTab: (tabId: string) => {
-                openedTabId.value = (openedTabId.value === tabId) ? undefined : tabId;
-            },
+            clickTab,
         };
     }
 })

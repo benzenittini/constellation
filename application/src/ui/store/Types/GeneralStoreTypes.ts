@@ -18,6 +18,7 @@ export interface GeneralDataState {
         zoomSpeed: number,
         switchCtrlShiftForSelection: boolean,
         useShiftToZoom: boolean,
+        invertScrollDirection: boolean,
     };
     clientId: string;
     appVersion: string;
@@ -47,6 +48,7 @@ export type GeneralDataMutations<S = GeneralDataState> = {
     setZoomSpeed (state: S, data: number): void;
     switchCtrlShiftForSelection (state: S, value: boolean): void;
     useShiftToZoom              (state: S, value: boolean): void;
+    invertScrollDirection       (state: S, value: boolean): void;
 }
 
 // -- Actions --
@@ -73,6 +75,7 @@ export interface GeneralDataActions {
     setZoomSpeed ({ commit }: AugmentedActionContext<GeneralDataState>, zoomSpeed: number): void;
     switchCtrlShiftForSelection  ({ commit }: AugmentedActionContext<GeneralDataState>, value: boolean): void;
     useShiftToZoom               ({ commit }: AugmentedActionContext<GeneralDataState>, value: boolean): void;
+    invertScrollDirection        ({ commit }: AugmentedActionContext<GeneralDataState>, value: boolean): void;
 }
 
 // -- Getters --

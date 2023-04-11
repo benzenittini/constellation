@@ -5,6 +5,7 @@ import { useStore } from '../store/store';
 
 const store = useStore();
 
+const INVERT_WHEEL = computed(() => store.state.generalData.uiFlags.invertScrollDirection);
 const ZOOM_SPEED = computed(() => store.state.generalData.uiFlags.zoomSpeed);
 const MULTIPLIER = 0.08;
 
@@ -64,13 +65,16 @@ export function useZoomable(pannable: any) {
             if (IS_MAC && wheelEvent.ctrlKey) {
                 // Why ctrl? Well, browsers set the ctrl key to true if the user is doing a pinch-to-zoom action:
                 // https://kenneth.io/post/detecting-multi-touch-trackpad-gestures-in-javascript
-                zoom(-10/4 * MULTIPLIER * ZOOM_SPEED.value, wheelEvent);
+                let distance = -10/4 * MULTIPLIER * ZOOM_SPEED.value;
+                zoom(distance, wheelEvent);
             } else {
                 const shouldZoom = useShiftToZoom.value
                     ? wheelEvent.shiftKey
                     : wheelEvent.ctrlKey || wheelEvent.metaKey; // metaKey is cmd on Mac
                 if (shouldZoom) {
-                    zoom(MULTIPLIER * ZOOM_SPEED.value, wheelEvent);
+                    let distance = MULTIPLIER * ZOOM_SPEED.value;
+                    if (INVERT_WHEEL.value) distance *= -1;
+                    zoom(distance, wheelEvent);
                 }
             }
         },
