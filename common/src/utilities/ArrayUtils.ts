@@ -1,7 +1,7 @@
 
 import { TypedMap } from "../datatypes/GenericDataTypes";
 
-// TODO-test : Needs tests
+
 export function arraysAreEqual(array1: any[] | undefined, array2: any[] | undefined, equalityCheck: (a: any, b: any) => boolean) {
     // Who knows, maybe they're both undefined or similarly mistyped. That probably counts as equal.
     if (array1 === array2)

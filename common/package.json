@@ -27,15 +27,22 @@
     "build": "webpack --config webpack.dev.cjs",
     "watch": "webpack --watch --config webpack.dev.cjs",
     "build-prod": "webpack --config webpack.prod.cjs",
-    "prepublish": "webpack --config webpack.prod.cjs"
+    "prepublish": "webpack --config webpack.prod.cjs",
+    "mocha": "mocha --require ts-node/register --recursive test/**/*.ts"
   },
   "dependencies": {
     "@types/webpack-node-externals": "^3.0.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
     "@types/uuid": "^9.0.1",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
     "ts-loader": "^9.4.2",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.4",
     "webpack": "^5.78.0",
     "webpack-cli": "^5.0.1",
