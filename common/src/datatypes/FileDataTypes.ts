@@ -30,6 +30,7 @@ export type UserSettings = {
     zoomSpeed: number;
     switchCtrlShiftForSelection: boolean;
     useShiftToZoom: boolean;
+    invertScrollDirection: boolean;
 };
 
 export type RemoteProject = {

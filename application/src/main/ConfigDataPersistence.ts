@@ -42,9 +42,9 @@ export function loadConfigFile() {
     config.backups = appConfig.backups;
     if (appConfig.userSettings?.panSpeed)  config.userSettings.panSpeed  = appConfig.userSettings?.panSpeed;
     if (appConfig.userSettings?.zoomSpeed) config.userSettings.zoomSpeed = appConfig.userSettings?.zoomSpeed;
-    if (appConfig.userSettings?.switchCtrlShiftForSelection) config.userSettings.switchCtrlShiftForSelection = appConfig.userSettings?.switchCtrlShiftForSelection;
-    if (appConfig.userSettings?.useShiftToZoom)              config.userSettings.useShiftToZoom              = appConfig.userSettings?.useShiftToZoom;
-    if (appConfig.userSettings?.invertScrollDirection)       config.userSettings.invertScrollDirection       = appConfig.userSettings?.invertScrollDirection;
+    if (appConfig.userSettings?.switchCtrlShiftForSelection !== undefined) config.userSettings.switchCtrlShiftForSelection = appConfig.userSettings?.switchCtrlShiftForSelection;
+    if (appConfig.userSettings?.useShiftToZoom !== undefined)              config.userSettings.useShiftToZoom              = appConfig.userSettings?.useShiftToZoom;
+    if (appConfig.userSettings?.invertScrollDirection !== undefined)       config.userSettings.invertScrollDirection       = appConfig.userSettings?.invertScrollDirection;
 }
 
 
