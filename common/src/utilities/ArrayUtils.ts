@@ -54,23 +54,23 @@ export function countOccurrences(array: any[]) {
 }
 
 /**
- * Returns the most common number in "array". Tiebreaker goes to the
- * number that occurred first. Empty array returns null.
+ * Returns an array of the most common numbers in "array". Usually just one element,
+ * but ties will have multiple and empty arrays will return an empty array.
  */
-export function mode(array: number[]): number | null {
+export function mode(array: number[]): number[] {
     let occurrences = countOccurrences(array);
-    let mode = null, count = 0;
+    let mode: number[] = [], count = 0;
 
     for (let key in occurrences) {
-        if (occurrences[key] > count) {
-            mode = key;
+        if (occurrences[key] === count) {
+            mode.push(parseFloat(key));
+        } else if (occurrences[key] > count) {
+            mode = [parseFloat(key)];
             count = occurrences[key];
         }
     }
 
-    return (mode === null)
-        ? null
-        : parseFloat(mode);
+    return mode;
 }
 
 /**

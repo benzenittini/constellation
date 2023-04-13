@@ -83,7 +83,8 @@ export default defineComponent({
             },
             alignInRow: () => {
                 // Scale the "gap" between the blocks based on their own scale (depth). Since they can technically be at different depths, use the "mode".
-                let scale = ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id])) ?? 1; // Mode *should* always be defined.
+                // Ties go to the biggest number, which creates the smallest gap.
+                let scale = Math.max(...ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id])));
                 let blockGap = 10/scale;
 
                 // Center-align the stack starting from the left-most block
@@ -120,7 +121,8 @@ export default defineComponent({
             },
             alignInColumn: () => {
                 // Scale the "gap" between the blocks based on their own scale (depth). Since they can technically be at different depths, use the "mode".
-                let scale = ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id])) ?? 1; // Mode *should* always be defined.
+                // Ties go to the biggest number, which creates the smallest gap.
+                let scale = Math.max(...ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id])));
                 let blockGap = 10/scale;
 
                 // Center-align the stack starting from the top-most block

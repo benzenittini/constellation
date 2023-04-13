@@ -126,12 +126,12 @@ describe('ArrayUtils', function() {
 
     describe('#mode()', function() {
         [
-            { arr: [],           expected: null },
-            { arr: [1, 2, 3, 1], expected: 1 },
-            { arr: [1, 2, 2, 1], expected: 1 },
+            { arr: [],           expected: [] },
+            { arr: [1, 2, 3, 1], expected: [1] },
+            { arr: [1, 2, 2, 1], expected: [1, 2] },
         ].forEach(({ arr, expected }) => {
             it(`mode(${JSON.stringify(arr)}) should return ${JSON.stringify(expected)}`, function() {
-                expect(ArrayUtils.mode(arr)).to.equal(expected);
+                expect(ArrayUtils.mode(arr)).to.deep.equal(expected);
                 expect(arr).to.deep.equal(arr);
             });
         });
