@@ -14,11 +14,16 @@ function saveConfig() {
 }
 
 function watchConfigFile() {
+    let lastModified: number;
     fs.watch(properties.user_data, {
         persistent: false,
     }, (eventType, filename) => {
         if (eventType === 'change') {
-            loadConfigFile();
+            let stat = fs.statSync(properties.user_data);
+            if (lastModified !== stat.mtimeMs) {
+                lastModified = stat.mtimeMs;
+                    loadConfigFile();
+            }
         }
     });
 }
