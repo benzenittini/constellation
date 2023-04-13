@@ -13,6 +13,7 @@ workdir
 build
 testboards
 packaging
+.nyc_output
 
 # Third-party Generated
 node_modules

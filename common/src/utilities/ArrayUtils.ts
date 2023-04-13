@@ -25,21 +25,25 @@ export function arraysAreEqual(array1: any[] | undefined, array2: any[] | undefi
     return true;
 }
 
-// TODO-test : Needs tests
-/** Does not work on objects (unless object refs are the same) */
+/**
+ * Returns an array containing only the unique items in the given array.
+ * Does not work on objects (unless object refs are the same)
+ */
 export function unique(array: any[]) {
     return array.filter(
         (value: any, index: number, self: any[]) => self.indexOf(value) === index);
 }
 
-// TODO-test : Needs tests
 export function includesAny(array?: any[], items?: any[]) {
     if (array == undefined) return false;
     if (items == undefined) return false;
     return items.some(item => array.includes(item));
 }
 
-// TODO-test : Needs tests
+/**
+ * Returns an object keyed by the array elements, and valued by the
+ * number of times that occurred in the array.
+ */
 export function countOccurrences(array: any[]) {
     return array.reduce((counts, key) => {
         if (!counts[key])
@@ -49,8 +53,11 @@ export function countOccurrences(array: any[]) {
     }, {});
 }
 
-// TODO-test : Needs tests
-export function mode(array: number[]): number {
+/**
+ * Returns the most common number in "array". Tiebreaker goes to the
+ * number that occurred first. Empty array returns null.
+ */
+export function mode(array: number[]): number | null {
     let occurrences = countOccurrences(array);
     let mode = null, count = 0;
 
@@ -61,22 +68,31 @@ export function mode(array: number[]): number {
         }
     }
 
-    return parseFloat(mode!);
+    return (mode === null)
+        ? null
+        : parseFloat(mode);
 }
 
+/**
+ * Modifies the original array by removing all provided "removals".
+ */
 export function removeEntries<T>(array: T[], removals: T[]) {
     for (let item of removals) {
-        let index = array.indexOf(item);
-        if (index !== -1) {
+        let index;
+        while ((index = array.indexOf(item)) !== -1) {
             array.splice(index, 1);
         }
     }
 }
 
+/**
+ * Modifies the original array by removing all instance of "item".
+ */
 export function removeItem(array: any[], item: any) {
-    let index = array.indexOf(item);
-    if (index !== -1)
+    let index;
+    while ((index = array.indexOf(item)) !== -1) {
         array.splice(index, 1);
+    }
 }
 
 /**
