@@ -28,7 +28,8 @@
     "watch": "webpack --watch --config webpack.dev.cjs",
     "build-prod": "webpack --config webpack.prod.cjs",
     "prepublish": "webpack --config webpack.prod.cjs",
-    "mocha": "nyc mocha --require ts-node/register --recursive test/**/*.ts"
+    "test": "nyc mocha --require ts-node/register --recursive test/**/*.ts",
+    "mocha": "nyc mocha --require ts-node/register --recursive"
   },
   "dependencies": {
     "@types/webpack-node-externals": "^3.0.0",

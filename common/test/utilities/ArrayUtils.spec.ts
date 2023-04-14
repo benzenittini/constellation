@@ -1,7 +1,7 @@
 
 import { expect } from 'chai';
 
-import { ArrayUtils } from '../src/utilities';
+import { ArrayUtils } from '../../src/utilities';
 
 describe('ArrayUtils', function() {
 
@@ -22,8 +22,6 @@ describe('ArrayUtils', function() {
         ].forEach(({ arr1, arr2, eqCheck }) => {
             it(`${JSON.stringify(arr1)} and ${JSON.stringify(arr2)} should be equal`, function() {
                 expect(ArrayUtils.arraysAreEqual(arr1, arr2, eqCheck)).to.be.true;
-                expect(arr1).to.deep.equal(arr1);
-                expect(arr2).to.deep.equal(arr2);
             });
         });
     });
@@ -37,8 +35,6 @@ describe('ArrayUtils', function() {
         ].forEach(({ arr1, arr2, eqCheck }) => {
             it(`${JSON.stringify(arr1)} and ${JSON.stringify(arr2)} should NOT be equal`, function() {
                 expect(ArrayUtils.arraysAreEqual(arr1, arr2, eqCheck)).to.be.false;
-                expect(arr1).to.deep.equal(arr1);
-                expect(arr2).to.deep.equal(arr2);
             });
         });
     });
@@ -57,7 +53,6 @@ describe('ArrayUtils', function() {
         ].forEach(({ arr, expected }) => {
             it(`unique(${JSON.stringify(arr)}) should return ${JSON.stringify(expected)}`, function() {
                 expect(ArrayUtils.unique(arr)).to.deep.equal(expected);
-                expect(arr).to.deep.equal(arr);
             });
         });
     });
@@ -75,8 +70,6 @@ describe('ArrayUtils', function() {
         ].forEach(({ arr1, arr2 }) => {
             it(`${JSON.stringify(arr1)} should include one of ${JSON.stringify(arr2)}`, function() {
                 expect(ArrayUtils.includesAny(arr1, arr2)).to.be.true;
-                expect(arr1).to.deep.equal(arr1);
-                expect(arr2).to.deep.equal(arr2);
             });
         });
     });
@@ -94,8 +87,6 @@ describe('ArrayUtils', function() {
         ].forEach(({ arr1, arr2 }) => {
             it(`${JSON.stringify(arr1)} should NOT include one of ${JSON.stringify(arr2)}`, function() {
                 expect(ArrayUtils.includesAny(arr1, arr2)).to.be.false;
-                expect(arr1).to.deep.equal(arr1);
-                expect(arr2).to.deep.equal(arr2);
             });
         });
     });
@@ -114,7 +105,6 @@ describe('ArrayUtils', function() {
         ].forEach(({ arr, expected }) => {
             it(`countOccurrences(${JSON.stringify(arr)}) should return ${JSON.stringify(expected)}`, function() {
                 expect(ArrayUtils.countOccurrences(arr)).to.deep.equal(expected);
-                expect(arr).to.deep.equal(arr);
             });
         });
     });
@@ -132,7 +122,6 @@ describe('ArrayUtils', function() {
         ].forEach(({ arr, expected }) => {
             it(`mode(${JSON.stringify(arr)}) should return ${JSON.stringify(expected)}`, function() {
                 expect(ArrayUtils.mode(arr)).to.deep.equal(expected);
-                expect(arr).to.deep.equal(arr);
             });
         });
     });
@@ -203,7 +192,6 @@ describe('ArrayUtils', function() {
         ].forEach(({ arr, keyBy, expected }) => {
             it(`mapify(${JSON.stringify(arr)}) should return ${JSON.stringify(expected)}`, function() {
                 expect(ArrayUtils.mapify(arr, keyBy)).to.deep.equal(expected);
-                expect(arr).to.deep.equal(arr);
             });
         });
     });

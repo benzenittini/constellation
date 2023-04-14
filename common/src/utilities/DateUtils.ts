@@ -1,7 +1,4 @@
 
-
-// TODO-test this whole file
-
 import { DateTime } from "../datatypes/FieldDataTypes";
 
 export function formatHyphenatedYYYYMMDD(date: Date) {
