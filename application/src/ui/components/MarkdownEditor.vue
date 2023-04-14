@@ -15,7 +15,7 @@
                 v-bind:rows="eicVisibleTextareaRows"
                 v-show="isEditMode"
                 v-model="inputVal"
-                v-on:blur="$emit('eic-blur'); $emit('eic-val-set', $event.target.value);"></textarea>
+                v-on:blur="$emit('eic-blur'); $emit('eic-val-set', ($event.target as HTMLInputElement).value);"></textarea>
             <div v-show="!isEditMode && displayHtml.length === 0" class="mwe-formatted-content mwm-no-content">(no value)</div>
             <div v-show="!isEditMode && displayHtml.length > 0"   class="mwe-formatted-content" v-html="displayHtml"></div>
         </div>
@@ -143,6 +143,12 @@ export default defineComponent({
 
         .mwe-formatted-content { overflow-x: auto; }
         .mwm-no-content { color: vars.$gray4; }
+
+        blockquote {
+            border-left: 4px solid vars.$gray3;
+            padding-inline-start: 10px;
+            margin-inline-start: 20px;
+        }
     }
 
     textarea {
