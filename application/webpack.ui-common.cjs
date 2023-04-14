@@ -19,9 +19,12 @@ module.exports = {
 
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.vue', '.scss'],
-        // This is needed because we npm-linked mw-vue-modals/notify, which adds them as symlinks,
-        // which makes it so they can't resolve our node_modules folder, which is required to resolve vue.
-        symlinks: false,
+        alias: {
+            // This is needed because we npm-linked mw-vue-modals/notify, which brings
+            // along it's own node_modules and vue installation that we don't want.
+            // The "symlinks: false" solution isn't consistent across platforms.
+            vue: path.resolve(__dirname, `./node_modules/vue`)
+        },
     },
 
     module: {
