@@ -7,7 +7,6 @@ const { VueLoaderPlugin } = require('vue-loader');
 const DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = {
-    // TODO-cleanup : Anything we want to do here..?
     // The "electron-renderer" target is more correct, but it doesn't export "global", which is required by Dragula.
     // Using the "web" target includes it, and works for all our other needs too.
     target: 'web',
