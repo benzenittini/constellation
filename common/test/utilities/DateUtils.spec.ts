@@ -23,6 +23,58 @@ describe('DateUtils', function() {
     });
 
 
+    // ================
+    // formatAsYYYYMM()
+    // ----------------
+
+    describe('#formatAsYYYYMM()', function() {
+        [
+            { year: 2012, month: 1,   expected: '201201' },
+            { year: 12,   month: 12,  expected: '001212' },
+            { year: 2012, month: 24,  expected: '201224' }, // ...it's what we asked for
+        ].forEach(({ year, month, expected }) => {
+            it(`'${expected}' should represent year ${year} and month ${month}`, function() {
+                expect(DateUtils.formatAsYYYYMM(year, month)).to.equal(expected);
+            });
+        });
+    });
+
+
+    // ==============
+    // formatAsMMYY()
+    // --------------
+
+    describe('#formatAsMMYY()', function() {
+        [
+            { year: 2012, month: 1,   expected: '01/12' },
+            { year: 12,   month: 12,  expected: '12/12' },
+            { year: 2012, month: 24,  expected: '24/12' }, // ...it's what we asked for
+        ].forEach(({ year, month, expected }) => {
+            it(`'${expected}' should represent year ${year} and month ${month}`, function() {
+                expect(DateUtils.formatAsMMYY(month, year)).to.equal(expected);
+            });
+        });
+    });
+
+
+    // ======================
+    // formatAsMonthDayYear()
+    // ----------------------
+
+    describe('#formatAsMonthDayYear()', function() {
+        [
+            { date: new Date('January 1, 2022'), expected: 'January 1, 2022' },
+            { date: new Date('December 31, 2022'), expected: 'December 31, 2022' },
+            { date: new Date('July 12, 22'), expected: 'July 12, 2022' },
+            { date: new Date(0), expected: 'December 31, 1969' },
+        ].forEach(({ date, expected }) => {
+            it(`'${expected}' should represent ${JSON.stringify(date)}`, function() {
+                expect(DateUtils.formatAsMonthDayYear(date)).to.equal(expected);
+            });
+        });
+    });
+
+
     // ===================
     // extract24HourTime()
     // -------------------

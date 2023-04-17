@@ -1,7 +1,7 @@
 
 export function isObjectWithKeys(obj: any, keys: string[]): boolean {
     // If undefined, return false.
-    if (!obj) return false;
+    if (!isObject(obj)) return false;
 
     // Check for each key, returning false if not present.
     for (let key of keys) {
