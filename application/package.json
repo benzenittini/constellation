@@ -59,6 +59,8 @@
     "js-cookie": "^3.0.1",
     "marked": "^4.2.12",
     "mitt": "^3.0.0",
+    "mw-vue-modals": "^2.0.1",
+    "mw-vue-notify": "^2.0.1",
     "socket.io-client": "^4.6.0",
     "uuid": "^9.0.0",
     "vue": "^3.2.47",

@@ -16,36 +16,17 @@ At this point, the project **is not** open to code contributions until I can inc
 # Cloning and setting it up
 
 ```bash
-# =============
-# mw-vue-modals
-# -------------
-git clone git@github.com:moonwafer-io/mw-vue-modals.git
-cd ./mw-vue-modals
-npm install
-npm run build-prod
-npm link
-
-# =============
-# mw-vue-notify
-# -------------
-git clone git@github.com:moonwafer-io/mw-vue-notify.git
-cd ./mw-vue-notify
-npm install
-npm run build-prod
-npm link
-
-# =============
-# constellation
-# -------------
 git clone git@github.com:benzenittini/constellation.git
+
 # common project
 cd ./constellation/common
 npm install
+
 # application project
 cd ../application
 npm install
-npm link mw-vue-modals mw-vue-notify
 node ./fixTypings.js
+
 # server project
 cd ../server
 npm install
@@ -53,29 +34,19 @@ npm install
 
 # Development Builds
 
-## Common
-
 ```bash
+# Common module
 cd ./common
-
 npm run watch
-```
 
-## Client
-
-```bash
+# Application module (client)
 cd ./application
-
 npm run watch-main
 npm run watch-ui
 npm run start
-```
 
-## Server
-
-```bash
+# Server module
 cd ./server
-
 npm run watch
 npm run serve
 ```
