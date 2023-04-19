@@ -24,8 +24,16 @@
 
         <!-- Remote Boards -->
         <div class="mw-board-list">
-            <div v-for="remote in remoteProjects" v-bind:key="remote.projectId">
+            <div class="mw-heading-flex">
+                <h2>Remote Projects</h2>
+                <button class="primary pink" v-on:click="addRemoteProject()">Add Remote Project</button>
+            </div>
 
+            <div class="mw-remote-project" v-for="remote in remoteProjects" v-bind:key="remote.projectId">
+
+                <eic-hr></eic-hr>
+
+                <!-- Could not connect -->
                 <div class="mw-heading-flex mw-connection-error" v-if="!remote.projectId || !projectMap[remote.projectId]">
                     <p>Could not connect to <span style="font-weight: bold">{{ remote.remoteProject.serverUrl }}</span></p>
                     <div class="mw-button-group">
@@ -33,9 +41,11 @@
                         <button class="primary yellow" v-on:click="retryRemoteProject(remote.remoteProject)">Retry Connection</button>
                     </div>
                 </div>
+
+                <!-- Project w/ boards -->
                 <div v-else>
                     <div class="mw-heading-flex">
-                        <h2>{{ projectMap[remote.projectId].projectName }}</h2>
+                        <h3>{{ projectMap[remote.projectId].projectName }}</h3>
                         <div class="mw-button-group">
                             <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.remoteProject, remote.projectId)">Leave Project</button>
                             <button class="tertiary green" v-on:click="importBoard(remote.projectId!)">Import Board</button>
@@ -60,11 +70,7 @@
                         </div>
                     </div>
                 </div>
-
-                <eic-hr></eic-hr>
             </div>
-
-            <button class="primary pink" v-on:click="addRemoteProject()">Add Remote Project</button>
         </div>
 
         <!-- User Settings -->
@@ -474,11 +480,7 @@ export default defineComponent({
         padding: 24px 32px;
         border-radius: vars.$radius-medium;
 
-        .mw-connection-error {
-            p { margin: 0 20px; color: vars.$red-error; }
-        }
-
-        h2 {
+        h2,h3 {
             margin: 0;
             padding: 0;
             display: inline-block;
@@ -506,6 +508,16 @@ export default defineComponent({
                     background: vars.$gray2;
                     .mw-svg-deletionx { opacity: 1; }
                 }
+            }
+        }
+
+        .mw-remote-project {
+            margin: 24px;
+
+            h3 { padding-left: 8px; }
+
+            .mw-connection-error {
+                p { margin: 0 8px; color: vars.$red-error; }
             }
         }
 

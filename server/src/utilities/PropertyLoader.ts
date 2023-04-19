@@ -1,13 +1,17 @@
 
 import fs from 'fs';
+import path from 'path';
 
 import { UserFile } from 'constellation-common/datatypes';
+import { StringUtils } from 'constellation-common/utilities';
+import { FileUtils } from 'constellation-common/persistence';
 
 // Keep these in sync!
 const VALID_PROPS: (keyof Properties)[] = [
     'log_level',
     'log_dir',
     'board_dir',
+    'backup_dir',
     'user_data',
     'project_data',
     'server_host',
@@ -21,6 +25,7 @@ type Properties = {
     log_level: string,
     log_dir: string,
     board_dir: string,
+    backup_dir: string,
     user_data: string,
     project_data: string,
     server_host: string,
@@ -35,6 +40,7 @@ export const properties: Properties = {
     log_level:    '',
     log_dir:      '',
     board_dir:    '',
+    backup_dir:   '', // Optional, but a default is set below.
     user_data:    '',
     project_data: '',
     server_host:  '',
@@ -75,18 +81,24 @@ export function populateProperties(configFile: string) {
             properties[key] = value;
         }
 
+        // Set default values for unset properties
+        if (StringUtils.isBlank(properties.backup_dir)) {
+            properties.backup_dir = path.resolve(properties.board_dir, 'backups');
+        }
+
         // Validate our properties
         for (let prop of VALID_PROPS) {
             let propVal = properties[prop as keyof Properties];
             if (propVal !== undefined && propVal.trim() === '') {
                 console.error(`Required property was not properly set: ${prop}`);
-                throw new Error();
+                throw new Error(`Required property was not properly set: ${prop}`);
             }
         }
 
         // Create any directories/files that don't exist.
-        createDirIfNeeded(properties.log_dir);
-        createDirIfNeeded(properties.board_dir);
+        FileUtils.createDirIfNeeded(properties.log_dir);
+        FileUtils.createDirIfNeeded(properties.board_dir);
+        FileUtils.createDirIfNeeded(properties.backup_dir);
         if (!fs.existsSync(properties.user_data)) {
             const contents: UserFile = {
                 registrationKeys: [],
@@ -98,11 +110,5 @@ export function populateProperties(configFile: string) {
         console.error(err);
         console.error("Failed to read/parse provided properties file.");
         process.exit(1);
-    }
-}
-
-function createDirIfNeeded(dir: string) {
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
     }
 }

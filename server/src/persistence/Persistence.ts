@@ -25,15 +25,15 @@ export async function initializePersistence(filepath: string) {
 }
 
 export function addBoardPersistence(boardId: string, template?: TemplateClassification[]) {
-    boardDataPersistence[boardId] = new BoardDataPersistence(
-        path.resolve(properties.board_dir, boardId + Constants.DOT_FILE_SUFFIX),
-        BoardDataPersistence.getInitData(template));
+    const sourceFilepath = path.resolve(properties.board_dir, boardId + Constants.DOT_FILE_SUFFIX);
+    const backupFilepath = path.resolve(properties.backup_dir, boardId + Constants.DOT_FILE_SUFFIX);
+    boardDataPersistence[boardId] = new BoardDataPersistence(sourceFilepath, backupFilepath, BoardDataPersistence.getInitData(template));
 }
 
 export function importBoardPersistence(boardId: string, initialData: BoardData) {
-    boardDataPersistence[boardId] = new BoardDataPersistence(
-        path.resolve(properties.board_dir, boardId + Constants.DOT_FILE_SUFFIX),
-        initialData);
+    const sourceFilepath = path.resolve(properties.board_dir, boardId + Constants.DOT_FILE_SUFFIX);
+    const backupFilepath = path.resolve(properties.backup_dir, boardId + Constants.DOT_FILE_SUFFIX);
+    boardDataPersistence[boardId] = new BoardDataPersistence(sourceFilepath, backupFilepath, initialData);
 }
 
 export function deleteBoardPersistence(boardId: string) {

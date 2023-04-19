@@ -1,7 +1,9 @@
 
 import path from 'path';
 import fs from 'fs';
+
 import { app } from 'electron';
+import { v4 as uuidv4 } from 'uuid';
 
 import { AddRemoteProjectRequest, ConfigFile, RemoveRemoteProjectRequest, TemplateClassification, UserSettings } from 'constellation-common/datatypes';
 
@@ -52,17 +54,36 @@ export function loadConfigFile() {
 // Actions
 // -------
 
-export function addLocalBoard(boardFilePath: string) {
+export function addLocalBoard(boardFilePath: string, backupId: string) {
     config.localBoards.push(boardFilePath);
+    config.backups[boardFilePath] = backupId;
     saveConfig();
 }
 
 export function removeLocalBoard(boardFilePath: string) {
-    let index = config.localBoards.indexOf(boardFilePath);
-    if (index !== -1) {
-        config.localBoards.splice(index, 1);
+    let boardIndex = config.localBoards.indexOf(boardFilePath);
+    if (boardIndex !== -1) {
+        config.localBoards.splice(boardIndex, 1);
+        if (config.backups[boardFilePath]) {
+            fs.rmSync(
+                path.join(app.getPath('userData'), 'backups', config.backups[boardFilePath]),
+                { force: true }
+            );
+            delete config.backups[boardFilePath];
+        }
         saveConfig();
     }
+}
+
+export function addBackupFile(boardId: string, backupId: string) {
+    config.backups[boardId] = backupId;
+    saveConfig();
+}
+export function getBackupId(boardId: string): string {
+    if (!config.backups[boardId]) {
+        addBackupFile(boardId, uuidv4());
+    }
+    return config.backups[boardId];
 }
 
 export function getRemoteServers() {

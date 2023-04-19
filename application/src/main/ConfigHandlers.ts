@@ -1,7 +1,9 @@
 
-import { dialog } from "electron";
 import fs from 'fs';
 import path from 'path';
+
+import { v4 as uuidv4 } from 'uuid';
+import { dialog } from "electron";
 
 import { ArrayUtils, Constants } from 'constellation-common/utilities';
 import { LOCAL_PROJECT, LOCAL_PROJECT_NAME, BasicBoardData, GetProjectDataResponse, CreateNewBoardRequest, CreateNewBoardResponse, GetBoardTemplatesResponse, DeleteBoardRequest, DeleteBoardResponse, GetRemoteProjectsResponse, AddRemoteProjectRequest, AddRemoteProjectResponse, RemoveRemoteProjectResponse, RemoveRemoteProjectRequest, ImportBoardResponse, verifyBoardData, ReadFileAsBoardResponse, GetUserSettingsResponse, SetUserSettingsRequest, SetUserSettingsResponse } from 'constellation-common/datatypes';
@@ -75,7 +77,7 @@ async function createNewBoard({ boardOrFileName, template }: CreateNewBoardReque
     if (boardOrFileName) {
         // Create new file with initial data
         fs.writeFileSync(boardOrFileName, JSON.stringify(BoardDataPersistence.getInitData(template)));
-        ConfigDataPersistence.addLocalBoard(boardOrFileName);
+        ConfigDataPersistence.addLocalBoard(boardOrFileName, uuidv4());
         ConfigDataPersistence.addOrUpdateTemplate(boardOrFileName, template);
         // Return board data, where ID is filepath and name is filename
         return {
@@ -146,7 +148,7 @@ async function importBoard(): Promise<ImportBoardResponse> {
                 };
             }
 
-            ConfigDataPersistence.addLocalBoard(chosenFile);
+            ConfigDataPersistence.addLocalBoard(chosenFile, uuidv4());
 
             // Save the imported board's template
             let boardData = JSON.parse(fs.readFileSync(chosenFile, 'utf8'));

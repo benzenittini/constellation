@@ -13,6 +13,7 @@ import { SUPPORT_EMAIL } from "../utilities/Constants";
 // --------------
 
 export const GENERIC_RESTART = `Try restarting your app, and if that doesn't resolve the issue, reach out to ${SUPPORT_EMAIL} for support.`;
+export const GENERIC_SUPPORT = `Reach out to ${SUPPORT_EMAIL} for support.`;
 
 // ErrorCode 1 = auth error
 // ErrorCode 2 = unknown error

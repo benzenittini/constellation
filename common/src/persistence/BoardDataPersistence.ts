@@ -13,6 +13,7 @@ import { verifyViewConfig } from '../datatypes/ViewDataTypes';
 export class BoardDataPersistence {
 
     public sourceFile: string | undefined;
+    public backupFile: string | undefined;
 
     private data: BoardData;
 
@@ -20,20 +21,38 @@ export class BoardDataPersistence {
 
     private reportSaveStatus: (status: boolean) => void;
 
-    constructor(sourceFile: string | undefined = undefined, initialData: BoardData = BoardDataPersistence.getInitData(), reportSaveStatus: (status: boolean) => void = (s) => {}) {
-        this.sourceFile = sourceFile;
+    constructor(
+        sourceFilepath: string | undefined = undefined,
+        backupFilepath: string | undefined = undefined,
+        initialData: BoardData = BoardDataPersistence.getInitData(),
+        reportSaveStatus: (status: boolean) => void = (s) => {}
+    ) {
+        this.sourceFile = sourceFilepath;
+        this.backupFile = backupFilepath;
         this.reportSaveStatus = reportSaveStatus;
 
-        if (this.sourceFile) {
+        if (this.sourceFile && this.backupFile) {
             // Get the file's data (or initialize the data if file is empty)
-            let fileData: string;
             if (fs.existsSync(this.sourceFile)) {
-                fileData = fs.readFileSync(this.sourceFile, 'utf8');
+                try {
+                    this.data = JSON.parse(fs.readFileSync(this.sourceFile, 'utf8'));
+                } catch(err) {
+                    // Fallback to backup file if main file fails to parse
+                    if (fs.existsSync(this.backupFile)) {
+                        this.data = JSON.parse(fs.readFileSync(this.backupFile, 'utf8'));
+                        this.saveData(); // Save the initial state
+                    } else {
+                        // Corrupt main file, and no backup file. Woe is me.
+                        throw new T.ConstError(3,
+                            `Failed to load board data. ${T.GENERIC_SUPPORT}`,
+                            T.ConstError.getLineId('BoardDataPersistence', 'constructor', 1),
+                            `Error in constructor: Failed to load the board's data. ${T.GENERIC_SUPPORT}`);
+                    }
+                }
             } else {
-                fileData = JSON.stringify(initialData);
+                this.data = JSON.parse(JSON.stringify(initialData));
+                this.saveData(); // Save the initial state
             }
-            this.data = JSON.parse(fileData);
-            this.saveData(); // Save the initial state
         } else {
             this.data = initialData;
         }
@@ -47,8 +66,9 @@ export class BoardDataPersistence {
     }
 
     private saveData() {
-        if (this.sourceFile) {
+        if (this.sourceFile && this.backupFile) {
             fs.writeFileSync(this.sourceFile, JSON.stringify(this.data, null, 2));
+            fs.writeFileSync(this.backupFile, JSON.stringify(this.data, null, 2));
             this.reportSaveStatus(true);
         }
     }

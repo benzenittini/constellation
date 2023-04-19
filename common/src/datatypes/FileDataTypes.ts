@@ -18,10 +18,7 @@ export type ConfigFile = {
     // Keyed by boardId (ie, filepath)
     boardTemplates: TypedMap<TemplateClassification[]>
     // Keyed by boardId (ie, filepath)
-    backups: TypedMap<{
-        file: string,
-        dateSaved: Date,
-    }[]>;
+    backups: TypedMap<string>;
     userSettings: UserSettings;
 };
 

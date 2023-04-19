@@ -18,7 +18,7 @@ export default defineComponent({
 @use "../styles/variables" as vars;
 
 .mw-hr {
-    height: 4px;
+    height: 2px;
     background-color: vars.$gray-dark;
     border-radius: vars.$radius-small;
 }

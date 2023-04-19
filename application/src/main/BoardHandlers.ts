@@ -1,11 +1,13 @@
 
 import fs from 'fs';
+import path from 'path';
+
 import { v4 as uuidv4 } from 'uuid';
-import { BrowserWindow } from 'electron';
+import { app, BrowserWindow } from 'electron';
 
 import * as ConfigDataPersistence from "./ConfigDataPersistence";
 import { ConstError, CreateBlockRequest, CreateBlockResponse, DeleteBlocksRequest, DeleteBlocksResponse, DeleteViewRequest, DeleteViewResponse, GetBoardDataRequest, GetBoardDataResponse, LoadViewRequest, LoadViewResponse, SaveViewRequest, SaveViewResponse, SetBlockContentRequest, SetBlockContentResponse, SetBlockParentRequest, SetBlockParentResponse, SetBlockPositionsRequest, SetBlockPositionsResponse, SetBlockPriorityRequest, SetBlockPriorityResponse, SetClassificationDefinitionsRequest, SetClassificationDefinitionsResponse, SetClassificationOnBlocksRequest, SetClassificationOnBlocksResponse, SetFieldDefinitionsRequest, SetFieldDefinitionsResponse, SetFieldOnBlocksRequest, SetFieldOnBlocksResponse } from 'constellation-common/datatypes';
-import { BoardDataPersistence } from 'constellation-common/persistence';
+import { BoardDataPersistence, FileUtils } from 'constellation-common/persistence';
 
 
 export function registerBoardHandlers(ipcMain: Electron.IpcMain) {
@@ -37,7 +39,10 @@ function getMainWindow() {
 async function getBoardData({ boardId: filepath }: GetBoardDataRequest): Promise<GetBoardDataResponse> {
     if (fs.existsSync(filepath)) {
         try {
-            persistence = new BoardDataPersistence(filepath, undefined, (status) => getMainWindow()?.webContents.send('board:updateSaveStatus', status));
+            const backupDirectory = FileUtils.createDirIfNeeded(path.join(app.getPath('userData'), 'backups'));
+            const backupFilename = ConfigDataPersistence.getBackupId(filepath);
+            const backupFilepath = path.join(backupDirectory, backupFilename);
+            persistence = new BoardDataPersistence(filepath, backupFilepath, undefined, (status) => getMainWindow()?.webContents.send('board:updateSaveStatus', status));
             return persistence.getBoardData();
         } catch(err) {
             return {
