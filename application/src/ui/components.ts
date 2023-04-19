@@ -14,6 +14,7 @@ import PossibleValueDisplay from './components/PossibleValueDisplay.vue';
 import KeyboardKey          from './components/KeyboardKey.vue';
 import MarkdownEditor       from './components/MarkdownEditor.vue';
 import ExpandableTree       from './components/ExpandableTree.vue';
+import HR                   from './components/HR.vue';
 // Complex Widgets
 import SaveCancel            from './components/SaveCancel.vue';
 import SaveDontSaveCancel    from './components/SaveDontSaveCancel.vue';
@@ -111,6 +112,7 @@ export let components: any = {
     'eic-infodisplay': InfoDisplay,
     'eic-possiblevaluedisplay': PossibleValueDisplay,
     'eic-expandable-tree': ExpandableTree,
+    'eic-hr': HR,
     'eic-keyboard-key': KeyboardKey,
     'eic-close': Close,
     'eic-dynamic-field': DynamicField,

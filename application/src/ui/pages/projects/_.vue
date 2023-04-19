@@ -2,7 +2,13 @@
     <div id="mw-projects">
         <!-- Local Boards -->
         <div class="mw-board-list">
-            <h2>{{ LOCAL_PROJECT_NAME }}</h2>
+            <div class="mw-heading-flex">
+                <h2>{{ LOCAL_PROJECT_NAME }}</h2>
+                <div class="mw-button-group">
+                    <button class="tertiary green" v-on:click="importBoard(LOCAL_PROJECT)">Import Board</button>
+                    <button class="primary green" v-on:click="createBoard(LOCAL_PROJECT)">Create Board</button>
+                </div>
+            </div>
             <table>
                 <tr v-for="board in localBoards"
                     v-bind:key="board.boardId"
@@ -14,50 +20,50 @@
                         ></eic-svg-deletion-x></td>
                 </tr>
             </table>
-            <div class="mw-button-group">
-                <button class="tertiary green" v-on:click="importBoard(LOCAL_PROJECT)">Import Board</button>
-                <button class="primary green" v-on:click="createBoard(LOCAL_PROJECT)">Create Board</button>
-            </div>
         </div>
 
         <!-- Remote Boards -->
-        <div class="mw-board-list"
-            v-for="remote in remoteProjects"
-            v-bind:key="remote.projectId"
-            v-bind:class="{ 'mw-connection-error': !remote.projectId || !projectMap[remote.projectId] }">
-            <div v-if="!remote.projectId || !projectMap[remote.projectId]">
-                <p>Could not connect to <span style="font-weight: bold">{{ remote.remoteProject.serverUrl }}</span></p>
-                <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.remoteProject, remote.projectId)">Leave Project</button>
-                <button class="primary yellow" v-on:click="retryRemoteProject(remote.remoteProject)">Retry Connection</button>
-            </div>
-            <div v-else>
-                <h2>{{ projectMap[remote.projectId].projectName }}</h2>
-                <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.remoteProject, remote.projectId)">Leave Project</button>
-                <div class="mw-board-blocks">
-                    <div class="mw-board-block" v-for="board in Object.values(projectMap[remote.projectId].boards)"
-                        v-bind:key="board.boardId"
-                        v-on:click="boardBeingEdited.boardId !== board.boardId && openBoard(remote.projectId!, board.boardId)">
-                        <span v-if="boardBeingEdited.boardId !== board.boardId">{{ board.boardName }}</span>
-                        <input v-else type="text"
-                            :ref="el => { if (el) editNameRefs[board.boardId] = el }"
-                            v-bind:value="board.boardName"
-                            v-on:blur="endEditBoard(board.boardName, $event)"
-                            v-on:keydown="blurIfEnter($event)"/>
-                        <eic-svg-pencil width="20px"
-                            v-on:click.stop="beginEditBoard(remote.projectId!, board.boardId)"></eic-svg-pencil>
-                        <eic-svg-deletion-x class="inversion" width="25px"
-                            v-on:click.stop="deleteBoard(remote.projectId!, board.boardId)"
-                            ></eic-svg-deletion-x>
+        <div class="mw-board-list">
+            <div v-for="remote in remoteProjects" v-bind:key="remote.projectId">
+
+                <div class="mw-heading-flex mw-connection-error" v-if="!remote.projectId || !projectMap[remote.projectId]">
+                    <p>Could not connect to <span style="font-weight: bold">{{ remote.remoteProject.serverUrl }}</span></p>
+                    <div class="mw-button-group">
+                        <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.remoteProject, remote.projectId)">Leave Project</button>
+                        <button class="primary yellow" v-on:click="retryRemoteProject(remote.remoteProject)">Retry Connection</button>
                     </div>
                 </div>
-                <div class="mw-button-group">
-                    <button class="tertiary green" v-on:click="importBoard(remote.projectId!)">Import Board</button>
-                    <button class="primary green" v-on:click="createBoard(remote.projectId!)">Create Board</button>
+                <div v-else>
+                    <div class="mw-heading-flex">
+                        <h2>{{ projectMap[remote.projectId].projectName }}</h2>
+                        <div class="mw-button-group">
+                            <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.remoteProject, remote.projectId)">Leave Project</button>
+                            <button class="tertiary green" v-on:click="importBoard(remote.projectId!)">Import Board</button>
+                            <button class="primary green" v-on:click="createBoard(remote.projectId!)">Create Board</button>
+                        </div>
+                    </div>
+                    <div class="mw-board-blocks">
+                        <div class="mw-board-block" v-for="board in Object.values(projectMap[remote.projectId].boards)"
+                            v-bind:key="board.boardId"
+                            v-on:click="boardBeingEdited.boardId !== board.boardId && openBoard(remote.projectId!, board.boardId)">
+                            <span v-if="boardBeingEdited.boardId !== board.boardId">{{ board.boardName }}</span>
+                            <input v-else type="text"
+                                :ref="el => { if (el) editNameRefs[board.boardId] = el }"
+                                v-bind:value="board.boardName"
+                                v-on:blur="endEditBoard(board.boardName, $event)"
+                                v-on:keydown="blurIfEnter($event)"/>
+                            <eic-svg-pencil width="20px"
+                                v-on:click.stop="beginEditBoard(remote.projectId!, board.boardId)"></eic-svg-pencil>
+                            <eic-svg-deletion-x class="inversion" width="25px"
+                                v-on:click.stop="deleteBoard(remote.projectId!, board.boardId)"
+                                ></eic-svg-deletion-x>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="mw-board-list">
+                <eic-hr></eic-hr>
+            </div>
+
             <button class="primary pink" v-on:click="addRemoteProject()">Add Remote Project</button>
         </div>
 
@@ -468,9 +474,8 @@ export default defineComponent({
         padding: 24px 32px;
         border-radius: vars.$radius-medium;
 
-        &.mw-connection-error {
-            border: 2px solid vars.$red4;
-            p { display: inline-block; }
+        .mw-connection-error {
+            p { margin: 0 20px; color: vars.$red-error; }
         }
 
         h2 {
@@ -505,8 +510,12 @@ export default defineComponent({
         }
 
         .mw-button-group {
-            text-align: right;
             button { margin: 0 5px; }
+        }
+        .mw-heading-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .mw-board-blocks {
