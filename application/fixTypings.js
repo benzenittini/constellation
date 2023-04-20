@@ -20,3 +20,12 @@ if (fs.existsSync(vuex)) {
     contents["exports"]["."]["types"] = "./types/index.d.ts";
     fs.writeFileSync(vuex, JSON.stringify(contents, null, 2));
 }
+
+// Insert "types": "./types/index.d.ts" into highlight.js
+// See: https://github.com/highlightjs/highlight.js/issues/3752
+const highlight = path.resolve('node_modules', 'highlight.js', 'package.json');
+if (fs.existsSync(highlight)) {
+    let contents = JSON.parse(fs.readFileSync(highlight, 'utf-8'));
+    contents["exports"]["."]["types"] = "./types/index.d.ts";
+    fs.writeFileSync(highlight, JSON.stringify(contents, null, 2));
+}
