@@ -8,7 +8,13 @@ const DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = {
     target: 'node',
-    externals: [nodeExternals([])],
+    externals: [nodeExternals({
+        allowlist: [
+            'constellation-common/utilities',
+            'constellation-common/persistence',
+            'constellation-common/datatypes',
+        ],
+    })],
 
     entry: {
         'constellation-server': './src/index.ts',
