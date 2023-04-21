@@ -68,7 +68,10 @@ import { E3, showError } from "../../ErrorLogger";
 export default defineComponent({
     props: {
         projectId: String,
-        saveData: Object,
+        saveData: {
+            type: Object,
+            required: true,
+        },
     },
     setup(props) {
 

@@ -22,10 +22,13 @@ import { E40, showError } from "../../ErrorLogger";
 
 export default defineComponent({
     props: {
-        saveData: Object as PropType<{
-            boardName: string,
-            initialData?: BoardData
-        }>,
+        saveData: {
+            type: Object as PropType<{
+                boardName: string,
+                initialData?: BoardData
+            }>,
+            required: true,
+        },
     },
     setup(props) {
 

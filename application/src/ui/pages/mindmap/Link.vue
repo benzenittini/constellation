@@ -48,8 +48,14 @@ export default defineComponent({
             type: Number,
             default: 1
         },
-        source: Object,
-        destination: Object,
+        source: {
+            type: Object,
+            required: true,
+        },
+        destination: {
+            type: Object,
+            required: true,
+        },
         tempShift: Object,
         tempResize: Object,
     },

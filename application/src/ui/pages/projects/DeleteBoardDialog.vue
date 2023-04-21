@@ -12,11 +12,14 @@ import { LOCAL_PROJECT } from 'constellation-common/datatypes';
 
 export default defineComponent({
     props: {
-        saveData: Object as PropType<{
-            projectId: string,
-            boardId: string,
-            deleteFile?: boolean,
-        }>,
+        saveData: {
+            type: Object as PropType<{
+                projectId: string,
+                boardId: string,
+                deleteFile?: boolean,
+            }>,
+            required: true,
+        },
     },
     setup(props) {
         return {

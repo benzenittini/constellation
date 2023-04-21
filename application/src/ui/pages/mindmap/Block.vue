@@ -6,6 +6,14 @@
         v-on:mousemove="mouseMove"
         v-on:wheel="updateBodySize()"><!-- You know what would be great? If spinning the mouse wheel while the block was expanding didn't make it forget how to size itself, but noOOOooo. -->
 
+        <!-- The "shadow" -->
+        <rect data-test="block"
+            class="eic-block-shadow"
+            v-bind:rx="(showPreview || isExpanded) ? 8/adjustedScale : (20/adjustedScale)"
+            v-bind:y="5/adjustedScale"
+            v-bind:width="bodySize.width"
+            v-bind:height="bodySize.height">
+        </rect>
         <!-- The background/border -->
         <rect data-test="block"
             class="eic-block-rect"
@@ -133,8 +141,14 @@ import { SetBlockContentAction } from '../../actions/board-actions/SetBlockConte
 export default defineComponent({
     emits: [ 'drag', 'resize', 'blockTrayDragStart', 'mouseEnterBlock', 'mouseLeaveBlock' ],
     props: {
-        eicBlock: Object,
-        eicScale: Number, // The canvas zoom scale
+        eicBlock: {
+            type: Object,
+            required: true,
+        },
+        eicScale: {
+            type: Number, // The canvas zoom scale
+            required: true,
+        },
         eicTempShift: Object, // {deltaX, deltaY} This gets set while dragging blocks
         eicTempResize: Object, // {deltaX, deltaY, deltaWidth, deltaHeight} This gets set while resizing blocks
         eicSkipTween: Boolean,
@@ -464,6 +478,9 @@ export default defineComponent({
         rect,foreignObject { transition: none; }
     }
 
+    .eic-block-shadow {
+        fill: vars.$gray-very-dark;
+    }
     .eic-block-rect {
         stroke: vars.$gray3;
         fill: vars.$gray-very-dark;

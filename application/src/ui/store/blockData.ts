@@ -446,7 +446,7 @@ const blockDataGetters: GetterTree<BlockDataState, RootState> & BlockDataGetters
         if (block.isSelected) {
             style.filter = `drop-shadow(0 0 ${10/depth}px ${GRAY8})`
         }
-        style.strokeWidth = 3 / depth;
+        style.strokeWidth = 1.5 / depth;
 
         return style;
     },
