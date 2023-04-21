@@ -45,7 +45,7 @@
                 <!-- Project w/ boards -->
                 <div v-else>
                     <div class="mw-heading-flex">
-                        <h3>{{ projectMap[remote.projectId].projectName }}</h3>
+                        <h3>{{ projectMap[remote.projectId].projectName }}<span v-if="remote.version" class="mw-project-version"> (v{{ remote.version }})</span></h3>
                         <div class="mw-button-group">
                             <button class="tertiary yellow" v-on:click="leaveRemoteProject(remote.remoteProject, remote.projectId)">Leave Project</button>
                             <button class="tertiary green" v-on:click="importBoard(remote.projectId!)">Import Board</button>
@@ -262,6 +262,8 @@ export default defineComponent({
                     }).onError(error => {
                         showError(E7, [error.message || GENERIC_RESTART]);
                     }).submit();
+                } else {
+                    boardBeingEdited.value = {};
                 }
 
             },
@@ -518,6 +520,9 @@ export default defineComponent({
 
             .mw-connection-error {
                 p { margin: 0 8px; color: vars.$red-error; }
+            }
+            .mw-project-version {
+                color: vars.$gray4;
             }
         }
 

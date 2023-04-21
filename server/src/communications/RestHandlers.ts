@@ -77,7 +77,10 @@ export async function deleteUser(req: Request, res: Response) {
 export async function getProject(req: Request, res: Response) {
     try {
         requireAuthorization(req, res, async () => {
-            res.json(await projectDataPersistence!.getBasicProjectData());
+            res.json({
+                ...(await projectDataPersistence!.getBasicProjectData()),
+                version: WEBPACK.APP_VERSION,
+            });
         });
     } catch(err) {
         logger.error(err);

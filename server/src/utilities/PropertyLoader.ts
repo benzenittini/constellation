@@ -94,6 +94,10 @@ export function populateProperties(configFile: string) {
                 throw new Error(`Required property was not properly set: ${prop}`);
             }
         }
+        if (path.resolve(properties.backup_dir) === path.resolve(properties.board_dir)) {
+            console.error(`The 'backup_dir' cannot be the same place as the 'board_dir'.`);
+            throw new Error(`The 'backup_dir' cannot be the same place as the 'board_dir'.`);
+        }
 
         // Create any directories/files that don't exist.
         FileUtils.createDirIfNeeded(properties.log_dir);

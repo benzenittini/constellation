@@ -2,7 +2,7 @@
     <div class="mw-dropdown eic-form-component">
         <select v-model="inputVal"
             v-bind:disabled="mwDisabled"
-            v-bind:class="{ 'disabled': mwDisabled, 'eic-invalid-value': isValid && !isValid(inputVal) }"
+            v-bind:class="{ 'disabled': mwDisabled, 'eic-invalid-value': isValid && !isValid(inputVal), 'mw-multi-select': mwMultiple }"
             v-bind:multiple="mwMultiple"
             v-on:blur="$emit('eic-blur')"
             v-on:focus="$emit('eic-focus')">
@@ -84,6 +84,7 @@ export default defineComponent({
 
 <style lang="scss">
 @use "../styles/variables" as vars;
+@use "../styles/mixins";
 
 .mw-dropdown {
     select {
@@ -100,16 +101,19 @@ export default defineComponent({
         width: 100%;
 
         // Replace the default arrow with our own
-        appearance: none;
-        // This is the SVG for our arrow.
-        // <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
-        //     <polygon fill="vars.$gray3" points="0,0 10,0 5,8" />
-        // </svg>
-        background-image: url("data:image/svg+xml, <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\"> <polygon fill=\"" + vars.$gray3 + "\" points=\"0,1 10,1 5,9\" /> </svg>");
-        background-repeat: no-repeat;
-        background-position: center right 6px;
-        background-size: 13px;
-        padding-right: 25px; // extra right padding for our dropdown arrow.
+        @include mixins.scrollbars;
+        &:not(.mw-multi-select) {
+            appearance: none;
+            // This is the SVG for our arrow.
+            // <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+            //     <polygon fill="vars.$gray3" points="0,0 10,0 5,8" />
+            // </svg>
+            background-image: url("data:image/svg+xml, <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\"> <polygon fill=\"" + vars.$gray3 + "\" points=\"0,1 10,1 5,9\" /> </svg>");
+            background-repeat: no-repeat;
+            background-position: center right 6px;
+            background-size: 13px;
+            padding-right: 25px; // extra right padding for our dropdown arrow.
+        }
 
         &:focus { border-color: vars.$gray-very-light; }
         &.eic-invalid-value { border-color: vars.$red4 !important; }
