@@ -35,7 +35,7 @@
 
 <script lang="ts">
 
-import { defineComponent, computed, reactive, watch } from "vue";
+import { defineComponent, computed, reactive, watch, ref } from "vue";
 
 import { useStore } from "../../store/store";
 import { SetBlockParentAction } from "../../actions/board-actions/SetBlockParent";
@@ -134,7 +134,6 @@ export default defineComponent({
         return {
             blockStyle, lineStart, lineStop, sourceBlockEdge, destinationBlockEdge,
             isSelected: computed(() => props.source!.isSelected && props.destination!.isSelected),
-            isEitherSelected: computed(() => props.source!.isSelected || props.destination!.isSelected),
             deleteLink: function() {
                 // Send the update request to the server
                 new SetBlockParentAction({
@@ -152,8 +151,9 @@ export default defineComponent({
 
 .mw-app-relationship-link {
 
+    .connecting-line { transition: stroke 0.2s; }
     &.selected {
-        .connecting-line { stroke: vars.$gray-very-light; fill: vars.$gray-very-light; }
+        .connecting-line { stroke: vars.$gray-very-light; }
     }
     line {
         stroke: vars.$gray3;

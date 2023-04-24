@@ -10,6 +10,7 @@
         <rect data-test="block"
             class="eic-block-shadow"
             v-bind:rx="(showPreview || isExpanded) ? 8/adjustedScale : (20/adjustedScale)"
+            v-bind:class="{ selected: eicBlock.isSelected }"
             v-bind:y="5/adjustedScale"
             v-bind:width="bodySize.width"
             v-bind:height="bodySize.height">
@@ -480,6 +481,10 @@ export default defineComponent({
 
     .eic-block-shadow {
         fill: vars.$gray-very-dark;
+        transition: fill 0.2s, width 0.5s, height 0.5s;
+        &.selected {
+            fill: vars.$gray-very-light;
+        }
     }
     .eic-block-rect {
         stroke: vars.$gray3;

@@ -14,7 +14,7 @@
 }
 
 @mixin block-is-selected {
-    box-shadow: 0 0 15px 3px vars.$gray-very-light;
+    box-shadow: 0 5px 0 vars.$gray-very-light;
 }
 
 
@@ -52,7 +52,7 @@
 
     text-align: center;
     border-radius: 20px;
-    border: 1.5px solid vars.$gray3;
+    border: 2px solid vars.$gray3;
     background: vars.$gray-very-dark;
     color: vars.$gray-very-light;
     box-shadow: 0 5px 0 vars.$gray-very-dark;

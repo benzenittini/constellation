@@ -443,10 +443,7 @@ const blockDataGetters: GetterTree<BlockDataState, RootState> & BlockDataGetters
             .forEach(fid => applyStylesByFieldId(fid));
 
         // Populate any final style overrides that are important
-        if (block.isSelected) {
-            style.filter = `drop-shadow(0 0 ${10/depth}px ${GRAY8})`
-        }
-        style.strokeWidth = 1.5 / depth;
+        style.strokeWidth = 2 / depth;
 
         return style;
     },

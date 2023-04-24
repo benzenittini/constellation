@@ -37,7 +37,7 @@
 
             <eic-link v-for="link in links"
                 v-bind:key="link.id"
-                v-bind:eic-skip-tween="blockDraggable.isDragging || blockResizable.isDragging"
+                v-bind:eic-skip-tween="blockDraggable.hasMoved || blockResizable.hasMoved"
                 v-bind:eic-scale="zoomScale"
                 v-bind:my-depth-scale="blockScales[link.source.blockId]"
                 v-bind:source="link.source"
@@ -62,7 +62,7 @@
                 v-bind:eic-scale="zoomScale"
                 v-bind:eic-temp-shift="blockDragDestination"
                 v-bind:eic-temp-resize="blockResizable.deltaDrag"
-                v-bind:eic-skip-tween="blockDraggable.isDragging || blockResizable.isDragging"
+                v-bind:eic-skip-tween="blockDraggable.hasMoved || blockResizable.hasMoved"
                 v-bind:my-scale="blockScales[blockId]"
                 v-on:drag="startBlockDrag($event.mouseEvent, { blockId: $event.blockId })"
                 v-on:resize="blockResizable.mouseDown($event.mouseEvent, $event.direction)"
@@ -79,7 +79,7 @@
                 v-bind:eic-scale="zoomable.scale"
                 v-bind:eic-temp-shift="blockDragDestination"
                 v-bind:eic-temp-resize="blockResizable.deltaDrag"
-                v-bind:eic-skip-tween="blockDraggable.isDragging || blockResizable.isDragging"
+                v-bind:eic-skip-tween="blockDraggable.hasMoved || blockResizable.hasMoved"
                 v-bind:my-scale="blockScales[blockId]"
                 v-on:drag="startBlockDrag($event.mouseEvent, { blockId: $event.blockId })"
                 v-on:resize="blockResizable.mouseDown($event.mouseEvent, $event.direction)"
@@ -132,9 +132,9 @@ export default defineComponent({
         let expandedBlockIds = computed(() => store.getters.expandedBlockIds);
 
         let selectionDraggable = useDraggable(); // The "drag box to select blocks" feature
-        let blockTrayLinking = useDraggable();  // For creating all link types (regular and hierarchical)
-        let blockDraggable = useDraggable();    // Moving selected blocks
-        let blockResizable = useResizable();    // Resizing selected blocks
+        let blockTrayLinking = useDraggable();   // For creating all link types (regular and hierarchical)
+        let blockDraggable = useDraggable();     // Moving selected blocks
+        let blockResizable = useResizable();     // Resizing selected blocks
 
         const addSelectKey = computed(() => store.state.generalData.uiFlags.switchCtrlShiftForSelection ? 'shiftKey' : 'ctrlKey');
 

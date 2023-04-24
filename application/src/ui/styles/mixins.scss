@@ -16,7 +16,7 @@
 }
 
 @mixin lift-up($distance: 10px, $time: 0.4s) {
-    transition: $time;
+    transition: box-shadow $time, transform $time;
     &:hover {
         box-shadow: 10px 10px 20px vars.$gray-very-dark;
         transform: translateY(-$distance);
