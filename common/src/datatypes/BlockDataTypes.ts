@@ -1,6 +1,7 @@
 import { isString } from "../utilities/StringUtils";
 import { isBoolean } from "../utilities/BooleanUtils";
 import { BoundingBox, TypedMap } from "./GenericDataTypes";
+import { ObjectUtils } from "../utilities";
 
 export const DEFAULT_BLOCK_WIDTH = 200;
 export const DEFAULT_BLOCK_HEIGHT = 60;
@@ -38,7 +39,7 @@ export class Block {
 
 export function verifyBlock(data: any): data is Block {
     // Make sure the required top-level keys all exist.
-    if (!(
+    if (!data || !(
         'id' in data &&
         'location' in data &&
         'content' in data &&
@@ -46,6 +47,11 @@ export function verifyBlock(data: any): data is Block {
         'fieldIds' in data &&
         'classificationIds' in data
     )) {
+        return false;
+    }
+
+    // Verify id is a string
+    if (!isString(data.id)) {
         return false;
     }
 
@@ -60,6 +66,9 @@ export function verifyBlock(data: any): data is Block {
 
     // Verify content extends BlockContent
     if (!verifyBlockContent(data.content)) return false;
+
+    // Verify fieldValues is an object
+    if (!ObjectUtils.isObject(data.fieldValues)) return false;
 
     // Verify fieldIds is an array of strings
     if (!Array.isArray(data.fieldIds)) return false;
@@ -103,7 +112,7 @@ export interface TextContentType {
 }
 
 export function verifyBlockContent(data: any): data is BlockContent {
-    if (!(
+    if (!data || !(
         'type' in data &&
         'data' in data
     )) {
@@ -111,7 +120,7 @@ export function verifyBlockContent(data: any): data is BlockContent {
     }
 
     if (data.type === 'text') {
-        if (!isString(data.data.text)) return false;
+        if (!isString(data.data?.text)) return false;
     } else {
         return false; // Unrecognized type
     }

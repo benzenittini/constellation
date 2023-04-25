@@ -25,7 +25,6 @@ npm install
 # application project
 cd ../application
 npm install
-node ./fixTypings.js
 
 # server project
 cd ../server

@@ -16,7 +16,8 @@
     "build-main-prod": "webpack --config webpack.main-prod.cjs",
     "start": "electron-forge start --app-path ./build",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "postinstall": "node ./fixTypings.js"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.5",
