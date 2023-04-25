@@ -358,6 +358,25 @@ export default defineComponent({
                 }
             });
 
+            // Toggle open/closed the block underneath the cursor
+            eventEmitter.register('canvasToggleBlockUnderCursor', 'toggleBlockUnderCursor', () => {
+                if (mouseSampler.lastEvent.value) {
+                    let openSelectedBlocks = store.getters.selectedBlocks.filter(b => b.isLockedOpen).map(b => b.id);
+                    if (openSelectedBlocks.length > 0) {
+                        // If there's an expanded and selected block, close it.
+                        store.dispatch("lockOpenClosed", { blockIds: openSelectedBlocks });
+                    } else {
+                        // Otherwise, try to select and expand the block under the cursor.
+                        let xy = xyToPersistedCoordinates(mouseSampler.lastEvent.value.clientX, mouseSampler.lastEvent.value.clientY);
+                        let blockId = store.getters.blockAtCoordinates(xy)?.id;
+                        if (blockId) {
+                            store.dispatch("selectBlocks",   { blockIds: [blockId] });
+                            store.dispatch("lockOpenClosed", { blockIds: [blockId] });
+                        }
+                    }
+                }
+            });
+
             // Related to bulk-creating blocks:
             eventEmitter.register('canvasBlockCreated', 'blockCreated', (blockId) => {
                 if (inBulkCreationMode.value) {
@@ -414,6 +433,9 @@ export default defineComponent({
         onUnmounted(() => {
             windowEvents.deregisterAll();
             eventEmitter.deregister('canvasGoToBlock');
+            eventEmitter.deregister('canvasToggleBlockUnderCursor');
+            eventEmitter.deregister('canvasBlockCreated');
+            eventEmitter.deregister('canvasBlockEditComplete');
         });
 
         // We have a 0x0 invisible box on the canvas because chrome. Whenever the user pans or zooms, we toggle the opacity

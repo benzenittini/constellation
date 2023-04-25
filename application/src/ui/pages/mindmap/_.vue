@@ -71,7 +71,7 @@ export default defineComponent({
                         // IE/Edge uses "Up". Others use "ArrowUp".
                         eventEmitter.emit('previousSearchResult');
                     } else if (!keyboardEvent.ctrlKey && !keyboardEvent.metaKey && !keyboardEvent.altKey && keyboardEvent.key === " ") {
-                        store.dispatch("lockOpenClosed", { blockIds: store.getters.selectedBlockIds });
+                        eventEmitter.emit('toggleBlockUnderCursor');
                     } else if (keyboardEvent.key === "?") {
                         eventEmitter.emit('toggleHelp');
                     }
