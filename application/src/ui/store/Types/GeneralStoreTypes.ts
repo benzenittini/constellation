@@ -1,5 +1,5 @@
 
-import { BasicBoardData, BasicProjectData, CurrentProjectBoard, BoardConfig, RemoteProject, TypedMap } from 'constellation-common/datatypes';
+import { BasicBoardData, BasicProjectData, CurrentProjectBoard, BoardConfig, RemoteProject, TypedMap, RemoteProjectLookup } from 'constellation-common/datatypes';
 import { AugmentedActionContext, GetterProperties } from "../StoreTypes"
 
 
@@ -10,7 +10,7 @@ import { AugmentedActionContext, GetterProperties } from "../StoreTypes"
 // -- State --
 export interface GeneralDataState {
     projectData: TypedMap<BasicProjectData>;
-    remoteProjectLookup: { remoteProject: RemoteProject, projectId?: string, version?: string }[];
+    remoteProjectLookup: RemoteProjectLookup[];
     currentProjectBoard: CurrentProjectBoard | undefined;
     uiFlags: {
         disablePointerEvents: boolean,

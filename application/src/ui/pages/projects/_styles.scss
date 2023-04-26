@@ -1,0 +1,62 @@
+
+@use "../../styles/variables" as vars;
+@use "../../styles/mixins";
+
+#mw-projects {
+
+    .mw-heading-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .mw-button-group {
+        button { margin: 0 5px; }
+    }
+
+    .mw-board-blocks {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 24px;
+        gap: 20px;
+        .mw-board-block {
+            @include mixins.lift-up(5px);
+            background: vars.$gray0;
+            border-radius: vars.$radius-small;
+            border: 2px solid vars.$pink-medium;
+            padding: 32px 48px;
+            cursor: pointer;
+            position: relative;
+
+            &:hover {
+                .mw-svg-pencil, .mw-svg-deletionx { opacity: 1; }
+            }
+
+            .mw-svg-pencil {
+                transition: opacity 0.2s;
+                position: absolute;
+                top: 5px;
+                left: 5px;
+                opacity: 0;
+            }
+            .mw-svg-deletionx {
+                transition: opacity 0.2s;
+                position: absolute;
+                top: -12px;
+                right: -12px;
+                opacity: 0;
+            }
+
+            input[type=text] {
+                background: vars.$gray1;
+                color: vars.$gray-very-light;
+                border: none;
+                padding: 8px 12px;
+                border-radius: vars.$component-radius;
+                font-size: 16px;
+                &:focus { outline: 1px solid vars.$gray3; }
+            }
+        }
+    }
+
+}
