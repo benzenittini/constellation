@@ -1,13 +1,15 @@
 
+import path from "path";
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
 
 import { logger } from "../utilities/Logger";
 import { properties } from "../utilities/PropertyLoader";
 import * as UserDataPersistence from '../persistence/UserDataPersistence';
-import { ConstError, CreateNewBoardRequest, ErrorResponse, ImportBoardRequest } from 'constellation-common/datatypes';
+import { ConstError, CreateNewBoardRequest, DownloadBoardDataResponse, ErrorResponse, ImportBoardRequest } from 'constellation-common/datatypes';
 
 import { projectDataPersistence, boardDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "../persistence/Persistence";
+import { Constants } from "constellation-common/utilities";
 
 
 function getJwt(req: Request) {
@@ -184,6 +186,22 @@ export async function putBoardById(req: Request, res: Response) {
         requireAuthorization(req, res, async () => {
             let boardId = req?.params?.id;
             res.json(await projectDataPersistence!.updateBoardConfig(boardId, req.body));
+        });
+    } catch(err) {
+        logger.error(err);
+        const response: ErrorResponse = { errorCode: 2, message: undefined };
+        res.json(response);
+    }
+}
+
+export async function getBoardById(req: Request, res: Response) {
+    try {
+        requireAuthorization(req, res, async () => {
+            const boardId = req?.params?.id;
+            const boardName = (await projectDataPersistence!.getBasicProjectData()).boards[boardId].boardName;
+            const boardData = await boardDataPersistence[boardId].getBoardData();
+            const response: DownloadBoardDataResponse = { boardData, boardName };
+            res.json(response);
         });
     } catch(err) {
         logger.error(err);

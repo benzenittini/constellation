@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { dialog } from "electron";
 
 import { ArrayUtils, Constants } from 'constellation-common/utilities';
-import { LOCAL_PROJECT, LOCAL_PROJECT_NAME, BasicBoardData, GetProjectDataResponse, CreateNewBoardRequest, CreateNewBoardResponse, GetBoardTemplatesResponse, DeleteBoardRequest, DeleteBoardResponse, GetRemoteProjectsResponse, AddRemoteProjectRequest, AddRemoteProjectResponse, RemoveRemoteProjectResponse, RemoveRemoteProjectRequest, ImportBoardResponse, verifyBoardData, ReadFileAsBoardResponse, GetUserSettingsResponse, SetUserSettingsRequest, SetUserSettingsResponse } from 'constellation-common/datatypes';
+import { LOCAL_PROJECT, LOCAL_PROJECT_NAME, BasicBoardData, GetProjectDataResponse, CreateNewBoardRequest, CreateNewBoardResponse, GetBoardTemplatesResponse, DeleteBoardRequest, DeleteBoardResponse, GetRemoteProjectsResponse, AddRemoteProjectRequest, AddRemoteProjectResponse, RemoveRemoteProjectResponse, RemoveRemoteProjectRequest, ImportBoardResponse, verifyBoardData, ReadFileAsBoardResponse, GetUserSettingsResponse, SetUserSettingsRequest, SetUserSettingsResponse, SaveBoardDataResponse, SaveBoardDataRequest } from 'constellation-common/datatypes';
 import { BoardDataPersistence } from 'constellation-common/persistence';
 import * as ConfigDataPersistence from "./ConfigDataPersistence";
 
@@ -24,6 +24,7 @@ export function registerConfigHandlers(ipcMain: Electron.IpcMain) {
     ipcMain.handle('config:readFileAsBoard',     () => readFileAsBoard());
     ipcMain.handle('config:getUserSettings',     () => getUserSettings());
     ipcMain.handle('config:setUserSettings',     (event, req) => setUserSettings(req));
+    ipcMain.handle('config:saveBoardData',       (event, req) => saveBoardData(req));
 }
 
 async function getProjectData(): Promise<GetProjectDataResponse> {
@@ -241,5 +242,23 @@ async function getUserSettings(): Promise<GetUserSettingsResponse> {
 
 async function setUserSettings(req: SetUserSettingsRequest): Promise<SetUserSettingsResponse> {
     ConfigDataPersistence.setUserSettings(req);
+    return {};
+}
+
+async function saveBoardData(req: SaveBoardDataRequest): Promise<SaveBoardDataResponse> {
+    let { filePath } = await dialog.showSaveDialog({
+        title: `Download ${req.boardName}`,
+        defaultPath: req.boardName + Constants.DOT_FILE_SUFFIX,
+        buttonLabel: "Save",
+        properties: [
+            'createDirectory',
+            'showOverwriteConfirmation',
+        ]
+    });
+
+    if (filePath) {
+        fs.writeFileSync(filePath, JSON.stringify(req.boardData));
+    }
+
     return {};
 }

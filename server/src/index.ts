@@ -61,6 +61,7 @@ import { initializePersistence } from './persistence/Persistence';
         app.put   ('/board',     Rest.putBoard);     // Importing existing board data into new board
         app.delete('/board/:id', Rest.deleteBoard);  // Deletes a board by id
         app.put   ('/board/:id', Rest.putBoardById); // Update a board's config (ex: name)
+        app.get   ('/board/:id', Rest.getBoardById); // Downloads a board's data
 
 
         // ====================

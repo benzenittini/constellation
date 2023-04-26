@@ -31,6 +31,8 @@
                         v-on:keydown="blurIfEnter($event)"/>
                     <eic-svg-pencil width="20px"
                         v-on:click.stop="beginEditBoard(remote.projectId!, board.boardId)"></eic-svg-pencil>
+                    <eic-svg-download height="20px"
+                        v-on:click.stop="downloadBoard(remote.remoteProject, board.boardId)"></eic-svg-download>
                     <eic-svg-deletion-x class="inversion" width="25px"
                         v-on:click.stop="deleteBoard(remote.projectId!, board.boardId)"
                         ></eic-svg-deletion-x>
@@ -45,12 +47,13 @@ import { defineComponent, ref, Ref, onBeforeUpdate, PropType } from 'vue';
 import { useVueModals } from 'mw-vue-modals';
 
 import { RemoteProject, GENERIC_RESTART, TypedMap, RemoteProjectLookup, BasicProjectData } from 'constellation-common/datatypes';
-import { E1, E11, E35, E7, showError } from '../../ErrorLogger';
+import { E1, E11, E35, E42, E7, showError } from '../../ErrorLogger';
+import { useBoardOperations } from '../../composables/BoardOperations';
 
 import { GetProjectDataAction } from '../../actions/project-actions/GetProjectData';
 import { LeaveProjectAction } from '../../actions/project-actions/LeaveProject';
 import { UpdateBoardConfigAction } from '../../actions/project-actions/UpdateBoardConfig';
-import { useBoardOperations } from '../../composables/BoardOperations';
+import { DownloadBoardDataAction } from '../../actions/project-actions/DownloadBoardData';
 
 export default defineComponent({
     props: {
@@ -76,6 +79,14 @@ export default defineComponent({
             boardBeingEdited,
             editNameRefs,
 
+            downloadBoard: (remoteProject: RemoteProject, boardId: string) => {
+                new DownloadBoardDataAction(
+                    remoteProject,
+                    boardId,
+                ).onError(error => {
+                    showError(E42, [error.message || GENERIC_RESTART]);
+                }).submit();
+            },
             beginEditBoard: (projectId: string, boardId: string) => {
                 boardBeingEdited.value = { projectId, boardId };
                 setTimeout(() => (editNameRefs.value as any)[boardId].select(), 0);
@@ -152,6 +163,7 @@ export default defineComponent({
 <style lang="scss">
 
 @use "../../styles/variables" as vars;
+@use "../../styles/mixins";
 @use "./styles";
 
 .mw-remote-project {
@@ -160,6 +172,53 @@ export default defineComponent({
     }
     .mw-project-version {
         color: vars.$gray4;
+    }
+
+    .mw-board-blocks {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 24px;
+        gap: 20px;
+        .mw-board-block {
+            @include mixins.lift-up(5px);
+            background: vars.$gray0;
+            border-radius: vars.$radius-medium;
+            border: 2px solid vars.$pink-medium;
+            padding: 32px 48px;
+            cursor: pointer;
+            position: relative;
+
+            &:hover {
+                .mw-svg-pencil, .mw-svg-download, .mw-svg-deletionx { opacity: 1; }
+            }
+            .mw-svg-pencil, .mw-svg-download, .mw-svg-deletionx {
+                transition: opacity 0.2s;
+                position: absolute;
+                opacity: 0;
+            }
+            .mw-svg-pencil {
+                top: 5px;
+                left: 5px;
+            }
+            .mw-svg-download {
+                top: 5px;
+                left: 30px;
+            }
+            .mw-svg-deletionx {
+                top: -12px;
+                right: -12px;
+            }
+
+            input[type=text] {
+                background: vars.$gray1;
+                color: vars.$gray-very-light;
+                border: none;
+                padding: 8px 12px;
+                border-radius: vars.$component-radius;
+                font-size: 16px;
+                &:focus { outline: 1px solid vars.$gray3; }
+            }
+        }
     }
 }
 

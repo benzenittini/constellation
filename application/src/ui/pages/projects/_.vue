@@ -71,12 +71,6 @@ export default defineComponent({
             new GetRemoteProjectsAction().submit();
         });
 
-
-        // =============
-        // User Settings
-        // -------------
-
-
         return {
             LOCAL_PROJECT, LOCAL_PROJECT_NAME,
 

@@ -117,6 +117,13 @@ export type GetUserSettingsResponse = ErrorResponse | UserSettings;
 export type SetUserSettingsRequest = Partial<UserSettings>;
 export type SetUserSettingsResponse = ErrorResponse | {};
 
+// DownloadBoardDataAction (Server)
+export type DownloadBoardDataRequest = void;
+export type DownloadBoardDataResponse = ErrorResponse | { boardData: BoardData, boardName: string };
+// DownloadBoardDataAction (Client)
+export type SaveBoardDataRequest = { boardData: BoardData, boardName: string };
+export type SaveBoardDataResponse = ErrorResponse | {};
+
 
 // ==============
 // Board Requests

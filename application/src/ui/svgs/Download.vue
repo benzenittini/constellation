@@ -21,8 +21,9 @@ export default defineComponent({
 <style lang="scss">
 @use "../styles/variables" as vars;
 .mw-svg-download {
-    // .mw-background { fill: vars.$gray0; }
-    .mw-drive { fill: vars.$gray8; }
-    .mw-arrow { fill: vars.$gray8; }
+    .mw-drive, .mw-arrow { fill: vars.$gray3; }
+    &:hover {
+        .mw-drive, .mw-arrow { fill: vars.$gray-very-light; }
+    }
 }
 </style>

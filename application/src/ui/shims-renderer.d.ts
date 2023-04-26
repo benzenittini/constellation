@@ -1,5 +1,5 @@
 
-import { AddRemoteProjectRequest, AddRemoteProjectResponse, CreateBlockRequest, CreateBlockResponse, CreateNewBoardRequest, CreateNewBoardResponse, DeleteBlocksRequest, DeleteBlocksResponse, DeleteBoardRequest, DeleteBoardResponse, DeleteViewRequest, DeleteViewResponse, GetBoardDataRequest, GetBoardDataResponse, GetBoardTemplatesResponse, GetProjectDataRequest, GetProjectDataResponse, GetRemoteProjectsRequest, GetRemoteProjectsResponse, GetUserSettingsResponse, ImportBoardRequest, ImportBoardResponse, LoadViewRequest, LoadViewResponse, ReadFileAsBoardResponse, RemoveRemoteProjectRequest, RemoveRemoteProjectResponse, SaveViewRequest, SaveViewResponse, SetBlockContentRequest, SetBlockContentResponse, SetBlockParentRequest, SetBlockParentResponse, SetBlockPositionsRequest, SetBlockPositionsResponse, SetBlockPriorityRequest, SetBlockPriorityResponse, SetClassificationDefinitionsRequest, SetClassificationDefinitionsResponse, SetClassificationOnBlocksRequest, SetClassificationOnBlocksResponse, SetFieldDefinitionsRequest, SetFieldDefinitionsResponse, SetFieldOnBlocksRequest, SetFieldOnBlocksResponse, SetUserSettingsRequest, SetUserSettingsResponse } from 'constellation-common/datatypes';
+import { AddRemoteProjectRequest, AddRemoteProjectResponse, CreateBlockRequest, CreateBlockResponse, CreateNewBoardRequest, CreateNewBoardResponse, DeleteBlocksRequest, DeleteBlocksResponse, DeleteBoardRequest, DeleteBoardResponse, DeleteViewRequest, DeleteViewResponse, GetBoardDataRequest, GetBoardDataResponse, GetBoardTemplatesResponse, GetProjectDataRequest, GetProjectDataResponse, GetRemoteProjectsRequest, GetRemoteProjectsResponse, GetUserSettingsResponse, ImportBoardRequest, ImportBoardResponse, LoadViewRequest, LoadViewResponse, ReadFileAsBoardResponse, RemoveRemoteProjectRequest, RemoveRemoteProjectResponse, SaveBoardDataRequest, SaveBoardDataResponse, SaveViewRequest, SaveViewResponse, SetBlockContentRequest, SetBlockContentResponse, SetBlockParentRequest, SetBlockParentResponse, SetBlockPositionsRequest, SetBlockPositionsResponse, SetBlockPriorityRequest, SetBlockPriorityResponse, SetClassificationDefinitionsRequest, SetClassificationDefinitionsResponse, SetClassificationOnBlocksRequest, SetClassificationOnBlocksResponse, SetFieldDefinitionsRequest, SetFieldDefinitionsResponse, SetFieldOnBlocksRequest, SetFieldOnBlocksResponse, SetUserSettingsRequest, SetUserSettingsResponse } from 'constellation-common/datatypes';
 
 /** Tells typescript what properties are available on the global "window" object. Useful for preloads. */
 declare global {
@@ -16,7 +16,8 @@ declare global {
             importBoard:         (req: ImportBoardRequest)         => Promise<ImportBoardResponse>,
             readFileAsBoard:     () => Promise<ReadFileAsBoardResponse>,
             getUserSettings:     () => Promise<GetUserSettingsResponse>,
-            setUserSettings:     (req: SetUserSettingsRequest) => Promise<SetUserSettingsResponse>,
+            setUserSettings:     (req: SetUserSettingsRequest)     => Promise<SetUserSettingsResponse>,
+            saveBoardData:       (req: SaveBoardDataRequest)       => Promise<SaveBoardDataResponse>,
         },
         board: {
             getBoardData:       (req: GetBoardDataRequest) => Promise<GetBoardDataResponse>,
