@@ -46,7 +46,7 @@ export type BoardData = {
 
 export function verifyBoardData(data: any): data is BoardData {
     // Make sure the required top-level keys all exist.
-    if (!(
+    if (!data || !(
         'blocks' in data &&
         'views' in data &&
         'fields' in data &&

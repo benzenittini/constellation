@@ -51,6 +51,7 @@ describe('BlockDataTypes', function() {
             { expected: false, data: {...validBlock, parentBlockId: 1} },
             { expected: false, data: {...validBlock, isSelected: 1} },
             { expected: false, data: {...validBlock, isLockedOpen: 1} },
+            { expected: false, data: {} },
             { expected: false, data: undefined },
         ].forEach(({ data, expected }) => {
             it(`should correctly identify a block datatype.`, function() {
