@@ -48,7 +48,8 @@ export class GetProjectDataAction extends Action {
                 store.dispatch('registerRemoteProject', {
                     remoteProject: this.remoteProject,
                     projectId: resp.projectId,
-                    version: resp.version
+                    version: resp.version,
+                    capabilities: resp.capabilities,
                 });
             }
 

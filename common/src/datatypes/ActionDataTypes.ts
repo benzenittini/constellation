@@ -68,8 +68,9 @@ export class ConstError extends Error {
 // Project Requests
 // ----------------
 
+export type ServerCapabilities = { downloadBoard?: boolean };
 export type GetProjectDataRequest = void;
-export type GetProjectDataResponse = ErrorResponse | (BasicProjectData & { version?: string });
+export type GetProjectDataResponse = ErrorResponse | (BasicProjectData & { version?: string, capabilities?: ServerCapabilities });
 
 export type GetBoardTemplatesRequest = void;
 export type GetBoardTemplatesResponse = ErrorResponse | BoardTemplateClient[];

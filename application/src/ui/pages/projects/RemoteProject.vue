@@ -31,7 +31,7 @@
                         v-on:keydown="blurIfEnter($event)"/>
                     <eic-svg-pencil width="20px"
                         v-on:click.stop="beginEditBoard(remote.projectId!, board.boardId)"></eic-svg-pencil>
-                    <eic-svg-download height="20px"
+                    <eic-svg-download height="20px" v-if="remote.capabilities?.downloadBoard"
                         v-on:click.stop="downloadBoard(remote.remoteProject, board.boardId)"></eic-svg-download>
                     <eic-svg-deletion-x class="inversion" width="25px"
                         v-on:click.stop="deleteBoard(remote.projectId!, board.boardId)"

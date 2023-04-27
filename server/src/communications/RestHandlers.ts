@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import { logger } from "../utilities/Logger";
 import { properties } from "../utilities/PropertyLoader";
 import * as UserDataPersistence from '../persistence/UserDataPersistence';
-import { ConstError, CreateNewBoardRequest, DownloadBoardDataResponse, ErrorResponse, ImportBoardRequest } from 'constellation-common/datatypes';
+import { ConstError, CreateNewBoardRequest, DownloadBoardDataResponse, ErrorResponse, GetProjectDataResponse, ImportBoardRequest } from 'constellation-common/datatypes';
 
 import { projectDataPersistence, boardDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "../persistence/Persistence";
 import { Constants } from "constellation-common/utilities";
@@ -79,10 +79,14 @@ export async function deleteUser(req: Request, res: Response) {
 export async function getProject(req: Request, res: Response) {
     try {
         requireAuthorization(req, res, async () => {
-            res.json({
+            const response: GetProjectDataResponse = {
                 ...(await projectDataPersistence!.getBasicProjectData()),
                 version: WEBPACK.APP_VERSION,
-            });
+                capabilities: {
+                    downloadBoard: true
+                },
+            }
+            res.json(response);
         });
     } catch(err) {
         logger.error(err);

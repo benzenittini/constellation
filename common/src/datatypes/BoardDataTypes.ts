@@ -7,6 +7,7 @@ import { RemoteProject } from "./FileDataTypes";
 
 import { isObject } from "../utilities/ObjectUtils";
 import { isString } from "../utilities/StringUtils";
+import { ServerCapabilities } from "./ActionDataTypes";
 
 
 // ===========
@@ -141,7 +142,8 @@ export type TemplatePV = {
 // -------------
 
 export type RemoteProjectLookup = {
-    remoteProject: RemoteProject,
-    projectId?: string,
-    version?: string 
+    remoteProject: RemoteProject;
+    projectId?: string;
+    version?: string;
+    capabilities?: ServerCapabilities;
 }

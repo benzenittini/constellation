@@ -76,12 +76,12 @@ const generalDataMutations: MutationTree<GeneralDataState> & GeneralDataMutation
         state.projectData[projectId].boards[boardId].boardName = boardConfig.name;
     },
 
-    registerRemoteProject (state, { remoteProject, projectId, version }) {
+    registerRemoteProject (state, { remoteProject, projectId, version, capabilities }) {
         let index = state.remoteProjectLookup.findIndex(proj => proj.remoteProject.serverUrl === remoteProject.serverUrl);
         if (index !== -1) {
-            state.remoteProjectLookup[index] = { remoteProject, projectId, version };
+            state.remoteProjectLookup[index] = { remoteProject, projectId, version, capabilities };
         } else {
-            state.remoteProjectLookup.push({ remoteProject, projectId, version });
+            state.remoteProjectLookup.push({ remoteProject, projectId, version, capabilities });
         }
     },
     deregisterRemoteProject (state, { remoteProject }) {
