@@ -17,12 +17,14 @@
             v-bind:style="{ transform: `${pannable.translateString} ${zoomable.scaleString}` }">
 
             <!-- All of our "snap zones" get painted first. -->
-            <circle class="mwe-snap-zone"
-                v-for="zone in snapZones"
-                v-bind:key="zone.key"
-                v-bind:cx="zone.x"
-                v-bind:cy="zone.y"
-                v-bind:r="20/zone.scale"/>
+            <template v-if="!ctrlHeld">
+                <circle class="mwe-snap-zone"
+                    v-for="zone in snapZones"
+                    v-bind:key="zone.key"
+                    v-bind:cx="zone.x"
+                    v-bind:cy="zone.y"
+                    v-bind:r="20/zone.scale"/>
+            </template>
 
             <!-- When linking blocks using the block tray, this draws the line the user's dragging. -->
             <eic-link data-test="block-canvas-active-link"
@@ -214,7 +216,7 @@ export default defineComponent({
                 }, [] as SnapZone[]);
         }
         function getBestSnapZone(x: number, y: number, widthBounds: number, heightBounds: number) {
-            if (snapZones.value.length === 0)
+            if (snapZones.value.length === 0 || ctrlHeld.value)
                 return { x, y };
 
             // Determine the closest snap zone
