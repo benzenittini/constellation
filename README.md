@@ -50,42 +50,44 @@ npm run watch
 npm run serve
 ```
 
-# Production Builds
+# Release Process
 
-## Common
+1. Verify everything is committed to git.
+1. Merge `dev` branch into `master`.
+1. Run clean builds of all projects:
+    ```bash
+    # Clean up past builds
+    rm -rf ./common/dist ./common/node_modules ./application/build ./application/node_modules ./server/dist ./server/node_modules
 
-```bash
-cd ./common
+    # Build common
+    cd ./common
+    npm install
+    npm run build-prod
 
-npm run build-prod
-```
+    # Build application
+    cd ../application
+    npm install
+    npm run build-main-prod
+    npm run build-ui-prod 
+    # For first time building on Windows:
+    # First install .NET 3.5.1 if not already.
+    # Then, install Wix 3.1.1: https://wixtoolset.org/docs/wix3/
+    # Then run "npm run make" command.
+    npm run make
 
-## Client
-
-```bash
-cd ./application
-
-# Building the code
-npm run build-main-prod
-npm run build-ui-prod
-
-# FOR WINDOWS:
-# First install .NET 3.5.1 if not already.
-# Then, install Wix 3.1.1: https://wixtoolset.org/docs/wix3/
-# Then run "npm run make" command.
-
-# Creating the Electron installers, run on the desired OS.
-npm run make
-```
-
-## Server
-
-```bash
-cd ./server
-
-# Building the server
-npm run build-prod
-
-# Create the zip file for upload
-npm run package-server
-```
+    # Build server
+    cd ../server
+    npm install
+    npm run build-prod
+    npm run package-server
+    ```
+1. Copy artifacts to server
+1. Create and push git tag
+    ```bash
+    git tag vM.m.p
+    git push origin --tags
+    ```
+1. Update all package.json versions for upcoming version.
+1. Create/push new branch for new version development.
+1. Update getconstellation.dev's changelog and available versions.
+1. Deploy new version of getconstellation.dev
