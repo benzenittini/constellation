@@ -1,11 +1,13 @@
 
 import { TypedMap } from "./GenericDataTypes"
-
 import { Block, verifyBlock } from './BlockDataTypes';
 import { ViewConfig, verifyViewConfig } from './ViewDataTypes';
 import { ClassificationDefinition, FieldDefinition, FieldType, PossibleValueDefinition, verifyClassificationDefinition, verifyFieldDefinition, verifyPossibleValueDefinition } from './FieldDataTypes';
+import { RemoteProject } from "./FileDataTypes";
+
 import { isObject } from "../utilities/ObjectUtils";
 import { isString } from "../utilities/StringUtils";
+import { ServerCapabilities } from "./ActionDataTypes";
 
 
 // ===========
@@ -45,7 +47,7 @@ export type BoardData = {
 
 export function verifyBoardData(data: any): data is BoardData {
     // Make sure the required top-level keys all exist.
-    if (!(
+    if (!data || !(
         'blocks' in data &&
         'views' in data &&
         'fields' in data &&
@@ -132,4 +134,16 @@ export type TemplateField = {
 export type TemplatePV = {
     name: string;
     style?: any;
+}
+
+
+// =============
+// Miscellaneous
+// -------------
+
+export type RemoteProjectLookup = {
+    remoteProject: RemoteProject;
+    projectId?: string;
+    version?: string;
+    capabilities?: ServerCapabilities;
 }

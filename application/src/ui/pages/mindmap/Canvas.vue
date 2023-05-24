@@ -17,12 +17,14 @@
             v-bind:style="{ transform: `${pannable.translateString} ${zoomable.scaleString}` }">
 
             <!-- All of our "snap zones" get painted first. -->
-            <circle class="mwe-snap-zone"
-                v-for="zone in snapZones"
-                v-bind:key="zone.key"
-                v-bind:cx="zone.x"
-                v-bind:cy="zone.y"
-                v-bind:r="20/zone.scale"/>
+            <template v-if="!ctrlHeld">
+                <circle class="mwe-snap-zone"
+                    v-for="zone in snapZones"
+                    v-bind:key="zone.key"
+                    v-bind:cx="zone.x"
+                    v-bind:cy="zone.y"
+                    v-bind:r="20/zone.scale"/>
+            </template>
 
             <!-- When linking blocks using the block tray, this draws the line the user's dragging. -->
             <eic-link data-test="block-canvas-active-link"
@@ -37,7 +39,7 @@
 
             <eic-link v-for="link in links"
                 v-bind:key="link.id"
-                v-bind:eic-skip-tween="blockDraggable.isDragging || blockResizable.isDragging"
+                v-bind:eic-skip-tween="blockDraggable.hasMoved || blockResizable.hasMoved"
                 v-bind:eic-scale="zoomScale"
                 v-bind:my-depth-scale="blockScales[link.source.blockId]"
                 v-bind:source="link.source"
@@ -62,7 +64,7 @@
                 v-bind:eic-scale="zoomScale"
                 v-bind:eic-temp-shift="blockDragDestination"
                 v-bind:eic-temp-resize="blockResizable.deltaDrag"
-                v-bind:eic-skip-tween="blockDraggable.isDragging || blockResizable.isDragging"
+                v-bind:eic-skip-tween="blockDraggable.hasMoved || blockResizable.hasMoved"
                 v-bind:my-scale="blockScales[blockId]"
                 v-on:drag="startBlockDrag($event.mouseEvent, { blockId: $event.blockId })"
                 v-on:resize="blockResizable.mouseDown($event.mouseEvent, $event.direction)"
@@ -79,7 +81,7 @@
                 v-bind:eic-scale="zoomable.scale"
                 v-bind:eic-temp-shift="blockDragDestination"
                 v-bind:eic-temp-resize="blockResizable.deltaDrag"
-                v-bind:eic-skip-tween="blockDraggable.isDragging || blockResizable.isDragging"
+                v-bind:eic-skip-tween="blockDraggable.hasMoved || blockResizable.hasMoved"
                 v-bind:my-scale="blockScales[blockId]"
                 v-on:drag="startBlockDrag($event.mouseEvent, { blockId: $event.blockId })"
                 v-on:resize="blockResizable.mouseDown($event.mouseEvent, $event.direction)"
@@ -132,9 +134,9 @@ export default defineComponent({
         let expandedBlockIds = computed(() => store.getters.expandedBlockIds);
 
         let selectionDraggable = useDraggable(); // The "drag box to select blocks" feature
-        let blockTrayLinking = useDraggable();  // For creating all link types (regular and hierarchical)
-        let blockDraggable = useDraggable();    // Moving selected blocks
-        let blockResizable = useResizable();    // Resizing selected blocks
+        let blockTrayLinking = useDraggable();   // For creating all link types (regular and hierarchical)
+        let blockDraggable = useDraggable();     // Moving selected blocks
+        let blockResizable = useResizable();     // Resizing selected blocks
 
         const addSelectKey = computed(() => store.state.generalData.uiFlags.switchCtrlShiftForSelection ? 'shiftKey' : 'ctrlKey');
 
@@ -214,7 +216,7 @@ export default defineComponent({
                 }, [] as SnapZone[]);
         }
         function getBestSnapZone(x: number, y: number, widthBounds: number, heightBounds: number) {
-            if (snapZones.value.length === 0)
+            if (snapZones.value.length === 0 || ctrlHeld.value)
                 return { x, y };
 
             // Determine the closest snap zone
@@ -358,6 +360,25 @@ export default defineComponent({
                 }
             });
 
+            // Toggle open/closed the block underneath the cursor
+            eventEmitter.register('canvasToggleBlockUnderCursor', 'toggleBlockUnderCursor', () => {
+                if (mouseSampler.lastEvent.value) {
+                    let openSelectedBlocks = store.getters.selectedBlocks.filter(b => b.isLockedOpen).map(b => b.id);
+                    if (openSelectedBlocks.length > 0) {
+                        // If there's an expanded and selected block, close it.
+                        store.dispatch("lockOpenClosed", { blockIds: openSelectedBlocks });
+                    } else {
+                        // Otherwise, try to select and expand the block under the cursor.
+                        let xy = xyToPersistedCoordinates(mouseSampler.lastEvent.value.clientX, mouseSampler.lastEvent.value.clientY);
+                        let blockId = store.getters.blockAtCoordinates(xy)?.id;
+                        if (blockId) {
+                            store.dispatch("selectBlocks",   { blockIds: [blockId] });
+                            store.dispatch("lockOpenClosed", { blockIds: [blockId] });
+                        }
+                    }
+                }
+            });
+
             // Related to bulk-creating blocks:
             eventEmitter.register('canvasBlockCreated', 'blockCreated', (blockId) => {
                 if (inBulkCreationMode.value) {
@@ -414,6 +435,9 @@ export default defineComponent({
         onUnmounted(() => {
             windowEvents.deregisterAll();
             eventEmitter.deregister('canvasGoToBlock');
+            eventEmitter.deregister('canvasToggleBlockUnderCursor');
+            eventEmitter.deregister('canvasBlockCreated');
+            eventEmitter.deregister('canvasBlockEditComplete');
         });
 
         // We have a 0x0 invisible box on the canvas because chrome. Whenever the user pans or zooms, we toggle the opacity

@@ -93,6 +93,8 @@ export default defineComponent({
 
 <style lang="scss">
 @use "../styles/variables" as vars;
+@use "../styles/mixins";
+
 @use "highlight.js/scss/atom-one-dark";
 
 .mw-markdowneditor {
@@ -152,6 +154,7 @@ export default defineComponent({
     }
 
     textarea {
+        @include mixins.scrollbars;
         font-family: 'Courier New', Courier, monospace;
         width: 100%;
         height: 100%;
@@ -163,6 +166,7 @@ export default defineComponent({
     }
 
     pre {
+        @include mixins.scrollbars;
         padding: 10px;
         border-radius: vars.$radius-small;
         background: vars.$gray-very-dark;

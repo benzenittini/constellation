@@ -71,3 +71,5 @@ export const E37: ClientError = { code: 'C:37', dismissAfterMillis: 5000, client
 export const E38: ClientError = { code: 'C:38', dismissAfterMillis: 0, clientTemplate: "An unexpected error occurred moving your block. %s" };
 export const E39: ClientError = { code: 'C:39', dismissAfterMillis: 0, clientTemplate: "Failed to update some field values: An expected field was not found. %s" };
 export const E40: ClientError = { code: 'C:40', dismissAfterMillis: 0, clientTemplate: "An error occurred importing your board. %s" };
+export const E41: ClientError = { code: 'C:41', dismissAfterMillis: 0, clientTemplate: "An error occurred downloading your board. %s" };
+export const E42: ClientError = { code: 'C:42', dismissAfterMillis: 0, clientTemplate: "An error occurred downloading your board. %s" };

@@ -35,6 +35,7 @@ import Calendar        from './svgs/Calendar.vue';
 import Chainlink       from './svgs/Chainlink.vue';
 import DeletionX       from './svgs/DeletionX.vue';
 import DoubleArrow     from './svgs/DoubleArrow.vue';
+import Download        from './svgs/Download.vue';
 import DragHandle      from './svgs/DragHandle.vue';
 import EqualizeWidths  from './svgs/EqualizeWidths.vue';
 import Filter          from './svgs/Filter.vue';
@@ -59,6 +60,9 @@ import Triangle        from './svgs/Triangle.vue';
 
 // Project/Board List
 import Projects               from './pages/projects/_.vue';
+import LocalBoards            from './pages/projects/LocalBoards.vue';
+import RemoteProject          from './pages/projects/RemoteProject.vue';
+import UserSettings           from './pages/projects/UserSettings.vue';
 import AddRemoteProjectDialog from './pages/projects/AddRemoteProjectDialog.vue';
 import CreateBoardDialog      from './pages/projects/CreateBoardDialog.vue';
 import ImportBoardDialog      from './pages/projects/ImportBoardDialog.vue';
@@ -133,6 +137,7 @@ export let components: any = {
     'eic-svg-chainlink': Chainlink,
     'eic-svg-deletion-x': DeletionX,
     'eic-svg-doublearrow': DoubleArrow,
+    'eic-svg-download': Download,
     'eic-svg-draghandle': DragHandle,
     'eic-svg-equalize-widths': EqualizeWidths,
     'eic-svg-filter': Filter,
@@ -155,6 +160,9 @@ export let components: any = {
     // -- Pages --
     // Project/Board List
     'eic-page-projects': Projects,
+    'eic-local-boards': LocalBoards,
+    'eic-remote-project': RemoteProject,
+    'eic-user-settings': UserSettings,
     'eic-add-remote-project-dialog': AddRemoteProjectDialog,
     'eic-create-board-dialog': CreateBoardDialog,
     'eic-import-board-dialog': ImportBoardDialog,

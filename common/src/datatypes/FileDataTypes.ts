@@ -1,3 +1,4 @@
+
 import { TemplateClassification } from "./BoardDataTypes";
 import { TypedMap } from "./GenericDataTypes";
 

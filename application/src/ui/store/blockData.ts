@@ -177,9 +177,9 @@ const blockDataActions: ActionTree<BlockDataState, RootState> & BlockDataActions
 
         dispatch("selectBlocks", {blockIds, clearCurrentSelection});
     },
-    clearBlockSelection ({ commit })           { commit('deselectAllBlocks'); },
+    clearBlockSelection ({ commit })          { commit('deselectAllBlocks'); },
     startEditingBlock   ({ commit }, blockId) { commit('changeEditedBlock', blockId); },
-    stopEditingBlock    ({ commit })           { commit('changeEditedBlock', undefined); },
+    stopEditingBlock    ({ commit })          { commit('changeEditedBlock', undefined); },
 
     lockOpenClosed  ({ commit, state }, {blockIds}) {
         // If all blocks are open, close them. Otherwise, open them.
@@ -443,10 +443,7 @@ const blockDataGetters: GetterTree<BlockDataState, RootState> & BlockDataGetters
             .forEach(fid => applyStylesByFieldId(fid));
 
         // Populate any final style overrides that are important
-        if (block.isSelected) {
-            style.filter = `drop-shadow(0 0 ${10/depth}px ${GRAY8})`
-        }
-        style.strokeWidth = 3 / depth;
+        style.strokeWidth = 2 / depth;
 
         return style;
     },

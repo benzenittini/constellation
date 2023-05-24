@@ -8,7 +8,11 @@
         <eic-search class="app-search"></eic-search>
 
         <div class="mw-right-side">
-            <span class="go-to-projects" v-on:click="backToProjects()">
+            <span v-if="activeViewConfig !== undefined" class="go-back" v-on:click="closeView()">
+                <eic-svg-arrow-2 width="30" height="30"></eic-svg-arrow-2>
+                <span>Close View</span>
+            </span>
+            <span v-else class="go-back" v-on:click="backToProjects()">
                 <eic-svg-arrow-2 width="30" height="30"></eic-svg-arrow-2>
                 <span>Board Selection</span>
             </span>
@@ -22,14 +26,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, ref } from "vue";
+import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
 
 import { useStore } from "../../../store/store";
+import { useEmitter } from "../../../composables/Emitter";
 
 export default defineComponent({
     props: {},
     setup() {
+        const store = useStore();
+        const emitter = useEmitter();
+
         let isSaved = ref(true);
+        let activeViewConfig = computed(() => store.state.viewData.activeViewConfig);
 
         onMounted(() => {
             (window as any).board.updateSaveStatus((_event: any, newStatus: boolean) => {
@@ -42,8 +51,12 @@ export default defineComponent({
 
         return {
             isSaved,
+            activeViewConfig,
             backToProjects: () => {
-                useStore().dispatch('clearBoardState');
+                store.dispatch('clearBoardState');
+            },
+            closeView: () => {
+                emitter.emit('closeView', activeViewConfig.value?.id);
             },
         }
     }
@@ -83,7 +96,7 @@ export default defineComponent({
                 stroke: transparent;
             }
         }
-        .go-to-projects {
+        .go-back {
             cursor: pointer;
             span {
                 vertical-align: middle;

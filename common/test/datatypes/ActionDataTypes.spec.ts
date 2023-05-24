@@ -2,7 +2,6 @@
 import { expect } from 'chai';
 
 import { ConstError } from '../../src/datatypes';
-import { ObjectUtils, StringUtils } from '../../src/utilities';
 
 describe('ConstError', function() {
 

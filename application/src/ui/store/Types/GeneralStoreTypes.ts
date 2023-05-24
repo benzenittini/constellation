@@ -1,5 +1,5 @@
 
-import { BasicBoardData, BasicProjectData, CurrentProjectBoard, BoardConfig, RemoteProject, TypedMap } from 'constellation-common/datatypes';
+import { BasicBoardData, BasicProjectData, CurrentProjectBoard, BoardConfig, RemoteProject, TypedMap, RemoteProjectLookup, ServerCapabilities } from 'constellation-common/datatypes';
 import { AugmentedActionContext, GetterProperties } from "../StoreTypes"
 
 
@@ -10,7 +10,7 @@ import { AugmentedActionContext, GetterProperties } from "../StoreTypes"
 // -- State --
 export interface GeneralDataState {
     projectData: TypedMap<BasicProjectData>;
-    remoteProjectLookup: { remoteProject: RemoteProject, projectId?: string }[];
+    remoteProjectLookup: RemoteProjectLookup[];
     currentProjectBoard: CurrentProjectBoard | undefined;
     uiFlags: {
         disablePointerEvents: boolean,
@@ -38,7 +38,7 @@ export type GeneralDataMutations<S = GeneralDataState> = {
     removeBoardFromProject (state: S, data: { projectId: string, boardId: string }): void;
     updateBoardConfig      (state: S, data: { projectId: string, boardId: string, boardConfig: BoardConfig }): void;
 
-    registerRemoteProject   (state: S, data: { remoteProject: RemoteProject, projectId?: string }): void;
+    registerRemoteProject   (state: S, data: { remoteProject: RemoteProject, projectId?: string, version?: string, capabilities?: ServerCapabilities }): void;
     deregisterRemoteProject (state: S, data: { remoteProject: RemoteProject }): void;
 
     // UI Flags
@@ -66,7 +66,7 @@ export interface GeneralDataActions {
     removeBoardFromProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string }): void;
     updateBoardConfig      ({ commit }: AugmentedActionContext<GeneralDataState>, data: { projectId: string, boardId: string, boardConfig: BoardConfig }): void;
 
-    registerRemoteProject   ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject, projectId?: string }): void;
+    registerRemoteProject   ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject, projectId?: string, version?: string, capabilities?: ServerCapabilities }): void;
     deregisterRemoteProject ({ commit }: AugmentedActionContext<GeneralDataState>, data: { remoteProject: RemoteProject }): void;
 
     // UI Flags

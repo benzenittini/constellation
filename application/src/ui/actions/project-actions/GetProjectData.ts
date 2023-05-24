@@ -39,9 +39,18 @@ export class GetProjectDataAction extends Action {
 
         } else {
             const store = useStore();
-            store.dispatch('addProject', resp);
+            store.dispatch('addProject', {
+                projectId: resp.projectId,
+                projectName: resp.projectName,
+                boards: resp.boards,
+            });
             if (this.remoteProject) {
-                store.dispatch('registerRemoteProject', { remoteProject: this.remoteProject, projectId: resp.projectId });
+                store.dispatch('registerRemoteProject', {
+                    remoteProject: this.remoteProject,
+                    projectId: resp.projectId,
+                    version: resp.version,
+                    capabilities: resp.capabilities,
+                });
             }
 
             if (this.successCallback)

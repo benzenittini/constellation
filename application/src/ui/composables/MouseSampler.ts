@@ -28,5 +28,6 @@ export function useMouseSampler() {
     return {
         recordEvent,
         setCallback,
+        lastEvent,
     };
 }

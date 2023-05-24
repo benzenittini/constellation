@@ -68,8 +68,9 @@ export class ConstError extends Error {
 // Project Requests
 // ----------------
 
+export type ServerCapabilities = { downloadBoard?: boolean };
 export type GetProjectDataRequest = void;
-export type GetProjectDataResponse = ErrorResponse | BasicProjectData;
+export type GetProjectDataResponse = ErrorResponse | (BasicProjectData & { version?: string, capabilities?: ServerCapabilities });
 
 export type GetBoardTemplatesRequest = void;
 export type GetBoardTemplatesResponse = ErrorResponse | BoardTemplateClient[];
@@ -116,6 +117,13 @@ export type GetUserSettingsResponse = ErrorResponse | UserSettings;
 
 export type SetUserSettingsRequest = Partial<UserSettings>;
 export type SetUserSettingsResponse = ErrorResponse | {};
+
+// DownloadBoardDataAction (Server)
+export type DownloadBoardDataRequest = void;
+export type DownloadBoardDataResponse = ErrorResponse | { boardData: BoardData, boardName: string };
+// DownloadBoardDataAction (Client)
+export type SaveBoardDataRequest = { boardData: BoardData, boardName: string };
+export type SaveBoardDataResponse = ErrorResponse | {};
 
 
 // ==============

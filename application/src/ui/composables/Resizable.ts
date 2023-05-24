@@ -54,10 +54,15 @@ export function useResizable() {
         return retObj;
     });
 
+    let hasMoved = computed(() => {
+        return isDragging.value && (startCoords.x !== currentCoords.x || startCoords.y !== currentCoords.y);
+    });
+
     return {
         // Variables
         isDragging,
         deltaDrag,
+        hasMoved,
 
         // Methods
         setOffset: (offsetX: number, offsetY: number) => {

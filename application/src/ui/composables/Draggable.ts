@@ -25,6 +25,10 @@ export function useDraggable() {
         };
     });
 
+    let hasMoved = computed(() => {
+        return isDragging.value && (startCoords.x !== currentCoords.x || startCoords.y !== currentCoords.y);
+    });
+
     return {
         // Variables
         metadata,
@@ -33,6 +37,7 @@ export function useDraggable() {
         deltaDrag,
         startCoords,
         currentCoords,
+        hasMoved,
 
         // Methods
         setOffset: (offsetX: number, offsetY: number) => {

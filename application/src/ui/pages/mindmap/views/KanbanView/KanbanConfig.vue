@@ -20,7 +20,10 @@ import { DataType, getFieldDataType } from 'constellation-common/datatypes';
 
 export default defineComponent({
     props: {
-        mwView: Object,
+        mwView: {
+            type: Object,
+            required: true,
+        },
     },
     setup() {
         const store = useStore();

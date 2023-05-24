@@ -24,7 +24,10 @@ export default defineComponent({
         'editcomplete'
     ],
     props: {
-        blockData: Object,
+        blockData: {
+            type: Object,
+            required: true,
+        },
         blockStyle: Object,
         inEditMode: Boolean
     },

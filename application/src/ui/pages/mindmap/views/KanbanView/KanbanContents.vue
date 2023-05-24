@@ -383,6 +383,7 @@ export default defineComponent({
             padding: 18px 0;
             text-align: center;
             border-top: 2px solid vars.$pink-medium;
+            font-size: 20px;
         }
         .mwe-kanban-column-blocks {
             flex-grow: 1;
