@@ -115,6 +115,7 @@ import { useEmitter } from "../../composables/Emitter";
 import { useWindowEvents } from "../../composables/WindowEvents";
 import { useMouseSampler } from "../../composables/MouseSampler";
 import { useTweenGroup } from "../../composables/TweenGroup";
+import { useCopyPaste } from "../../composables/CopyPaste";
 
 import { Block, BlockContent, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, BoundingBox } from 'constellation-common/datatypes';
 import { ArrayUtils, RectangleUtils } from 'constellation-common/utilities';
@@ -143,6 +144,7 @@ export default defineComponent({
         let eventEmitter = useEmitter(); // Emits/receives events from other components
 
         let windowEvents = useWindowEvents(); // Handles window-level keypresses, etc.
+        let copyPaste = useCopyPaste();
 
         let tweenGroup = useTweenGroup(); // Manages the joint pan/zoom tween when a user jumps to a block.
 
@@ -332,6 +334,21 @@ export default defineComponent({
                         new DeleteBlocksAction(selectedBlockIds).submit();
 
                         return; // Processed a keystroke, so exit.
+                    }
+                }
+            });
+            // Cut / Copy / Paste
+            windowEvents.register('cutCopyPasteBlocks', 'keydown', (keyboardEvent: KeyboardEvent) => {
+                if ((keyboardEvent.ctrlKey || keyboardEvent.metaKey) && !keyboardEvent.repeat) {
+                    const selectedBlocks = store.getters.selectedBlocks;
+                    if (selectedBlocks.length > 0 && keyboardEvent.key === 'c') {
+                        navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                    } else if (selectedBlocks.length > 0 && keyboardEvent.key === 'x') {
+                        navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                        new DeleteBlocksAction(selectedBlocks.map(e => e.id)).submit();
+                    } else if (keyboardEvent.key === 'v') {
+                        console.log("paste");
+                        // TODO-ben
                     }
                 }
             });
