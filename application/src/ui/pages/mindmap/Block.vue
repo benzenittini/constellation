@@ -3,7 +3,6 @@
         v-bind:style="{ transform: `translate(${boundingBox.x}px, ${boundingBox.y}px)` }"
         v-on:mouseenter="mouseEnter"
         v-on:mouseleave="mouseLeave"
-        v-on:mousemove="mouseMove"
         v-on:wheel="updateBodySize()"><!-- You know what would be great? If spinning the mouse wheel while the block was expanding didn't make it forget how to size itself, but noOOOooo. -->
 
         <!-- The "shadow" -->
@@ -128,7 +127,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, onMounted, reactive, Ref, ref, watch } from "vue";
+import { computed, defineComponent, onMounted, reactive, Ref, ref, watch } from "vue";
 
 import { useStore } from "../../store/store";
 import { useEmitter } from "../../composables/Emitter";
@@ -282,12 +281,6 @@ export default defineComponent({
             }
         });
 
-        let canvasPan: any = inject('canvasPan');
-        let canvasZoom: any = inject('canvasZoom');
-        let canvasYOffset: any = inject('canvasYOffset');
-
-        let lastMousePosition: Ref<{x: any, y: any}> = ref({ x: undefined, y: undefined });
-
         let blockStyle = computed(() => {
             let style = store.getters.getStyles(props.eicBlock as Block, adjustedScale.value!);
             if (showPreview.value || isExpanded.value) {
@@ -368,91 +361,10 @@ export default defineComponent({
                 isBlockHovered.value = true;
                 context.emit('mouseEnterBlock', props.eicBlock!.id);
             },
-            mouseMove: (mouseEvent: MouseEvent) => {
-                // Why? See below comment in the mouseLeave section regarding Firefox.
-                lastMousePosition.value = {
-                    x: mouseEvent.clientX,
-                    y: mouseEvent.clientY
-                };
-            },
             mouseLeave: (mouseEvent: MouseEvent) => {
                 context.emit('mouseLeaveBlock', props.eicBlock!.id);
-
-                // This function should just be "isBlockHovered = false; showPreview = false;", but Firefox sucks.
-                //
-                // Expanded dropdown menus don't exist "inside" their parent in Firefox, so whenever someone is in
-                // preview mode and tried to choose an option, their block would contract since the mouse "left" it.
-                //
-                // OK, no problem, we'll just use this mouseEvent to determine if the mouse exits this block's
-                // bounds. ...except that apparently the dropdown menu has its own coordinate system that makes this
-                // mouseEvent always look like it's outside the block's bounds.
-                //
-                // So ... any special javascript or CSS approaches we could take? Tracking the focus/blur status
-                // perhaps? NOPE. If you open a dropdown, and then click outside it to close it, it still has focus.
-                // No events get thrown that let us detect the dropdown gets closed.
-                //
-                // Could we wire up some global mouse events to track the status? Perhaps ... but between the keyboard
-                // and mouse, there are a LOT of inputs that can cause dropdowns to open and close.
-                //
-                // There were some things about tracking the "aria-expanded" attribute ... but apparently that's not
-                // consistently implemented (or at least I couldn't get it to work).
-                //
-                // So I implemented a custom dropdown, but aside from missing out on all those handy keyboard shortcuts
-                // mentioned above, that had some additional display problems near the bottoms of dialogs and the
-                // bottom of the screen.
-                //
-                // SO WHAT DO?!
-                //
-                // We track the previous mouse position. If it's within "so many" pixels from the edge of the block's
-                // bounds, then we check the current mouse's position. If that's _outside_ the same edge, only _then_
-                // do we contract the block. Seems to work reasonably well, though more testing is needed.
-                //
-                // ... but all this effort is only necessary if the block is being previewed. Otherwise, we can
-                // short-circuit.
-                if (!showPreview.value) {
-                    isBlockHovered.value = false;
-                    showPreview.value = false;
-                    return;
-                }
-
-                if (!lastMousePosition.value.x || !lastMousePosition.value.y)
-                    return;
-
-                let blockBounds = {
-                    left:   boundingBox.value.x,
-                    right:  boundingBox.value.x + bodySize.value.width,
-                    top:    boundingBox.value.y,
-                    bottom: boundingBox.value.y + bodySize.value.height,
-                }
-
-                const prevAdjustedMouseCoords = {
-                    x: (lastMousePosition.value.x - canvasPan.value.x) / canvasZoom.value,
-                    y: (lastMousePosition.value.y - canvasPan.value.y - canvasYOffset) / canvasZoom.value,
-                };
-                const adjustedMouseCoords = {
-                    x: (mouseEvent.clientX - canvasPan.value.x) / canvasZoom.value,
-                    y: (mouseEvent.clientY - canvasPan.value.y - canvasYOffset) / canvasZoom.value,
-                };
-
-                // Only if the previous mouse location was "close" to the edge do we care.
-                const INSIDE_BUFFER = 160;
-                // When determining if the last mouse position was close to and edge, we need to budge the edge outward a tad. The mouse position and
-                // adjustment doesn't seem to be exact for some reason, resulting in the blocks not closing when exiting them slowly.
-                const OUTSIDE_BUFFER = 20;
-                const closeToLeft   = blockBounds.left   - OUTSIDE_BUFFER <= prevAdjustedMouseCoords.x && prevAdjustedMouseCoords.x <= blockBounds.left   + INSIDE_BUFFER;
-                const closeToRight  = blockBounds.right  - INSIDE_BUFFER  <= prevAdjustedMouseCoords.x && prevAdjustedMouseCoords.x <= blockBounds.right  + OUTSIDE_BUFFER;
-                const closeToTop    = blockBounds.top    - OUTSIDE_BUFFER <= prevAdjustedMouseCoords.y && prevAdjustedMouseCoords.y <= blockBounds.top    + INSIDE_BUFFER;
-                const closeToBottom = blockBounds.bottom - INSIDE_BUFFER  <= prevAdjustedMouseCoords.y && prevAdjustedMouseCoords.y <= blockBounds.bottom + OUTSIDE_BUFFER;
-
-                const exitedLeft   = closeToLeft   && adjustedMouseCoords.x < blockBounds.left;
-                const exitedRight  = closeToRight  && adjustedMouseCoords.x > blockBounds.right;
-                const exitedTop    = closeToTop    && adjustedMouseCoords.y < blockBounds.top;
-                const exitedBottom = closeToBottom && adjustedMouseCoords.y > blockBounds.bottom;
-
-                if (exitedLeft || exitedRight || exitedTop || exitedBottom) {
-                    isBlockHovered.value = false;
-                    showPreview.value = false;
-                }
+                isBlockHovered.value = false;
+                showPreview.value = false;
             },
         }
     },
@@ -468,7 +380,6 @@ export default defineComponent({
 @use 'expanded-block';
 
 .mw-app-relationship-block {
-    cursor: default;
 
     // Animate the blocks into position
     transition: all 0.5s;
