@@ -17,7 +17,7 @@
             v-bind:style="{ transform: `${pannable.translateString} ${zoomable.scaleString}` }">
 
             <!-- All of our "snap zones" get painted first. -->
-            <template v-if="!ctrlHeld">
+            <template v-if="!altHeld">
                 <circle class="mwe-snap-zone"
                     v-for="zone in snapZones"
                     v-bind:key="zone.key"
@@ -218,7 +218,7 @@ export default defineComponent({
                 }, [] as SnapZone[]);
         }
         function getBestSnapZone(x: number, y: number, widthBounds: number, heightBounds: number) {
-            if (snapZones.value.length === 0 || ctrlHeld.value)
+            if (snapZones.value.length === 0 || altHeld.value)
                 return { x, y };
 
             // Determine the closest snap zone
@@ -302,6 +302,7 @@ export default defineComponent({
         }
 
         let ctrlHeld = ref(false);
+        let altHeld = ref(false);
         let inBulkCreationMode = ref(false);
         let blocksBulkCreated: Ref<string[]> = ref([]);
 
@@ -355,10 +356,14 @@ export default defineComponent({
             windowEvents.register('modifierPressed', 'keydown', (keyboardEvent: KeyboardEvent) => {
                 if (keyboardEvent.key === 'Control' || keyboardEvent.key === 'Meta') // "meta" is "cmd" for Macs
                     ctrlHeld.value = true;
+                if (keyboardEvent.key === 'Alt')
+                    altHeld.value = true;
             });
             windowEvents.register('modifierReleased', 'keyup', (keyboardEvent: KeyboardEvent) => {
                 if (keyboardEvent.key === 'Control' || keyboardEvent.key === 'Meta') // "meta" is "cmd" for Macs
                     ctrlHeld.value = false;
+                if (keyboardEvent.key === 'Alt')
+                    altHeld.value = false;
             });
 
             // Set up event handlers, allowing other components to "steer" the canvas view
@@ -481,7 +486,7 @@ export default defineComponent({
             DEFAULT_BLOCK_HEIGHT,
 
             // Variables (and refs)
-            blockCanvas, blockScales, ctrlHeld,
+            blockCanvas, blockScales, ctrlHeld, altHeld,
 
             // zoomable.scale is only used when the user is dragging or resizing blocks. By forcing it to be "1" when the user isn't doing
             // one of these things, it gives us a HUGE performance optimization when the user is zooming in/out.
@@ -549,6 +554,7 @@ export default defineComponent({
             completeDraggableActions: (mouseEvent: MouseEvent) => {
                 store.dispatch('setDisablePointerEvents', false);
                 snapZones.value = [];
+                altHeld.value = false;
 
                 // -- Select blocks by bounding box --
                 if (selectionDraggable.isDragging.value) {
