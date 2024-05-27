@@ -257,7 +257,7 @@ async function saveBoardData(req: SaveBoardDataRequest): Promise<SaveBoardDataRe
     });
 
     if (filePath) {
-        fs.writeFileSync(filePath, JSON.stringify(req.boardData));
+        fs.writeFileSync(filePath, JSON.stringify(req.boardData, null, 2));
     }
 
     return {};
