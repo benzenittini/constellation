@@ -56,26 +56,31 @@ npm run serve
 1. Merge `dev` branch into `master`.
 1. Run clean builds of all projects:
     ```bash
-    # Clean up past builds
+    # -- Clean up past builds --
     rm -rf ./common/dist ./common/node_modules ./application/build ./application/node_modules ./server/dist ./server/node_modules
 
-    # Build common
+    # -- Build common --
     cd ./common
     npm install
     npm run build-prod
 
-    # Build application
+    # -- Build application --
     cd ../application
     npm install
     npm run build-main-prod
-    npm run build-ui-prod 
+    npm run build-ui-prod
+
+    # For first time building on Debian-based:
+    # You must install "rpmbuild" to build the RPMs.
+    # sudo apt-get install rpm
+
     # For first time building on Windows:
     # First install .NET 3.5.1 if not already.
     # Then, install Wix 3.1.1: https://wixtoolset.org/docs/wix3/
-    # Then run "npm run make" command.
+
     npm run make
 
-    # Build server
+    # -- Build server --
     cd ../server
     npm install
     npm run build-prod
