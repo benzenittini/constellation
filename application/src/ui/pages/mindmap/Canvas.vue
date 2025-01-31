@@ -188,8 +188,8 @@ export default defineComponent({
                 y: linkDestination.value.y - DEFAULT_BLOCK_HEIGHT/2
             }, 1, parentBlockDepth+1);
 
-            // Build up a list of "snap zones"
-            snapZones.value = createSnapZonesFromBlocks(store.state.hierarchyData.hierarchy[parentBlockId].childrenBlockIds, ghostBlock.block.location, ghostBlock.scale);
+            // Build up a list of "snap zones" around the parent block and all its children.
+            snapZones.value = createSnapZonesFromBlocks([parentBlockId, ...store.state.hierarchyData.hierarchy[parentBlockId].childrenBlockIds], ghostBlock.block.location, ghostBlock.scale);
         }
         function createSnapZonesFromBlocks(blockIds: string[], snapBlockLocation: BoundingBox, scale: number) {
             const gap = 10 / scale;
