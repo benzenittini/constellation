@@ -1,5 +1,4 @@
 
-import path from "path";
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
 
@@ -9,7 +8,6 @@ import * as UserDataPersistence from '../persistence/UserDataPersistence';
 import { ConstError, CreateNewBoardRequest, DownloadBoardDataResponse, ErrorResponse, GetProjectDataResponse, ImportBoardRequest } from 'constellation-common/datatypes';
 
 import { projectDataPersistence, boardDataPersistence, deleteBoardPersistence, addBoardPersistence, importBoardPersistence } from "../persistence/Persistence";
-import { Constants } from "constellation-common/utilities";
 
 
 function getJwt(req: Request) {
@@ -83,7 +81,8 @@ export async function getProject(req: Request, res: Response) {
                 ...(await projectDataPersistence!.getBasicProjectData()),
                 version: WEBPACK.APP_VERSION,
                 capabilities: {
-                    downloadBoard: true
+                    downloadBoard: true,
+                    bulkCreateBlocks: true,
                 },
             }
             res.json(response);

@@ -118,7 +118,7 @@ import { useTweenGroup } from "../../composables/TweenGroup";
 import { useCopyPaste } from "../../composables/CopyPaste";
 
 import { Block, BlockContent, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, BoundingBox } from 'constellation-common/datatypes';
-import { ArrayUtils, RectangleUtils } from 'constellation-common/utilities';
+import { ArrayUtils, RectangleUtils, ScaleUtils } from 'constellation-common/utilities';
 
 import { CreateBlockAction } from '../../actions/board-actions/CreateBlock';
 import { SetBlockPositionsAction } from '../../actions/board-actions/SetBlockPositions';
@@ -179,12 +179,14 @@ export default defineComponent({
 
             // Update ghost block position/size
             let parentBlockId    = blockTrayLinking.metadata.data.sourceBlockId;
-            let parentBlockScale = blockScales.value[parentBlockId];
-            ghostBlock.scale                 = (parentBlockScale + parentBlockScale*0.5);
-            ghostBlock.block.location.width  = DEFAULT_BLOCK_WIDTH / (parentBlockScale + parentBlockScale*0.5);
-            ghostBlock.block.location.height = DEFAULT_BLOCK_HEIGHT / (parentBlockScale + parentBlockScale*0.5);
-            ghostBlock.block.location.x      = linkDestination.value.x - ghostBlock.block.location.width/2;
-            ghostBlock.block.location.y      = linkDestination.value.y - ghostBlock.block.location.height/2;
+            let parentBlockDepth = ScaleUtils.getDepth(blocks.value[parentBlockId], blocks.value);
+            ghostBlock.scale     = ScaleUtils.calculateScale(parentBlockDepth+1);
+            ghostBlock.block.location = ScaleUtils.updateBounds({
+                width: DEFAULT_BLOCK_WIDTH,
+                height: DEFAULT_BLOCK_HEIGHT,
+                x: linkDestination.value.x - DEFAULT_BLOCK_WIDTH/2,
+                y: linkDestination.value.y - DEFAULT_BLOCK_HEIGHT/2
+            }, 1, parentBlockDepth+1);
 
             // Build up a list of "snap zones"
             snapZones.value = createSnapZonesFromBlocks(store.state.hierarchyData.hierarchy[parentBlockId].childrenBlockIds, ghostBlock.block.location, ghostBlock.scale);
@@ -348,8 +350,12 @@ export default defineComponent({
                         navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
                         new DeleteBlocksAction(selectedBlocks.map(e => e.id)).submit();
                     } else if (keyboardEvent.key === 'v') {
-                        console.log("paste");
-                        // TODO-ben
+                        // Blocks are pasted wherever the mouse is
+                        const { clientX, clientY } = mouseSampler.lastEvent?.value ?? { clientX: 0, clientY: 0 };
+                        const pasteLocation = xyToPersistedCoordinates(clientX, clientY);
+                        navigator.clipboard.readText()
+                            .then(text => copyPaste.paste(text, pasteLocation))
+                            .catch(e => console.error(e));
                     }
                 }
             });

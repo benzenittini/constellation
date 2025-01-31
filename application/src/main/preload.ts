@@ -1,6 +1,6 @@
 
 import { contextBridge, ipcRenderer, shell } from 'electron';
-import { AddRemoteProjectRequest, CreateBlockRequest, CreateNewBoardRequest, DeleteBlocksRequest, DeleteBoardRequest, DeleteViewRequest, GetBoardDataRequest, LoadViewRequest, RemoveRemoteProjectRequest, SaveBoardDataRequest, SaveViewRequest, SetBlockContentRequest, SetBlockParentRequest, SetBlockPositionsRequest, SetBlockPriorityRequest, SetClassificationDefinitionsRequest, SetClassificationOnBlocksRequest, SetFieldDefinitionsRequest, SetFieldOnBlocksRequest, SetUserSettingsRequest } from 'constellation-common/datatypes';
+import { AddRemoteProjectRequest, CreateBlockRequest, CreateNewBoardRequest, DeleteBlocksRequest, DeleteBoardRequest, DeleteViewRequest, GetBoardDataRequest, LoadViewRequest, PasteDataRequest, RemoveRemoteProjectRequest, SaveBoardDataRequest, SaveViewRequest, SetBlockContentRequest, SetBlockParentRequest, SetBlockPositionsRequest, SetBlockPriorityRequest, SetClassificationDefinitionsRequest, SetClassificationOnBlocksRequest, SetFieldDefinitionsRequest, SetFieldOnBlocksRequest, SetUserSettingsRequest } from 'constellation-common/datatypes';
 
 // NOTE: When adding new bridged items, make sure to update shims-renderer.d.ts with the new properties
 
@@ -21,7 +21,8 @@ contextBridge.exposeInMainWorld('config', {
 });
 
 contextBridge.exposeInMainWorld('board', {
-    getBoardData:       (req: GetBoardDataRequest) => ipcRenderer.invoke('board:getBoardData', req),
+    getBoardData: (req: GetBoardDataRequest) => ipcRenderer.invoke('board:getBoardData', req),
+    pasteData:    (req: PasteDataRequest)    => ipcRenderer.invoke('board:pasteData', req),
 
     // -- Blocks --
     createBlock:       (req: CreateBlockRequest)       => ipcRenderer.invoke('board:createBlock', req),

@@ -80,8 +80,9 @@ export interface GeneralDataActions {
 
 // -- Getters --
 export type GeneralDataGetters<S = GeneralDataState> = {
-    currentProjectBoard   (state: S, getters: GetterProperties): CurrentProjectBoard | undefined;
-    isCurrentBoardRemote  (state: S, getters: GetterProperties): boolean;
-    pointerEventsDisabled (state: S, getters: GetterProperties): boolean;
-    getRemoteProjectById  (state: S, getters: GetterProperties): (projectId: string) => RemoteProject | undefined;
+    currentProjectBoard        (state: S, getters: GetterProperties): CurrentProjectBoard | undefined;
+    isCurrentBoardRemote       (state: S, getters: GetterProperties): boolean;
+    pointerEventsDisabled      (state: S, getters: GetterProperties): boolean;
+    getRemoteProjectById       (state: S, getters: GetterProperties): (projectId: string) => RemoteProject | undefined;
+    currentProjectCapabilities (state: S, getters: GetterProperties): ServerCapabilities;
 }

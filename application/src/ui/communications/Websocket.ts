@@ -2,11 +2,6 @@
 import { reactive } from 'vue';
 import io, { Socket } from 'socket.io-client';
 
-// import { io, Socket } from 'socket.io-client';
-// const { io } = import('socket.io-client');
-// import * as io from 'socket.io-client';
-// import { io } from 'socket.io-client';
-
 import { useVueModals } from 'mw-vue-modals';
 import { useVueNotify } from 'mw-vue-notify';
 
@@ -29,6 +24,7 @@ import { SetBlockPriorityAction } from '../actions/board-actions/SetBlockPriorit
 import { LoadViewAction } from '../actions/board-actions/LoadView';
 import { E31, showError } from '../ErrorLogger';
 import { useStore } from '../store/store';
+import { PasteDataAction } from '../actions/board-actions/PasteData';
 
 
 const WS_DIALOG_ID = 'ws-connecting-dialog';
@@ -148,6 +144,7 @@ export let ws = new Websocket();
 
 function registerListeners(socket: Socket) {
     socket.on('getBoardData', (data: any) => { ws.closeConnectionDialog(); GetBoardDataAction.processResponse(data); });
+    socket.on('pasteData',    (data: any) => { PasteDataAction.processResponse(data); });
     // -- Block Data --
     socket.on('createBlock',       (data: any) => { CreateBlockAction.processResponse(data); });
     socket.on('setBlockPositions', (data: any) => { SetBlockPositionsAction.processResponse(data); });

@@ -1,6 +1,6 @@
 
 import { Block, BlockContent, BlockIdAndPosition } from "./BlockDataTypes";
-import { BasicBoardData, BasicProjectData, BoardData, BoardTemplateClient, TemplateClassification } from "./BoardDataTypes";
+import { BasicBoardData, BasicProjectData, BoardData, BoardTemplateClient, CopyData, TemplateClassification } from "./BoardDataTypes";
 import { ChangedFieldValue, ClassificationDefinition, FieldDefinition, PossibleValueDefinition } from "./FieldDataTypes";
 import { BoundingBox, TypedMap } from "./GenericDataTypes";
 import { BaseViewConfig, ViewConfig } from "./ViewDataTypes";
@@ -68,7 +68,7 @@ export class ConstError extends Error {
 // Project Requests
 // ----------------
 
-export type ServerCapabilities = { downloadBoard?: boolean };
+export type ServerCapabilities = { downloadBoard?: boolean, bulkCreateBlocks?: boolean };
 export type GetProjectDataRequest = void;
 export type GetProjectDataResponse = ErrorResponse | (BasicProjectData & { version?: string, capabilities?: ServerCapabilities });
 
@@ -139,6 +139,9 @@ export type CreateBlockRequest  = { clientId: string, location: BoundingBox, par
 // Error 3 indicates parent block not found.
 // Error 4 indicates block ID already exists.
 export type CreateBlockResponse = ErrorResponse | { clientId: string, block: Block };
+
+export type PasteDataRequest  = { clientId: string, pastedData: CopyData };
+export type PasteDataResponse = ErrorResponse | { clientId: string, blocks: Block[], classificationIds: string[], classificationDefs: TypedMap<ClassificationDefinition>, fieldDefs: TypedMap<FieldDefinition>, possibleValueDefs: TypedMap<PossibleValueDefinition> };
 
 export type SetBlockPositionsRequest  = { blocksAndPositions: BlockIdAndPosition[] };
 export type SetBlockPositionsResponse = ErrorResponse | BlockIdAndPosition[];

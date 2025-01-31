@@ -6,12 +6,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { app, BrowserWindow } from 'electron';
 
 import * as ConfigDataPersistence from "./ConfigDataPersistence";
-import { ConstError, CreateBlockRequest, CreateBlockResponse, DeleteBlocksRequest, DeleteBlocksResponse, DeleteViewRequest, DeleteViewResponse, GetBoardDataRequest, GetBoardDataResponse, LoadViewRequest, LoadViewResponse, SaveViewRequest, SaveViewResponse, SetBlockContentRequest, SetBlockContentResponse, SetBlockParentRequest, SetBlockParentResponse, SetBlockPositionsRequest, SetBlockPositionsResponse, SetBlockPriorityRequest, SetBlockPriorityResponse, SetClassificationDefinitionsRequest, SetClassificationDefinitionsResponse, SetClassificationOnBlocksRequest, SetClassificationOnBlocksResponse, SetFieldDefinitionsRequest, SetFieldDefinitionsResponse, SetFieldOnBlocksRequest, SetFieldOnBlocksResponse } from 'constellation-common/datatypes';
+import { ConstError, CreateBlockRequest, CreateBlockResponse, DeleteBlocksRequest, DeleteBlocksResponse, DeleteViewRequest, DeleteViewResponse, GetBoardDataRequest, GetBoardDataResponse, LoadViewRequest, LoadViewResponse, PasteDataRequest, PasteDataResponse, SaveViewRequest, SaveViewResponse, SetBlockContentRequest, SetBlockContentResponse, SetBlockParentRequest, SetBlockParentResponse, SetBlockPositionsRequest, SetBlockPositionsResponse, SetBlockPriorityRequest, SetBlockPriorityResponse, SetClassificationDefinitionsRequest, SetClassificationDefinitionsResponse, SetClassificationOnBlocksRequest, SetClassificationOnBlocksResponse, SetFieldDefinitionsRequest, SetFieldDefinitionsResponse, SetFieldOnBlocksRequest, SetFieldOnBlocksResponse } from 'constellation-common/datatypes';
 import { BoardDataPersistence, FileUtils } from 'constellation-common/persistence';
 
 
 export function registerBoardHandlers(ipcMain: Electron.IpcMain) {
-    ipcMain.handle('board:getBoardData',      (event, req) => getBoardData(req));
+    ipcMain.handle('board:getBoardData', (event, req) => getBoardData(req));
+    ipcMain.handle('board:pasteData',    (event, req) => pasteData(req));
     // -- Blocks --
     ipcMain.handle('board:createBlock',       (event, req) => createBlock(req));
     ipcMain.handle('board:setBlockPositions', (event, req) => setBlockPositions(req));
@@ -56,6 +57,18 @@ async function getBoardData({ boardId: filepath }: GetBoardDataRequest): Promise
         errorCode: 4,
         message: 'File was not found.',
     };
+}
+
+async function pasteData({ clientId, pastedData }: PasteDataRequest): Promise<PasteDataResponse> {
+    try {
+        return {
+            clientId,
+            ...(await persistence!.pasteData(pastedData)),
+        };
+    } catch(err) {
+        const error = ConstError.safeConstructor(err as any);
+        return error.getErrorResponse();
+    }
 }
 
 async function createBlock({ clientId, location, parentBlockId }: CreateBlockRequest): Promise<CreateBlockResponse> {

@@ -52,7 +52,7 @@
                         <span><eic-keyboard-key v-bind:mwKeyText="treeSelectKey"></eic-keyboard-key></span>
                         <img src="../../graphics/mouse-left-click.png">
                     </div>
-                    <figcaption>Hold {{ treeSelectKey.toLowerCase() }} and left-click to select an entire tree</figcaption>
+                    <figcaption>Hold {{ treeSelectKey.toLowerCase() }} and left-click to select an entire branch</figcaption>
                 </figure>
             </div>
         </div>

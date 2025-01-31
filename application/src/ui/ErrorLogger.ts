@@ -73,3 +73,4 @@ export const E39: ClientError = { code: 'C:39', dismissAfterMillis: 0, clientTem
 export const E40: ClientError = { code: 'C:40', dismissAfterMillis: 0, clientTemplate: "An error occurred importing your board. %s" };
 export const E41: ClientError = { code: 'C:41', dismissAfterMillis: 0, clientTemplate: "An error occurred downloading your board. %s" };
 export const E42: ClientError = { code: 'C:42', dismissAfterMillis: 0, clientTemplate: "An error occurred downloading your board. %s" };
+export const E43: ClientError = { code: 'C:43', dismissAfterMillis: 5000, clientTemplate: "The remote server does not support pasting. Update the server version to unlock this capability." };

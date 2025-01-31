@@ -84,6 +84,9 @@ const blockDataMutations: MutationTree<BlockDataState> & BlockDataMutations = {
         state.blocks[blockId].location.width = width;
         state.blocks[blockId].location.height = height;
     },
+    setBlockParent(state, {parentId, childId}) {
+        state.blocks[childId].parentBlockId = parentId;
+    },
     deleteBlocks(state, {blockIds}) {
         for (let blockId of blockIds) {
             delete state.blocks[blockId];
@@ -201,6 +204,9 @@ const blockDataActions: ActionTree<BlockDataState, RootState> & BlockDataActions
                 height: idAndPosition.location.height,
             })
         }
+    },
+    setBlockParent ({ commit }, {parentId, childId})  {
+        commit('setBlockParent', {parentId, childId});
     },
 
     // -- Block Deletion --

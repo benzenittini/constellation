@@ -36,7 +36,7 @@ export interface HierarchyDataActions {
 
     createNode  ({ commit }: AugmentedActionContext<HierarchyDataState>, payload: {blockId: string, parentId: string | undefined}): void;
     deleteNode  ({ commit }: AugmentedActionContext<HierarchyDataState>, blockId: string): void;
-    setParent   ({ commit, state, getters, rootState }: AugmentedActionContext<HierarchyDataState>, payload: {blockId: string, newParent: string | undefined}): void;
+    setParent   ({ commit, state, getters, rootState }: AugmentedActionContext<HierarchyDataState>, payload: {blockId: string, newParent: string | undefined, focalPoint?: {x: number, y: number}}): void;
 }
 
 // -- Getters --

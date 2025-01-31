@@ -2,9 +2,10 @@
 import { MutationTree, ActionTree, GetterTree, Module } from "vuex";
 import { useVueNotify } from 'mw-vue-notify';
 
-import { TypedMap } from 'constellation-common/datatypes';
+import { BoundingBox, TypedMap } from 'constellation-common/datatypes';
 import { BlockLinkPair, RootState } from "./StoreTypes";
 import { HierarchyDataState, HierarchyDataGetters, HierarchyDataMutations, HierarchyDataActions } from "./Types/HierarchyStoreTypes";
+import { ScaleUtils } from "constellation-common/utilities";
 
 
 // =====
@@ -83,12 +84,25 @@ const hierarchyDataActions: ActionTree<HierarchyDataState, RootState> & Hierarch
             commit('assignParent', { parentId, childId: blockId });
         }
     },
-    deleteNode({ commit, state, dispatch },  blockId) {
-        let node = state.hierarchy[blockId];
-        let childIds = JSON.parse(JSON.stringify(node.childrenBlockIds)); // parse+stringify is to do a copy since we're modifying the underlying list
+    deleteNode({ commit, state, dispatch, rootState }, blockId) {
+        const node = state.hierarchy[blockId];
+        let childIds = JSON.parse(JSON.stringify(node.childrenBlockIds)) as string[]; // parse+stringify is to do a copy since we're modifying the underlying list
         let parentId = node.parentBlockId;
+
+        // The "focal point" for this operation is "the child location closest to the deleted node"
+        const nodeLoc = rootState.blockData.blocks[blockId].location;
+        const focalPoint = childIds
+            .map(id => rootState.blockData.blocks[id].location)
+            .map(loc => ({
+                location: loc,
+                distance: Math.sqrt(
+                    Math.pow(loc.x - nodeLoc.x, 2) +
+                    Math.pow(loc.y - nodeLoc.y, 2)
+                )
+            }))
+            .sort((a, b) => a.distance - b.distance)?.[0]?.location;
         for (let childId of childIds) {
-            dispatch('setParent', { blockId: childId, newParent: parentId }); // FYI, parentId may be undefined
+            dispatch('setParent', { blockId: childId, newParent: parentId, focalPoint }); // FYI, parentId may be undefined
         }
 
         // Remove it as a child from its parent
@@ -99,7 +113,7 @@ const hierarchyDataActions: ActionTree<HierarchyDataState, RootState> & Hierarch
         // Clean up the store
         commit('deleteNode', blockId);
     },
-    setParent({ commit, state, getters, rootState }, { blockId, newParent }) {
+    setParent({ commit, state, getters, rootState, dispatch }, { blockId, newParent, focalPoint }) {
         // Verify we don't have a circular reference by traversing up the hierarchy
         let isCircular = false;
         let currentBlockId: string | undefined = newParent;
@@ -119,15 +133,11 @@ const hierarchyDataActions: ActionTree<HierarchyDataState, RootState> & Hierarch
         }
 
         if (!isCircular) {
-            // We need to update all impacted block sizes based on their new depth. For now, let's record their "old depths",
-            // and then once we update their place in the hierarchy we can perform the update based on their "new depths".
-            let descendants = getters.getTransitiveDescendants(blockId);
-            let oldDepths: TypedMap<number> = {};
-            for (let childId of descendants) {
-                oldDepths[childId] = getters.blockScales[childId];
-            }
+            const blockLookup = rootState.blockData.blocks;
+            const originalBlockDepth = ScaleUtils.getDepth(blockLookup[blockId], blockLookup);
+            const parentBlockDepth = newParent ? ScaleUtils.getDepth(blockLookup[newParent], blockLookup) : 0;
 
-            // Remove blockId as a child from it's current parent (if it has one)
+            // Remove blockId as a child from its current parent (if it has one)
             let currentParent = state.hierarchy[blockId].parentBlockId;
             if (currentParent) {
                 commit('removeChild', { parentId: currentParent, childId: blockId });
@@ -140,23 +150,36 @@ const hierarchyDataActions: ActionTree<HierarchyDataState, RootState> & Hierarch
             } else {
                 commit('clearParent', blockId);
             }
+            // Updates the blockData too.
+            dispatch('setBlockParent', { parentId: newParent, childId: blockId });
 
-            // Update all impacted block sizes based on their new depth
-            for (let childId of descendants) {
-                let parentId = (childId !== blockId) ? state.hierarchy[childId].parentBlockId! : newParent;
-                let block = rootState.blockData.blocks[childId];
-                let newDepth = parentId
-                    ? (1.5 * getters.blockScales[parentId]) // x + 0.5x => 1.5x
-                    : 1;
-                let newWidth = block.location.width * oldDepths[childId] / newDepth;
-                let newHeight = block.location.height * oldDepths[childId] / newDepth;
-                commit('setBlockPosition', {
-                    blockId: childId,
-                    x: block.location.x,
-                    y: block.location.y,
-                    width: newWidth,
-                    height: newHeight
-                });
+
+            // Update all impacted block locations.
+            // -- Children are rescaled --
+            const oldChildLocation = JSON.parse(JSON.stringify(blockLookup[blockId].location));
+            const newChildLocation = ScaleUtils.updateBounds(blockLookup[blockId].location, originalBlockDepth, parentBlockDepth+1, focalPoint);
+            commit('setBlockPosition', { blockId, ...newChildLocation });
+            // -- Grandchildren are rescaled and repositioned --
+            for (const gchildId of getters.getTransitiveDescendants(blockId)) {
+                // Skip the child (since it was already taken care of)
+                if (gchildId === blockId) continue;
+                // Update the grandchildren
+                const depthFromChild = ScaleUtils.getDepth(blockLookup[gchildId], blockLookup, blockId);
+                const origLoc = blockLookup[gchildId].location;
+                const newGchildLocation = ScaleUtils.updateBounds(
+                    {
+                        // Need to shift the original position based on how much this block's parent moved, as the parent
+                        //   may have moved as a result of one of its siblings rescaling.
+                        x: origLoc.x + (newChildLocation.x - oldChildLocation.x),
+                        y: origLoc.y + (newChildLocation.y - oldChildLocation.y),
+                        width: origLoc.width,
+                        height: origLoc.height,
+                    },
+                    originalBlockDepth + depthFromChild,
+                    parentBlockDepth + 1 + depthFromChild,
+                    newChildLocation,
+                );
+                commit('setBlockPosition', { blockId: gchildId, ...newGchildLocation });
             }
         }
     },
@@ -204,6 +227,7 @@ const hierarchyDataGetters: GetterTree<HierarchyDataState, RootState> & Hierarch
         return pairs;
     },
     blockScales: (state) => {
+        // TODO-ben: Scale : REMOVE THIS in favor of utilities..?
         let scales: TypedMap<number> = {};
         for (let blockId in state.hierarchy) {
             let depth = 1; // "1" is a root-level block. Bigger numbers are decendants

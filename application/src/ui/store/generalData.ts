@@ -154,6 +154,11 @@ const generalDataGetters: GetterTree<GeneralDataState, RootState> & GeneralDataG
         let entry = state.remoteProjectLookup.find(proj => proj.projectId === projectId);
         return entry?.remoteProject;
     },
+    currentProjectCapabilities: (state, {getRemoteProjectById}) => {
+        const currentProjectId = state.currentProjectBoard?.projectId;
+        const remoteProject = state.remoteProjectLookup.find(proj => proj.projectId === currentProjectId);
+        return remoteProject?.capabilities || {};
+    },
 }
 
 
