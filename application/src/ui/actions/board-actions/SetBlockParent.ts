@@ -40,7 +40,7 @@ export class SetBlockParentAction extends Action {
         } else {
             useStore().dispatch("setParent", {
                 blockId: resp.blockId,
-                newParent: resp.parentBlockId, // FYI, data.parentBlockId may be undefined
+                newParent: resp.parentBlockId, // FYI, resp.parentBlockId may be undefined
             });
         }
     }

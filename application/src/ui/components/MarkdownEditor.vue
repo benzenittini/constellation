@@ -1,11 +1,7 @@
 <template>
-    <div class="mw-markdowneditor">
-        <div v-if="mwEditorTitle !== ''" class="title-with-tabs">
-            <div class="title">{{ mwEditorTitle }}</div>
-            <div class="tab" v-bind:class="{selected: !isEditMode}" v-on:click="exitEditMode">Read</div>
-            <div class="tab" v-bind:class="{selected: isEditMode}" v-on:click="enterEditMode" v-if="!mwDisabled">Edit</div>
-        </div>
-        <div v-else>
+    <div v-bind:class="{ 'mw-markdowneditor': true, 'mw-has-title': mwEditorTitle !== '' }">
+        <div class="tabs">
+            <div v-if="mwEditorTitle !== ''" class="title">{{ mwEditorTitle }}</div>
             <div class="tab" v-bind:class="{selected: !isEditMode}" v-on:click="exitEditMode">Read</div>
             <div class="tab" v-bind:class="{selected: isEditMode}" v-on:click="enterEditMode" v-if="!mwDisabled">Edit</div>
         </div>
@@ -102,7 +98,7 @@ export default defineComponent({
 
     h1,h2,h3,h4,h5,h6,p,li,a { text-align: left !important; }
 
-    .title-with-tabs {
+    &.mw-has-title .tabs {
         display: flex;
         .title  { flex-grow: 1; }
         div:not(.title) { flex-grow: 0; }
@@ -134,6 +130,9 @@ export default defineComponent({
             background: vars.$gray1;
             padding: 8px 0;
         }
+    }
+    &.mw-has-title .content {
+        border-radius: vars.$component-radius;
     }
     .content {
         border-radius: 0 vars.$component-radius vars.$component-radius vars.$component-radius;
@@ -168,7 +167,6 @@ export default defineComponent({
     pre {
         @include mixins.scrollbars;
         padding: 10px;
-        border-radius: vars.$radius-small;
         background: vars.$gray-very-dark;
         overflow-x: auto;
         width: 100%;

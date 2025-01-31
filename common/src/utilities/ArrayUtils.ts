@@ -29,9 +29,10 @@ export function arraysAreEqual(array1: any[] | undefined, array2: any[] | undefi
  * Returns an array containing only the unique items in the given array.
  * Does not work on objects (unless object refs are the same)
  */
-export function unique(array: any[]) {
-    return array.filter(
-        (value: any, index: number, self: any[]) => self.indexOf(value) === index);
+export function unique<T = any>(array: T[], areEqual: ((a: T, b: T) => boolean) = ((a, b) => a === b)) {
+    return array.filter((val1: any, index: number, self: any[]) => {
+        return self.findIndex(val2 => areEqual(val1, val2)) === index;
+    });
 }
 
 export function includesAny(array?: any[], items?: any[]) {

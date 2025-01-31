@@ -18,13 +18,13 @@
         <div class="icon-group">
             <!-- "Align in Row" (30w x 10h) (use the vertical "stack-blocks" svg, but rotate and flip it to make it look horizontal) -->
             <div id="ac-align-in-row" class="mw-icon" data-test="ac-align-in-row" v-on:click="alignInRow"
-                title="Line up all selected blocks horizontally.">
+                title="Line up all selected blocks horizontally, L-to-R. Hold ctrl for R-to-L.">
                 <eic-svg-stack-blocks width="11" height="33"></eic-svg-stack-blocks>
             </div>
 
             <!-- "Align in Column" (10w x 30h) -->
             <div id="ac-align-in-column" class="mw-icon" data-test="ac-align-in-column" v-on:click="alignInColumn"
-                title="Stack all selected blocks vertically.">
+                title="Stack all selected blocks vertically, T-to-B. Hold ctrl for B-to-T.">
                 <eic-svg-stack-blocks width="11" height="33"></eic-svg-stack-blocks>
             </div>
         </div>
@@ -81,79 +81,111 @@ export default defineComponent({
                 }
                 request.submit();
             },
-            alignInRow: () => {
+            alignInRow: (mouseEvent: MouseEvent) => {
                 // Scale the "gap" between the blocks based on their own scale (depth). Since they can technically be at different depths, use the "mode".
                 // Ties go to the biggest number, which creates the smallest gap.
                 let scale = Math.max(...ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id])));
                 let blockGap = 10/scale;
 
-                // Center-align the stack starting from the left-most block
-                let leftMostBlock = selectedBlocks.value
+                const reversed = mouseEvent.ctrlKey;
+
+                // Center-align the stack starting from the left-most block (or right-most if reversed)
+                let startingBlock = selectedBlocks.value
                     .reduce((prev, curr) => {
-                        if (prev.location.x < curr.location.x) {
-                            return prev;
-                        } else if (prev.location.x > curr.location.x) {
-                            return curr;
+                        const prevLocX = reversed ? prev.location.x + prev.location.width : prev.location.x;
+                        const currLocX = reversed ? curr.location.x + curr.location.width : curr.location.x;
+                        if (prevLocX < currLocX) {
+                            return reversed ? curr : prev;
+                        } else if (prevLocX > currLocX) {
+                            return reversed ? prev : curr;
                         } else {
-                            return prev.location.y < curr.location.y ? prev : curr
+                            return prev.location.y < curr.location.y
+                                ? reversed ? curr : prev
+                                : reversed ? prev : curr;
                         }
                     });
-                let currentX = leftMostBlock.location.x; // Every block will have a different X.
-                let centerY = leftMostBlock.location.y + leftMostBlock.location.height/2; // All blocks will have the same Y *centerpoint*.
+                let currentX = startingBlock.location.x; // Every block will have a different X.
+                let centerY = startingBlock.location.y + startingBlock.location.height/2; // All blocks will have the same Y *centerpoint*.
 
                 // We want to sort the blocks by their "x" location so the user has some control over the ordering that they're stacked.
                 let sortedBlocks = selectedBlocks.value
                     .map(e => ({ id: e.id, location: e.location }))
-                    .sort((a, b) => a.location.x - b.location.x);
+                    .sort((a, b) => reversed
+                        ? (a.location.x + a.location.width) - (b.location.x + b.location.width)
+                        : a.location.x - b.location.x);
+                if (reversed) sortedBlocks.reverse();
 
                 // Submit the action
                 let request = new SetBlockPositionsAction();
+                let isFirst = true;
                 for (let block of sortedBlocks) {
+                    if (reversed && !isFirst) {
+                        currentX -= block.location.width + blockGap;
+                    }
                     request.addBlockAndPosition(block.id, {
                         x: currentX,
                         y: centerY - block.location.height/2,
                         width: block.location.width,
                         height: block.location.height,
                     });
-                    currentX += block.location.width + blockGap;
+                    if (!reversed) {
+                        currentX += block.location.width + blockGap;
+                    }
+                    isFirst = false;
                 }
                 request.submit();
             },
-            alignInColumn: () => {
+            alignInColumn: (mouseEvent: MouseEvent) => {
                 // Scale the "gap" between the blocks based on their own scale (depth). Since they can technically be at different depths, use the "mode".
                 // Ties go to the biggest number, which creates the smallest gap.
                 let scale = Math.max(...ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id])));
                 let blockGap = 10/scale;
 
-                // Center-align the stack starting from the top-most block
-                let topMostBlock = selectedBlocks.value
+                const reversed = mouseEvent.ctrlKey;
+
+                // Center-align the stack starting from the top-most block (or bottom-most if reversed)
+                let startingBlock = selectedBlocks.value
                     .reduce((prev, curr) => {
-                        if (prev.location.y < curr.location.y) {
-                            return prev;
-                        } else if (prev.location.y > curr.location.y) {
-                            return curr;
+                        const prevLocY = reversed ? prev.location.y + prev.location.height : prev.location.y;
+                        const currLocY = reversed ? curr.location.y + curr.location.height : curr.location.y;
+                        if (prevLocY < currLocY) {
+                            return reversed ? curr : prev;
+                        } else if (prevLocY > currLocY) {
+                            return reversed ? prev : curr;
                         } else {
-                            return prev.location.x < curr.location.x ? prev : curr
+                            return prev.location.x < curr.location.x
+                                ? reversed ? curr : prev
+                                : reversed ? prev : curr;
                         }
                     });
-                let centerX = topMostBlock.location.x + topMostBlock.location.width/2; // All blocks will have the same X *centerpoint*.
-                let currentY = topMostBlock.location.y; // Every block will have a different Y.
+                let centerX = startingBlock.location.x + startingBlock.location.width/2; // All blocks will have the same X *centerpoint*.
+                let currentY = startingBlock.location.y; // Every block will have a different Y.
 
                 // We want to sort the blocks by their "y" location so the user has some control over the ordering that they're stacked.
                 let sortedBlocks = selectedBlocks.value
                     .map(e => ({ id: e.id, location: e.location }))
-                    .sort((a, b) => a.location.y - b.location.y);
+                    .sort((a, b) => reversed
+                        ? (a.location.y + a.location.height) - (b.location.y + b.location.height)
+                        : a.location.y - b.location.y);
+                if (reversed) sortedBlocks.reverse();
 
                 // Submit the action
                 let request = new SetBlockPositionsAction();
+                let isFirst = true;
                 for (let block of sortedBlocks) {
+                    if (reversed && !isFirst) {
+                        currentY -= block.location.height + blockGap;
+                    }
                     request.addBlockAndPosition(block.id, {
                         x: centerX - block.location.width/2,
                         y: currentY,
                         width: block.location.width,
                         height: block.location.height,
                     });
-                    currentY += block.location.height + blockGap;
+                    if (!reversed) {
+                        currentY += block.location.height + blockGap;
+                    }
+                    isFirst = false;
                 }
                 request.submit();
             }

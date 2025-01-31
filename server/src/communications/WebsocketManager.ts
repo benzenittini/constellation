@@ -91,6 +91,7 @@ export class WebsocketManager {
 
     registerApplicationHandlers(socket: Socket): void {
         socket.on('getBoardData', WebsocketHandlers.getBoardData(this.io, socket));
+        socket.on('pasteData',    WebsocketHandlers.pasteData(this.io, socket));
         // -- Blocks --
         socket.on('createBlock',       WebsocketHandlers.createBlock(this.io, socket));
         socket.on('setBlockPositions', WebsocketHandlers.setBlockPositions(this.io, socket));

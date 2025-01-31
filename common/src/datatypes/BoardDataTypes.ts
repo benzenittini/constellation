@@ -1,5 +1,5 @@
 
-import { TypedMap } from "./GenericDataTypes"
+import { TypedMap, parseAs } from "./GenericDataTypes"
 import { Block, verifyBlock } from './BlockDataTypes';
 import { ViewConfig, verifyViewConfig } from './ViewDataTypes';
 import { ClassificationDefinition, FieldDefinition, FieldType, PossibleValueDefinition, verifyClassificationDefinition, verifyFieldDefinition, verifyPossibleValueDefinition } from './FieldDataTypes';
@@ -134,6 +134,47 @@ export type TemplateField = {
 export type TemplatePV = {
     name: string;
     style?: any;
+}
+
+
+// ============
+// Copy / Paste
+// ------------
+
+export type CopyData = {
+    classifications: ClassificationDefinition[];
+    fields: FieldDefinition[];
+    possibleValues: PossibleValueDefinition[];
+    blocks: Block[];
+};
+
+export function verifyCopyData(data: any): data is CopyData {
+    let parsedData = parseAs<CopyData>(data);
+
+    // If it failed to parse into an object, it's definitely not CopyData.
+    if (parsedData === false) return false;
+
+    // Make sure data is an object with all the necessary fields
+    if (!('classifications' in parsedData) || !('fields' in parsedData) || !('possibleValues' in parsedData) || !('blocks' in parsedData)) {
+        return false;
+    }
+
+    // Make sure each field is an array.
+    const {classifications, fields, possibleValues, blocks} = parsedData;
+    if ([classifications, fields, possibleValues, blocks].some(arr => !Array.isArray(arr))) {
+        return false;
+    }
+
+    // Make sure each array's elements are of the proper type.
+    if (classifications.some(c => !verifyClassificationDefinition(c)) ||
+        fields.some(c => !verifyFieldDefinition(c)) ||
+        possibleValues.some(c => !verifyPossibleValueDefinition(c)) ||
+        blocks.some(c => !verifyBlock(c))
+    ) {
+        return false;
+    }
+
+    return true;
 }
 
 

@@ -32,9 +32,10 @@ export type BlockDataMutations<S = BlockDataState> = {
 
     lockOpenClosed (state: S, payload: {blockIds: string[], isLockedOpen: boolean}): void;
 
-    setBlockPosition    (state: S, payload: {blockId: string, x: number, y: number, width: number, height: number}): void;
+    setBlockPosition (state: S, payload: {blockId: string, x: number, y: number, width: number, height: number}): void;
+    setBlockParent   (state: S, payload: {parentId: string, childId: string}): void;
 
-    deleteBlocks        (state: S, payload: {blockIds: string[]}): void;
+    deleteBlocks (state: S, payload: {blockIds: string[]}): void;
 
     setBlockContent (state: S, payload: {blockId: string, newContent: BlockContent}): void;
 
@@ -69,6 +70,7 @@ export interface BlockDataActions {
     contractBlock ({ commit }: AugmentedActionContext<BlockDataState>, blockId: string): void;
 
     setBlockPositions    ({ commit }: AugmentedActionContext<BlockDataState>, blockIdsAndPositions: BlockIdAndPosition[]): void;
+    setBlockParent  ({ commit }: AugmentedActionContext<BlockDataState>, payload: { parentId: string, childId: string }): void;
 
     deleteBlocks         ({ commit }: AugmentedActionContext<BlockDataState>, blockIds: string[]): void;
 

@@ -30,6 +30,23 @@ export function getBoardData(io: Server, socket: Socket) {
     }
 }
 
+export function pasteData(io: Server, socket: Socket) {
+    return async (message: string) => {
+        try {
+            let { clientId, boardId, pastedData } = JSON.parse(message);
+            let result = {
+                clientId: clientId,
+                ...(await boardDataPersistence[boardId].pasteData(pastedData)),
+            };
+            io.in(boardId).emit('pasteData', result);
+        } catch(err) {
+            const error = ConstError.safeConstructor(err as any);
+            logger.error(`Error encountered when pasting data: ${error.message}`);
+            socket.emit('pasteData', error.getErrorResponse());
+        }
+    };
+}
+
 
 // ======
 // Blocks

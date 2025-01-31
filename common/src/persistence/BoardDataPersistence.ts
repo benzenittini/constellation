@@ -2,13 +2,15 @@
 import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
-import { BoardData, TemplateClassification } from '../datatypes/BoardDataTypes';
+import { BoardData, CopyData, TemplateClassification } from '../datatypes/BoardDataTypes';
 import { BoundingBox, TypedMap } from '../datatypes/GenericDataTypes';
 import { Block, BlockContent, BlockIdAndPosition, verifyBlockContent } from '../datatypes/BlockDataTypes';
-import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes } from '../datatypes/FieldDataTypes';
+import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes, getFieldDataType } from '../datatypes/FieldDataTypes';
 import * as T from '../datatypes/ActionDataTypes';
 import * as ArrayUtils from '../utilities/ArrayUtils';
+import * as ObjectUtils from '../utilities/ObjectUtils';
 import { verifyViewConfig } from '../datatypes/ViewDataTypes';
+import { ScaleUtils } from '../utilities';
 
 export class BoardDataPersistence {
 
@@ -157,6 +159,152 @@ export class BoardDataPersistence {
         return this.data;
     }
 
+    async pasteData({classifications, fields, possibleValues, blocks}: CopyData): Promise<{
+        blocks: Block[],
+        classificationIds: string[],
+        classificationDefs: TypedMap<ClassificationDefinition>,
+        fieldDefs: TypedMap<FieldDefinition>,
+        possibleValueDefs: TypedMap<PossibleValueDefinition>
+    }> {
+        const fieldMap = ArrayUtils.mapify<FieldDefinition>(fields, 'id');
+
+        // Look up the existing classification/field/PV IDs. Any that don't exist are assigned to undefined.
+        const pastedCidToExistingMappings = classifications.reduce((acc, curr) => {
+            const idMappings = this.getExistingClassificationMappings(curr, fieldMap);
+            acc[curr.id] = idMappings;
+            return acc;
+        }, {} as TypedMap<{ cid: string, fids: TypedMap<string> } | undefined>);
+
+        // Flatten the above object into three individual ID lookup maps -- pasted IDs to their persisted IDs.
+        let cidPastedToPersisted  = {} as TypedMap<string>;
+        let fidPastedToPersisted  = {} as TypedMap<string>;
+        let pvidPastedToPersisted = {} as TypedMap<string>;
+        for (const [pastedCid, existingMappings] of Object.entries(pastedCidToExistingMappings)) {
+            // existingMappings will be undefined for any new classifications, which we don't need in our lookup maps AT THIS POINT. They're added later.
+            if (existingMappings != undefined) {
+                cidPastedToPersisted[pastedCid] = existingMappings.cid;
+                fidPastedToPersisted  = { ...fidPastedToPersisted,  ...existingMappings.fids  };
+            }
+        }
+
+        // Figure out which classifications, fields, and PVs need to be created
+        const csToCreateArr = Object.entries(pastedCidToExistingMappings)
+            .filter(([_, existingMappings]) => existingMappings?.cid == undefined)
+            .map(([pastedCid, _]) => classifications.find(c => c.id === pastedCid)!);
+        const fsToCreateArr = csToCreateArr
+            .flatMap(c => c.fieldIds)
+            .map(fid => fields.find(f => f.id === fid)!);
+        const pvsToCreateArr = fsToCreateArr
+            .flatMap(f => f.possibleValueIds)
+            .map(pvid => possibleValues.find(pv => pv.id === pvid)!);
+
+        // Regenerate all their IDs, saving the mapped values for later use
+        const csToCreate  = this.recreateIds(csToCreateArr,  cidPastedToPersisted);
+        const fsToCreate  = this.recreateIds(fsToCreateArr,  fidPastedToPersisted);
+        const pvsToCreate = this.recreateIds(pvsToCreateArr, pvidPastedToPersisted);
+        // Also, update the field IDs on each classification to the new values.
+        Object.values(csToCreate).forEach(c => {
+            c.fieldIds = c.fieldIds
+                .filter(fid => fid in fidPastedToPersisted) // Cut out any that aren't in our lookup map. (Shouldn't ever happen.)
+                .map(fid => fidPastedToPersisted[fid]!);
+        });
+        // Also also, update the PV IDs on each field to the new values.
+        Object.values(fsToCreate).forEach(f => {
+            f.possibleValueIds = f.possibleValueIds
+                .filter(pvid => pvid in pvidPastedToPersisted) // Cut out any that aren't in our lookup map. (Shouldn't ever happen.)
+                .map(pvid => pvidPastedToPersisted[pvid]!);
+        });
+
+        // Classification updates need to include ALL classifications, so take what we already have and add on the new ones.
+        // (PV and Field updates just need the new definitions.)
+        const classificationIds  = [ ...this.data.classificationIds, ...Object.keys(csToCreate) ];
+        const classificationDefs = { ...this.data.classifications, ...csToCreate };
+
+        // Create the pasted non-classification fields and their PVs
+        await this.setClassificationDefinitions({
+            classificationIds: classificationIds,
+            classifications: classificationDefs,
+            fields: fsToCreate,
+            possibleValues: pvsToCreate,
+        });
+
+        // Create the pasted blocks.
+        for (const block of blocks) {
+            await this.createBlock(block.id, block.location, undefined);
+            await this.setBlockContent(block.id, block.content);
+            for (const cid of block.classificationIds) {
+                await this.setClassificationOnBlocks({ blockIds: [block.id], classificationId: cidPastedToPersisted[cid], isActive: true })
+            }
+            for (const [fid, value] of Object.entries(block.fieldValues)) {
+                await this.setFieldOnBlocks({ fieldId: fidPastedToPersisted[fid], blockIdToFieldValue: { [block.id]: value } })
+            }
+            // TODO-ben: For fields directly on blocks (not classifications)
+            // await this.addFieldIdsToBlocks([block.id], block.fieldIds.map(fid => fidPastedToPersisted[fid]));
+            // await this.setFieldDefinitions(...);
+        }
+        for (const block of blocks) {
+            await this.setBlockParent(block.id, block.parentBlockId, true);
+        }
+
+        // TODO-ben: Include a "we made a best attempt" flag in the response, and only set it if we mapped some IDs..?
+        return {
+            blocks: blocks.map(b => this.data.blocks[b.id]),
+            classificationIds,
+            classificationDefs,
+            fieldDefs: fsToCreate,
+            possibleValueDefs: pvsToCreate,
+        };
+    }
+
+
+    // ================
+    // Helper Utilities
+    // ----------------
+
+    /**
+     * Considered "matching" if the names match, all field names match (uni-directionally), and all field types are compatible. PVs *do not matter*
+     * because they are only stored on blocks as values (not IDs), and don't necessarily have a hard mapping to PV definitions.
+     * 
+     * Returns mappings from "pasted" to "persisted/existing" ids.
+     */
+    getExistingClassificationMappings(pastedClassification: ClassificationDefinition, fieldDefs: TypedMap<FieldDefinition>): { cid: string, fids: TypedMap<string> } | undefined {
+        for (const existingClassification of Object.values(this.data.classifications)) {
+            // If the classification names don't match, on to the next!
+            if (existingClassification.name !== pastedClassification.name) continue;
+
+            // Every pasted field must exist in the existing classification's field list
+            const existingFields = existingClassification.fieldIds.map(fid => this.data.fields[fid]);
+            const pastedToExistingFids = pastedClassification.fieldIds
+                .reduce((acc, pastedFid) => {
+                    // The field names must match and the field data types must be compatible in order to count as a matching field.
+                    const matchingField = existingFields.find(existing => existing.name === fieldDefs[pastedFid].name && getFieldDataType(existing.type) === getFieldDataType(fieldDefs[pastedFid].type));
+                    acc[pastedFid] = matchingField?.id;
+                    return acc;
+                }, {} as TypedMap<string | undefined>);
+
+            // Check if we found a compatible match
+            if (Object.values(pastedToExistingFids).every(fid => fid !== undefined)) {
+                return {
+                    cid: existingClassification.id,
+                    fids: pastedToExistingFids as TypedMap<string>, // Safe to cast since we just verified all values were not undefined
+                };
+            }
+        }
+
+        // If we didn't find any matches, then return undefined :(
+        return undefined;
+    }
+
+    recreateIds<T extends {id: string}>(targets: T[], oldToNewLookup: TypedMap<string>): TypedMap<T> {
+        return targets.reduce((acc, t) => {
+            const newId = uuidv4();
+            oldToNewLookup[t.id] = newId;
+            t.id = newId;
+            acc[newId] = t;
+            return acc;
+        }, {} as TypedMap<T>);
+    }
+
 
     // ==========
     // Block CRUD
@@ -200,41 +348,78 @@ export class BoardDataPersistence {
     }
 
     async deleteBlocks(blockIds: string[]): Promise<string[]> {
-        // Get all the decendants (and depths) of the given blockId - needed to re-scale blocks later on.
-        let originalDescendents = await this.getBlockDescendents(blockIds);
-        let originalDepths      = await this.getBlockDepths(Array.from(originalDescendents));
+        // Process one block deletion at a time to ensure things are resized properly.
+        for (const deletedId of blockIds) {
+            // The "parent" of the deleted block is relevant for scaling. Remember that it *could* be undefined.
+            const parentId = this.data.blocks[deletedId].parentBlockId;
 
-        // Update the parent block IDs of all the deleted blocks' children.
-        for (let block of Object.values(this.data.blocks)) {
-            // Traverse up the chain of parentBlockIds until we arrive at one that either isn't deleted, or is undefined.
-            // That'll be this block's new parent.
-            let newParentId = block.parentBlockId;
-            while (newParentId && blockIds.includes(newParentId)) {
-                newParentId = this.data.blocks[newParentId].parentBlockId;
+            // Update all the children and descendents
+            const childLookup = this.getBlockChildLookup();
+            if (childLookup[deletedId] != undefined) {
+                // The "focal point" for repositioning is "the child location closest to the deleted node"
+                const deletedLoc = this.data.blocks[deletedId].location;
+                const focalPoint = childLookup[deletedId]
+                    .map(childId => this.data.blocks[childId].location)
+                    .map(childLoc => ({
+                        location: childLoc,
+                        distance: Math.sqrt(
+                            Math.pow(childLoc.x - deletedLoc.x, 2) +
+                            Math.pow(childLoc.y - deletedLoc.y, 2)
+                        )
+                    }))
+                    .sort((a, b) => a.distance - b.distance)?.[0]?.location;
+
+                // Update the child's location and all its descendents
+                for (const childId of childLookup[deletedId]) {
+                    // Collect some data
+                    const child = this.data.blocks[childId];
+                    const originalBlockDepth = ScaleUtils.getDepth(child, this.data.blocks);
+                    const parentBlockDepth = parentId ? ScaleUtils.getDepth(this.data.blocks[parentId], this.data.blocks) : 0;
+
+                    // Point the child at their new parent (...a phrase I never thought I'd say.)
+                    child.parentBlockId = parentId;
+
+                    // Update the child and all the grandchildren
+                    const descendents      = await this.getBlockDescendents([childId], childLookup);
+                    const descendentDepths = await this.getBlockDepths(Array.from(descendents), childId);
+
+                    const oldDepths = {} as TypedMap<number>;
+                    const newDepths = {} as TypedMap<number>;
+                    Object.entries(descendentDepths).forEach(([id, depth]) => {
+                        oldDepths[id] = originalBlockDepth + depth;
+                        newDepths[id] = parentBlockDepth + 1 + depth;
+                    });
+                    await this.adjustBlockSizes(oldDepths, newDepths, focalPoint);
+                }
             }
-            block.parentBlockId = newParentId;
-        }
 
-        // Remove the blocks from existence
-        for (let blockId of blockIds) {
-            delete this.data.blocks[blockId];
-            let index = this.data.blockPriorities.indexOf(blockId);
+            // Finally, delete this node
+            delete this.data.blocks[deletedId];
+            let index = this.data.blockPriorities.indexOf(deletedId);
             if (index !== -1) {
                 this.data.blockPriorities.splice(index, 1);
             }
         }
-
-        // Determine the new depth of each descendant, and update its size appropriately
-        let newDescendents = Array.from(originalDescendents).filter(od => !blockIds.includes(od.id));
-        let newDepths      = await this.getBlockDepths(Array.from(newDescendents));
-        await this.adjustBlockSizes(originalDepths, newDepths);
 
         this.scheduleSave();
 
         return blockIds;
     }
 
-    async setBlockParent(blockId: string, parentBlockId: string | undefined): Promise<void> {
+    getTreeRoots(descendentBlocks: Block[], deletedBlockIds: string[]): Record<string, {x: number, y: number}> {
+        const dBidToRootId: Record<string, {x: number, y: number}> = {};
+        for (let descendent of descendentBlocks) {
+            // Traverse up the tree until we reach a root node or one of the deleted blocks
+            let potentialRoot = descendent;
+            while (potentialRoot.parentBlockId != undefined && !(potentialRoot.id in deletedBlockIds)) {
+                potentialRoot = this.data.blocks[potentialRoot.parentBlockId];
+            }
+            dBidToRootId[descendent.id] = potentialRoot.location;
+        }
+        return dBidToRootId;
+    }
+
+    async setBlockParent(blockId: string, parentBlockId: string | undefined, skipResize: boolean = false): Promise<void> {
         // Validation
         if (blockId === undefined) {
             throw new T.ConstError(3,
@@ -253,11 +438,7 @@ export class BoardDataPersistence {
                 "Error in setBlockParent: requested parentBlockId doesn't exist.");
         }
 
-        // Get all the decendants (and depths) of the given blockId
-        let originalDescendents = await this.getBlockDescendents([blockId]);
-        let originalDepths      = await this.getBlockDepths(Array.from(originalDescendents));
-
-        // Update the hierarchy - first verify we don't have a circular reference by traversing up the hierarchy
+        // Verify we don't have a circular reference by traversing up the hierarchy
         let currentBlockId: string | undefined = parentBlockId;
         while (currentBlockId !== undefined) {
             currentBlockId = this.data.blocks[currentBlockId].parentBlockId;
@@ -269,25 +450,31 @@ export class BoardDataPersistence {
                     "Error in setBlockParent: circular dependency detected!");
             }
         }
+
+        // Get all the decendants (and depths) of the given blockId
+        let originalDescendents = await this.getBlockDescendents([blockId], this.getBlockChildLookup());
+        let originalDepths      = await this.getBlockDepths(Array.from(originalDescendents));
+
+        // Update the hierarchy
         this.data.blocks[blockId].parentBlockId = parentBlockId;
 
         // Determine the new depth of each descendant, and update its size appropriately
-        let newDescendents = await this.getBlockDescendents([blockId]);
-        let newDepths      = await this.getBlockDepths(Array.from(newDescendents));
-        await this.adjustBlockSizes(originalDepths, newDepths);
+        if (!skipResize) {
+            const rootLoc = this.data.blocks[blockId].location;
+            const newDescendents = await this.getBlockDescendents([blockId], this.getBlockChildLookup());
+            const newDepths      = await this.getBlockDepths(Array.from(newDescendents));
+            await this.adjustBlockSizes(originalDepths, newDepths, rootLoc);
+        }
 
         // The data's dirty!
         this.scheduleSave();
     }
 
-    async getBlockDescendents(parentIds: string[]): Promise<Set<Block>> {
-        // Short-circuit if able
-        if (parentIds.length === 0) {
-            return new Set<Block>();
-        }
-
-        // We only track each block's parentId, which is very inconvenient for finding descendents.
-        // Let's build up a list of each block's children for convenience and (hopefully) efficiency.
+    /**
+     * We only track each block's parentId, which is very inconvenient for finding descendents. This function
+     * builds up and returns a list of each block's children for convenience and (hopefully) efficiency.
+     */
+    getBlockChildLookup(): TypedMap<string[]> {
         let blockChildren: TypedMap<string[]> = {}; // Parent Id --> Children Ids
         Object.values(this.data.blocks).forEach(b => {
             if (b.parentBlockId) {
@@ -295,55 +482,41 @@ export class BoardDataPersistence {
                 blockChildren[b.parentBlockId].push(b.id);
             }
         });
+        return blockChildren;
+    }
+
+    async getBlockDescendents(parentIds: string[], childLookup: TypedMap<string[]>): Promise<Set<Block>> {
+        // Short-circuit if able
+        if (parentIds.length === 0) {
+            return new Set<Block>();
+        }
 
         // Fetch and return the Blocks
         let descendents = new Set<Block>();
         let blocksToCheck = [...parentIds]; // Copying to prevent modifying the passed-in parameter on the caller.
         for (let blockId of blocksToCheck) {
             descendents.add(this.data.blocks[blockId]);
-            blockChildren[blockId]?.forEach(b => blocksToCheck.push(b));
+            childLookup[blockId]?.forEach(b => blocksToCheck.push(b));
         }
         return descendents;
     }
 
-    async getBlockDepths(blocks: Block[]): Promise<TypedMap<number>> {
-        let depths: TypedMap<number> = {};
-
-        for (let block of blocks) {
-            let depth = 1;
-            let parentId = block.parentBlockId;
-            while (parentId !== undefined) {
-                depth++;
-                parentId = this.data.blocks[parentId]?.parentBlockId;
-            }
-            depths[block.id] = depth;
-        }
-
-        return depths;
+    async getBlockDepths(blocks: Block[], depthFromBlockId?: string): Promise<TypedMap<number>> {
+        return blocks.reduce((acc, block) => {
+            acc[block.id] = ScaleUtils.getDepth(block, this.data.blocks, depthFromBlockId);
+            return acc;
+        }, {} as TypedMap<number>);
     }
 
-    async adjustBlockSizes(originalDepths: TypedMap<number>, newDepths: TypedMap<number>): Promise<void> {
+    async adjustBlockSizes(originalDepths: TypedMap<number>, newDepths: TypedMap<number>, rootLoc: { x: number, y: number } | undefined): Promise<void> {
         // Build up a list of blockIdsAndPositions to update
-        let blockIdsAndPositions: BlockIdAndPosition[] = [];
-        for (let blockId in newDepths) {
-            // For each layer deep, we want to multiply its scale by 1.5.
-            // Depth of 1 == scale 1
-            // Depth of 2 == scale 1 * 1.5
-            // Depth of 3 == scale 1 * 1.5 * 1.5
-            // Depth of n == scale 1 * Math.pow(1.5, n-1)
-            let originalScale = 1 * Math.pow(1.5, originalDepths[blockId]-1);
-            let newScale      = 1 * Math.pow(1.5, newDepths[blockId]-1);
-
+        let blockIdsAndPositions: BlockIdAndPosition[] = Object.keys(newDepths).map(blockId => {
             let block = this.data.blocks[blockId];
-            blockIdsAndPositions.push({
+            return {
                 blockId: block.id,
-                location: {
-                    ...block.location,
-                    width:  block.location.width  * originalScale / newScale,
-                    height: block.location.height * originalScale / newScale
-                }
-            });
-        }
+                location: ScaleUtils.updateBounds(block.location, originalDepths[block.id], newDepths[block.id], rootLoc),
+            };
+        });
 
         // Do the update!
         await this.setBlockPositions(blockIdsAndPositions);
@@ -372,6 +545,10 @@ export class BoardDataPersistence {
         this.scheduleSave();
     }
 
+    /**
+     * We provide classificationIds rather than just calling Object.keys(classifications) because the order of the IDs determine
+     * their order on the UI, which is important to maintain.
+     */
     async setClassificationDefinitions({ classificationIds, classifications, fields, possibleValues }: T.SetClassificationDefinitionsRequest): Promise<T.SetClassificationDefinitionsResponse> {
         // Validating the request will work before changing any values.
         await this.verifyValidFieldTypeTransitions(fields);
@@ -417,7 +594,7 @@ export class BoardDataPersistence {
 
     async updateFieldDefinitions(fields: TypedMap<FieldDefinition>): Promise<void> {
         // Just set each key/value pair, replacing existing IDs, but not worrying about having stale IDs
-        // left over. We can clean those up some other time if they're a problem..
+        // left over. We can clean those up some other time if they're a problem.
         this.data.fields = { ...this.data.fields, ...fields };
     }
 

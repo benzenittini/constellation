@@ -17,7 +17,7 @@
             v-bind:style="{ transform: `${pannable.translateString} ${zoomable.scaleString}` }">
 
             <!-- All of our "snap zones" get painted first. -->
-            <template v-if="!ctrlHeld">
+            <template v-if="!altHeld">
                 <circle class="mwe-snap-zone"
                     v-for="zone in snapZones"
                     v-bind:key="zone.key"
@@ -115,9 +115,10 @@ import { useEmitter } from "../../composables/Emitter";
 import { useWindowEvents } from "../../composables/WindowEvents";
 import { useMouseSampler } from "../../composables/MouseSampler";
 import { useTweenGroup } from "../../composables/TweenGroup";
+import { useCopyPaste } from "../../composables/CopyPaste";
 
 import { Block, BlockContent, DEFAULT_BLOCK_HEIGHT, DEFAULT_BLOCK_WIDTH, MIN_BLOCK_HEIGHT, MIN_BLOCK_WIDTH, BoundingBox } from 'constellation-common/datatypes';
-import { ArrayUtils, RectangleUtils } from 'constellation-common/utilities';
+import { ArrayUtils, RectangleUtils, ScaleUtils } from 'constellation-common/utilities';
 
 import { CreateBlockAction } from '../../actions/board-actions/CreateBlock';
 import { SetBlockPositionsAction } from '../../actions/board-actions/SetBlockPositions';
@@ -143,6 +144,7 @@ export default defineComponent({
         let eventEmitter = useEmitter(); // Emits/receives events from other components
 
         let windowEvents = useWindowEvents(); // Handles window-level keypresses, etc.
+        let copyPaste = useCopyPaste();
 
         let tweenGroup = useTweenGroup(); // Manages the joint pan/zoom tween when a user jumps to a block.
 
@@ -177,15 +179,17 @@ export default defineComponent({
 
             // Update ghost block position/size
             let parentBlockId    = blockTrayLinking.metadata.data.sourceBlockId;
-            let parentBlockScale = blockScales.value[parentBlockId];
-            ghostBlock.scale                 = (parentBlockScale + parentBlockScale*0.5);
-            ghostBlock.block.location.width  = DEFAULT_BLOCK_WIDTH / (parentBlockScale + parentBlockScale*0.5);
-            ghostBlock.block.location.height = DEFAULT_BLOCK_HEIGHT / (parentBlockScale + parentBlockScale*0.5);
-            ghostBlock.block.location.x      = linkDestination.value.x - ghostBlock.block.location.width/2;
-            ghostBlock.block.location.y      = linkDestination.value.y - ghostBlock.block.location.height/2;
+            let parentBlockDepth = ScaleUtils.getDepth(blocks.value[parentBlockId], blocks.value);
+            ghostBlock.scale     = ScaleUtils.calculateScale(parentBlockDepth+1);
+            ghostBlock.block.location = ScaleUtils.updateBounds({
+                width: DEFAULT_BLOCK_WIDTH,
+                height: DEFAULT_BLOCK_HEIGHT,
+                x: linkDestination.value.x - DEFAULT_BLOCK_WIDTH/2,
+                y: linkDestination.value.y - DEFAULT_BLOCK_HEIGHT/2
+            }, 1, parentBlockDepth+1);
 
-            // Build up a list of "snap zones"
-            snapZones.value = createSnapZonesFromBlocks(store.state.hierarchyData.hierarchy[parentBlockId].childrenBlockIds, ghostBlock.block.location, ghostBlock.scale);
+            // Build up a list of "snap zones" around the parent block and all its children.
+            snapZones.value = createSnapZonesFromBlocks([parentBlockId, ...store.state.hierarchyData.hierarchy[parentBlockId].childrenBlockIds], ghostBlock.block.location, ghostBlock.scale);
         }
         function createSnapZonesFromBlocks(blockIds: string[], snapBlockLocation: BoundingBox, scale: number) {
             const gap = 10 / scale;
@@ -216,7 +220,7 @@ export default defineComponent({
                 }, [] as SnapZone[]);
         }
         function getBestSnapZone(x: number, y: number, widthBounds: number, heightBounds: number) {
-            if (snapZones.value.length === 0 || ctrlHeld.value)
+            if (snapZones.value.length === 0 || altHeld.value)
                 return { x, y };
 
             // Determine the closest snap zone
@@ -300,6 +304,7 @@ export default defineComponent({
         }
 
         let ctrlHeld = ref(false);
+        let altHeld = ref(false);
         let inBulkCreationMode = ref(false);
         let blocksBulkCreated: Ref<string[]> = ref([]);
 
@@ -335,13 +340,36 @@ export default defineComponent({
                     }
                 }
             });
+            // Cut / Copy / Paste
+            windowEvents.register('cutCopyPasteBlocks', 'keydown', (keyboardEvent: KeyboardEvent) => {
+                if ((keyboardEvent.ctrlKey || keyboardEvent.metaKey) && !keyboardEvent.repeat) {
+                    const selectedBlocks = store.getters.selectedBlocks;
+                    if (selectedBlocks.length > 0 && keyboardEvent.key === 'c') {
+                        navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                    } else if (selectedBlocks.length > 0 && keyboardEvent.key === 'x') {
+                        navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                        new DeleteBlocksAction(selectedBlocks.map(e => e.id)).submit();
+                    } else if (keyboardEvent.key === 'v') {
+                        // Blocks are pasted wherever the mouse is
+                        const { clientX, clientY } = mouseSampler.lastEvent?.value ?? { clientX: 0, clientY: 0 };
+                        const pasteLocation = xyToPersistedCoordinates(clientX, clientY);
+                        navigator.clipboard.readText()
+                            .then(text => copyPaste.paste(text, pasteLocation))
+                            .catch(e => console.error(e));
+                    }
+                }
+            });
             windowEvents.register('modifierPressed', 'keydown', (keyboardEvent: KeyboardEvent) => {
                 if (keyboardEvent.key === 'Control' || keyboardEvent.key === 'Meta') // "meta" is "cmd" for Macs
                     ctrlHeld.value = true;
+                if (keyboardEvent.key === 'Alt')
+                    altHeld.value = true;
             });
             windowEvents.register('modifierReleased', 'keyup', (keyboardEvent: KeyboardEvent) => {
                 if (keyboardEvent.key === 'Control' || keyboardEvent.key === 'Meta') // "meta" is "cmd" for Macs
                     ctrlHeld.value = false;
+                if (keyboardEvent.key === 'Alt')
+                    altHeld.value = false;
             });
 
             // Set up event handlers, allowing other components to "steer" the canvas view
@@ -464,7 +492,7 @@ export default defineComponent({
             DEFAULT_BLOCK_HEIGHT,
 
             // Variables (and refs)
-            blockCanvas, blockScales, ctrlHeld,
+            blockCanvas, blockScales, ctrlHeld, altHeld,
 
             // zoomable.scale is only used when the user is dragging or resizing blocks. By forcing it to be "1" when the user isn't doing
             // one of these things, it gives us a HUGE performance optimization when the user is zooming in/out.
@@ -532,6 +560,7 @@ export default defineComponent({
             completeDraggableActions: (mouseEvent: MouseEvent) => {
                 store.dispatch('setDisablePointerEvents', false);
                 snapZones.value = [];
+                altHeld.value = false;
 
                 // -- Select blocks by bounding box --
                 if (selectionDraggable.isDragging.value) {

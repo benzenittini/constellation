@@ -16,7 +16,8 @@
                     ></eic-checkbox>
             </div>
 
-            <div class="title-col clickable" title="Edit the extra fields defined on this block."
+            <!-- TODO-ben: More formally remove "Fields" -->
+            <!-- <div class="title-col clickable" title="Edit the extra fields defined on this block."
                 v-on:click="editFields()">
                 <eic-svg-pencil width="18" height="18"></eic-svg-pencil>
                 <span>Extra Fields:</span>
@@ -25,7 +26,7 @@
             <div class="content-col">
                 <span v-if="fieldNames !== ''" class="field-display">{{ fieldNames }}</span>
                 <span v-else class="no-field-display">(none)</span>
-            </div>
+            </div> -->
         </div>
 
         <!-- Classifications -->

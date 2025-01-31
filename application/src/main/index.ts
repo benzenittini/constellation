@@ -9,7 +9,7 @@ import { loadConfigFile } from './ConfigDataPersistence';
 const createWindow = () => {
     const win = new BrowserWindow({
         width: 1280,
-        height: 1024,
+        height: process.env.NODE_ENV !== 'production' ? 1536 : 1024,
         icon: '/path/to/icon.png', // Only needed for linux packaging.
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
