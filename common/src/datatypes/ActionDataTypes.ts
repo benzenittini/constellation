@@ -50,8 +50,10 @@ export class ConstError extends Error {
     }
 
     static safeConstructor(error: Error | ConstError): ConstError {
-        return (error instanceof ConstError)
-            ? error
+        // Cannot do "instanceof" because (I think) "common" is built in a different module than "application",
+        // which results in different-but-identical "ConstError" classes.
+        return (error.constructor.name === 'ConstError')
+            ? error as ConstError
             : new ConstError(2, undefined,
                 ConstError.getLineId('ActionDataTypes', 'safeConstructor', 1),
                 'An unhandled error has occurred.',
