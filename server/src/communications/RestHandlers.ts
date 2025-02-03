@@ -43,7 +43,7 @@ export async function postUser(req: Request, res: Response) {
         // Return the token to the client
         res.json({ token: clientAuthToken });
     } catch(err) {
-        if (err instanceof ConstError) {
+        if (ConstError.isConstError(err)) {
             logger.error(err.message);
             res.json(err.getErrorResponse());
         } else {

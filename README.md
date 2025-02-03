@@ -57,7 +57,7 @@ npm run serve
 1. Run clean builds of all projects:
     ```bash
     # -- Clean up past builds --
-    rm -rf ./common/dist ./common/node_modules ./application/build ./application/node_modules ./server/dist ./server/node_modules
+    rm -rf ./common/dist ./common/node_modules ./application/build ./application/node_modules ./application/out ./server/dist ./server/node_modules
 
     # -- Build common --
     cd ./common
