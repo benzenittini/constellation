@@ -30,7 +30,7 @@ export class ConstError extends Error {
     constructor(clientCode: number, clientMessage: string | undefined, lineId: string, serverMessage: string, wrappedError: any | undefined = undefined) {
         let wrappedServerMessage = serverMessage;
         if (wrappedError) {
-            wrappedServerMessage += (wrappedError instanceof Error)
+            wrappedServerMessage += ('stack' in wrappedError)
                 ? `\nWrapped Error:\n${wrappedError.stack}\n--\n`
                 : `\nWrapped Error:\n${wrappedError}\n--\n`;
         }
@@ -49,9 +49,18 @@ export class ConstError extends Error {
         };
     }
 
+    static isConstError(err: unknown): err is ConstError {
+        return err != null && typeof err === 'object'
+            && 'clientCode' in err
+            && 'serverMessage' in err
+            && 'message' in err;
+    }
+
     static safeConstructor(error: Error | ConstError): ConstError {
-        return (error instanceof ConstError)
-            ? error
+        // Cannot do "instanceof" because (I think) "common" is built in a different module than "application",
+        // which results in different-but-identical "ConstError" classes.
+        return ConstError.isConstError(error)
+            ? error as ConstError
             : new ConstError(2, undefined,
                 ConstError.getLineId('ActionDataTypes', 'safeConstructor', 1),
                 'An unhandled error has occurred.',

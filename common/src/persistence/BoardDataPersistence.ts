@@ -8,7 +8,6 @@ import { Block, BlockContent, BlockIdAndPosition, verifyBlockContent } from '../
 import { ChangedFieldValue, ChangedPVName, ClassificationDefinition, FieldDefinition, PossibleValueDefinition, getCompatibleFieldTypes, getFieldDataType } from '../datatypes/FieldDataTypes';
 import * as T from '../datatypes/ActionDataTypes';
 import * as ArrayUtils from '../utilities/ArrayUtils';
-import * as ObjectUtils from '../utilities/ObjectUtils';
 import { verifyViewConfig } from '../datatypes/ViewDataTypes';
 import { ScaleUtils } from '../utilities';
 
