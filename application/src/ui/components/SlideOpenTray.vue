@@ -100,6 +100,7 @@ export default defineComponent({
         position: relative;
         vertical-align: bottom;
         z-index: 0;
+        margin-right: -1px;
         pointer-events: none;
 
         // Slide the preview text open when hovered
@@ -115,9 +116,11 @@ export default defineComponent({
             pointer-events: auto;
             min-width: $tab-size;
             height: $tab-size;
+            display: flex;
+            align-items: center;
 
             background: vars.$gray-very-dark;
-            padding: 8px;
+            padding-left: 8px;
             border: 1px solid vars.$gray3;
             border-right: none;
             border-radius: $border-radius 0 0 $border-radius;
@@ -135,8 +138,7 @@ export default defineComponent({
 
             .mw-sot-tab-preview {
                 display: inline-block;
-                padding: 5px 8px;
-                vertical-align: top;
+                padding: 0 8px;
                 color: vars.$gray4;
             }
 
