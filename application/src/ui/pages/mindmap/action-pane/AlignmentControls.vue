@@ -18,13 +18,13 @@
         <div class="icon-group">
             <!-- "Align in Row" (30w x 10h) (use the vertical "stack-blocks" svg, but rotate and flip it to make it look horizontal) -->
             <div id="ac-align-in-row" class="mw-icon" data-test="ac-align-in-row" v-on:click="alignInRow"
-                title="Line up all selected blocks horizontally, L-to-R. Hold ctrl for R-to-L.">
+                title="Line up all selected blocks horizontally, L-to-R. Hold ctrl/cmd for R-to-L.">
                 <eic-svg-stack-blocks width="11" height="33"></eic-svg-stack-blocks>
             </div>
 
             <!-- "Align in Column" (10w x 30h) -->
             <div id="ac-align-in-column" class="mw-icon" data-test="ac-align-in-column" v-on:click="alignInColumn"
-                title="Stack all selected blocks vertically, T-to-B. Hold ctrl for B-to-T.">
+                title="Stack all selected blocks vertically, T-to-B. Hold ctrl/cmd for B-to-T.">
                 <eic-svg-stack-blocks width="11" height="33"></eic-svg-stack-blocks>
             </div>
         </div>
@@ -87,7 +87,7 @@ export default defineComponent({
                 let scale = Math.max(...ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id])));
                 let blockGap = 10/scale;
 
-                const reversed = mouseEvent.ctrlKey;
+                const reversed = mouseEvent.ctrlKey || mouseEvent.metaKey;
 
                 // Center-align the stack starting from the left-most block (or right-most if reversed)
                 let startingBlock = selectedBlocks.value
@@ -141,7 +141,7 @@ export default defineComponent({
                 let scale = Math.max(...ArrayUtils.mode(selectedBlocks.value.map(e => blockScales.value[e.id])));
                 let blockGap = 10/scale;
 
-                const reversed = mouseEvent.ctrlKey;
+                const reversed = mouseEvent.ctrlKey || mouseEvent.metaKey;
 
                 // Center-align the stack starting from the top-most block (or bottom-most if reversed)
                 let startingBlock = selectedBlocks.value
