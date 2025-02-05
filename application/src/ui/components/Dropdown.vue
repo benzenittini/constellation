@@ -7,6 +7,7 @@
             v-on:blur="$emit('eic-blur')"
             v-on:focus="$emit('eic-focus')">
             <option v-if="mwPlaceholder" v-bind:value="mwPlaceholder" disabled>{{ mwPlaceholder }}</option>
+            <option v-if="mwClearable" class="mw-unset" v-bind:key="undefined" v-bind:value="null">(unset)</option>
             <option v-for="opt in ungroupedOptions"
                 v-bind:key="opt.value"
                 v-bind:value="opt.value"
@@ -35,6 +36,7 @@ export default defineComponent({
         mwDisabled: Boolean,
         mwMultiple: Boolean,
         mwPlaceholder: String,
+        mwClearable: Boolean,
     },
     setup(props, context) {
         let inputVal = computed({
@@ -118,6 +120,8 @@ export default defineComponent({
         &:focus { border-color: vars.$gray-very-light; }
         &.eic-invalid-value { border-color: vars.$red4 !important; }
         &.disabled { cursor: not-allowed; }
+
+        .mw-unset { color: vars.$gray4; }
     }
 }
 

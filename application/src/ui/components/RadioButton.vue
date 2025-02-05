@@ -1,7 +1,7 @@
 <template>
     <div class="eic-form-component mw-radiobutton">
         <label v-bind:class="{ disabled: mwDisabled }">
-            <input type="radio" v-bind:disabled="mwDisabled" v-bind:name="eicGroup" v-bind:value="eicRadioValue" v-model="inputVal" />
+            <input type="radio" v-bind:disabled="mwDisabled" v-bind:name="eicGroup" v-bind:value="eicRadioValue" v-model="inputVal" v-on:click="clearValue" />
             <div class="outer-circle"><div class="inner-circle"></div></div>
             <span class="text">{{ eicLabel }}</span>
         </label>
@@ -9,11 +9,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, PropType } from "vue";
 
 export default defineComponent({
     props: {
-        modelValue: String, // Must be "modelValue" for v-model to work
+        modelValue: { // Must be "modelValue" for v-model to work
+            // Can be a string or null. TypeScript doesn't like the correct syntax: [String, null]
+            type: null as unknown as PropType<String | null>
+        },
         eicGroup: String,
         eicLabel: String,
         eicRadioValue: String,
@@ -28,8 +31,15 @@ export default defineComponent({
             }
         });
 
+        function clearValue() {
+            if (props.eicRadioValue === inputVal.value) {
+                inputVal.value = null;
+            }
+        }
+
         return {
-            inputVal
+            inputVal,
+            clearValue
         }
     },
     methods: {

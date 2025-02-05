@@ -109,10 +109,10 @@ export default defineComponent({
 
         let groupedBlocks = computed(() => {
 
-            // pvName --> block[], and 'Uncategorized' is for all unset PVs
+            // pvName --> block[], and 'Unset' is for all unset PVs
             let columnLookups = displayedBlocks.value.reduce((groupings, block) => {
 
-                let pvName = block.fieldValues[kanbanConfig.value.groupingFieldId] || 'Uncategorized';
+                let pvName = block.fieldValues[kanbanConfig.value.groupingFieldId] || 'Unset';
                 if (!groupings[pvName]) {
                     groupings[pvName] = [];
                 }
@@ -193,7 +193,7 @@ export default defineComponent({
                 if (currentFieldValue !== newPVName) {
                     new SetFieldOnBlocksAction(
                         fieldId,
-                        { [blockId]: newPVName === 'Uncategorized' ? null : newPVName },
+                        { [blockId]: newPVName === 'Unset' ? null : newPVName },
                     ).submit();
                 }
             });

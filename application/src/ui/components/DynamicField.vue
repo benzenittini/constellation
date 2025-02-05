@@ -188,7 +188,8 @@ export default defineComponent({
                                 display: fieldOption.displayText,
                                 value: fieldOption.pvName
                             })),
-                            mwDisabled: props.mwDisabled
+                            mwDisabled: props.mwDisabled,
+                            mwClearable: true,
                         },
                         model: selectedItem?.pvName
                     });
