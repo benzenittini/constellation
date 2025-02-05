@@ -534,7 +534,8 @@ export default defineComponent({
                 blockDragDestination.deltaY = blockDraggable.deltaDrag.value.deltaY;
 
                 const currentBlock: Block = blocks.value[metadata.blockId];
-                let snapZoneBlocks = store.getters.getSiblings(metadata.blockId);
+                let snapZoneBlocks = [...store.getters.getSiblings(metadata.blockId)];
+                if (currentBlock.parentBlockId) snapZoneBlocks.unshift(currentBlock.parentBlockId);
                 // Non-selected blocks only ... unless we're moving a block that wasn't selected, in which case our entire selection will be cleared by this action so it won't matter.
                 if (currentBlock.isSelected) {
                     let selectedBlockIds = store.getters.selectedBlockIds;
