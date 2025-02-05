@@ -2,14 +2,14 @@
     <div class="mw-checkbox eic-form-component" v-bind:class="{ 'disabled': mwDisabled }">
         <label>
             <input type="checkbox" v-bind:disabled="mwDisabled" v-model="inputVal" v-on:click.stop />
-            <div class="outer-box"><div class="inner-box"></div></div>
+            <div class="outer-box"><div v-bind:class="{ 'inner-box': true, 'enable-fill': enableFill }"></div></div>
             <span class="text">{{ eicLabel }}</span>
         </label>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, onMounted, ref } from "vue";
 
 export default defineComponent({
     props: {
@@ -27,8 +27,12 @@ export default defineComponent({
             }
         });
 
+        let enableFill = ref(inputVal.value);
+        setTimeout(() => enableFill.value = true, 500);
+
         return {
-            inputVal
+            inputVal,
+            enableFill,
         }
     },
     methods: {
@@ -40,6 +44,7 @@ export default defineComponent({
 @use "../styles/variables" as vars;
 
 .mw-checkbox {
+
     // Hide the actual checkbox
     input[type="checkbox"] { display: none; }
 
@@ -57,6 +62,8 @@ export default defineComponent({
     .inner-box {
         width: 100%;
         height: 100%;
+        animation: 0.3s forwards spring-out;
+        &.enable-fill { background: vars.$gray-very-light; }
     }
     .text {
         margin-left: 8px;
@@ -66,9 +73,9 @@ export default defineComponent({
     }
 
     // Make things white when checked
-    label :checked + .outer-box            { border-color: vars.$gray-very-light; }
-    label :checked + .outer-box .inner-box { background: vars.$gray-very-light; }
     label :checked ~ .text                 { color: vars.$gray-very-light; }
+    label :checked + .outer-box            { border-color: vars.$gray-very-light; }
+    label :checked + .outer-box .inner-box { animation: 0.3s spring-in; }
 
     &.disabled * { cursor: not-allowed; }
 }

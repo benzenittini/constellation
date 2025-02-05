@@ -2,14 +2,14 @@
     <div class="eic-form-component mw-radiobutton">
         <label v-bind:class="{ disabled: mwDisabled }">
             <input type="radio" v-bind:disabled="mwDisabled" v-bind:name="eicGroup" v-bind:value="eicRadioValue" v-model="inputVal" v-on:click="clearValue" />
-            <div class="outer-circle"><div class="inner-circle"></div></div>
+            <div class="outer-circle"><div v-bind:class="{ 'inner-circle': true, 'enable-fill': enableFill }"></div></div>
             <span class="text">{{ eicLabel }}</span>
         </label>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType } from "vue";
+import { defineComponent, computed, PropType, ref } from "vue";
 
 export default defineComponent({
     props: {
@@ -37,9 +37,13 @@ export default defineComponent({
             }
         }
 
+        let enableFill = ref(inputVal.value === props.eicRadioValue);
+        setTimeout(() => enableFill.value = true, 500);
+
         return {
             inputVal,
-            clearValue
+            clearValue,
+            enableFill,
         }
     },
     methods: {
@@ -68,6 +72,8 @@ export default defineComponent({
         width: 0.6em;
         height: 0.6em;
         border-radius: 50px;
+        animation: 0.3s forwards spring-out;
+        &.enable-fill { background: vars.$gray-very-light; }
     }
     .text {
         margin-left: 8px;
@@ -77,15 +83,9 @@ export default defineComponent({
     }
 
     // Make things white when checked
-    label :checked + .outer-circle {
-        border-color: vars.$gray-very-light;
-    }
-    label :checked + .outer-circle .inner-circle {
-        background: vars.$gray-very-light;
-    }
-    label :checked ~ .text {
-        color: vars.$gray-very-light;
-    }
+    label :checked ~ .text                       { color: vars.$gray-very-light; }
+    label :checked + .outer-circle               { border-color: vars.$gray-very-light; }
+    label :checked + .outer-circle .inner-circle { animation: 0.3s spring-in; }
 }
 
 </style>

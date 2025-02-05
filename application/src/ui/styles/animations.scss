@@ -14,3 +14,15 @@
         0 0 0 30px rgba(vars.$gray8, 0);
     }
 }
+
+@keyframes spring-in {
+    0% { transform: scale(0); }
+    75% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+}
+
+@keyframes spring-out {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.5); }
+    100% { transform: scale(0); }
+}
