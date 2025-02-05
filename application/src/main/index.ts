@@ -16,6 +16,7 @@ const createWindow = () => {
         },
     });
     win.setMenu(null);
+    win.setBackgroundColor("hsl(248, 8%, 20%)");
 
     if (process.env.NODE_ENV !== 'production') {
         win.webContents.openDevTools();

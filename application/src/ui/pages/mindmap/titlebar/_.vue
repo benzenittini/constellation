@@ -16,7 +16,7 @@
                 <eic-svg-arrow-2 width="30" height="30"></eic-svg-arrow-2>
                 <span>Board Selection</span>
             </span>
-            <svg class="save-indicator" width="15" height="15">
+            <svg v-if="isLocal" class="save-indicator" width="15" height="15">
                 <title>{{ isSaved ? 'Saved!' : 'Saving...' }}</title>
                 <circle v-bind:class="{ saving: !isSaved, saved: isSaved }"
                     r="5" cx="7" cy="7" />
@@ -30,12 +30,15 @@ import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
 
 import { useStore } from "../../../store/store";
 import { useEmitter } from "../../../composables/Emitter";
+import { ws } from '../../../communications/Websocket';
 
 export default defineComponent({
     props: {},
     setup() {
         const store = useStore();
         const emitter = useEmitter();
+
+        let isLocal = !store.getters.isCurrentBoardRemote;
 
         let isSaved = ref(true);
         let activeViewConfig = computed(() => store.state.viewData.activeViewConfig);
@@ -50,6 +53,7 @@ export default defineComponent({
         });
 
         return {
+            isLocal,
             isSaved,
             activeViewConfig,
             backToProjects: () => {
