@@ -106,9 +106,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use '../../styles/variables' as vars;
+<style lang="css">
 
 .mw-app-relationship-textcontent {
     height: 100%;
@@ -119,7 +117,7 @@ export default defineComponent({
         background: transparent;
         border: none;
         resize: none;
-        color: vars.$gray-very-light;
+        color: var(--gray-very-light);
         text-align: center;
         margin: 0;
         padding: 0;
@@ -127,7 +125,7 @@ export default defineComponent({
     }
 }
 
-// This centers the displayed contents:
+/* This centers the displayed contents: */
 .mw-app-relationship-textcontent {
     position: relative;
     pre {

@@ -43,15 +43,12 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "sass:math";
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-lightswitch {
-    $switch-width: 45px;
+    --switch-width: 45px;
 
-    // Make all the text non-selectable
+    /* Make all the text non-selectable */
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -61,9 +58,9 @@ export default defineComponent({
 
     .mw-switch-container {
         display: inline-block;
-        border: 1px solid vars.$gray5;
+        border: 1px solid var(--gray5);
         height: 1.2em;
-        width: $switch-width;
+        width: var(--switch-width);
         padding: 2px;
         margin: 0 5px;
         border-radius: 7px;
@@ -71,27 +68,27 @@ export default defineComponent({
         cursor: pointer;
     }
     .mw-switch {
-        background: vars.$gray5;
+        background: var(--gray5);
         width: 50%;
         height: 100%;
         border-radius: 5px;
         transition: 0.4s;
     }
     span {
-        color: vars.$gray5;
+        color: var(--gray5);
         cursor: pointer;
     }
 
     .selected-option {
         &.text-label {
-            color: vars.$gray-very-light;
+            color: var(--gray-very-light);
         }
         &.mw-switch-container {
-            border-color: vars.$gray-very-light;
+            border-color: var(--gray-very-light);
         }
         .mw-switch  {
-            background-color: vars.$gray-very-light;
-            transform: translateX(math.div(($switch-width - 4), 2));
+            background-color: var(--gray-very-light);
+            transform: translateX(calc(calc(var(--switch-width) - 4) / 2));
         }
     }
 }

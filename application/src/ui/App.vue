@@ -32,10 +32,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-
-@use "./styles/variables" as vars;
-@use "./styles/mixins";
+<style lang="css">
 
 .mw-app {
     display: flex;
@@ -47,20 +44,15 @@ export default defineComponent({
             pointer-events: none;
         }
     }
-    .mw-vm-modal-group {
-        .mw-vm-main {
-            @include mixins.scrollbars;
-        }
-    }
 
     main {
         flex-grow: 1;
-        background: vars.$gray-dark;
+        background: var(--gray-dark);
         z-index: 0;
 
         display: flex;
-        align-items: stretch; // Children stretch to fill height of main
-        justify-content: center; // Children are horizontally centered inside main
+        align-items: stretch; /* Children stretch to fill height of main */
+        justify-content: center; /* Children are horizontally centered inside main */
     }
 }
 

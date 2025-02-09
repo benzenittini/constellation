@@ -33,22 +33,22 @@
   },
   "dependencies": {
     "@types/webpack-node-externals": "^3.0.4",
-    "uuid": "^9.0.1"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.16",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.12.12",
-    "@types/uuid": "^9.0.8",
-    "chai": "^4.4.1",
-    "mocha": "^10.4.0",
+    "@types/chai": "^4.3.20",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.17.17",
+    "@types/uuid": "^10.0.0",
+    "chai": "^4.5.0",
+    "mocha": "^10.8.2",
     "nyc": "^15.1.0",
-    "ts-loader": "^9.5.1",
+    "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-merge": "^5.10.0",
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-merge": "^6.0.1",
     "webpack-node-externals": "^3.0.0"
   },
   "nyc": {

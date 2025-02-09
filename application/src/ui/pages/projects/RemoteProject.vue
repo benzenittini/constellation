@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="mw-board-blocks">
-                <div class="mw-board-block" v-for="board in Object.values(projectData.boards)"
+                <div class="mw-board-block mw-lift-up" v-for="board in Object.values(projectData.boards)"
                     v-bind:key="board.boardId"
                     v-on:click="boardBeingEdited.boardId !== board.boardId && openBoard(remote.projectId!, board.boardId)">
                     <span v-if="boardBeingEdited.boardId !== board.boardId">{{ board.boardName }}</span>
@@ -160,18 +160,14 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-
-@use "../../styles/variables" as vars;
-@use "../../styles/mixins";
-@use "./styles";
+<style lang="css">
 
 .mw-remote-project {
     .mw-connection-error {
-        p { margin: 0 8px; color: vars.$red-error; }
+        p { margin: 0 8px; color: var(--red-error); }
     }
     .mw-project-version {
-        color: vars.$gray4;
+        color: var(--gray4);
     }
 
     .mw-board-blocks {
@@ -180,10 +176,9 @@ export default defineComponent({
         margin: 24px;
         gap: 20px;
         .mw-board-block {
-            @include mixins.lift-up(5px);
-            background: vars.$gray0;
-            border-radius: vars.$radius-medium;
-            border: 2px solid vars.$pink-medium;
+            background: var(--gray0);
+            border-radius: var(--radius-medium);
+            border: 2px solid var(--pink-medium);
             padding: 32px 48px;
             cursor: pointer;
             position: relative;
@@ -210,13 +205,13 @@ export default defineComponent({
             }
 
             input[type=text] {
-                background: vars.$gray1;
-                color: vars.$gray-very-light;
+                background: var(--gray1);
+                color: var(--gray-very-light);
                 border: none;
                 padding: 8px 12px;
-                border-radius: vars.$component-radius;
+                border-radius: var(--component-radius);
                 font-size: 16px;
-                &:focus { outline: 1px solid vars.$gray3; }
+                &:focus { outline: 1px solid var(--gray3); }
             }
         }
     }

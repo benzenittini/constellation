@@ -18,12 +18,11 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-app-wsconnectiondialog {
-    background: vars.$gray-very-dark;
-    border-radius: vars.$dialog-section-radius;
+    background: var(--gray-very-dark);
+    border-radius: var(--dialog-section-radius);
     display: flex;
     align-items: center;
     justify-content: center;

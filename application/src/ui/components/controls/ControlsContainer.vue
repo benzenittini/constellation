@@ -37,8 +37,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../styles/variables" as vars;
+<style lang="css">
 
 #mw-controlscontainer {
     .mwe-controls-title {
@@ -49,14 +48,69 @@ export default defineComponent({
         left: 10px;
         font-size: 16px;
         font-weight: bold;
-        color: vars.$gray4;
+        color: var(--gray4);
     }
 
     .mwe-support-note {
         text-align: center;
-        color: vars.$gray4;
+        color: var(--gray4);
         margin: 0 0 20px 0;
     }
+
+    h2 {
+        text-align: center;
+        margin: 0 5px 10px 5px;
+    }
+
+    .mw-controls-row {
+        margin: 50px auto;
+        width: 100%;
+
+        .mw-controls-horiz-flex {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            gap: 50px;
+        }
+
+        .mw-controls-inner-flex {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            gap: 30px;
+        }
+    }
+
+    figure {
+        text-align: center;
+        margin: 0;
+        vertical-align: top;
+        .fig-icon {
+            min-height: 70px;
+            &>* {
+                padding: 5px;
+                vertical-align: middle;
+            }
+            .or-text {
+                line-height: 70px;
+                color: var(--gray3);
+            }
+            .x2-text {
+                vertical-align: bottom;
+                color: var(--gray3);
+                font-weight: bold;
+                font-size: 1.5em;
+            }
+        }
+        figcaption {
+            margin-top: 5px;
+            max-width: 200px;
+        }
+        .long-caption {
+            max-width: 300px;
+        }
+    }
+
 }
 
 </style>

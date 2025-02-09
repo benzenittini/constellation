@@ -51,20 +51,19 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-radiobutton {
     label.disabled { cursor: not-allowed; }
 
-    // Hide the actual radiobutton
+    /* Hide the actual radiobutton */
     input[type="radio"] { display: none; }
 
-    // General styling of the pieces
+    /* General styling of the pieces */
     .outer-circle {
         display: inline-flex;
         margin-bottom: 5px;
-        border: 2px solid vars.$gray4;
+        border: 2px solid var(--gray4);
         border-radius: 50px;
         padding: 3px;
     }
@@ -73,18 +72,18 @@ export default defineComponent({
         height: 0.6em;
         border-radius: 50px;
         animation: 0.3s forwards spring-out;
-        &.enable-fill { background: vars.$gray-very-light; }
+        &.enable-fill { background: var(--gray-very-light); }
     }
     .text {
         margin-left: 8px;
-        color: vars.$gray4;
+        color: var(--gray4);
         font-size: 1.0rem;
         vertical-align: middle;
     }
 
-    // Make things white when checked
-    label :checked ~ .text                       { color: vars.$gray-very-light; }
-    label :checked + .outer-circle               { border-color: vars.$gray-very-light; }
+    /* Make things white when checked */
+    label :checked ~ .text                       { color: var(--gray-very-light); }
+    label :checked + .outer-circle               { border-color: var(--gray-very-light); }
     label :checked + .outer-circle .inner-circle { animation: 0.3s spring-in; }
 }
 

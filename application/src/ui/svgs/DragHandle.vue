@@ -23,16 +23,15 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-svg-draghandle {
     transition: opacity 0.2s;
     cursor: move;
     vertical-align: middle;
 
-    stroke: vars.$gray3;
-    fill: vars.$gray3;
+    stroke: var(--gray3);
+    fill: var(--gray3);
 }
 
 </style>

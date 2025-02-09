@@ -40,19 +40,18 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-checkbox {
 
-    // Hide the actual checkbox
+    /* Hide the actual checkbox */
     input[type="checkbox"] { display: none; }
 
-    // General styling of the pieces
+    /* General styling of the pieces */
     .outer-box {
         margin-bottom: 5px;
         display: inline-flex;
-        border: 2px solid vars.$gray4;
+        border: 2px solid var(--gray4);
         border-radius: 4px;
         padding: 3px;
         position: relative;
@@ -63,18 +62,18 @@ export default defineComponent({
         width: 100%;
         height: 100%;
         animation: 0.3s forwards spring-out;
-        &.enable-fill { background: vars.$gray-very-light; }
+        &.enable-fill { background: var(--gray-very-light); }
     }
     .text {
         margin-left: 8px;
-        color: vars.$gray4;
+        color: var(--gray4);
         font-size: 1.0rem;
         vertical-align: middle;
     }
 
-    // Make things white when checked
-    label :checked ~ .text                 { color: vars.$gray-very-light; }
-    label :checked + .outer-box            { border-color: vars.$gray-very-light; }
+    /* Make things white when checked */
+    label :checked ~ .text                 { color: var(--gray-very-light); }
+    label :checked + .outer-box            { border-color: var(--gray-very-light); }
     label :checked + .outer-box .inner-box { animation: 0.3s spring-in; }
 
     &.disabled * { cursor: not-allowed; }

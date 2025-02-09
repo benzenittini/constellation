@@ -40,37 +40,34 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "sass:math";
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-infodisplay {
     position: absolute; 
     z-index: 10;
 
-    $circle-size: 25px;
+    --circle-size: 25px;
     .the-i {
         position: absolute;
         z-index: 10;
 
-        color: vars.$cyan;
+        color: var(--cyan);
         font-weight: bold;
         font-size: 1.2em;
         font-family: "DejaVu Serif";
         text-align: center;
 
-        background: vars.$gray-very-dark;
-        border: 2px solid vars.$cyan;
-        border-radius: math.div($circle-size, 2);
-        height: $circle-size;
-        width: $circle-size;
+        background: var(--gray-very-dark);
+        border: 2px solid var(--cyan);
+        border-radius: calc(var(--circle-size) / 2);
+        height: var(--circle-size);
+        width: var(--circle-size);
 
         cursor: default;
     }
 
     .expansion {
-        // Makes the single-line expansion appear centered better around the "i"
+        /* Makes the single-line expansion appear centered better around the "i" */
         transform: translate(-2px, -2px);
 
         z-index: 9;
@@ -79,13 +76,13 @@ export default defineComponent({
         position: relative;
 
         div {
-            color: vars.$gray-very-dark;
+            color: var(--gray-very-dark);
             font-size: 1.2em;
 
-            border-radius: math.div($circle-size, 2);
-            background: vars.$cyan;
+            border-radius: calc(var(--circle-size) / 2);
+            background: var(--cyan);
             padding: 5px 10px;
-            padding-left: $circle-size + 5px;
+            padding-left: calc(var(--circle-size) + 5px);
         }
     }
     .show-expansion {

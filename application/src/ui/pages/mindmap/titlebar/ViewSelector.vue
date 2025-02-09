@@ -77,8 +77,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-@use "../../../styles/variables" as vars;
+<style lang="css">
 
 .mw-app-viewselector {
     display: inline-block;
@@ -87,9 +86,9 @@ export default defineComponent({
     
     .mwe-available-view-list {
         position: absolute;
-        background: vars.$gray-very-dark;
+        background: var(--gray-very-dark);
         border-radius: 6px;
-        box-shadow: 4px 4px 4px vars.$gray-very-dark;
+        box-shadow: 4px 4px 4px var(--gray-very-dark);
 
         .mwe-view-list-item {
             padding: 15px;
@@ -98,18 +97,18 @@ export default defineComponent({
             border-bottom: 1px solid transparent;
 
             &:hover {
-                background: vars.$gray-dark;
-                border-color: vars.$gray4;
+                background: var(--gray-dark);
+                border-color: var(--gray4);
             }
         }
         
         .mwe-create-new-view {
             padding: 20px;
-            color: vars.$gray4;
+            color: var(--gray4);
             text-align: center;
             cursor: pointer;
             &:hover {
-                color: vars.$gray-very-light;
+                color: var(--gray-very-light);
             }
         }
     }

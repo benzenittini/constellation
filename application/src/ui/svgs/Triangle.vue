@@ -15,11 +15,10 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-svg-triangle {
-    fill: vars.$gray3;
+    fill: var(--gray3);
 }
 
 </style>

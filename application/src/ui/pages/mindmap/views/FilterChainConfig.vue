@@ -251,31 +251,31 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../styles/variables" as vars;
-@use "../viewstyles";
+<style lang="css">
+
+@import url("../viewstyles.css");
 
 .mw-app-filterconfig {
     max-height: 400px;
     overflow: auto;
 
-    border: 1px solid vars.$gray3;
+    border: 1px solid var(--gray3);
     border-radius: 6px;
-    background: vars.$gray-dark;
+    background: var(--gray-dark);
 
     .mwe-filter {
         padding: 10px 10px;
         position: relative;
 
         &.mwe-show-dashed-line {
-            border-top: 1px dashed vars.$gray3;
+            border-top: 1px dashed var(--gray3);
         }
 
-        color: vars.$gray-very-light;
+        color: var(--gray-very-light);
 
         p { margin: 0; }
 
-        // -- Flex Config --
+        /* -- Flex Config -- */
         display: flex;
         gap: 10px;
         align-items: center;
@@ -285,14 +285,14 @@ export default defineComponent({
         .mwe-filter-type-dropdown { max-width: 250px; }
 
         .mw-svg-deletionx {
-            opacity: 0; // Gets changed when filter is hovered
+            opacity: 0; /* Gets changed when filter is hovered */
             transition: opacity 0.2s;
         }
 
         transition: border-color 0.2s, background-color 0.2s;
 
         &.mwm-being-deleted.mwm-existing {
-            background: rgba(vars.$red-error, 0.2);
+            background: color-mix(in hsl, var(--red-error) 20%, transparent);
         }
     }
 }

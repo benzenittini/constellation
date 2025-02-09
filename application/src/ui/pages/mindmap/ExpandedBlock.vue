@@ -189,23 +189,21 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use '../../styles/variables' as vars;
-@use 'expanded-block';
+<style lang="css">
 
 .mw-app-relationship-expandedblock {
     width: 600px;
 
-    // Need to re-enable text selection. The canvas disables it for all children by default.
+    /* Need to re-enable text selection. The canvas disables it for all children by default. */
     user-select: text;
     -moz-user-select: text;
     -webkit-user-select: text;
 
     .add-classifications-fields {
         font-size: 16px;
-        color: vars.$gray4;
+        color: var(--gray4);
 
-        // Gridbox Setup
+        /* Gridbox Setup */
         display: grid;
         grid-template-columns: auto 1fr;
         row-gap: 0.5em;
@@ -224,20 +222,20 @@ export default defineComponent({
         &>.title-col.clickable {
             cursor: pointer;
             &:hover {
-                color: vars.$gray-very-light;
-                .mw-svg-pencil { stroke: vars.$gray-very-light; }
+                color: var(--gray-very-light);
+                .mw-svg-pencil { stroke: var(--gray-very-light); }
             }
         }
 
-        .field-display    { color: vars.$gray-very-light; margin-right: 15px; }
-        .no-field-display { color: vars.$gray4; }
+        .field-display    { color: var(--gray-very-light); margin-right: 15px; }
+        .no-field-display { color: var(--gray4); }
     }
 
     .mw-classification-flex {
         display: flex;
 
         &>div:first-child {
-            color: vars.$gray4;
+            color: var(--gray4);
 
             flex-grow: 0;
             flex-shrink: 0;
@@ -246,7 +244,7 @@ export default defineComponent({
             margin-left: -20px;
             font-size: 1.0rem;
 
-            // Rotates and centers the classification name
+            /* Rotates and centers the classification name */
             writing-mode: vertical-rl;
             text-align: center;
         }
@@ -255,8 +253,8 @@ export default defineComponent({
             flex-shrink: 1;
             min-width: 0;
 
-            border-left: 1px dashed vars.$gray4;
-            border-radius: vars.$radius-large;
+            border-left: 1px dashed var(--gray4);
+            border-radius: var(--radius-large);
             padding-left: 20px;
         }
     }
@@ -270,18 +268,18 @@ export default defineComponent({
 
         .field-name-col {
             vertical-align: top;
-            color: vars.$gray4;
+            color: var(--gray4);
             font-size: 18px;
         }
         .mw-markdowneditor {
             .title {
-                color: vars.$gray4;
+                color: var(--gray4);
                 font-size: 18px;
             }
         }
     }
 
-    .mw-no-facs-to-display { color: vars.$gray4; }
+    .mw-no-facs-to-display { color: var(--gray4); }
 
 }
 </style>

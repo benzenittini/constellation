@@ -13,13 +13,10 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-
-@use "../styles/variables" as vars;
-
+<style lang="css">
 .mw-hr {
     height: 2px;
-    background-color: vars.$gray-dark;
-    border-radius: vars.$radius-small;
+    background-color: var(--gray-dark);
+    border-radius: var(--radius-small);
 }
 </style>

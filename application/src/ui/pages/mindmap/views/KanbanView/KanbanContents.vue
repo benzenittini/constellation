@@ -1,14 +1,14 @@
 <template>
     <div class="mw-app-kanban-contents">
-        <div class="mw-app-kanban-board" v-bind:style="{ 'margin-right': selectedBlocks.length >= 1 ? actionPaneWidth : 0 }">
+        <div class="mw-app-kanban-board mw-unselectable" v-bind:style="{ 'margin-right': selectedBlocks.length >= 1 ? actionPaneWidth : 0 }">
             <div v-if="selectedButFilteredBlocks.length > 0"
                 class="mwe-selected-but-filtered"
                 v-on:click="mouseClick($event)">
                 <p>These blocks are selected, but no longer pass the view's filter. They'll disappear when deselected.</p>
-                <div class="mwe-filtered-block-section">
+                <div class="mwe-filtered-block-section mw-scrollbars">
                     <div v-for="block in selectedButFilteredBlocks" v-bind:key="'kanban-' + block.id"
-                        class="mwe-block"
-                        v-bind:class="{ 'mwm-selected': selectedBlockIds.includes(block.id) }"
+                        class="mwe-block mw-lift-up"
+                        v-bind:class="{ 'mw-block-is-selected': selectedBlockIds.includes(block.id) }"
                         v-bind:style="getBlockStyle(block)"
                         v-on:click="toggleSelection($event, block)"
                         v-on:dblclick="goToBlock(block.id)">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div ref="columnsRef"
-                class="mw-app-kanban-columns"
+                class="mw-app-kanban-columns mw-scrollbars"
                 v-on:mousedown.self="mouseDown($event)"
                 v-on:click.self="mouseClick($event)"
                 v-on:mousemove="mouseMove($event)"
@@ -35,15 +35,15 @@
                         v-on:mousedown.self="mouseDown($event)"
                         v-on:click.self="mouseClick($event)"
                     >{{ grouping.pvName }}</h2>
-                    <div class="mwe-kanban-column-blocks"
+                    <div class="mwe-kanban-column-blocks mw-scrollbars"
                         :ref="el => { if (el) dragAreas[i] = el }"
                         v-bind:mw-pv-name="grouping.pvName"
                         v-on:mousedown.self="mouseDown($event)"
                         v-on:click.self="mouseClick($event)"
                         >
                         <div v-for="block in grouping.blocks" v-bind:key="'kanban-' + block.id"
-                            class="mwe-block"
-                            v-bind:class="{ 'mwm-selected': selectedBlockIds.includes(block.id) }"
+                            class="mwe-block mw-lift-up"
+                            v-bind:class="{ 'mw-block-is-selected': selectedBlockIds.includes(block.id) }"
                             v-bind:mw-block-id="block.id"
                             v-bind:style="getBlockStyle(block)"
                             v-on:click="toggleSelection($event, block)"
@@ -319,21 +319,16 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="css">
 
-@use "sass:color";
-@use "../../../../styles/variables" as vars;
-@use "../../../../styles/mixins" as mixins;
-@use "../../viewstyles";
-
+@import url("../../viewstyles.css");
 
 .mw-app-kanban-contents {
-    background: vars.$gray1;
+    background: var(--gray1);
 
-    h2 { color: vars.$gray7; font-weight: bold; }
+    h2 { color: var(--gray7); font-weight: bold; }
 
     .mw-app-kanban-board {
-        @include mixins.unselectable;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -344,23 +339,22 @@ export default defineComponent({
         margin: 50px auto;
         text-align: center;
         padding: 50px 100px;
-        color: vars.$gray5;
-        background: vars.$gray2;
-        border: 1px solid vars.$gray-very-dark;
-        border-top: 2px solid vars.$pink-medium;
-        border-radius: vars.$radius-medium;
-        box-shadow: vars.$shadow-inset-down-medium;
+        color: var(--gray5);
+        background: var(--gray2);
+        border: 1px solid var(--gray-very-dark);
+        border-top: 2px solid var(--pink-medium);
+        border-radius: var(--radius-medium);
+        box-shadow: var(--shadow-inset-down-medium);
         height: fit-content;
     }
 
     .mw-app-kanban-columns {
-        flex-grow: 1; // vertical flex, to fill the screen.
+        flex-grow: 1; /* vertical flex, to fill the screen. */
 
         padding: 10px;
         display: flex;
         overflow-x: auto;
         overflow-y: hidden;
-        @include mixins.scrollbars;
     }
 
     .mwe-kanban-column {
@@ -373,28 +367,27 @@ export default defineComponent({
         gap: 20px;
 
         .mwe-kanban-column-header,.mwe-kanban-column-blocks {
-            background: vars.$gray2;
-            border-radius: vars.$radius-medium;
-            box-shadow: vars.$shadow-inset-down-medium;
-            border: 1px solid vars.$gray-very-dark;
+            background: var(--gray2);
+            border-radius: var(--radius-medium);
+            box-shadow: var(--shadow-inset-down-medium);
+            border: 1px solid var(--gray-very-dark);
         }
         .mwe-kanban-column-header {
             margin: 0;
             padding: 18px 0;
             text-align: center;
-            border-top: 2px solid vars.$pink-medium;
+            border-top: 2px solid var(--pink-medium);
             font-size: 20px;
         }
         .mwe-kanban-column-blocks {
             flex-grow: 1;
             overflow-y: auto;
-            @include mixins.scrollbars;
             border-radius: 10px 10px 0 0;
             padding: 10px;
         }
 
         .mwe-uncategorized-column {
-            color: vars.$gray5;
+            color: var(--gray5);
         }
     }
 }

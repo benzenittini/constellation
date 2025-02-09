@@ -9,7 +9,7 @@ export function initialize() {
 
 export function showError(err: ClientError, replacements?: string[]) {
     mwVueNotify.showNotification({
-        cssClasses: ['mw-notification-failure'],
+        cssClasses: ['mw-notification', 'failure'],
         dismissAfterMillis: err.dismissAfterMillis,
         data: { message: `${performReplacements(err.clientTemplate, replacements)} (Code ${err.code})` }
     });

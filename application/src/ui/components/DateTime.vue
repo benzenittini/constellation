@@ -60,42 +60,40 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-datetime {
 
     &.disabled * { cursor: not-allowed; }
 
-    // The bottom border - a separate "div" so it can have a cool effect when hovered.
+    /* The bottom border - a separate "div" so it can have a cool effect when hovered. */
     .eic-datetime-border {
         display: inline-block;
-        border-radius: vars.$component-radius + 1; // +1 to hide some ugly top corners
+        border-radius: calc(var(--component-radius) + 1px); /* +1 to hide some ugly top corners */
         padding-bottom: 1px;
-        transition: background-position 0.2s ease-out; // "ease-out" to help counteract the "roundedness" of the radial gradient
-        background: radial-gradient(51% 50% at bottom, vars.$gray-very-light 100%, vars.$gray4 100%) top;
+        transition: background-position 0.2s ease-out; /* "ease-out" to help counteract the "roundedness" of the radial gradient */
+        background: radial-gradient(51% 50% at bottom, var(--gray-very-light) 100%, var(--gray4) 100%) top;
         background-size: 100% 200%;
-        &.eic-invalid-value:focus-within { background: vars.$red-error !important; }
+        &.eic-invalid-value:focus-within { background: var(--red-error) !important; }
     }
     .eic-datetime-border:focus-within {
         background-position: bottom;
     }
 
-    // Standard input styling
+    /* Standard input styling */
     input {
-        background: vars.$gray1;
-        border-radius: vars.$component-radius;
+        background: var(--gray1);
+        border-radius: var(--component-radius);
         padding: 8px 12px;
-        color: vars.$gray-very-light;
+        color: var(--gray-very-light);
         font-size: 16px;
         border: none;
         outline: none;
         width: 100%;
     }
 
-    // Placeholder text formatting. Firefox needs "opacity:1" or it doesn't look right.
-    input::placeholder { color: vars.$gray-medium; opacity: 1; }
+    /* Placeholder text formatting. Firefox needs "opacity:1" or it doesn't look right. */
+    input::placeholder { color: var(--gray-medium); opacity: 1; }
 
 }
 

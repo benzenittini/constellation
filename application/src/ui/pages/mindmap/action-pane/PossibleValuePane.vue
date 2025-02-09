@@ -9,6 +9,7 @@
             v-on:scroll="updateScrollY"
             v-bind:class="{
                 'eic-pv-pane-content': true,
+                'mw-scrollbars': true,
                 'style-for-deletion': styleForFieldDeletion,
             }">
             <svg v-bind:viewBox="svgViewBox"
@@ -40,7 +41,7 @@
                         at the root of the document, resulting in the loss of their styles given by their classes. -->
                 <div class="mw-pv-list-item" style="display: flex">
                     <div class="pv-drag-handle" style="flex-basis: 25px; margin-left: 15px;"></div> <!-- Just a spacer -->
-                    <eic-textbox class="eic-add-pv-textbox" eic-placeholder="+ Add Value" v-on:eic-focus="addNewPossibleValue()"></eic-textbox>
+                    <eic-textbox class="eic-add-pv-textbox" v-bind:mw-phantom="true" eic-placeholder="+ Add Value" v-on:eic-focus="addNewPossibleValue()"></eic-textbox>
                 </div>
             </div>
 
@@ -353,6 +354,7 @@ export default defineComponent({
         // Wrapped inside "onMounted" because we need to provide dragula with DOM refs
         onMounted(() => {
             pvDrake = dragula([pvListWrapper.value as any], {
+                mirrorContainer: document.getElementById("mw-dragula-mount")!,
                 moves: function (el, container, handle) {
                     return dragulaComposition.wasHandleGrabbed(handle, 'pv-drag-handle');
                 }
@@ -413,48 +415,49 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="css">
 
-@use "sass:math";
-@use "../../../styles/variables" as vars;
-@use "../../../styles/mixins";
-@use "dialogs";
-
+.mw-dragula-mount,
 .mw-app-actionpane-possiblevaluepane {
-    $pane-height: 200px;
-    $arrow-size: 20px;
+    --pane-height: 200px;
+    --arrow-size: 20px;
 
     position: relative;
 
-    // Slide open
+    /* This is to make this section go all the way to the left/right edges. */
+    margin-left: -(var(--deletion-border-thickness));
+    margin-right: -(var(--deletion-border-thickness));
+
+    /* Slide open */
     overflow: hidden;
-    height: $pane-height;
+    height: var(--pane-height);
     &.pv-slide-open-enter-active,&.pv-slide-open-leave-active { transition: height 0.4s; }
     &.pv-slide-open-enter-from,&.pv-slide-open-leave-to       { height: 0; }
 
     .eic-pv-pane-content {
-        $pvpanecontent-horiz-padding: 20px;
-        $pvpanecontent-vert-padding: 10px;
+        --pvpanecontent-horiz-padding: 20px;
+        --pvpanecontent-vert-padding: 10px;
 
-        padding: $pvpanecontent-vert-padding $pvpanecontent-horiz-padding;
-        height: $pane-height - $arrow-size;
+        padding: var(--pvpanecontent-vert-padding) var(--pvpanecontent-horiz-padding);
+        height: calc(var(--pane-height) - var(--arrow-size));
         position: relative;
-        @include mixins.scrollbars;
         overflow-y: auto;
 
-        background: vars.$gray-dark;
-        border-top: 1px solid vars.$gray3;
-        border-bottom: 1px solid vars.$gray3;
+        background: var(--gray-dark);
+        border-top: 1px solid var(--gray3);
+        border-bottom: 1px solid var(--gray3);
 
-        // To make this pane not show up on top of the deletion border, we need to
-        // set the left/right edges of this border to match either this pane's background
-        // (to blend in), or the deletion border (...also to blend in).
-        border-left: dialogs.$deletion-border-thickness solid vars.$gray-dark;
-        border-right: dialogs.$deletion-border-thickness solid vars.$gray-dark;
+        /*
+         * To make this pane not show up on top of the deletion border, we need to
+         * set the left/right edges of this border to match either this pane's background
+         * (to blend in), or the deletion border (...also to blend in).
+         */
+        border-left: var(--deletion-border-thickness) solid var(--gray-dark);
+        border-right: var(--deletion-border-thickness) solid var(--gray-dark);
         &.style-for-deletion {
             transition: all 0.2s;
-            border-left: dialogs.$deletion-border-thickness solid vars.$red-error;
-            border-right: dialogs.$deletion-border-thickness solid vars.$red-error;
+            border-left: var(--deletion-border-thickness) solid var(--red-error);
+            border-right: var(--deletion-border-thickness) solid var(--red-error);
         }
 
         .eic-pv-edit-list {
@@ -467,7 +470,6 @@ export default defineComponent({
                 margin-left: 5px;
                 padding: 5px;
             }
-            .eic-add-pv-textbox { @include mixins.phantom-textbox; }
         }
         .eic-pv-style-editor {
             display: inline-block;
@@ -478,40 +480,36 @@ export default defineComponent({
             .eic-pv-style-editor-wrapper { display: inline-block; width: 95%; }
             .eic-delete-col              { display: inline-block; width: 5%;  }
 
-            .mw-svg-deletionx>line       { stroke: vars.$gray4; }
-            .mw-svg-deletionx:hover>line { stroke: vars.$gray-dark; }
+            .mw-svg-deletionx>line       { stroke: var(--gray4); }
+            .mw-svg-deletionx:hover>line { stroke: var(--gray-dark); }
         }
 
         &>svg {
             position: absolute;
-            margin: (-$pvpanecontent-vert-padding) (-$pvpanecontent-horiz-padding);
+            margin: calc(-1 * var(--pvpanecontent-vert-padding)) calc(-1 * var(--pvpanecontent-horiz-padding));
             width: 100%;
             pointer-events: none;
 
             path {
-                fill: vars.$gray-dark;
-                stroke: vars.$gray-very-dark;
-                filter: drop-shadow(0px 6px 4px vars.$gray-very-dark);
+                fill: var(--gray-dark);
+                stroke: var(--gray-very-dark);
+                filter: drop-shadow(0px 6px 4px var(--gray-very-dark));
             }
         }
     }
 
-    // This is to make this section go all the way to the left/right edges.
-    margin-left: -(dialogs.$deletion-border-thickness);
-    margin-right: -(dialogs.$deletion-border-thickness);
-
     .eic-pointer-up-bounds {
         overflow: hidden;
         margin-bottom: -1px;
-        height: $arrow-size;
+        height: var(--arrow-size);
         width: 100%;
         .eic-pointer-up {
-            background: vars.$gray-dark;
-            border-top: 1px solid vars.$gray3;
-            border-right: 1px solid vars.$gray3;
-            width: $arrow-size;
-            height: $arrow-size;
-            transform: translate(550px, math.div($arrow-size, 2)) rotate(-45deg);
+            background: var(--gray-dark);
+            border-top: 1px solid var(--gray3);
+            border-right: 1px solid var(--gray3);
+            width: var(--arrow-size);
+            height: var(--arrow-size);
+            transform: translate(550px, calc(var(--arrow-size) / 2)) rotate(-45deg);
             position: relative;
             z-index: 1;
         }

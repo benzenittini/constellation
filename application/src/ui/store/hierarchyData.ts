@@ -124,7 +124,7 @@ const hierarchyDataActions: ActionTree<HierarchyDataState, RootState> & Hierarch
                 isCircular = true;
                 if (getters.inDemoMode) {
                     useVueNotify().showNotification({
-                        cssClasses: ['mw-notification-warning'],
+                        cssClasses: ['mw-notification', 'warning'],
                         dismissAfterMillis: 4000,
                         data: { message: "Circular hierarchies are not allowed." }
                     });

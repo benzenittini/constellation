@@ -9,7 +9,7 @@ export function anyAreBlank(strs: (string | undefined)[] ) {
 }
 
 export function isString(str: any) {
-    return (typeof str === 'string' || str instanceof String);
+    return (typeof str === 'string');
 }
 
 

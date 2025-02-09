@@ -70,7 +70,7 @@ class Websocket {
                     isOutdated = true;
                     this.closeConnectionDialog();
                     this.outdatedClientNotifId = useVueNotify().showNotification({
-                        cssClasses: ['mw-notification-failure'],
+                        cssClasses: ['mw-notification', 'failure'],
                         componentName: 'mw-vn-message-with-list',
                         data: {
                             message: `Version mismatch between client and server. Please synchronize the major versions to connect to this server.`,
@@ -169,7 +169,7 @@ function registerListeners(socket: Socket) {
 
         // Show notification
         useVueNotify().showNotification({
-            cssClasses: ['mw-notification-failure'],
+            cssClasses: ['mw-notification', 'failure'],
             dismissAfterMillis: 0,
             data: { message: "Board has been deleted by another user.", },
         });

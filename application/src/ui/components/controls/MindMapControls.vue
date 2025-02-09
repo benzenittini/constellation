@@ -116,10 +116,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "../../styles/variables" as vars;
-@use "controls";
+<style lang="css">
 
 #mw-mindmapcontrols {
     padding: 0 20px;

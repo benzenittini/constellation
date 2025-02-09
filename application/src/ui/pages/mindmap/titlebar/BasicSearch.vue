@@ -116,8 +116,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../styles/variables" as vars;
+<style lang="css">
 
 .mw-app-search-basicsearch {
     height: 100%;
@@ -129,7 +128,7 @@ export default defineComponent({
         align-items: center;
         cursor: text;
         .mwe-search-placeholder {
-            color: vars.$gray3;
+            color: var(--gray3);
             padding: 0 5px;
         }
     }
@@ -144,14 +143,14 @@ export default defineComponent({
             border: none;
             background: transparent;
             outline: none;
-            color: vars.$gray-very-light;
+            color: var(--gray-very-light);
             font-weight: bold;
         }
         .mw-svg-magnifyingglass {
-            stroke: vars.$gray-very-light;
+            stroke: var(--gray-very-light);
         }
 
-        .mwe-is-selected { color: vars.$gray-very-light; }
+        .mwe-is-selected { color: var(--gray-very-light); }
     }
 }
 </style>

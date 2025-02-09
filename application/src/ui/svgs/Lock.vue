@@ -19,14 +19,13 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-svg-lock {
-    stroke: vars.$gray3;
+    stroke: var(--gray3);
 
     &.active {
-        stroke: vars.$gray-very-light;
+        stroke: var(--gray-very-light);
     }
 }
 

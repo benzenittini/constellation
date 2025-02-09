@@ -7,13 +7,14 @@
         </div>
         <div class="content">
             <textarea ref="textareaRef"
+                class="mw-scrollbars"
                 placeholder="(This supports Markdown &#x1F389;)"
                 v-bind:rows="eicVisibleTextareaRows"
                 v-show="isEditMode"
                 v-model="inputVal"
                 v-on:blur="$emit('eic-blur'); $emit('eic-val-set', ($event.target as HTMLInputElement).value);"></textarea>
             <div v-show="!isEditMode && displayHtml.length === 0" class="mwe-formatted-content mwm-no-content">(no value)</div>
-            <div v-show="!isEditMode && displayHtml.length > 0"   class="mwe-formatted-content" v-html="displayHtml"></div>
+            <div v-show="!isEditMode && displayHtml.length > 0"   class="mwe-formatted-content mw-scrollbars" v-html="displayHtml"></div>
         </div>
     </div>
 </template>
@@ -87,14 +88,12 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
-@use "../styles/mixins";
+<style lang="css">
 
-@use "highlight.js/scss/atom-one-dark";
+@import url("highlight.js/styles/atom-one-dark.min.css");
 
 .mw-markdowneditor {
-    color: vars.$gray-very-light;
+    color: var(--gray-very-light);
 
     h1,h2,h3,h4,h5,h6,p,li,a { text-align: left !important; }
 
@@ -106,54 +105,53 @@ export default defineComponent({
 
     .tab {
         position: relative;
-        background: vars.$gray0;
-        border-radius: vars.$component-radius vars.$component-radius 0 0;
+        background: var(--gray0);
+        border-radius: var(--component-radius) var(--component-radius) 0 0;
         text-align: center;
         min-width: 100px;
         padding: 8px 0;
         display: inline-block;
         cursor: pointer;
-        color: vars.$gray4;
+        color: var(--gray4);
         z-index: 1;
 
-        $border-width: 2px;
-        border: $border-width solid vars.$gray1;
+        --border-width: 2px;
+        border: var(--border-width) solid var(--gray1);
 
-        transform: translateY($border-width);
+        transform: translateY(var(--border-width));
         &:not(:first-child) {
-            transform: translate(-6px, $border-width);
+            transform: translate(-6px, var(--border-width));
         }
 
         &.selected {
             z-index: 2;
-            color: vars.$gray-very-light;
-            background: vars.$gray1;
+            color: var(--gray-very-light);
+            background: var(--gray1);
             padding: 8px 0;
         }
     }
     &.mw-has-title .content {
-        border-radius: vars.$component-radius;
+        border-radius: var(--component-radius);
     }
     .content {
-        border-radius: 0 vars.$component-radius vars.$component-radius vars.$component-radius;
+        border-radius: 0 var(--component-radius) var(--component-radius) var(--component-radius);
         padding: 10px;
-        background: vars.$gray1;
+        background: var(--gray1);
 
-        a { color: vars.$pink-medium; }
-        a:hover { color: vars.$gray-very-light; }
+        a { color: var(--pink-medium); }
+        a:hover { color: var(--gray-very-light); }
 
         .mwe-formatted-content { overflow-x: auto; }
-        .mwm-no-content { color: vars.$gray4; }
+        .mwm-no-content { color: var(--gray4); }
 
         blockquote {
-            border-left: 4px solid vars.$gray3;
+            border-left: 4px solid var(--gray3);
             padding-inline-start: 10px;
             margin-inline-start: 20px;
         }
     }
 
     textarea {
-        @include mixins.scrollbars;
         font-family: 'Courier New', Courier, monospace;
         width: 100%;
         height: 100%;
@@ -161,19 +159,19 @@ export default defineComponent({
         border: none;
         outline: none;
         resize: none;
-        color: vars.$gray-very-light;
+        color: var(--gray-very-light);
     }
 
     pre {
-        @include mixins.scrollbars;
         padding: 10px;
-        background: vars.$gray-very-dark;
+        background: var(--gray-very-dark);
         overflow-x: auto;
         width: 100%;
+        /* Scrollbars are added to the inner "marked" pre tag inside mixins.css */
     }
 
     del {
-        color: vars.$gray4;
+        color: var(--gray4);
     }
 }
 </style>

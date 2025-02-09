@@ -33,8 +33,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-nextprevious {
     padding: 5px 35px;
@@ -44,8 +43,8 @@ export default defineComponent({
         cursor: pointer;
         margin-right: 10px;
 
-        color: vars.$gray4;
-        &:hover { color: vars.$gray-very-light; }
+        color: var(--gray4);
+        &:hover { color: var(--gray-very-light); }
     }
 }
 

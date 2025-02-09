@@ -85,7 +85,7 @@
                                         <line x1="50%" y1="0%" x2="50%" y2="50%"></line>  <!-- Vertical -->
                                         <line x1="50%" y1="50%" x2="90%" y2="50%"></line> <!-- Horizontal -->
                                     </svg>
-                                    <eic-textbox eic-placeholder="+ Add Field" v-on:eic-focus="addNewField(cid)"></eic-textbox>
+                                    <eic-textbox v-bind:mw-phantom="true" eic-placeholder="+ Add Field" v-on:eic-focus="addNewField(cid)"></eic-textbox>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                     <div class="eic-drag-col"></div> <!-- Just a spacer. -->
                     <div class="eic-table-cols">
                         <div class="eic-name-col">
-                            <eic-textbox eic-placeholder="+ Add Classification" v-on:eic-focus="addNewClassification()"></eic-textbox>
+                            <eic-textbox v-bind:mw-phantom="true" eic-placeholder="+ Add Classification" v-on:eic-focus="addNewClassification()"></eic-textbox>
                         </div>
                     </div>
                 </div>
@@ -227,6 +227,7 @@ export default defineComponent({
         onMounted(() => {
             // Classification drag-n-drop
             classificationDrake = dragula([classificationWrapper.value as any], {
+                mirrorContainer: document.getElementById("mw-dragula-mount")!,
                 moves: (el, container, handle) => {
                     let shouldMove = dragulaComposition.wasHandleGrabbed(handle, 'classification-drag-handle');
 
@@ -244,6 +245,7 @@ export default defineComponent({
 
             // Field drag-n-drop
             fieldDrake = dragula((fieldLists.value as any), {
+                mirrorContainer: document.getElementById("mw-dragula-mount")!,
                 moves: (el, container, handle) => {
                     let shouldMove = dragulaComposition.wasHandleGrabbed(handle, 'field-drag-handle');
 
@@ -307,27 +309,51 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../styles/variables" as vars;
-@use "../../../styles/mixins";
-@use "dialogs";
+<style lang="css">
 
+#mw-dragula-mount,
 .mw-app-actionpane-editclassificationsdialog {
+    --deletion-border-thickness: 1px;
+
     .eic-dialog-section {
-        & { margin-bottom: vars.$dialog-section-gap; }
+        background: var(--gray-very-dark);
+        border-radius: var(--dialog-section-radius);
+        padding: 10px 0px;
+        margin-bottom: var(--dialog-section-gap);
 
         &.eic-classification-section { padding: 0; }
         .eic-classification-section-content {
             padding: 10px 0;
-            border-radius: vars.$dialog-section-radius;
-            border: dialogs.$deletion-border-thickness solid transparent;
+            border-radius: var(--dialog-section-radius);
+            border: var(--deletion-border-thickness) solid transparent;
+        }
+
+        &.eic-info-section { color: var(--gray4); }
+
+        .highlight { color: var(--gray8); }
+
+        /* Row styles */
+        .eic-header-row {
+            h3 { margin: 0; padding: 0; border-bottom: 1px solid var(--gray4); }
+            color: var(--gray4);
+            text-align: left;
+            margin: 15px 0;
+        }
+        .eic-field-row {
+            padding: 5px 0;
+            border: var(--deletion-border-thickness) solid transparent; /* Gets turned red when deleting */
+            border-radius: 10px;
+        }
+        .eic-add-field-row {
+            padding: 5px 0;
+            border: var(--deletion-border-thickness) solid transparent; /* (We don't show deletion on this row ... but this makes the "tree" line up with the rows above. */
+            &>* {transition: opacity 0.4s;}
         }
     }
 
     .eic-add-classification-row {
         padding: 5px 0;
         &>* {transition: opacity 0.4s;}
-        .mw-textbox { @include mixins.phantom-textbox; }
     }
 
     .mw-delete-classification {
@@ -335,8 +361,57 @@ export default defineComponent({
         width: 30px;
         height: 30px;
         margin-left: 10px;
-        margin-right: -1px; // A negative margin stops it from popping down to the next line.
+        margin-right: -1px; /* A negative margin stops it from popping down to the next line. */
         transition: all 0.2s;
+    }
+
+    .eic-padded-row { padding: 0 20px; }
+
+    /* ============= */
+    /* Table Styling */
+    /* ------------- */
+
+    .deletion-highlight {
+        transition: all 0.2s;
+        border: var(--deletion-border-thickness) solid var(--red-error) !important;
+        background: color-mix(in hsl, var(--red-error) 20%, transparent) !important;
+    }
+    path.deletion-highlight {
+        stroke: var(--red-error) !important;
+        fill: color-mix(in hsl, var(--red-error) 20%, transparent) !important;
+    }
+
+
+    .eic-drag-col   { display: inline-block; width: 2.5%;  }
+    .eic-table-cols { display: inline-block; width: 97.5%; } /* Comprised of the following 5 columns. */
+    /* The below cols should add up to 100% */
+    .eic-name-col    { width: 30%; }
+    .eic-type-col    { width: 25%; }
+    .eic-pv-col      { width: 40%; }
+    .eic-delete-col  { width: 5%;  }
+
+    .eic-cell {
+        display: inline-block;
+        padding: 0 5px;
+        vertical-align: middle;
+    }
+
+    /* Specific column styles */
+    .eic-pv-notapplicable { color: var(--gray4); padding-left: 10px; }
+    .eic-delete-col>*     { transition: all 0.2s; }
+
+    .eic-name-col.when-tree-is-displayed {
+        display: inline-flex;
+        .mw-tree {
+            flex: 40px 0 0;
+            margin-top: -10px;
+            margin-bottom: -10px;
+
+            line {
+                stroke: var(--gray2);
+                stroke-width: 5px;
+            }
+        }
     }
 }
 

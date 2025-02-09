@@ -194,8 +194,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use '../../../styles/variables' as vars;
+<style lang="css">
 
 .mw-app-relationship-alignmentcontrols {
     text-align: center;
@@ -203,8 +202,8 @@ export default defineComponent({
 
     .mw-icon {
         &:hover {
-            .arrow,.block { stroke: vars.$gray-very-light; }
-            .block { fill: vars.$gray-very-light; }
+            .arrow,.block { stroke: var(--gray-very-light); }
+            .block { fill: var(--gray-very-light); }
         }
         cursor: pointer;
     }
@@ -220,7 +219,7 @@ export default defineComponent({
         width: 40px;
     }
 
-    // Need to reverse/flip these two icons.
+    /* Need to reverse/flip these two icons. */
     #ac-equalize-heights>svg { transform: scaleX(-1) rotate(90deg); }
     #ac-align-in-row>svg     { transform: scaleX(-1) rotate(90deg); }
 

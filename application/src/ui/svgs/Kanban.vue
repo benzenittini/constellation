@@ -36,17 +36,16 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-svg-kanban {
-    .kanban-heading { stroke: none;        fill: vars.$gray3; }
-    .kanban-column  { stroke: vars.$gray3; fill: vars.$gray3; }
-    .kanban-block   { stroke: none;        fill: vars.$gray-very-dark; }
+    .kanban-heading { stroke: none;         fill: var(--gray3); }
+    .kanban-column  { stroke: var(--gray3); fill: var(--gray3); }
+    .kanban-block   { stroke: none;         fill: var(--gray-very-dark); }
 
     &.active {
-        .kanban-heading { stroke: none;        fill: vars.$gray7; }
-        .kanban-column  { stroke: vars.$gray7; fill: vars.$gray7; }
+        .kanban-heading { stroke: none;         fill: var(--gray7); }
+        .kanban-column  { stroke: var(--gray7); fill: var(--gray7); }
     }
 }
 

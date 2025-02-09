@@ -681,14 +681,13 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use '../../styles/variables' as vars;
+<style lang="css">
 
 .mw-app-relationship-canvas {
     width: 100%;
     height: 100%;
 
-    // Make all the text non-selectable (helpful because of all the dragging)
+    /* Make all the text non-selectable (helpful because of all the dragging) */
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -696,7 +695,7 @@ export default defineComponent({
     &.creating-bulk { cursor: copy; }
 
     .selection-box {
-        stroke: vars.$gray-very-light;
+        stroke: var(--gray-very-light);
         fill: rgba(255, 255, 255, 0.1);
         stroke-width: 2px;
     }
@@ -704,11 +703,11 @@ export default defineComponent({
     .canvas-welcome-text {
         text-anchor: middle;
         font-size: 1.7em;
-        fill: vars.$gray3;
+        fill: var(--gray3);
     }
 
     .mwe-snap-zone {
-        fill: vars.$gray1;
+        fill: var(--gray1);
     }
 }
 

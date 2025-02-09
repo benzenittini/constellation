@@ -61,20 +61,19 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use '../../styles/variables' as vars;
+<style lang="css">
 
 .mw-app-relationship-blocktray {
     .block-tray-background {
-        fill: vars.$gray-very-dark;
+        fill: var(--gray-very-dark);
     }
 
     .mw-svg-magnifyingglass.show-active {
-        stroke: vars.$pink-medium;
+        stroke: var(--pink-medium);
     }
 
     .mw-icon {
-        &:hover:not(.show-active) { stroke: vars.$gray-very-light; }
+        &:hover:not(.show-active) { stroke: var(--gray-very-light); }
         cursor: pointer;
     }
     .mw-magnifying-wrapper { transform: translate(10px, 10px); }

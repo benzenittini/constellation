@@ -20,13 +20,12 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-svg-stackblocks {
     fill: none;
 
-    .block { fill: vars.$gray3; }
+    .block { fill: var(--gray3); }
 }
 
 </style>

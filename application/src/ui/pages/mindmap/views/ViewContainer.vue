@@ -200,15 +200,15 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../styles/variables" as vars;
-@use "../viewstyles";
+<style lang="css">
+
+@import url("../viewstyles.css");
 
 .mw-app-viewcontainer {
     position: absolute;
     height: 100%;
     width: 100%;
-    overflow: hidden; // Hide the config section when the view is opening/closing.
+    overflow: hidden; /* Hide the config section when the view is opening/closing. */
     z-index: 5;
 
     transition: transform 0.4s;
@@ -221,18 +221,18 @@ export default defineComponent({
     }
 
     .mwe-view-config-wrapper {
-        box-shadow: 4px 4px 4px vars.$gray-very-dark;
+        box-shadow: 4px 4px 4px var(--gray-very-dark);
         position: absolute;
         width: 100%;
         padding-top: 2px;
-        background: vars.$pink-purp-gradient;
+        background: var(--pink-purp-gradient);
 
-        // Opening/closing the config section
+        /* Opening/closing the config section */
         transition: transform 0.4s;
         &.is-visible { transform: translateY(-100%); }
 
         .mwe-view-config-section {
-            background: vars.$gray-very-dark;
+            background: var(--gray-very-dark);
 
             .mwe-config-tabs {
                 position: absolute;
@@ -241,14 +241,14 @@ export default defineComponent({
 
                 .mwe-config-tab {
                     display: inline-block;
-                    background: vars.$gray-very-dark;
+                    background: var(--gray-very-dark);
                     padding: 10px 20px;
                     &:not(:first-child) {
-                        border-left: 1px solid vars.$gray3;
+                        border-left: 1px solid var(--gray3);
                     }
                     cursor: pointer;
                     &:hover {
-                        background-color: vars.$gray-dark;
+                        background-color: var(--gray-dark);
                     }
 
                     svg {
@@ -265,7 +265,7 @@ export default defineComponent({
             .mwe-view-config {
                 margin: 0 auto;
                 padding: 20px;
-                background: vars.$gray-very-dark;
+                background: var(--gray-very-dark);
                 max-width: 1000px;
 
                 .mw-textbox { display: inline-block; }
@@ -282,13 +282,12 @@ export default defineComponent({
                 }
             }
 
-            $save-border-radius: 6px;
             .mwe-view-save-button-wrapper {
-                background: vars.$pink-purp-gradient;
+                background: var(--pink-purp-gradient);
                 padding-top: 1px;
 
                 .mwe-view-save-buttons {
-                    background: vars.$gray-very-dark;
+                    background: var(--gray-very-dark);
                     padding: 10px;
                     text-align: right;
 

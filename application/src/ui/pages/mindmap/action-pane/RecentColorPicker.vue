@@ -34,19 +34,17 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "../../../styles/variables" as vars;
+<style lang="css">
 
 .mw-app-actionpane-recentcolorpicker {
     .mw-dialog-section {
-        background: vars.$gray-very-dark;
-        border-radius: vars.$dialog-section-radius;
+        background: var(--gray-very-dark);
+        border-radius: var(--dialog-section-radius);
         padding: 10px 10px;
-        &:not(:last-child) { margin-bottom: vars.$dialog-section-gap; }
+        &:not(:last-child) { margin-bottom: var(--dialog-section-gap); }
 
         h3 { margin: 0; padding: 0; }
-        color: vars.$gray4;
+        color: var(--gray4);
 
         .color-swatch {
             cursor: pointer;
@@ -54,7 +52,7 @@ export default defineComponent({
             width: 30px;
             height: 30px;
             margin: 10px 5px 0 5px;
-            border: 1px solid vars.$gray3;
+            border: 1px solid var(--gray3);
         }
     }
 }

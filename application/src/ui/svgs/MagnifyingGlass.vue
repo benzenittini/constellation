@@ -20,11 +20,10 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-svg-magnifyingglass {
-    stroke: vars.$gray3;
+    stroke: var(--gray3);
     stroke-width: 3;
     .glare { stroke-width: 1; }
 }

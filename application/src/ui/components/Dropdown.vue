@@ -2,7 +2,7 @@
     <div class="mw-dropdown eic-form-component">
         <select v-model="inputVal"
             v-bind:disabled="mwDisabled"
-            v-bind:class="{ 'disabled': mwDisabled, 'eic-invalid-value': isValid && !isValid(inputVal), 'mw-multi-select': mwMultiple }"
+            v-bind:class="{ 'mw-scrollbars': true, 'disabled': mwDisabled, 'eic-invalid-value': isValid && !isValid(inputVal), 'mw-multi-select': mwMultiple }"
             v-bind:multiple="mwMultiple"
             v-on:blur="$emit('eic-blur')"
             v-on:focus="$emit('eic-focus')">
@@ -84,17 +84,15 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
-@use "../styles/mixins";
+<style lang="css">
 
 .mw-dropdown {
     select {
-        background-color: vars.$gray1;
-        color: vars.$gray-very-light;
+        background-color: var(--gray1);
+        color: var(--gray-very-light);
         border: none;
-        border-bottom: 1px solid vars.$gray4;
-        border-radius: vars.$component-radius;
+        border-bottom: 1px solid var(--gray4);
+        border-radius: var(--component-radius);
         padding: 8px 12px;
         outline: none;
 
@@ -102,26 +100,26 @@ export default defineComponent({
 
         width: 100%;
 
-        // Replace the default arrow with our own
-        @include mixins.scrollbars;
+        /* Replace the default arrow with our own */
         &:not(.mw-multi-select) {
             appearance: none;
-            // This is the SVG for our arrow.
-            // <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
-            //     <polygon fill="vars.$gray3" points="0,0 10,0 5,8" />
-            // </svg>
-            background-image: url("data:image/svg+xml, <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\"> <polygon fill=\"" + vars.$gray3 + "\" points=\"0,1 10,1 5,9\" /> </svg>");
+            /* This is the SVG for our arrow:
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+                   <polygon fill="var(--gray3)" points="0,0 10,0 5,8" />
+               </svg>
+            */
+            background-image: url("data:image/svg+xml, <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\"> <polygon fill=\"hsla(248, 8%, 35%, 1)\" points=\"0,1 10,1 5,9\" /> </svg>");
             background-repeat: no-repeat;
             background-position: center right 6px;
             background-size: 13px;
-            padding-right: 25px; // extra right padding for our dropdown arrow.
+            padding-right: 25px; /* extra right padding for our dropdown arrow. */
         }
 
-        &:focus { border-color: vars.$gray-very-light; }
-        &.eic-invalid-value { border-color: vars.$red4 !important; }
+        &:focus { border-color: var(--gray-very-light); }
+        &.eic-invalid-value { border-color: var(--red4) !important; }
         &.disabled { cursor: not-allowed; }
 
-        .mw-unset { color: vars.$gray4; }
+        .mw-unset { color: var(--gray4); }
     }
 }
 

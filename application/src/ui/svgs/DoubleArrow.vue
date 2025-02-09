@@ -15,12 +15,11 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-svg-doublearrow {
     fill: transparent;
-    stroke: vars.$gray-very-light;
+    stroke: var(--gray-very-light);
     stroke-width: 2px;
 }
 

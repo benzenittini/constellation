@@ -17,11 +17,5 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../../styles/variables" as vars;
-@use "../../viewstyles";
-
-.mw-app-filter-config {
-}
-
+<style lang="css">
 </style>

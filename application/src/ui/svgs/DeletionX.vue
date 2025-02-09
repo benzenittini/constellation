@@ -16,8 +16,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-svg-deletionx {
     vertical-align: middle;
@@ -25,17 +24,17 @@ export default defineComponent({
 
     * { transition: 0.2s; }
     circle { fill: transparent; stroke: transparent; }
-    line { fill: transparent; stroke: vars.$gray3; stroke-width: 3; }
+    line { fill: transparent; stroke: var(--gray3); stroke-width: 3; }
     &:hover {
-        circle { fill: vars.$red4; }
-        line { stroke: vars.$gray-very-dark; }
+        circle { fill: var(--red4); }
+        line { stroke: var(--gray-very-dark); }
     }
 
     &.inversion {
-        circle { fill: vars.$red4; }
-        line { stroke: vars.$gray-very-dark; }
+        circle { fill: var(--red4); }
+        line { stroke: var(--gray-very-dark); }
         &:hover {
-            circle { fill: vars.$red6; }
+            circle { fill: var(--red6); }
         }
     }
 }

@@ -157,17 +157,16 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../styles/variables" as vars;
+<style lang="css">
 
 .mw-app-actionpane-styleeditor {
-    // -- Basics --
+    /* -- Basics -- */
     font-size: 18px;
-    color: vars.$gray4;
+    color: var(--gray4);
     margin: 10px 0px 10px 30px;
     padding: 10px;
 
-    // -- Layout --
+    /* -- Layout -- */
     display: grid;
     grid-auto-columns: minmax(12px, auto);
     grid-auto-rows: auto;
@@ -181,7 +180,7 @@ export default defineComponent({
     .text          { grid-row: 3; }
     .sample-swatch { grid-column: 5 / 7; grid-row: 1 / 4; }
 
-    // -- Other --
+    /* -- Other -- */
     .recent-colors>svg  { cursor: pointer; }
     .color-picker>input { cursor: pointer; }
     .reset              { cursor: pointer; }
@@ -189,11 +188,11 @@ export default defineComponent({
     .mw-svg-resetarrow {
         width: 20px;
         vertical-align: middle;
-        fill: vars.$gray4;
-        &:hover { fill: vars.$gray-very-light; }
+        fill: var(--gray4);
+        &:hover { fill: var(--gray-very-light); }
     }
 
-    // -- Swatch Styling --
+    /* -- Swatch Styling -- */
     .sample-swatch {
         align-self: center;
 

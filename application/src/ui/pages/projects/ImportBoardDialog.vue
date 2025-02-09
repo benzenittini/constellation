@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { GENERIC_RESTART, ReadFileAsBoardResponse, BoardData } from 'constellation-common/datatypes';
 
 import { E40, showError } from "../../ErrorLogger";
@@ -67,22 +67,20 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../styles/variables" as vars;
-@use "../../styles/mixins";
+<style lang="css">
 
 .mw-web-projects-importboarddialog {
-    background: vars.$gray-very-dark;
-    border-radius: vars.$dialog-section-radius;
+    background:    var(--gray-very-dark);
+    border-radius: var(--dialog-section-radius);
     padding: 10px 20px;
 
-    h3                { color: vars.$gray4; padding: 0; }
-    button            { font-size: 14px; padding: 6px 12px !important; }
+    h3     { color: var(--gray4); padding: 0; }
+    button { font-size: 14px; padding: 6px 12px !important; }
 
     .mw-file-picker {
         cursor: pointer;
         &.mw-warning-text {
-            color: vars.$red-error;
+            color: var(--red-error);
         }
     }
 
@@ -92,53 +90,6 @@ export default defineComponent({
             margin: 10px;
         }
         .mw-dropdown { max-width: 230px; }
-    }
-    .mwe-template-config {
-        p {
-            color: vars.$gray4;
-            padding: 0 40px;
-        }
-        .mwe-template-tree {
-            @include mixins.scrollbars();
-
-            height: 230px;
-            margin: 20px;
-            overflow-y: auto;
-            padding: 10px;
-            padding-left: 30px;
-            background: vars.$gray1;
-            border-radius: vars.$radius-small;
-
-            &>.mw-expandable-tree {
-                margin: 10px 0;
-                .mw-expandable-tree {
-                    margin: 5px 0;
-                }
-            }
-
-            .mwm-helper-text {
-                color: vars.$gray4;
-            }
-
-            .mwe-classification-option {
-                display: flex;
-                justify-content: space-between;
-                gap: 18px;
-                &>* {
-                    &:first-child { flex-grow: 1; flex-shrink: 0; }
-                    &:last-child  {
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        margin: 1px;
-                    }
-                }
-
-                .mwe-field-list { color: vars.$gray4; }
-                .mwm-selected   { color: vars.$gray8; }
-            }
-        }
-
     }
 }
 

@@ -20,15 +20,14 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style lang="css">
 
 .mw-svg-equalizewidths {
-    stroke: vars.$gray3;
+    stroke: var(--gray3);
     fill: none;
 
     .block {
-        fill: vars.$gray3;
+        fill: var(--gray3);
     }
 }
 

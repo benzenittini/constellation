@@ -131,20 +131,17 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-
-@use "../../styles/variables" as vars;
-@use "./styles";
+<style>
 
 #mw-projects {
     width: 100%;
     padding: 32px;
 
     .mw-page-section {
-        background: vars.$gray1;
+        background: var(--gray1);
         margin: 32px;
         padding: 24px 32px;
-        border-radius: vars.$radius-medium;
+        border-radius: var(--radius-medium);
 
         h2,h3 {
             margin: 0;
@@ -162,8 +159,21 @@ export default defineComponent({
         position: absolute;
         bottom: 10px;
         right: 10px;
-        color: vars.$gray-medium;
+        color: var(--gray-medium);
     }
+
+    /* ===================================== */
+    /* These are contained in sub-components */
+    /* ------------------------------------- */
+    .mw-heading-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .mw-button-group {
+        button { margin: 0 5px; }
+    }
+    /* ===================================== */
 }
 
 </style>
