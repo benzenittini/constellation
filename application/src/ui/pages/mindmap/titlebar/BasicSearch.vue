@@ -116,7 +116,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-search-basicsearch {
     height: 100%;

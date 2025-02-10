@@ -224,7 +224,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-actionpane {
 

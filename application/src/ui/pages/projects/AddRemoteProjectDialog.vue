@@ -37,7 +37,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
+<style>
 
 .mw-add-remote-project {
     background: var(--gray-very-dark);

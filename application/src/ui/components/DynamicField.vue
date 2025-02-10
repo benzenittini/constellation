@@ -269,6 +269,6 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 </style>

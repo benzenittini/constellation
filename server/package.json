@@ -15,24 +15,24 @@
     "package-server": "mkdir -p ./packaging && zip -r -j ./packaging/constellation-server-$npm_package_version.zip ./dist/*"
   },
   "dependencies": {
-    "express": "^4.19.2",
+    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "socket.io": "^4.7.5",
+    "socket.io": "^4.8.1",
     "uuid": "^9.0.1",
-    "winston": "^3.13.0",
+    "winston": "^3.17.0",
     "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/node": "^20.12.12",
+    "@types/jsonwebtoken": "^9.0.8",
+    "@types/node": "^20.17.17",
     "@types/uuid": "^9.0.8",
     "@types/webpack-node-externals": "^3.0.4",
     "constellation-common": "file:../common",
     "copy-webpack-plugin": "^11.0.0",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.4.5",
-    "webpack": "^5.91.0",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.7.3",
+    "webpack": "^5.97.1",
     "webpack-cli": "^5.1.4",
     "webpack-merge": "^5.10.0",
     "webpack-node-externals": "^3.0.0"

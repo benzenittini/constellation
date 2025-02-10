@@ -301,7 +301,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-web-projects-createboarddialog {
     background: var(--gray-very-dark);

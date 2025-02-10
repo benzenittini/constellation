@@ -61,7 +61,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-relationship-blocktray {
     .block-tray-background {

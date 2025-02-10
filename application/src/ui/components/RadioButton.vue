@@ -51,7 +51,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-radiobutton {
     label.disabled { cursor: not-allowed; }

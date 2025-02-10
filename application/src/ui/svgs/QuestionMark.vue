@@ -19,7 +19,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-questionmark {
     fill: var(--gray3);

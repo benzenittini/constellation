@@ -15,7 +15,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-close {
     background: var(--gray-very-dark);

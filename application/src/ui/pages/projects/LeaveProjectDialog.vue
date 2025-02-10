@@ -16,7 +16,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
+<style>
 
 .mw-leave-project {
     background: var(--gray-very-dark);

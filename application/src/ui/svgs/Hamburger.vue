@@ -21,7 +21,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-hamburger {
     transition: stroke 0.2s;

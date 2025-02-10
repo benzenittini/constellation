@@ -33,7 +33,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-nextprevious {
     padding: 5px 35px;

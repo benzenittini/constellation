@@ -36,7 +36,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-kanban {
     .kanban-heading { stroke: none;         fill: var(--gray3); }

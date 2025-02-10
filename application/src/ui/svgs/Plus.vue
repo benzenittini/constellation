@@ -15,7 +15,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-plus {
     stroke: var(--gray3);

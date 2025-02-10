@@ -18,7 +18,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-pencil {
     stroke: var(--gray3);

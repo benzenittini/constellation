@@ -78,7 +78,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 #mw-kanbancontrols {
     padding: 0 20px;

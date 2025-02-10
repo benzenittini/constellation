@@ -16,7 +16,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-arrow2 {
     vertical-align: middle;

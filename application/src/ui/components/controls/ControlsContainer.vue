@@ -37,7 +37,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 #mw-controlscontainer {
     .mwe-controls-title {

@@ -29,7 +29,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
+<style>
 
 .mw-delete-board {
     background: var(--gray-very-dark);

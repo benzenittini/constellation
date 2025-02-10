@@ -195,7 +195,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-actionpane-editfieldsdialog {
     .eic-dialog-section {

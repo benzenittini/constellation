@@ -25,7 +25,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-savecancel {
     background: var(--gray-very-dark);

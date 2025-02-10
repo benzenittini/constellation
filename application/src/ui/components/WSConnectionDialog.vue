@@ -18,7 +18,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-wsconnectiondialog {
     background: var(--gray-very-dark);

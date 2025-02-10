@@ -116,7 +116,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 #mw-mindmapcontrols {
     padding: 0 20px;

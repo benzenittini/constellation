@@ -84,7 +84,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-dropdown {
     select {

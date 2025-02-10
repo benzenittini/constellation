@@ -60,7 +60,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-calendar {
     .calendar-bounds { fill: var(--gray3); stroke: var(--gray3); }

@@ -35,7 +35,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 .mw-mappablelabel {
     color: var(--gray-very-light);
 }

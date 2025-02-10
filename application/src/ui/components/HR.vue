@@ -13,7 +13,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
+<style>
 .mw-hr {
     height: 2px;
     background-color: var(--gray-dark);

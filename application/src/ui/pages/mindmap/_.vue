@@ -118,7 +118,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
+<style>
 .mw-app-relationship {
     height: 100vh;
     width: 100vw;

@@ -21,7 +21,8 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
-import { marked } from 'marked';
+import { Marked } from 'marked';
+import { markedHighlight } from "marked-highlight";
 import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
 
@@ -52,13 +53,17 @@ export default defineComponent({
             set: val => { context.emit('update:modelValue', val)}
         });
 
+        let marked = new Marked(markedHighlight({
+            // emptyLangClass: 'hljs',
+            // langPrefix: 'hljs language-',
+            highlight(code, lang) {
+                const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+                return hljs.highlight(code, { language }).value;
+            }
+        }));
+
         let displayHtml = computed(() => {
-            return DOMPurify.sanitize(marked(inputVal.value!, {
-                highlight: (code, lang) => {
-                    const validLanguage = hljs.getLanguage(lang) ? lang : 'plaintext';
-                    return hljs.highlight(code, { language: validLanguage }).value;
-                }
-            }));
+            return DOMPurify.sanitize(marked.parse(inputVal.value) as string);
         });
 
         let isEditMode = ref(false);
@@ -88,7 +93,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 @import url("highlight.js/styles/atom-one-dark.min.css");
 

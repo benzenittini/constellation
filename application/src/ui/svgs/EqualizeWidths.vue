@@ -20,7 +20,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-equalizewidths {
     stroke: var(--gray3);

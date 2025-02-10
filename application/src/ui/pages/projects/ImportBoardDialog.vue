@@ -67,7 +67,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-web-projects-importboarddialog {
     background:    var(--gray-very-dark);

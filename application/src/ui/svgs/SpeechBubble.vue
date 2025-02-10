@@ -18,7 +18,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-speechbubble {
     stroke: var(--gray3);

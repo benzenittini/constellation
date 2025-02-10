@@ -160,7 +160,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
+<style>
 
 .mw-remote-project {
     .mw-connection-error {

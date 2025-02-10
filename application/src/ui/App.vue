@@ -32,7 +32,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app {
     display: flex;

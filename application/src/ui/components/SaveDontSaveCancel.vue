@@ -30,7 +30,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-savedontsavecancel {
     background: var(--gray-very-dark);

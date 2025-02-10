@@ -189,7 +189,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-relationship-expandedblock {
     width: 600px;

@@ -26,7 +26,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-gear {
     fill: var(--gray3);

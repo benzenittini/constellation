@@ -16,7 +16,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-filter {
     .mwe-filter-background { fill: var(--gray3); }

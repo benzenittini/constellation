@@ -19,7 +19,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-lock {
     stroke: var(--gray3);

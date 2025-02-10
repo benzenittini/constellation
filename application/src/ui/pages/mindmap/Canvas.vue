@@ -681,7 +681,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-relationship-canvas {
     width: 100%;

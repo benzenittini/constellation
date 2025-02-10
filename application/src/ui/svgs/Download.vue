@@ -18,7 +18,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 .mw-svg-download {
     .mw-drive, .mw-arrow { fill: var(--gray3); }
     &:hover {

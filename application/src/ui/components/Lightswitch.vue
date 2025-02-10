@@ -43,7 +43,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-lightswitch {
     --switch-width: 45px;

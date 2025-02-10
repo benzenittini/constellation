@@ -61,7 +61,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
+<style>
 
 #mw-user-settings {
     .mw-pan-zoom-settings {

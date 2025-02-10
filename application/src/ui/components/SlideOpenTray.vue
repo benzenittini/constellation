@@ -65,7 +65,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-slideopentray {
 

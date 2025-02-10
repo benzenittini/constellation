@@ -17,7 +17,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-keyboardkey {
     display: inline-block;

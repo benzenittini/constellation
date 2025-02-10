@@ -77,7 +77,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-viewselector {
     display: inline-block;

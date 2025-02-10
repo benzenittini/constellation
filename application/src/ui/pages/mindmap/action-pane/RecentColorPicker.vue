@@ -34,7 +34,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-actionpane-recentcolorpicker {
     .mw-dialog-section {

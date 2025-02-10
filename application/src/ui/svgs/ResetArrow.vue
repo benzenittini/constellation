@@ -14,7 +14,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-resetarrow {
     fill: var(--gray3);

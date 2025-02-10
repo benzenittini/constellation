@@ -23,7 +23,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-svg-draghandle {
     transition: opacity 0.2s;

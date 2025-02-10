@@ -67,7 +67,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-titlebar {
     display: flex;

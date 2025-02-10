@@ -57,6 +57,7 @@
     "highlight.js": "^11.11.1",
     "js-cookie": "^3.0.5",
     "marked": "^15.0.6",
+    "marked-highlight": "^2.2.1",
     "mitt": "^3.0.1",
     "mw-vue-modals": "^2.0.3",
     "mw-vue-notify": "^2.0.3",

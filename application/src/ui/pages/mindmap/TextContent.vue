@@ -106,7 +106,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 .mw-app-relationship-textcontent {
     height: 100%;

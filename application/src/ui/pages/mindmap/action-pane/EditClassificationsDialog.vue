@@ -309,7 +309,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 #mw-dragula-mount,
 .mw-app-actionpane-editclassificationsdialog {

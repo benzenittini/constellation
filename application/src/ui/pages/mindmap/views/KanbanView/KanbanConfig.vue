@@ -39,7 +39,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="css">
+<style>
 
 @import url("../../viewstyles.css");
 
