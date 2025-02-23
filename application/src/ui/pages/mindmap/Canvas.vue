@@ -345,10 +345,18 @@ export default defineComponent({
                 if ((keyboardEvent.ctrlKey || keyboardEvent.metaKey) && !keyboardEvent.repeat) {
                     const selectedBlocks = store.getters.selectedBlocks;
                     if (selectedBlocks.length > 0 && keyboardEvent.key === 'c') {
-                        navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                        const selectedText = window.getSelection()?.toString();
+                        // Only copy the block if there's not other text highlighted. (Otherwise, use default copy behavior to copy text)
+                        if (!selectedText || selectedText === '') {
+                            navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                        }
                     } else if (selectedBlocks.length > 0 && keyboardEvent.key === 'x') {
-                        navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
-                        new DeleteBlocksAction(selectedBlocks.map(e => e.id)).submit();
+                        const selectedText = window.getSelection()?.toString();
+                        // Only cut the block if there's not other text highlighted. (Otherwise, use default cut behavior to cut text)
+                        if (!selectedText || selectedText === '') {
+                            navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                            new DeleteBlocksAction(selectedBlocks.map(e => e.id)).submit();
+                        }
                     } else if (keyboardEvent.key === 'v') {
                         // Blocks are pasted wherever the mouse is
                         const { clientX, clientY } = mouseSampler.lastEvent?.value ?? { clientX: 0, clientY: 0 };
