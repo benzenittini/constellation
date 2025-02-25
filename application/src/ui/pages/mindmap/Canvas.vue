@@ -345,10 +345,18 @@ export default defineComponent({
                 if ((keyboardEvent.ctrlKey || keyboardEvent.metaKey) && !keyboardEvent.repeat) {
                     const selectedBlocks = store.getters.selectedBlocks;
                     if (selectedBlocks.length > 0 && keyboardEvent.key === 'c') {
-                        navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                        const selectedText = window.getSelection()?.toString();
+                        // Only copy the block if there's not other text highlighted. (Otherwise, use default copy behavior to copy text)
+                        if (!selectedText || selectedText === '') {
+                            navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                        }
                     } else if (selectedBlocks.length > 0 && keyboardEvent.key === 'x') {
-                        navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
-                        new DeleteBlocksAction(selectedBlocks.map(e => e.id)).submit();
+                        const selectedText = window.getSelection()?.toString();
+                        // Only cut the block if there's not other text highlighted. (Otherwise, use default cut behavior to cut text)
+                        if (!selectedText || selectedText === '') {
+                            navigator.clipboard.writeText(copyPaste.getCopyString(selectedBlocks));
+                            new DeleteBlocksAction(selectedBlocks.map(e => e.id)).submit();
+                        }
                     } else if (keyboardEvent.key === 'v') {
                         // Blocks are pasted wherever the mouse is
                         const { clientX, clientY } = mouseSampler.lastEvent?.value ?? { clientX: 0, clientY: 0 };
@@ -534,7 +542,8 @@ export default defineComponent({
                 blockDragDestination.deltaY = blockDraggable.deltaDrag.value.deltaY;
 
                 const currentBlock: Block = blocks.value[metadata.blockId];
-                let snapZoneBlocks = store.getters.getSiblings(metadata.blockId);
+                let snapZoneBlocks = [...store.getters.getSiblings(metadata.blockId)];
+                if (currentBlock.parentBlockId) snapZoneBlocks.unshift(currentBlock.parentBlockId);
                 // Non-selected blocks only ... unless we're moving a block that wasn't selected, in which case our entire selection will be cleared by this action so it won't matter.
                 if (currentBlock.isSelected) {
                     let selectedBlockIds = store.getters.selectedBlockIds;
@@ -680,14 +689,13 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use '../../styles/variables' as vars;
+<style>
 
 .mw-app-relationship-canvas {
     width: 100%;
     height: 100%;
 
-    // Make all the text non-selectable (helpful because of all the dragging)
+    /* Make all the text non-selectable (helpful because of all the dragging) */
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -695,7 +703,7 @@ export default defineComponent({
     &.creating-bulk { cursor: copy; }
 
     .selection-box {
-        stroke: vars.$gray-very-light;
+        stroke: var(--gray-very-light);
         fill: rgba(255, 255, 255, 0.1);
         stroke-width: 2px;
     }
@@ -703,11 +711,11 @@ export default defineComponent({
     .canvas-welcome-text {
         text-anchor: middle;
         font-size: 1.7em;
-        fill: vars.$gray3;
+        fill: var(--gray3);
     }
 
     .mwe-snap-zone {
-        fill: vars.$gray1;
+        fill: var(--gray1);
     }
 }
 

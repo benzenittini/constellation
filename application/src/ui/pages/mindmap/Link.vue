@@ -146,23 +146,22 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use '../../styles/variables' as vars;
+<style>
 
 .mw-app-relationship-link {
 
     .connecting-line { transition: stroke 0.2s; }
     &.selected {
-        .connecting-line { stroke: vars.$gray-very-light; }
+        .connecting-line { stroke: var(--gray-very-light); }
     }
     line {
-        stroke: vars.$gray3;
+        stroke: var(--gray3);
     }
     polygon {
-        stroke: vars.$gray3;
+        stroke: var(--gray3);
         stroke-width: 6;
         stroke-linejoin: round;
-        fill: vars.$gray3;
+        fill: var(--gray3);
     }
 
     .invisible-line {
@@ -174,10 +173,10 @@ export default defineComponent({
         transition: 0.1s;
         transition-delay: 0.1s;
         cursor: pointer;
-        fill: vars.$red4;
+        fill: var(--red4);
         line {
             stroke-width: 5;
-            stroke: vars.$gray-dark;
+            stroke: var(--gray-dark);
         }
     }
     &:hover {

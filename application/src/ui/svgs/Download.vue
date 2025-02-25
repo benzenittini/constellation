@@ -18,12 +18,11 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 .mw-svg-download {
-    .mw-drive, .mw-arrow { fill: vars.$gray3; }
+    .mw-drive, .mw-arrow { fill: var(--gray3); }
     &:hover {
-        .mw-drive, .mw-arrow { fill: vars.$gray-very-light; }
+        .mw-drive, .mw-arrow { fill: var(--gray-very-light); }
     }
 }
 </style>

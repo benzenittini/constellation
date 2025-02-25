@@ -37,41 +37,40 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 
 .mw-possiblevaluedisplay {
     cursor: pointer;
 
     &.is-focused {
         .eic-border        { background-position: bottom; }
-        .mw-svg-gear       { fill: vars.$gray-very-light; }
+        .mw-svg-gear       { fill: var(--gray-very-light); }
     }
 
-    // The bottom border - a separate "div" so it can have a cool effect when hovered.
+    /* The bottom border - a separate "div" so it can have a cool effect when hovered. */
     .eic-border {
         display: inline-block;
-        border-radius: vars.$component-radius + 1; // +1 to hide some ugly top corners
+        border-radius: calc(var(--component-radius) + 1px); /* +1 to hide some ugly top corners */
         padding-bottom: 1px;
         width: 100%;
-        transition: background-position 0.2s ease-out; // "ease-out" to help counteract the "roundedness" of the radial gradient
-        background: radial-gradient(51% 50% at bottom, vars.$gray-very-light 100%, vars.$gray4 100%) top;
+        transition: background-position 0.2s ease-out; /* "ease-out" to help counteract the "roundedness" of the radial gradient */
+        background: radial-gradient(51% 50% at bottom, var(--gray-very-light) 100%, var(--gray4) 100%) top;
         background-size: 100% 200%;
     }
 
-    // Standard input styling
+    /* Standard input styling */
     .eic-value-display {
         position: relative;
-        background: vars.$gray1;
+        background: var(--gray1);
         border: none;
-        border-radius: vars.$component-radius;
+        border-radius: var(--component-radius);
         padding: 8px 32px 8px 12px;
-        color: vars.$gray-very-light;
+        color: var(--gray-very-light);
         font-size: 1.0rem;
         outline: none;
         width: 100%;
 
-        // Don't linewrap
+        /* Don't linewrap */
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

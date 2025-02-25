@@ -1,0 +1,46 @@
+
+.mw-unselectable {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.mw-lift-up {
+    transition: box-shadow 0.2s, transform 0.2s;
+    &:hover {
+        box-shadow: 10px 10px 20px var(--gray-very-dark);
+        transform: translateY(-3px);
+    }
+}
+
+/* This is needed for MarkdownEditor.vue to give code blocks horizontal scrollbars. */
+.mw-scrollbars pre,
+/* This gives our modals the fancy scrollbars too. */
+.mw-app .mw-vm-modal-group .mw-vm-main,
+/* And also, everything with "mw-scrollbars" should get scrollbars. */
+.mw-scrollbars {
+  /* Compliments of: https://css-tricks.com/the-current-state-of-styling-scrollbars-in-css/ */
+  --size: 10px;
+  --background-color: rgba(0,0,0,0.2);
+
+  /* For Chrome & Safari */
+  &::-webkit-scrollbar {
+    width: var(--size);
+    height: var(--size);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--gray3);
+    border-radius: 6px;
+    border: 1px solid var(--gray0);
+    transition: 0.4s;
+    &:hover { background-color: var(--gray5); }
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--background-color);
+    border-radius: 6px;
+  }
+
+  /* Standard version (Firefox only for now) */
+  scrollbar-color: var(--gray3) var(--background-color);
+}

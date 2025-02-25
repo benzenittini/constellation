@@ -78,10 +78,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "../../styles/variables" as vars;
-@use "controls";
+<style>
 
 #mw-kanbancontrols {
     padding: 0 20px;

@@ -25,13 +25,12 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 
 .mw-savecancel {
-    background: vars.$gray-very-dark;
-    border-radius: vars.$dialog-section-radius;
-    margin-top: vars.$dialog-section-gap;
+    background: var(--gray-very-dark);
+    border-radius: var(--dialog-section-radius);
+    margin-top: var(--dialog-section-gap);
     padding: 5px 35px;
 
     text-align: right;

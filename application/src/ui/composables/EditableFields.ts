@@ -27,58 +27,58 @@ function openEditFieldsDialog(blockIds: string[], fieldIds: string[], fieldDefs:
     // inside the dialog.
     let blockIdsToUpdate = blockIds;
 
-    mwVueModals.createOrUpdateModal({
-        id: dialogId,
-        styleOverrides: {
-            'width': '850px',
-        },
-        layout: {
-            componentName: 'mw-vm-fixed-bottom',
-            panes: {
-                'bottom': {
-                    componentName: 'eic-savecancel',
-                    eventHandlers: {
-                        'mw-cancel': (event: any) => {
-                            mwVueModals.closeModal(dialogId);
-                        },
-                        'mw-save': (event: any) => {
-                            let fieldDefinitions = modalData.fieldDefs.reduce((prev: TypedMap<FieldDefinition>, curr) => {
-                                prev[curr.id] = curr;
-                                return prev;
-                            }, {});
-                            let fieldIds = modalData.fieldDefs.map(f => f.id);
-                            let deletedFieldIds = originalFieldIds.filter(fid => !modalData.fieldDefs.some(field => field.id === fid));
-                            let possibleValueDefinitions = modalData.fieldDefs.reduce((prev: TypedMap<PossibleValueDefinition>, curr) => {
-                                curr.possibleValueIds?.forEach(pvid => {
-                                    prev[pvid] = modalData.possibleValueDefs[pvid];
-                                });
-                                return prev;
-                            }, {});
+    // mwVueModals.createOrUpdateModal({
+    //     id: dialogId,
+    //     styleOverrides: {
+    //         'width': '850px',
+    //     },
+    //     layout: {
+    //         componentName: 'mw-vm-fixed-bottom',
+    //         panes: {
+    //             'bottom': {
+    //                 componentName: 'eic-savecancel',
+    //                 eventHandlers: {
+    //                     'mw-cancel': (event: any) => {
+    //                         mwVueModals.closeModal(dialogId);
+    //                     },
+    //                     'mw-save': (event: any) => {
+    //                         let fieldDefinitions = modalData.fieldDefs.reduce((prev: TypedMap<FieldDefinition>, curr) => {
+    //                             prev[curr.id] = curr;
+    //                             return prev;
+    //                         }, {});
+    //                         let fieldIds = modalData.fieldDefs.map(f => f.id);
+    //                         let deletedFieldIds = originalFieldIds.filter(fid => !modalData.fieldDefs.some(field => field.id === fid));
+    //                         let possibleValueDefinitions = modalData.fieldDefs.reduce((prev: TypedMap<PossibleValueDefinition>, curr) => {
+    //                             curr.possibleValueIds?.forEach(pvid => {
+    //                                 prev[pvid] = modalData.possibleValueDefs[pvid];
+    //                             });
+    //                             return prev;
+    //                         }, {});
 
-                            new SetFieldDefinitionsAction(
-                                JSON.parse(JSON.stringify(blockIdsToUpdate)),
-                                JSON.parse(JSON.stringify(fieldDefinitions)),
-                                JSON.parse(JSON.stringify(fieldIds)),
-                                JSON.parse(JSON.stringify(possibleValueDefinitions)),
-                                JSON.parse(JSON.stringify(deletedFieldIds)),
-                            ).submit();
+    //                         new SetFieldDefinitionsAction(
+    //                             JSON.parse(JSON.stringify(blockIdsToUpdate)),
+    //                             JSON.parse(JSON.stringify(fieldDefinitions)),
+    //                             JSON.parse(JSON.stringify(fieldIds)),
+    //                             JSON.parse(JSON.stringify(possibleValueDefinitions)),
+    //                             JSON.parse(JSON.stringify(deletedFieldIds)),
+    //                         ).submit();
 
-                            mwVueModals.closeModal(dialogId);
-                        },
-                    }
-                },
-                'main': {
-                    componentName: 'eic-edit-fields-dialog',
-                    componentData: modalData,
-                    styleOverrides: {
-                        'max-height': '500px',
-                    },
-                    eventHandlers: {
-                    }
-                }
-            }
-        }
-    });
+    //                         mwVueModals.closeModal(dialogId);
+    //                     },
+    //                 }
+    //             },
+    //             'main': {
+    //                 componentName: 'eic-edit-fields-dialog',
+    //                 componentData: modalData,
+    //                 styleOverrides: {
+    //                     'max-height': '500px',
+    //                 },
+    //                 eventHandlers: {
+    //                 }
+    //             }
+    //         }
+    //     }
+    // });
 }
 
 function setFieldValueOnBlocks(blocks: Block[], fieldId: string, valueChangeEvent: any) {

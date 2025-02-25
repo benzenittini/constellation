@@ -30,14 +30,13 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 
 .mw-svg-person {
 
-    .outline  { stroke: vars.$cyan; }
-    .backdrop { fill: vars.$cyan; }
-    .body     { fill: vars.$gray-very-dark; }
+    .outline  { stroke: var(--cyan); }
+    .backdrop { fill: var(--cyan); }
+    .body     { fill: var(--gray-very-dark); }
 
 }
 

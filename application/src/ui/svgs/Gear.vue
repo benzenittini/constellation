@@ -26,11 +26,10 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 
 .mw-svg-gear {
-    fill: vars.$gray3;
+    fill: var(--gray3);
 }
 
 </style>

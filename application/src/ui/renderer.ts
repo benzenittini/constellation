@@ -1,9 +1,14 @@
 
+// Third-party styles and fonts
 import "@fontsource/roboto";
-
 import 'dragula/dist/dragula.min.css';
 
-import './styles/global-styles';
+// Our global stylesheets
+import './styles/global-styles.css';
+import './styles/variables.css';
+import './styles/mixins.css';
+import './styles/animations.css';
+
 
 // ==================
 // App Initialization

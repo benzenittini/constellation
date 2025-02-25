@@ -63,7 +63,6 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "dialogs";
+<style>
 
 </style>

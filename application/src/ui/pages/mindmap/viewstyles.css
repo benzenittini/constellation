@@ -1,0 +1,68 @@
+
+.mwe-config-heading {
+    margin: 0;
+    padding: 0;
+    color: var(--gray4);
+    &.mwm-inline {
+        display: inline-block;
+        padding-right: 20px;
+    }
+}
+
+.mw-block-is-selected {
+    box-shadow: 0 5px 0 var(--gray-very-light) !important;
+}
+
+
+.mwe-selected-but-filtered {
+    background: var(--gray2);
+    border-radius: var(--radius-medium);
+    border: 1px solid var(--gray-very-dark);
+    box-shadow: var(--shadow-inset-down-medium);
+    margin: 16px;
+
+    p { margin: 0; padding: 10px; }
+
+    .mwe-filtered-block-section {
+        padding: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        align-content: flex-start;
+        overflow-x: auto;
+
+        .mwe-block {
+            margin: 5px;
+            width: 300px;
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+    }
+}
+
+.mwe-block {
+    position: relative;
+    margin: 10px;
+    cursor: pointer;
+
+    text-align: center;
+    border-radius: 20px;
+    border: 2px solid var(--gray3);
+    background: var(--gray-very-dark);
+    color: var(--gray-very-light);
+    box-shadow: 0 5px 0 var(--gray-very-dark);
+
+    .mwe-breadcrumbs {
+        color: var(--gray5);
+        background: color-mix(in hsl, var(--gray-very-dark) 10%, transparent);
+        border-radius: 22px 22px 0 0;
+        border-bottom: 1px solid color-mix(in hsl, var(--gray4) 40%, transparent);
+        padding: 5px;
+        /* If there are breadcrumbs, we want the main block text to be shifted up
+           by ~10px so it looks "more centered" on the block. */
+        margin-bottom: -10px;
+    }
+    .mwe-block-content {
+        padding: 25px 15px 25px 15px;
+    }
+}

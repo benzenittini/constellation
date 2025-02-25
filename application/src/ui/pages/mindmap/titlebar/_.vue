@@ -16,7 +16,7 @@
                 <eic-svg-arrow-2 width="30" height="30"></eic-svg-arrow-2>
                 <span>Board Selection</span>
             </span>
-            <svg class="save-indicator" width="15" height="15">
+            <svg v-if="isLocal" class="save-indicator" width="15" height="15">
                 <title>{{ isSaved ? 'Saved!' : 'Saving...' }}</title>
                 <circle v-bind:class="{ saving: !isSaved, saved: isSaved }"
                     r="5" cx="7" cy="7" />
@@ -30,12 +30,15 @@ import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
 
 import { useStore } from "../../../store/store";
 import { useEmitter } from "../../../composables/Emitter";
+import { ws } from '../../../communications/Websocket';
 
 export default defineComponent({
     props: {},
     setup() {
         const store = useStore();
         const emitter = useEmitter();
+
+        let isLocal = !store.getters.isCurrentBoardRemote;
 
         let isSaved = ref(true);
         let activeViewConfig = computed(() => store.state.viewData.activeViewConfig);
@@ -50,6 +53,7 @@ export default defineComponent({
         });
 
         return {
+            isLocal,
             isSaved,
             activeViewConfig,
             backToProjects: () => {
@@ -63,16 +67,14 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../styles/variables" as vars;
-@use "../../../styles/mixins";
+<style>
 
 .mw-app-titlebar {
     display: flex;
     align-items: center;
     z-index: 10;
 
-    background: vars.$gray-very-dark;
+    background: var(--gray-very-dark);
     padding: 10px;
 
     &>* {
@@ -91,8 +93,8 @@ export default defineComponent({
             vertical-align: middle;
             margin: 0 -20px 0 20px;
             circle {
-                &.saving { fill: vars.$yellow2; }
-                &.saved  { fill: vars.$green1; }
+                &.saving { fill: var(--yellow2); }
+                &.saved  { fill: var(--green1); }
                 stroke: transparent;
             }
         }
@@ -101,17 +103,17 @@ export default defineComponent({
             span {
                 vertical-align: middle;
                 margin-left: 5px;
-                color: vars.$gray3;
+                color: var(--gray3);
             }
             .mw-svg-arrow2 {
                 transform: scaleX(-1);
                 transform-origin: center;
                 transition: transform 0.4s;
-                stroke: vars.$gray3;
+                stroke: var(--gray3);
             }
             &:hover {
-                span { color: vars.$gray-very-light; }
-                .mw-svg-arrow2 { stroke: vars.$gray-very-light; transform: translateX(-10px) scaleX(-1); }
+                span { color: var(--gray-very-light); }
+                .mw-svg-arrow2 { stroke: var(--gray-very-light); transform: translateX(-10px) scaleX(-1); }
             }
         }
     }

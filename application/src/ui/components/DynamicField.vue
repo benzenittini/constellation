@@ -87,20 +87,20 @@ export default defineComponent({
 
         function getTemporalModel(uniqueValues: string[]): DateTime {
             // Determine how many unique dates and unique times there are.
-            let setOfDates = new Set();
-            let setOfTimes = new Set();
+            let setOfDates = new Set<string>();
+            let setOfTimes = new Set<string>();
             uniqueValues.forEach(v => {
                 if (v !== 'null') {
                     let [d, t] = v.split(' ');
-                    setOfDates.add(d);
-                    setOfTimes.add(t);
+                    d && d !== '' && setOfDates.add(d as string);
+                    t && t !== '' && setOfTimes.add(t as string);
                 }
             });
 
             // Create the model object
             let model = { date: '', time: '' };
-            if (setOfDates.size === 1) model.date = setOfDates.values().next().value;
-            if (setOfTimes.size === 1) model.time = setOfTimes.values().next().value;
+            if (setOfDates.size === 1) model.date = setOfDates.values().next().value || '';
+            if (setOfTimes.size === 1) model.time = setOfTimes.values().next().value || '';
 
             return model;
         }
@@ -188,7 +188,8 @@ export default defineComponent({
                                 display: fieldOption.displayText,
                                 value: fieldOption.pvName
                             })),
-                            mwDisabled: props.mwDisabled
+                            mwDisabled: props.mwDisabled,
+                            mwClearable: true,
                         },
                         model: selectedItem?.pvName
                     });
@@ -268,6 +269,6 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style>
 
 </style>

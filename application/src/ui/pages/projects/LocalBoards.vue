@@ -34,20 +34,17 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-
-@use "../../styles/variables" as vars;
-@use "./styles";
+<style>
 
 #mw-local-boards {
     table {
-        $table-margin: 24px;
-        width: calc(100% - $table-margin - $table-margin);
-        margin: $table-margin;
+        --table-margin: 24px;
+        width: calc(100% - var(--table-margin) - var(--table-margin));
+        margin: var(--table-margin);
         border-collapse: collapse;
         td {
-            border-top: 2px solid vars.$gray2;
-            border-bottom: 2px solid vars.$gray2;
+            border-top: 2px solid var(--gray2);
+            border-bottom: 2px solid var(--gray2);
             padding: 12px 8px;
 
             &.mw-deletion-column { text-align: right; }
@@ -59,7 +56,7 @@ export default defineComponent({
                 opacity: 0;
             }
             &:hover {
-                background: vars.$gray2;
+                background: var(--gray2);
                 .mw-svg-deletionx { opacity: 1; }
             }
         }

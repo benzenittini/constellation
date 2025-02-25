@@ -60,17 +60,16 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 
 .mw-svg-calendar {
-    .calendar-bounds { fill: vars.$gray3; stroke: vars.$gray3; }
-    .month-letter    { fill: vars.$gray-very-dark;  stroke: none; }
-    .month-underline { fill: vars.$gray-very-dark;  stroke: none; }
-    .calendar-day    { fill: vars.$gray-very-dark;  stroke: none; }
+    .calendar-bounds { fill: var(--gray3); stroke: var(--gray3); }
+    .month-letter    { fill: var(--gray-very-dark);  stroke: none; }
+    .month-underline { fill: var(--gray-very-dark);  stroke: none; }
+    .calendar-day    { fill: var(--gray-very-dark);  stroke: none; }
 
     &.active {
-        .calendar-bounds { fill: vars.$gray7; stroke: vars.$gray7; }
+        .calendar-bounds { fill: var(--gray7); stroke: var(--gray7); }
     }
 }
 

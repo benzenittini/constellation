@@ -37,23 +37,20 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-
-@use "../../styles/variables" as vars;
+<style>
 
 .mw-add-remote-project {
-    background: vars.$gray-very-dark;
-    border-radius: vars.$dialog-section-radius;
+    background: var(--gray-very-dark);
+    border-radius: var(--dialog-section-radius);
     padding: 10px 20px;
-
-    h3 { color: vars.$gray4; padding: 0; }
 
     display: grid;
     grid-template-columns: 150px 1fr;
     column-gap: 10px;
-    &>* {
-        align-self: center;
-    }
+    &>* { align-self: center; }
+
+    h3 { color: var(--gray4); padding: 0; }
+
 }
 
 </style>

@@ -21,15 +21,14 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 
 .mw-svg-hamburger {
     transition: stroke 0.2s;
-    stroke: vars.$gray3;
+    stroke: var(--gray3);
 
     &.active {
-        stroke: vars.$gray-very-light;
+        stroke: var(--gray-very-light);
     }
 }
 

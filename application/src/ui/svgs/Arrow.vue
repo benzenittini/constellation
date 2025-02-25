@@ -16,21 +16,20 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 
 .mw-svg-arrow {
     cursor: pointer;
     vertical-align: middle;
 
-    stroke: vars.$gray3;
+    stroke: var(--gray3);
     stroke-width: 5px;
     stroke-linecap: round;
-    &:hover { stroke: vars.$gray-very-light; }
+    &:hover { stroke: var(--gray-very-light); }
     line { stroke-width: 7px; }
 
-    fill: vars.$gray-very-dark;
-    circle { filter: drop-shadow(0px 4px 4px vars.$gray-very-dark); }
+    fill: var(--gray-very-dark);
+    circle { filter: drop-shadow(0px 4px 4px var(--gray-very-dark)); }
 }
 
 </style>

@@ -51,7 +51,7 @@ export class SaveViewAction extends Action {
 
                 if (store.state.generalData.clientId === resp.clientId) {
                     useVueNotify().showNotification({
-                        cssClasses: ['mw-notification-success'],
+                        cssClasses: ['mw-notification', 'success'],
                         dismissAfterMillis: 2500,
                         data: { message: 'View saved successfully!' },
                         position: 'top-center',

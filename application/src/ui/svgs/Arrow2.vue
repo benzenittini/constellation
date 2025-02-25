@@ -16,14 +16,12 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "../styles/variables" as vars;
+<style>
 
 .mw-svg-arrow2 {
     vertical-align: middle;
 
-    stroke: vars.$gray3;
+    stroke: var(--gray3);
     stroke-width: 3px;
     stroke-linecap: round;
 }

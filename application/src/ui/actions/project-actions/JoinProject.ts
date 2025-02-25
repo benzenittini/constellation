@@ -28,14 +28,14 @@ export class JoinProjectAction extends Action {
         // Fail to join if user is already a member
         if (StringUtils.anyAreBlank([this.projectUrl, this.registrationKey, this.clientName])) {
             useVueNotify().showNotification({
-                cssClasses: ['mw-notification-warning'],
+                cssClasses: ['mw-notification', 'warning'],
                 dismissAfterMillis: 4000,
                 data: { message: `Please provide values for all fields.` },
             });
             return;
         } else if (useStore().state.generalData.remoteProjectLookup.some(p => p.remoteProject.serverUrl === this.projectUrl)) {
             useVueNotify().showNotification({
-                cssClasses: ['mw-notification-warning'],
+                cssClasses: ['mw-notification', 'warning'],
                 dismissAfterMillis: 4000,
                 data: { message: `You are already a member of this project. First remove the project if you want to re-join.` },
             });

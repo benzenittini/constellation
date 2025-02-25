@@ -35,11 +35,8 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "../styles/variables" as vars;
-
+<style>
 .mw-mappablelabel {
-    color: vars.$gray-very-light;
+    color: var(--gray-very-light);
 }
 </style>

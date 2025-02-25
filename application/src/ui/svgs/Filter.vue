@@ -16,15 +16,14 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 
 .mw-svg-filter {
-    .mwe-filter-background { fill: vars.$gray3; }
-    .mwe-filter-icon       { fill: vars.$gray-very-dark; }
+    .mwe-filter-background { fill: var(--gray3); }
+    .mwe-filter-icon       { fill: var(--gray-very-dark); }
 
     &.active {
-        .mwe-filter-background { fill: vars.$gray7; }
+        .mwe-filter-background { fill: var(--gray7); }
     }
 }
 

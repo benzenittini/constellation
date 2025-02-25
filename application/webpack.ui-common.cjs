@@ -17,7 +17,7 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.vue', '.scss'],
+        extensions: ['.ts', '.tsx', '.js', '.vue'],
         alias: {
             // This is needed because we npm-linked mw-vue-modals/notify, which brings
             // along it's own node_modules and vue installation that we don't want.
@@ -41,8 +41,8 @@ module.exports = {
                 }
             },
             {
-                test: /\.s?[ac]ss$/i,
-                use: ['style-loader', 'css-loader', 'sass-loader'],
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
             },
             {
                 test: /\.vue$/,

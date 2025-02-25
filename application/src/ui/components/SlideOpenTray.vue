@@ -30,8 +30,6 @@ export default defineComponent({
         const store = useStore();
         const eventEmitter = useEmitter();
 
-        const parsedReleaseNotes = ref([] as any[]);
-
         let contentDimensions = computed(() => {
             if (openedTabId.value === 'controls') {
                 return { width: 750 };
@@ -57,7 +55,6 @@ export default defineComponent({
         return {
             openedTabId,
             highlightedTabId,
-            parsedReleaseNotes,
             contentDimensions,
 
             pointerEventsDisabled: computed(() => store.getters.pointerEventsDisabled),
@@ -68,21 +65,19 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
-@use "../styles/animations";
+<style>
 
 .mw-slideopentray {
 
-    $tab-size: 41px;
-    $border-radius: 10px;
+    --tab-size: 41px;
+    --border-radius: 10px;
 
     position: fixed;
     right: 0;
     bottom: 50px;
     z-index: 1000;
 
-    // Why yes. Yes I am lazy. #mobileFriendly
+    /* Why yes. Yes I am lazy. #mobileFriendly */
     @media (max-width: 675px) { display: none; }
 
     pointer-events: none;
@@ -100,12 +95,13 @@ export default defineComponent({
         position: relative;
         vertical-align: bottom;
         z-index: 0;
+        margin-right: -1px;
         pointer-events: none;
 
-        // Slide the preview text open when hovered
+        /* Slide the preview text open when hovered */
         .mw-sot-tab {
             transition: transform 0.4s;
-            transform: translateX(calc(100% - #{$tab-size}));
+            transform: translateX(calc(100% - var(--tab-size)));
         }
         &:hover {
             .mw-sot-tab { transform: translateX(0); }
@@ -113,35 +109,31 @@ export default defineComponent({
 
         .mw-sot-tab {
             pointer-events: auto;
-            min-width: $tab-size;
-            height: $tab-size;
+            min-width: var(--tab-size);
+            height: var(--tab-size);
+            display: flex;
+            align-items: center;
 
-            background: vars.$gray-very-dark;
-            padding: 8px;
-            border: 1px solid vars.$gray3;
+            background: var(--gray-very-dark);
+            padding-left: 8px;
+            border: 1px solid var(--gray3);
             border-right: none;
-            border-radius: $border-radius 0 0 $border-radius;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
             &.active {
-                border-color: vars.$gray-very-light;
-                .mw-sot-tab-preview { color: vars.$gray-very-light; }
-            }
-            // Show the preview text when needed (ex: when there's new release notes.)
-            &.displayed {
-                transform: translateX(0);
-                animation: ripple 1.5s linear 3;
+                border-color: var(--gray-very-light);
+                .mw-sot-tab-preview { color: var(--gray-very-light); }
             }
 
             cursor: pointer;
 
             .mw-sot-tab-preview {
                 display: inline-block;
-                padding: 5px 8px;
-                vertical-align: top;
-                color: vars.$gray4;
+                padding: 0 8px;
+                color: var(--gray4);
             }
 
             &:hover {
-                .mw-sot-tab-preview { color: vars.$gray-very-light; }
+                .mw-sot-tab-preview { color: var(--gray-very-light); }
             }
         }
     }
@@ -149,17 +141,17 @@ export default defineComponent({
     .mw-sot-tab-content {
         position: relative;
         z-index: 1;
-        background: vars.$gray-very-dark;
-        border: 1px solid vars.$gray3;
+        background: var(--gray-very-dark);
+        border: 1px solid var(--gray3);
         border-right: none;
-        border-radius: $border-radius 0 0 0;
+        border-radius: var(--border-radius) 0 0 0;
         vertical-align: bottom;
-        right: -1px; // Prevents a vertical border line along the right edge of the screen.
+        right: -1px; /* Prevents a vertical border line along the right edge of the screen. */
 
-        // Make the widths transition nicely.
+        /* Make the widths transition nicely. */
         overflow: hidden;
         transition: width 0.4s;
-        // To avoid an ugly line during a transition when there's no content, let's make this always be as tall as the "tab stack".
+        /* To avoid an ugly line during a transition when there's no content, let's make this always be as tall as the "tab stack". */
         min-height: 125px;
     }
 }

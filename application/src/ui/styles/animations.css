@@ -1,0 +1,12 @@
+
+@keyframes spring-in {
+    0% { transform: scale(0); }
+    75% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes spring-out {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    100% { transform: scale(0); }
+}

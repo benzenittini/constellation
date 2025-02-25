@@ -24,7 +24,7 @@
         <div class="mwe-template-config" v-show="showTemplateConfig">
             <p>Select the classifications you want your board to start with. Once the board is created, you can fine-tune their fields to better meet your needs.</p>
             <!-- Top-level tree -->
-            <div class="mwe-template-tree">
+            <div class="mwe-template-tree mw-scrollbars">
                 <eic-expandable-tree
                     v-for="(project,projIndex) in classificationTree" v-bind:key="project.projectId"
                     v-bind:start-expanded="true">
@@ -301,22 +301,20 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../styles/variables" as vars;
-@use "../../styles/mixins";
+<style>
 
 .mw-web-projects-createboarddialog {
-    background: vars.$gray-very-dark;
-    border-radius: vars.$dialog-section-radius;
+    background: var(--gray-very-dark);
+    border-radius: var(--dialog-section-radius);
     padding: 10px 20px;
 
-    h3                { color: vars.$gray4; padding: 0; }
+    h3                { color: var(--gray4); padding: 0; }
     button            { font-size: 14px; padding: 6px 12px !important; }
 
     .mw-file-picker {
         cursor: pointer;
         &.mw-warning-text {
-            color: vars.$red-error;
+            color: var(--red-error);
         }
     }
 
@@ -329,19 +327,17 @@ export default defineComponent({
     }
     .mwe-template-config {
         p {
-            color: vars.$gray4;
+            color: var(--gray4);
             padding: 0 40px;
         }
         .mwe-template-tree {
-            @include mixins.scrollbars();
-
             height: 230px;
             margin: 20px;
             overflow-y: auto;
             padding: 10px;
             padding-left: 30px;
-            background: vars.$gray1;
-            border-radius: vars.$radius-small;
+            background: var(--gray1);
+            border-radius: var(--radius-small);
 
             &>.mw-expandable-tree {
                 margin: 10px 0;
@@ -351,7 +347,7 @@ export default defineComponent({
             }
 
             .mwm-helper-text {
-                color: vars.$gray4;
+                color: var(--gray4);
             }
 
             .mwe-classification-option {
@@ -368,8 +364,8 @@ export default defineComponent({
                     }
                 }
 
-                .mwe-field-list { color: vars.$gray4; }
-                .mwm-selected   { color: vars.$gray8; }
+                .mwe-field-list { color: var(--gray4); }
+                .mwm-selected   { color: var(--gray8); }
             }
         }
 

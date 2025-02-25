@@ -22,7 +22,7 @@
                 </div>
                 <div v-for="result, i in searchResults" v-bind:key="result.blockId"
                     class="mwe-search-result"
-                    v-bind:class="{ 'is-selected': selectedSearchResult === i }"
+                    v-bind:class="{ 'mw-block-is-selected': selectedSearchResult === i }"
                     v-bind:style="getBlockStyle(result.block)"
                     v-on:mouseenter="selectedSearchResult = i"
                     v-on:click="panToBlock(result.blockId)">
@@ -123,18 +123,16 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style>
 
-@use "sass:color";
-@use "../../../styles/variables" as vars;
-@use '../viewstyles';
-
-$border-radius: vars.$radius-medium;
-$search-bar-height: 35px;
+@import url("../viewstyles.css");
 
 .mw-app-search {
 
-    height: $search-bar-height;
+    --border-radius: var(--radius-medium);
+    --search-bar-height: 35px;
+
+    height: var(--search-bar-height);
     overflow: visible;
 
     &.disable-pointer-events {
@@ -142,25 +140,25 @@ $search-bar-height: 35px;
     }
 
     .mwe-app-search-outline {
-        border: 1px solid vars.$gray2;
-        border-radius: $border-radius;
-        background: vars.$gray-very-dark;
+        border: 1px solid var(--gray2);
+        border-radius: var(--border-radius);
+        background: var(--gray-very-dark);
 
         .mwe-app-search-criteria {
-            border-radius: $border-radius;
+            border-radius: var(--border-radius);
             margin: -1px;
             padding: 1px;
 
             &:focus-within {
-                background: vars.$pink-purp-gradient;
+                background: var(--pink-purp-gradient);
             }
 
             .mwe-app-search-contents {
-                color: vars.$gray3;
-                background: vars.$gray-very-dark;
-                border-radius: $border-radius;
-                min-height: $search-bar-height;
-                height: 1px; // Oh css, how you woo me <3 https://stackoverflow.com/a/21836870
+                color: var(--gray3);
+                background: var(--gray-very-dark);
+                border-radius: var(--border-radius);
+                min-height: var(--search-bar-height);
+                height: 1px; /* Oh css. https://stackoverflow.com/a/21836870 */
             }
         }
 
@@ -177,21 +175,17 @@ $search-bar-height: 35px;
             }
 
             .mwe-search-result {
-                border: 3px solid vars.$gray3;
+                border: 3px solid var(--gray3);
                 border-radius: 20px;
                 margin: 10px;
                 cursor: pointer;
 
-                &.is-selected {
-                    @include viewstyles.block-is-selected;
-                }
-
                 .mwe-breadcrumbs {
                     padding: 10px 15px;
-                    color: vars.$gray3;
-                    background: color.adjust(vars.$gray-very-dark, $alpha: -0.4);
+                    color: var(--gray3);
+                    background: color-mix(in hsl, var(--gray-very-dark) 60%, transparent);
                     border-radius: 17px 17px 0 0;
-                    border-bottom: 1px solid color.adjust(vars.$gray3, $alpha: -0.6);
+                    border-bottom: 1px solid color-mix(in hsl, var(--gray3) 40%, transparent);
                 }
                 .mwe-summary-text {
                     padding: 13px 15px 17px 15px;

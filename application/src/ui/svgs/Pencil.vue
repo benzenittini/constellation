@@ -18,13 +18,12 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../styles/variables" as vars;
+<style>
 
 .mw-svg-pencil {
-    stroke: vars.$gray3;
+    stroke: var(--gray3);
     &:hover {
-        stroke: vars.$gray-very-light;
+        stroke: var(--gray-very-light);
     }
 }
 

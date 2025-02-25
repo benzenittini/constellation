@@ -1,5 +1,5 @@
 <template>
-    <div class="mw-app-actionpane"
+    <div class="mw-app-actionpane mw-scrollbars"
         v-bind:style="{width: `${paneWidth}px`, right: mwSelectedBlocks.length >= mwShowAfterNumberSelected ? '0' : `${-paneWidth-10}px`}"
         v-bind:class="{ 'disable-pointer-events': pointerEventsDisabled }">
 
@@ -48,7 +48,6 @@
             <div class="actionpane-heading">
                 <h2>Fields</h2>
             </div>
-            <div class="edit-button" v-if="mwSelectedBlockIds.length === 1" v-on:click="editFields">edit</div>
 
             <!-- Classification Fields -->
             <div class="field-grouping eic-classification-flex" v-for="cid in activeClassificationIdsSorted" v-bind:key="cid">
@@ -225,9 +224,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../styles/variables" as vars;
-@use "../../../styles/mixins";
+<style>
 
 .mw-app-actionpane {
 
@@ -240,14 +237,13 @@ export default defineComponent({
     top: 0;
     z-index: 0;
 
-    color: vars.$gray4;
-    background: vars.$gray-very-dark;
+    color: var(--gray4);
+    background: var(--gray-very-dark);
     box-shadow: -4px 0px 4px rgba(0, 0, 0, 0.25);
     height: 100%;
 
     padding: 25px;
     overflow-y: auto;
-    @include mixins.scrollbars;
 
     .mw-block-count {
         text-align: center;
@@ -255,14 +251,14 @@ export default defineComponent({
         margin-bottom: 30px;
     }
 
-    h1 { text-align: center; margin-bottom: 35px; font-weight: bold; color: vars.$gray3; }
+    h1 { text-align: center; margin-bottom: 35px; font-weight: bold; color: var(--gray3); }
     .actionpane-heading {
         width: 100%;
-        border-bottom: 1px solid vars.$gray3;
-        h2 { margin: 0; padding: 0; font-weight: normal; color: vars.$gray4; }
+        border-bottom: 1px solid var(--gray3);
+        h2 { margin: 0; padding: 0; font-weight: normal; color: var(--gray4); }
     }
     .edit-button { float: right; cursor: pointer; }
-    .edit-button:hover { color: vars.$gray-very-light; }
+    .edit-button:hover { color: var(--gray-very-light); }
 
     .classification-list {
         margin: 40px 0;
@@ -277,7 +273,7 @@ export default defineComponent({
             margin-top: 20px;
             .field-name { font-size: 18px; margin-bottom: 5px; }
             .mw-app-dynamicfield {
-                border-left: 2px solid vars.$pink-medium;
+                border-left: 2px solid var(--pink-medium);
                 margin-left: 2px;
                 padding-left: 10px;
             }
@@ -295,7 +291,7 @@ export default defineComponent({
             padding-right: 3px;
             font-size: 1.0rem;
 
-            // Rotates and centers the classification name
+            /* Rotates and centers the classification name */
             writing-mode: vertical-rl;
             text-align: center;
         }
@@ -304,8 +300,8 @@ export default defineComponent({
             flex-shrink: 1;
             min-width: 0;
 
-            border-left: 1px dashed vars.$gray3;
-            border-radius: vars.$radius-large;
+            border-left: 1px dashed var(--gray3);
+            border-radius: var(--radius-large);
             padding: 10px; padding-right: 0;
         }
     }
@@ -315,7 +311,7 @@ export default defineComponent({
         text-align: center;
         font-size: 1.0rem;
 
-        &.highlight { color: vars.$gray-very-light; }
+        &.highlight { color: var(--gray-very-light); }
     }
 }
 

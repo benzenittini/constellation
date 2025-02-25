@@ -1,4 +1,5 @@
 <template>
+    <!-- TODO-ben: DELETE THIS ENTIRE DIALOG. -->
     <div class="mw-app-actionpane-editfieldsdialog" ref="editFieldsDialog" v-on:mousemove="checkForVerticalScroll">
         <div class="eic-dialog-section eic-info-section">
             <p class="eic-padded-row">This dialog shows fields that have been directly added to the selected blocks. This
@@ -194,14 +195,12 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../styles/variables" as vars;
-@use "dialogs";
+<style>
 
 .mw-app-actionpane-editfieldsdialog {
     .eic-dialog-section {
-        // Skip the margin on the last one - gap is taken care of by the "SaveCancel" component
-        &:not(:last-child) { margin-bottom: vars.$dialog-section-gap; }
+        /* Skip the margin on the last one - gap is taken care of by the "SaveCancel" component */
+        &:not(:last-child) { margin-bottom: var(--dialog-section-gap); }
     }
 }
 

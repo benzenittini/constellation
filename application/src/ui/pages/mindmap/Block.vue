@@ -38,9 +38,8 @@
             v-bind:width="bodySize.width*adjustedScale"
             v-bind:height="bodySize.height*adjustedScale"
             v-on:mousedown="selectIfNotSelected">
-            <body xmlns="http://www.w3.org/1999/xhtml"
-                ref="blockBody"
-                v-bind:class="{ expanded: showPreview || isExpanded }"
+            <div ref="blockBody"
+                v-bind:class="{ 'mw-body': true, 'mw-scrollbars': true, expanded: showPreview || isExpanded }"
                 v-on:dblclick.stop="enterEditMode">
 
                 <!-- Fully expanded, showing all fields/comments/etc -->
@@ -108,7 +107,7 @@
                     <div class="resize-handle resize-s"  v-on:mousedown="tryToResize({ mouseEvent: $event, direction: ResizeDirection.S })"></div>
                     <div class="resize-handle resize-se" v-on:mousedown="tryToResize({ mouseEvent: $event, direction: ResizeDirection.SE })" data-test="block-resize-se"></div>
                 </div>
-            </body>
+            </div>
         </foreignObject>
 
         <!-- The block tray -->
@@ -371,19 +370,13 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "sass:math";
-@use '../../styles/variables' as vars;
-@use '../../styles/mixins';
-
-@use 'expanded-block';
+<style>
 
 .mw-app-relationship-block {
 
-    // Animate the blocks into position
+    /* Animate the blocks into position */
     transition: all 0.5s;
-    // Expand/contract the block
+    /* Expand/contract the block */
     rect,foreignObject { transition: width 0.5s, height 0.5s; }
     &.eic-skip-tween {
         transition: none;
@@ -391,49 +384,51 @@ export default defineComponent({
     }
 
     .eic-block-shadow {
-        fill: vars.$gray-very-dark;
+        fill: var(--gray-very-dark);
         transition: fill 0.2s, width 0.5s, height 0.5s;
         &.selected {
-            fill: vars.$gray-very-light;
+            fill: var(--gray-very-light);
         }
     }
     .eic-block-rect {
-        stroke: vars.$gray3;
-        fill: vars.$gray-very-dark;
+        stroke: var(--gray3);
+        fill: var(--gray-very-dark);
     }
 
     .eic-block-displaying-preview {
-        $width: 100px;
-        $height: 25px;
+        --width: 100px;
+        --height: 25px;
         opacity: 0;
         transition: transform 0.2s, opacity 0.2s;
-        &.is-visible { transform: translate(5px, -$height+5px); opacity: 1; }
+        &.is-visible {
+            transform: translate(5px, calc(5px - var(--height)));
+            opacity: 1;
+        }
         transform: translateX(5px);
         rect {
             rx: 5px;
-            width: $width;
-            height: $height;
-            fill: vars.$pink-medium;
+            width: var(--width);
+            height: var(--height);
+            fill: var(--pink-medium);
         }
         text {
-            transform: translate(math.div($width, 2), math.div($height, 2));
-            text-anchor: middle;       // Center horizontally
-            dominant-baseline: middle; // Center vertically
-            fill: vars.$gray-very-dark;
+            transform: translate(calc(var(--width) / 2), calc(var(--height) / 2));
+            text-anchor: middle;       /* Center horizontally */
+            dominant-baseline: middle; /* Center vertically */
+            fill: var(--gray-very-dark);
             font-weight: bold;
         }
     }
 
-    body {
+    .mw-body {
         width: 100%;
         height: 100%;
         background: none;
-        @include mixins.scrollbars;
         &.expanded {
             overflow-x: hidden;
             height: auto;
-            background: vars.$pink-purp-gradient;
-            border-radius: vars.$dialog-section-radius;
+            background: var(--pink-purp-gradient);
+            border-radius: var(--dialog-section-radius);
         }
 
         .resize-grid {
@@ -455,9 +450,29 @@ export default defineComponent({
                 .resize-se { cursor: nwse-resize; }
             }
 
-            // Without this, the content can cover the resize handles if the content is too big
+            /* Without this, the content can cover the resize handles if the content is too big */
             .resize-handle { z-index: 1; }
         }
     }
+
+    .mw-block-content-section {
+        margin: var(--dialog-section-gap);
+        border-radius: var(--dialog-section-radius);
+        background: var(--gray-very-dark);
+        padding: 20px 30px;
+
+        &.in-edit-mode {
+            padding: 10px;
+            textarea { height: 100px; }
+        }
+
+        pre {
+            position: relative;
+            top: auto;
+            left: auto;
+            transform: none;
+        }
+    }
+
 }
 </style>

@@ -39,14 +39,14 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-@use "../../../../styles/variables" as vars;
-@use "../../viewstyles";
+<style>
+
+@import url("../../viewstyles.css");
 
 .mw-app-kanban-config {
     .mwe-kanban-no-ss-fields {
         display: inline-block;
-        color: vars.$red-error;
+        color: var(--red-error);
         max-width: 50%;
         vertical-align: top;
     }

@@ -46,7 +46,7 @@ export class DeleteViewAction extends Action {
             // Only show "success" notification if this was the user who created it.
             if (store.state.generalData.clientId === resp.clientId) {
                 useVueNotify().showNotification({
-                    cssClasses: ['mw-notification-success'],
+                    cssClasses: ['mw-notification', 'success'],
                     dismissAfterMillis: 2500,
                     data: { message: 'View deleted successfully!' },
                     position: 'top-center',

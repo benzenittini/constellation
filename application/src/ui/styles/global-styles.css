@@ -1,0 +1,181 @@
+
+/* ==================== */
+/* Document-Wide Styles */
+/* -------------------- */
+
+* { box-sizing: border-box; }
+
+html {
+    overflow-x: hidden;
+    font-family: 'Roboto';
+    font-size: 16px;
+}
+body {
+    /* NOTE: We cannot have an "overflow-x: hidden" on the body element or any downstream "position: sticky" elements will not work! */
+    /* overflow-x: hidden; */
+
+    position: relative;
+    padding: 0;
+    margin: 0;
+    background: var(--gray-dark);
+    color: var(--gray-very-light);
+}
+h1,h2,h3,h4,h5,h6 { font-weight: normal; }
+
+.mw-hr {
+    height: 1px;
+    background: var(--gray3);
+    margin: 20px 0;
+}
+
+img { max-width: 100%; } /* Improves w/ responsiveness */
+
+textarea,pre {
+    font-family: 'Roboto';
+    font-size: 16px;
+}
+
+a {
+    cursor: pointer;
+    color: var(--gray-light);
+    transition: color 0.1s;
+    text-decoration: none;
+    position: relative;
+
+    &:hover {
+        color: var(--gray-very-light);
+        text-decoration: underline;
+        text-decoration-color: var(--pink-medium);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 6px;
+    }
+}
+
+.mwm-unselectable {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.has-tooltip { cursor: help; }
+
+/* This allows mouse wheel events to get captured while dragging w/ dragula. */
+.gu-mirror { pointer-events: none; }
+
+
+/* ============== */
+/* Button Styling */
+/* -------------- */
+
+button {
+    border-radius: var(--component-radius);
+    border: none;
+    background: none;
+    font-family: 'Roboto'; /* For an unknown reason, FF doesn't recognize the "Roboto" set on the html{} block above. But only for buttons. */
+    font-size: 16px;
+    padding: 8px 24px;
+    cursor: pointer;
+    transition: background-color 0.2s, background-position 0.2s, border-color 0.2s, color 0.2s;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+    &:active:not(:disabled) {
+        opacity: 0.75;
+        transform: scale(0.97);
+    }
+
+    /* Colors */
+
+    --text-color:             transparent;
+    --background-color:       transparent;
+    --border-color:           transparent;
+    --hover-text-color:       transparent;
+    --hover-background-color: transparent;
+    --hover-border-color:     transparent;
+
+    &.primary.gray     { --text-color: var(--gray-very-dark);  --background-color: var(--gray-light); --border-color: var(--gray-very-light); --hover-text-color: var(--gray-very-dark); }
+    &.primary.red      { --text-color: var(--red8);            --background-color: var(--red1);       --border-color: var(--red4);            --hover-text-color: var(--red0); }
+    &.primary.pink     { --text-color: var(--pink8);           --background-color: var(--pink1);      --border-color: var(--pink4);           --hover-text-color: var(--pink0); }
+    &.primary.yellow   { --text-color: var(--yellow8);         --background-color: var(--yellow1);    --border-color: var(--yellow4);         --hover-text-color: var(--yellow0); }
+    &.primary.green    { --text-color: var(--green8);          --background-color: var(--green1);     --border-color: var(--green4);          --hover-text-color: var(--green0); }
+
+    &.secondary.gray   { --text-color: var(--gray-very-light); --background-color: var(--gray3);   --hover-text-color: var(--gray-very-dark); --hover-background-color: var(--gray-very-light); }
+    &.secondary.red    { --text-color: var(--red0);            --background-color: var(--red6);    --hover-text-color: var(--red0);           --hover-background-color: var(--red4); }
+    &.secondary.pink   { --text-color: var(--pink0);           --background-color: var(--pink6);   --hover-text-color: var(--pink0);          --hover-background-color: var(--pink4); }
+    &.secondary.yellow { --text-color: var(--yellow0);         --background-color: var(--yellow6); --hover-text-color: var(--yellow0);        --hover-background-color: var(--yellow4); }
+    &.secondary.green  { --text-color: var(--green0);          --background-color: var(--green6);  --hover-text-color: var(--green0);         --hover-background-color: var(--green4); }
+
+    &.tertiary.gray    { --text-color: var(--gray-very-light); --hover-border-color: var(--gray-very-light); }
+    &.tertiary.red     { --text-color: var(--red4);            --hover-border-color: var(--red4); }
+    &.tertiary.pink    { --text-color: var(--pink4);           --hover-border-color: var(--pink4); }
+    &.tertiary.yellow  { --text-color: var(--yellow4);         --hover-border-color: var(--yellow4); }
+    &.tertiary.green   { --text-color: var(--green4);          --hover-border-color: var(--green4); }
+
+    /* Variants */
+
+    &.primary {
+        color: var(--text-color);
+        background: linear-gradient(to top, var(--border-color) 50%, var(--background-color) 50%) top;
+        background-size: 100% 200%;
+
+        padding-top: 10px; /* Overridden here to "balance" the bottom border. */
+        border-bottom: 2px solid var(--border-color);
+        &:hover:not(:disabled) {
+            color: var(--hover-text-color);
+            background-position: bottom;
+        }
+    }
+
+    &.secondary {
+        color: var(--text-color);
+        background: var(--background-color);
+        &:hover:not(:disabled) {
+            color: var(--hover-text-color);
+            background: var(--hover-background-color);
+        }
+    }
+
+    &.tertiary {
+        color: var(--text-color);
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        &:hover:not(:disabled) {
+            border-top: 1px solid var(--hover-border-color);
+            border-bottom: 1px solid var(--hover-border-color);
+        }
+    }
+
+}
+
+
+/* =========== */
+/* Input Types */
+/* ----------- */
+
+input[type=color] {
+    border: 0;
+    padding: 0;
+}
+
+
+/* ============= */
+/* Notifications */
+/* ------------- */
+
+.mw-notification {
+    --notif-fg: transparent; --notif-bg: transparent; --notif-border: transparent;
+    &.success { --notif-fg: var(--green8);  --notif-bg: var(--green0);  --notif-border: var(--green0);  }
+    &.warning { --notif-fg: var(--yellow8); --notif-bg: var(--yellow0); --notif-border: var(--yellow0); }
+    &.failure { --notif-fg: var(--red8);    --notif-bg: var(--red0);    --notif-border: var(--red0);    }
+    &.info    { --notif-fg: var(--gray7);   --notif-bg: var(--gray1);   --notif-border: var(--gray0);   }
+
+    border-radius: var(--radius-small) !important;
+    color: var(--notif-fg) !important;
+    border-color: var(--notif-border) !important;
+    background: var(--notif-bg) !important;
+    box-shadow: var(--shadow-down-right-medium);
+    line-height: 24px;
+}

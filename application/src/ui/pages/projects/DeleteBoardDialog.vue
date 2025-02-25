@@ -29,13 +29,11 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-
-@use "../../styles/variables" as vars;
+<style>
 
 .mw-delete-board {
-    background: vars.$gray-very-dark;
-    border-radius: vars.$dialog-section-radius;
+    background: var(--gray-very-dark);
+    border-radius: var(--dialog-section-radius);
     padding: 10px 20px;
 
     .mw-checkbox {

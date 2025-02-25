@@ -61,9 +61,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-
-@use "../../styles/variables" as vars;
+<style>
 
 #mw-user-settings {
     .mw-pan-zoom-settings {

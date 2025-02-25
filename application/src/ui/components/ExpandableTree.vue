@@ -35,9 +35,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-
-@use "../styles/variables" as vars;
+<style>
 
 .mw-expandable-tree {
 
@@ -57,6 +55,5 @@ export default defineComponent({
     }
 
 }
-
 
 </style>
